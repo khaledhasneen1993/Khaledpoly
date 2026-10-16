@@ -9,12 +9,6 @@ import com.polybot.hft.events.HftEventTypes;
 import com.polybot.hft.executor.events.ExecutorOrderStatusEvent;
 import com.polybot.hft.executor.metrics.ExecutorMetricsService;
 import com.polybot.hft.polymarket.service.PolymarketTradingService;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Duration;
@@ -22,6 +16,11 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
@@ -41,11 +40,15 @@ public class ExecutorOrderMonitor {
 
   private final Map<String, TrackedOrder> trackedByOrderId = new ConcurrentHashMap<>();
 
-  public void trackNewOrder(String orderId, String tokenId, OrderSide side, BigDecimal price, BigDecimal size) {
+  public void trackNewOrder(
+      String orderId, String tokenId, OrderSide side, BigDecimal price, BigDecimal size) {
     if (orderId == null || orderId.isBlank()) {
       return;
     }
-    trackedByOrderId.putIfAbsent(orderId, new TrackedOrder(orderId, tokenId, side, price, size, clock.instant(), null, null, null, 0));
+    trackedByOrderId.putIfAbsent(
+        orderId,
+        new TrackedOrder(
+            orderId, tokenId, side, price, size, clock.instant(), null, null, null, 0));
   }
 
   @Scheduled(initialDelay = 2_000L, fixedDelay = 1_000L)
@@ -62,15 +65,17 @@ public class ExecutorOrderMonitor {
       if (tracked == null) {
         continue;
       }
-      if (tracked.trackedAt() != null && Duration.between(tracked.trackedAt(), now).compareTo(TRACK_TTL) > 0) {
-        trackedByOrderId.remove(tracked.orderId());
-        continue;
-      }
       pollOne(tracked);
     }
   }
 
-  private void pollOne(TrackedOrder tracked) {
+  @org.springframework.context.event.EventListener
+  public void onUserUpdate(UserChannelService.OrderChanged event) {
+    TrackedOrder tracked = trackedByOrderId.get(event.orderId());
+    if (tracked != null) pollOne(tracked);
+  }
+
+  private synchronized void pollOne(TrackedOrder tracked) {
     if (tracked == null || tracked.orderId() == null || tracked.orderId().isBlank()) {
       return;
     }
@@ -83,28 +88,26 @@ public class ExecutorOrderMonitor {
       error = e.getMessage() != null ? e.getMessage() : e.toString();
     }
 
-    String status = order == null ? null : firstText(order,
-        "status",
-        "state",
-        "order_status",
-        "orderStatus"
-    );
-    BigDecimal matched = order == null ? null : firstDecimal(order,
-        "matched_size",
-        "matchedSize",
-        "size_matched",
-        "sizeMatched",
-        "filled_size",
-        "filledSize",
-        "size_filled",
-        "sizeFilled"
-    );
-    BigDecimal remaining = order == null ? null : firstDecimal(order,
-        "remaining_size",
-        "remainingSize",
-        "size_remaining",
-        "sizeRemaining"
-    );
+    String status =
+        order == null ? null : firstText(order, "status", "state", "order_status", "orderStatus");
+    BigDecimal matched =
+        order == null
+            ? null
+            : firstDecimal(
+                order,
+                "matched_size",
+                "matchedSize",
+                "size_matched",
+                "sizeMatched",
+                "filled_size",
+                "filledSize",
+                "size_filled",
+                "sizeFilled");
+    BigDecimal remaining =
+        order == null
+            ? null
+            : firstDecimal(
+                order, "remaining_size", "remainingSize", "size_remaining", "sizeRemaining");
     if (remaining == null && matched != null && tracked.requestedSize() != null) {
       remaining = tracked.requestedSize().subtract(matched);
       if (remaining.compareTo(BigDecimal.ZERO) < 0) {
@@ -112,30 +115,34 @@ public class ExecutorOrderMonitor {
       }
     }
 
-    boolean changed = !Objects.equals(normalize(status), normalize(tracked.lastStatus()))
-        || !decimalEq(matched, tracked.lastMatchedSize())
-        || !decimalEq(remaining, tracked.lastRemainingSize())
-        || error != null;
+    boolean changed =
+        !Objects.equals(normalize(status), normalize(tracked.lastStatus()))
+            || !decimalEq(matched, tracked.lastMatchedSize())
+            || !decimalEq(remaining, tracked.lastRemainingSize())
+            || error != null;
 
     if (changed && events.isEnabled()) {
-      events.publish(clock.instant(), HftEventTypes.EXECUTOR_ORDER_STATUS, tracked.orderId(), new ExecutorOrderStatusEvent(
+      events.publish(
+          clock.instant(),
+          HftEventTypes.EXECUTOR_ORDER_STATUS,
           tracked.orderId(),
-          tracked.tokenId(),
-          tracked.side(),
-          tracked.requestedPrice(),
-          tracked.requestedSize(),
-          status,
-          matched,
-          remaining,
-          truncateJson(order),
-          error
-      ));
+          new ExecutorOrderStatusEvent(
+              tracked.orderId(),
+              tracked.tokenId(),
+              tracked.side(),
+              tracked.requestedPrice(),
+              tracked.requestedSize(),
+              status,
+              matched,
+              remaining,
+              truncateJson(order),
+              error));
     }
 
     if (error != null) {
       int nextErrors = tracked.errorCount() + 1;
       if (nextErrors >= MAX_ERRORS_PER_ORDER) {
-        trackedByOrderId.remove(tracked.orderId());
+        trackedByOrderId.put(tracked.orderId(), tracked.withErrorCount(MAX_ERRORS_PER_ORDER));
       } else {
         trackedByOrderId.put(tracked.orderId(), tracked.withErrorCount(nextErrors));
       }
@@ -152,7 +159,8 @@ public class ExecutorOrderMonitor {
     }
   }
 
-  private static boolean isTerminal(String status, BigDecimal matched, BigDecimal remaining, BigDecimal requestedSize) {
+  private static boolean isTerminal(
+      String status, BigDecimal matched, BigDecimal remaining, BigDecimal requestedSize) {
     if (remaining != null && remaining.compareTo(BigDecimal.ZERO) == 0) {
       return true;
     }
@@ -162,15 +170,7 @@ public class ExecutorOrderMonitor {
     if (status == null || status.isBlank()) {
       return false;
     }
-    String s = status.trim().toUpperCase();
-    return s.contains("FILLED")
-        || s.contains("CANCELED")
-        || s.contains("CANCELLED")
-        || s.contains("EXPIRED")
-        || s.contains("REJECTED")
-        || s.contains("FAILED")
-        || s.contains("DONE")
-        || s.contains("CLOSED");
+    return com.polybot.hft.polymarket.model.OrderStatus.terminal(status);
   }
 
   private static String normalize(String s) {
@@ -249,9 +249,7 @@ public class ExecutorOrderMonitor {
     }
   }
 
-  /**
-   * Record metrics when an order reaches a terminal state.
-   */
+  /** Record metrics when an order reaches a terminal state. */
   private void recordTerminalMetrics(String status, BigDecimal matched, BigDecimal requestedSize) {
     if (status == null) {
       return;
@@ -260,7 +258,8 @@ public class ExecutorOrderMonitor {
 
     // Check if fully filled
     if (normalized.contains("FILLED") || normalized.contains("DONE")) {
-      boolean fullyFilled = matched != null && requestedSize != null && matched.compareTo(requestedSize) >= 0;
+      boolean fullyFilled =
+          matched != null && requestedSize != null && matched.compareTo(requestedSize) >= 0;
       if (fullyFilled || normalized.contains("FILLED")) {
         metricsService.recordOrderFilled(null); // slippage tracking can be added later
       }
@@ -285,15 +284,33 @@ public class ExecutorOrderMonitor {
       String lastStatus,
       BigDecimal lastMatchedSize,
       BigDecimal lastRemainingSize,
-      int errorCount
-  ) {
+      int errorCount) {
     TrackedOrder withLast(String status, BigDecimal matched, BigDecimal remaining) {
-      return new TrackedOrder(orderId, tokenId, side, requestedPrice, requestedSize, trackedAt, status, matched, remaining, errorCount);
+      return new TrackedOrder(
+          orderId,
+          tokenId,
+          side,
+          requestedPrice,
+          requestedSize,
+          trackedAt,
+          status,
+          matched,
+          remaining,
+          errorCount);
     }
 
     TrackedOrder withErrorCount(int next) {
-      return new TrackedOrder(orderId, tokenId, side, requestedPrice, requestedSize, trackedAt, lastStatus, lastMatchedSize, lastRemainingSize, next);
+      return new TrackedOrder(
+          orderId,
+          tokenId,
+          side,
+          requestedPrice,
+          requestedSize,
+          trackedAt,
+          lastStatus,
+          lastMatchedSize,
+          lastRemainingSize,
+          next);
     }
   }
 }
-

@@ -1,0 +1,4 @@
+name: polybot
+include:
+  - docker-compose.analytics.yaml
+  - docker-compose.monitoring.yaml

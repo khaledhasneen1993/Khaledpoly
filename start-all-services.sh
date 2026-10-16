@@ -1,106 +1,48 @@
 #!/usr/bin/env bash
-
-set -e
-
-echo "=========================================="
-echo "Starting All Polybot Services"
-echo "=========================================="
-echo ""
-
-# Navigate to project root
+set -euo pipefail
+umask 077
 cd "$(dirname "$0")"
-
-# Build if needed
-if [ ! -f "executor-service/target/executor-service-0.0.1-SNAPSHOT.jar" ] || \
-   [ ! -f "strategy-service/target/strategy-service-0.0.1-SNAPSHOT.jar" ] || \
-   [ ! -f "ingestor-service/target/ingestor-service-0.0.1-SNAPSHOT.jar" ] || \
-   [ ! -f "infrastructure-orchestrator-service/target/infrastructure-orchestrator-service-0.0.1-SNAPSHOT.jar" ]; then
-    echo "Building all services..."
-    mvn clean package -DskipTests
-    echo ""
+command -v java >/dev/null || { echo "Java 21 is required"; exit 1; }
+command -v curl >/dev/null || { echo "curl is required"; exit 1; }
+mkdir -p logs state
+light="${POLYBOT_LIGHT:-true}"
+services=(executor-service strategy-service)
+if [[ "$light" != true ]]; then
+  command -v docker >/dev/null || { echo "Docker Compose is required for full mode"; exit 1; }
+  docker compose -f compose.yaml config --quiet
+  docker compose -f compose.yaml up -d --wait
+  services+=(ingestor-service analytics-service)
 fi
-
-# Create logs directory if not exists
-mkdir -p logs
-
-echo "Starting services in background..."
-echo ""
-
-# Start infrastructure orchestrator first (it will start all Docker stacks)
-echo "1. Starting infrastructure-orchestrator-service (port 8084)..."
-echo "   This will start: Redpanda, ClickHouse, Prometheus, Grafana, Alertmanager"
-java -jar infrastructure-orchestrator-service/target/infrastructure-orchestrator-service-0.0.1-SNAPSHOT.jar \
-    --spring.profiles.active=develop \
-    > logs/infrastructure-orchestrator-service.log 2>&1 &
-echo $! > logs/infrastructure-orchestrator-service.pid
-echo "   PID: $(cat logs/infrastructure-orchestrator-service.pid)"
-
-# Wait for infrastructure to be ready
-echo "   Waiting for infrastructure stacks to be ready..."
-sleep 20
-
-# Start executor service
-echo "2. Starting executor-service (port 8080)..."
-java -jar executor-service/target/executor-service-0.0.1-SNAPSHOT.jar \
-    --spring.profiles.active=develop \
-    > logs/executor-service.log 2>&1 &
-echo $! > logs/executor-service.pid
-echo "   PID: $(cat logs/executor-service.pid)"
-
-# Start strategy service
-echo "3. Starting strategy-service (port 8081)..."
-java -jar strategy-service/target/strategy-service-0.0.1-SNAPSHOT.jar \
-    --spring.profiles.active=develop \
-    > logs/strategy-service.log 2>&1 &
-echo $! > logs/strategy-service.pid
-echo "   PID: $(cat logs/strategy-service.pid)"
-
-# Start ingestor service
-echo "4. Starting ingestor-service (port 8083)..."
-java -jar ingestor-service/target/ingestor-service-0.0.1-SNAPSHOT.jar \
-    --spring.profiles.active=develop \
-    > logs/ingestor-service.log 2>&1 &
-echo $! > logs/ingestor-service.pid
-echo "   PID: $(cat logs/ingestor-service.pid)"
-
-# Start analytics service
-echo "5. Starting analytics-service (port 8082)..."
-java -jar analytics-service/target/analytics-service-0.0.1-SNAPSHOT.jar \
-    --spring.profiles.active=develop \
-    > logs/analytics-service.log 2>&1 &
-echo $! > logs/analytics-service.pid
-echo "   PID: $(cat logs/analytics-service.pid)"
-
-echo ""
-echo "=========================================="
-echo "✓ All services started"
-echo "=========================================="
-echo ""
-echo "Service URLs:"
-echo "  • Executor:         http://localhost:8080/actuator/health"
-echo "  • Strategy:         http://localhost:8081/actuator/health"
-echo "  • Analytics:        http://localhost:8082/actuator/health"
-echo "  • Ingestor:         http://localhost:8083/actuator/health"
-echo "  • Infrastructure:   http://localhost:8084/actuator/health"
-echo ""
-echo "Analytics Stack:"
-echo "  • ClickHouse HTTP:  http://localhost:8123"
-echo "  • ClickHouse TCP:   tcp://localhost:9000"
-echo "  • Redpanda Kafka:   localhost:9092"
-echo "  • Redpanda Admin:   http://localhost:9644"
-echo ""
-echo "Monitoring Stack:"
-echo "  • Grafana:          http://localhost:3000 (admin/$GRAFANA_ADMIN_PASSWORD)"
-echo "  • Prometheus:       http://localhost:9090"
-echo "  • Alertmanager:     http://localhost:9093"
-echo ""
-echo "Logs:"
-echo "  • tail -f logs/executor-service.log"
-echo "  • tail -f logs/strategy-service.log"
-echo "  • tail -f logs/analytics-service.log"
-echo "  • tail -f logs/ingestor-service.log"
-echo "  • tail -f logs/infrastructure-orchestrator-service.log"
-echo ""
-echo "To stop all services:"
-echo "  ./stop-all-services.sh"
-echo ""
+for service in "${services[@]}"; do
+  pidfile="logs/$service.pid"
+  if [[ -f "$pidfile" ]] && kill -0 "$(cat "$pidfile")" 2>/dev/null; then
+    echo "$service is already running; refusing duplicate start"; exit 1
+  fi
+done
+build_required=false
+for service in "${services[@]}"; do [[ -f "$service/target/$service-0.0.1-SNAPSHOT.jar" ]] || build_required=true; done
+if [[ "$build_required" == true ]]; then
+  command -v mvn >/dev/null || { echo "Build first with Maven: mvn verify"; exit 1; }
+  mvn --batch-mode --no-transfer-progress verify
+fi
+started=()
+cleanup_failure() {
+  for pid in "${started[@]}"; do kill -TERM "$pid" 2>/dev/null || true; done
+}
+trap cleanup_failure ERR
+for service in "${services[@]}"; do
+  extra=()
+  [[ "$light" == true ]] && extra+=(--hft.events.enabled=false)
+  java -Dpolybot.orderState="$PWD/state/strategy-orders.json" -jar "$service/target/$service-0.0.1-SNAPSHOT.jar"     --spring.profiles.active=develop "${extra[@]}" > "logs/$service.log" 2>&1 &
+  pid=$!; started+=("$pid"); printf '%s\n' "$pid" > "logs/$service.pid"
+  case "$service" in executor-service) port=8080;; strategy-service) port=8081;; ingestor-service) port=8083;; analytics-service) port=8082;; esac
+  ready=false
+  for ((attempt=0;attempt<30;attempt++)); do
+    kill -0 "$pid" 2>/dev/null || { echo "$service exited; see logs/$service.log"; exit 1; }
+    if curl --fail --silent --max-time 2 "http://127.0.0.1:$port/actuator/health" >/dev/null; then ready=true; break; fi
+    sleep 1
+  done
+  [[ "$ready" == true ]] || { echo "$service readiness timed out"; cleanup_failure; exit 1; }
+done
+trap - ERR
+echo "PAPER services ready. Phase-one fills are disabled; this is not a profitability simulation."

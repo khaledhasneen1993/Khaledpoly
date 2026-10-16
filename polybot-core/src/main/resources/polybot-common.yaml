@@ -22,7 +22,7 @@ management:
       environment: ${hft.mode:PAPER}
   endpoint:
     health:
-      show-details: always
+      show-details: never
       probes:
         enabled: true
     prometheus:
@@ -31,3 +31,5 @@ management:
 logging:
   level:
     org.apache.kafka: WARN
+
+# Never expose detailed account/runtime internals through public health endpoints.

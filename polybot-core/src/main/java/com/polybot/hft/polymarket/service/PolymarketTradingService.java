@@ -15,16 +15,15 @@ import com.polybot.hft.polymarket.model.ClobOrderType;
 import com.polybot.hft.polymarket.model.OrderBook;
 import com.polybot.hft.polymarket.model.SignedOrder;
 import com.polybot.hft.polymarket.order.PolymarketOrderBuilder;
+import java.math.BigDecimal;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.UUID;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
-
-import java.math.BigDecimal;
-import java.util.UUID;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -35,6 +34,8 @@ public class PolymarketTradingService {
   private final @NonNull PolymarketAuthContext authContext;
   private final @NonNull PolymarketClobClient clobClient;
   private final @NonNull ObjectMapper objectMapper;
+  private final @NonNull MarketPolicyService marketPolicy;
+  private final @NonNull java.time.Clock clock;
 
   public OrderBook getOrderBook(String tokenId) {
     log.info("Fetching order book for tokenId={}", tokenId);
@@ -55,90 +56,93 @@ public class PolymarketTradingService {
 
   public OrderSubmissionResult placeLimitOrder(LimitOrderRequest request) {
     if (properties.risk().killSwitch()) {
-      throw new IllegalStateException("Trading disabled by kill switch (hft.risk.kill-switch=true)");
+      throw new IllegalStateException(
+          "Trading disabled by kill switch (hft.risk.kill-switch=true)");
     }
     enforceRiskLimits(request.side(), request.price(), request.size());
+    var policy = marketPolicy.resolve(request.tokenId());
+    policy.validate(request, clock);
 
     Credentials signer = authContext.requireSignerCredentials();
-    SignedOrder order = orderBuilder(signer).buildLimitOrder(
-        request.tokenId(),
-        request.side(),
-        request.price(),
-        request.size(),
-        resolveTickSize(request.tokenId(), request.tickSize()),
-        resolveNegRisk(request.tokenId(), request.negRisk()),
-        resolveFeeRateBps(request.tokenId(), request.feeRateBps()),
-        request.nonce(),
-        request.expirationSeconds(),
-        request.taker()
-    );
+    SignedOrder order =
+        orderBuilder(signer, policy.version())
+            .buildLimitOrder(
+                request.tokenId(),
+                request.side(),
+                request.price(),
+                request.size(),
+                policy.tick(),
+                policy.negativeRisk(),
+                0,
+                request.nonce(),
+                request.expirationSeconds(),
+                request.taker());
 
     if (properties.mode() == HftProperties.TradingMode.PAPER) {
       String paperOrderId = "paper-" + UUID.randomUUID();
-      JsonNode paperResp = objectMapper.createObjectNode()
-          .put("mode", properties.mode().name())
-          .put("orderID", paperOrderId)
-          .put("orderId", paperOrderId)
-          .put("status", "OPEN");
+      JsonNode paperResp =
+          objectMapper
+              .createObjectNode()
+              .put("mode", properties.mode().name())
+              .put("orderID", paperOrderId)
+              .put("orderId", paperOrderId)
+              .put("status", "OPEN");
       return new OrderSubmissionResult(properties.mode(), order, paperResp);
     }
 
     ApiCreds creds = authContext.requireApiCreds();
     ClobOrderType orderType = request.orderType() == null ? ClobOrderType.GTC : request.orderType();
-    JsonNode resp = clobClient.postOrder(
-        signer,
-        creds,
-        order,
-        orderType,
-        request.deferExec() != null && request.deferExec()
-    );
+    JsonNode resp =
+        clobClient.postOrder(
+            signer, creds, order, orderType, request.deferExec() != null && request.deferExec());
     return new OrderSubmissionResult(properties.mode(), order, resp);
   }
 
   public OrderSubmissionResult placeMarketOrder(MarketOrderRequest request) {
     if (properties.risk().killSwitch()) {
-      throw new IllegalStateException("Trading disabled by kill switch (hft.risk.kill-switch=true)");
+      throw new IllegalStateException(
+          "Trading disabled by kill switch (hft.risk.kill-switch=true)");
     }
     enforceMarketRiskLimits(request.side(), request.price(), request.amount());
 
     Credentials signer = authContext.requireSignerCredentials();
-    SignedOrder order = orderBuilder(signer).buildMarketOrder(
-        request.tokenId(),
-        request.side(),
-        request.amount(),
-        request.price(),
-        resolveTickSize(request.tokenId(), request.tickSize()),
-        resolveNegRisk(request.tokenId(), request.negRisk()),
-        resolveFeeRateBps(request.tokenId(), request.feeRateBps()),
-        request.nonce(),
-        request.taker()
-    );
+    SignedOrder order =
+        orderBuilder(signer, marketPolicy.resolve(request.tokenId()).version())
+            .buildMarketOrder(
+                request.tokenId(),
+                request.side(),
+                request.amount(),
+                request.price(),
+                resolveTickSize(request.tokenId(), request.tickSize()),
+                resolveNegRisk(request.tokenId(), request.negRisk()),
+                0,
+                request.nonce(),
+                request.taker());
 
     if (properties.mode() == HftProperties.TradingMode.PAPER) {
       String paperOrderId = "paper-" + UUID.randomUUID();
-      JsonNode paperResp = objectMapper.createObjectNode()
-          .put("mode", properties.mode().name())
-          .put("orderID", paperOrderId)
-          .put("orderId", paperOrderId)
-          .put("status", "OPEN");
+      JsonNode paperResp =
+          objectMapper
+              .createObjectNode()
+              .put("mode", properties.mode().name())
+              .put("orderID", paperOrderId)
+              .put("orderId", paperOrderId)
+              .put("status", "OPEN");
       return new OrderSubmissionResult(properties.mode(), order, paperResp);
     }
 
     ApiCreds creds = authContext.requireApiCreds();
     ClobOrderType orderType = request.orderType() == null ? ClobOrderType.FOK : request.orderType();
-    JsonNode resp = clobClient.postOrder(
-        signer,
-        creds,
-        order,
-        orderType,
-        request.deferExec() != null && request.deferExec()
-    );
+    JsonNode resp =
+        clobClient.postOrder(
+            signer, creds, order, orderType, request.deferExec() != null && request.deferExec());
     return new OrderSubmissionResult(properties.mode(), order, resp);
   }
 
   public JsonNode cancelOrder(String orderId) {
     if (properties.mode() == HftProperties.TradingMode.PAPER) {
-      return objectMapper.createObjectNode()
+      return objectMapper
+          .createObjectNode()
           .put("mode", properties.mode().name())
           .put("canceled", true)
           .put("orderId", orderId);
@@ -151,7 +155,8 @@ public class PolymarketTradingService {
 
   public JsonNode getOrder(String orderId) {
     if (properties.mode() == HftProperties.TradingMode.PAPER) {
-      return objectMapper.createObjectNode()
+      return objectMapper
+          .createObjectNode()
           .put("mode", properties.mode().name())
           .put("orderId", orderId);
     }
@@ -162,24 +167,28 @@ public class PolymarketTradingService {
 
   public JsonNode getOrders(Map<String, String> query) {
     if (properties.mode() == HftProperties.TradingMode.PAPER) {
-      return objectMapper.createObjectNode()
+      return objectMapper
+          .createObjectNode()
           .put("mode", properties.mode().name())
           .set("data", objectMapper.createArrayNode());
     }
     Credentials signer = authContext.requireSignerCredentials();
     ApiCreds creds = authContext.requireApiCreds();
-    return clobClient.getOrders(signer, creds, query == null ? Map.of() : new LinkedHashMap<>(query));
+    return clobClient.getOrders(
+        signer, creds, query == null ? Map.of() : new LinkedHashMap<>(query));
   }
 
   public JsonNode getTrades(Map<String, String> query) {
     if (properties.mode() == HftProperties.TradingMode.PAPER) {
-      return objectMapper.createObjectNode()
+      return objectMapper
+          .createObjectNode()
           .put("mode", properties.mode().name())
           .set("data", objectMapper.createArrayNode());
     }
     Credentials signer = authContext.requireSignerCredentials();
     ApiCreds creds = authContext.requireApiCreds();
-    return clobClient.getTrades(signer, creds, query == null ? Map.of() : new LinkedHashMap<>(query));
+    return clobClient.getTrades(
+        signer, creds, query == null ? Map.of() : new LinkedHashMap<>(query));
   }
 
   public PolymarketHealthResponse getHealth(boolean deep, String tokenId) {
@@ -211,19 +220,18 @@ public class PolymarketTradingService {
         tokenId,
         serverTime,
         orderBook,
-        deepError
-    );
+        deepError);
   }
 
-  private PolymarketOrderBuilder orderBuilder(Credentials signer) {
+  private PolymarketOrderBuilder orderBuilder(Credentials signer, String version) {
     HftProperties.Polymarket polymarket = properties.polymarket();
     HftProperties.Auth auth = polymarket.auth();
-    return new PolymarketOrderBuilder(
+    return PolymarketOrderBuilder.forMarket(
         polymarket.chainId(),
         signer,
         auth.signatureType(),
-        authContext.funderAddress().orElse(null)
-    );
+        authContext.funderAddress().orElse(null),
+        version);
   }
 
   private BigDecimal resolveTickSize(String tokenId, BigDecimal tickSizeOverride) {
@@ -249,8 +257,11 @@ public class PolymarketTradingService {
 
     BigDecimal notional = price.multiply(size);
     BigDecimal maxNotional = properties.risk().maxOrderNotionalUsd();
-    if (maxNotional != null && maxNotional.compareTo(BigDecimal.ZERO) > 0 && notional.compareTo(maxNotional) > 0) {
-      throw new IllegalArgumentException("Order notional exceeds maxOrderNotionalUsd (" + maxNotional + ")");
+    if (maxNotional != null
+        && maxNotional.compareTo(BigDecimal.ZERO) > 0
+        && notional.compareTo(maxNotional) > 0) {
+      throw new IllegalArgumentException(
+          "Order notional exceeds maxOrderNotionalUsd (" + maxNotional + ")");
     }
   }
 
@@ -260,8 +271,11 @@ public class PolymarketTradingService {
     }
     BigDecimal notional = side == OrderSide.BUY ? amount : amount.multiply(price);
     BigDecimal maxNotional = properties.risk().maxOrderNotionalUsd();
-    if (maxNotional != null && maxNotional.compareTo(BigDecimal.ZERO) > 0 && notional.compareTo(maxNotional) > 0) {
-      throw new IllegalArgumentException("Order notional exceeds maxOrderNotionalUsd (" + maxNotional + ")");
+    if (maxNotional != null
+        && maxNotional.compareTo(BigDecimal.ZERO) > 0
+        && notional.compareTo(maxNotional) > 0) {
+      throw new IllegalArgumentException(
+          "Order notional exceeds maxOrderNotionalUsd (" + maxNotional + ")");
     }
   }
 }

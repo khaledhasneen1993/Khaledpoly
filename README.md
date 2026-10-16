@@ -1,4 +1,6 @@
-# Polybot
+# Khaledpoly / Polybot
+
+Phase-one reliability development: PAPER-only, durable account/order state, current API contracts and regression tests. Fills are disabled by default; this release makes no profitability claim. See [phase-one implementation and rollout limits](docs/PHASE1.md).
 
 Open-source Polymarket trading infrastructure and strategy reverse-engineering toolkit.
 
@@ -36,8 +38,8 @@ Polybot is the execution and market-data foundation for **AWARE**, the next prod
 ### 1. Clone
 
 ```bash
-git clone https://github.com/ent0n29/polybot.git
-cd polybot
+git clone https://github.com/khaledhasneen1993/Khaledpoly.git
+cd Khaledpoly
 ```
 
 ### 2. Optional Environment Setup
@@ -55,7 +57,7 @@ Note: Spring Boot does not auto-load `.env`; export variables in your shell when
 ./start-all-services.sh
 ```
 
-This script builds missing artifacts, starts infrastructure stacks, then starts all services with `develop` profile.
+The launcher starts a lightweight PAPER executor and strategy with the `develop` profile. Set `POLYBOT_LIGHT=false` for analytics infrastructure; see docs/PHASE1.md.
 
 ### 4. Verify
 
@@ -126,7 +128,7 @@ Key variables are documented in `.env.example`.
 
 Most relevant:
 - `POLYMARKET_TARGET_USER` for strategy research workflows
-- `POLYMARKET_PRIVATE_KEY`, `POLYMARKET_API_KEY`, `POLYMARKET_API_SECRET`, `POLYMARKET_API_PASSPHRASE` for live trading
+- Legacy live credentials are not needed for this PAPER release; LIVE startup is locked pending rollout verification
 - `KAFKA_BOOTSTRAP_SERVERS`, `ANALYTICS_DB_URL`, `CLICKHOUSE_*` for data pipeline
 - `GRAFANA_ADMIN_PASSWORD`, `SLACK_WEBHOOK_URL` for ops/alerts
 

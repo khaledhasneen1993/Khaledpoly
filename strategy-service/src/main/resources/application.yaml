@@ -5,5 +5,9 @@ spring:
     name: strategy-service
 
 server:
+  address: ${POLYBOT_BIND_ADDRESS:127.0.0.1}
   port: 8081
 
+
+polybot:
+  executor-token: ${POLYBOT_EXECUTOR_TOKEN:}

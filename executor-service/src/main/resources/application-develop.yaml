@@ -16,7 +16,7 @@ logging:
 executor:
   sim:
     enabled: true
-    fills-enabled: true
+    fills-enabled: false
     fill-poll-millis: 500
     maker-fill-probability-per-poll: 0.01
     maker-fill-probability-multiplier-per-tick: 1.0
@@ -35,3 +35,12 @@ executor:
     max-retries: 3
     merge-only-near-end: true
     merge-seconds-before-end: 600
+
+  account:
+    initial-cash: ${PAPER_INITIAL_CASH:500}
+    max-order: ${PAPER_MAX_ORDER:25}
+    max-token-exposure: ${PAPER_MAX_TOKEN_EXPOSURE:25}
+    max-gross-exposure: ${PAPER_MAX_GROSS_EXPOSURE:250}
+    daily-loss: ${PAPER_DAILY_LOSS:25}
+    drawdown: ${PAPER_MAX_DRAWDOWN:50}
+    state-path: ${PAPER_STATE_PATH:state/paper-account.json}

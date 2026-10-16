@@ -10,21 +10,20 @@ import com.polybot.hft.polymarket.auth.PolymarketAuthContext;
 import com.polybot.hft.polymarket.data.PolymarketDataApiClient;
 import com.polybot.hft.polymarket.data.PolymarketPosition;
 import com.polybot.hft.polymarket.onchain.ContractConfig;
+import java.math.BigDecimal;
+import java.time.Clock;
+import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
 
-import java.math.BigDecimal;
-import java.time.Clock;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class PolymarketBankrollService {
 
-  private static final TypeReference<List<PolymarketPosition>> POSITIONS_LIST = new TypeReference<>() {
-  };
+  private static final TypeReference<List<PolymarketPosition>> POSITIONS_LIST =
+      new TypeReference<>() {};
 
   private final @NonNull HftProperties properties;
   private final @NonNull PolymarketAuthContext authContext;
@@ -37,18 +36,23 @@ public class PolymarketBankrollService {
   public PolymarketBankrollResponse snapshot() {
     long now = clock.millis();
     if (simulator.enabled()) {
+      BigDecimal equity = simulator.equity();
+      var account = simulator.accountState();
+      BigDecimal basis =
+          account.holdings().values().stream()
+              .map(com.polybot.hft.risk.AccountLedger.Holding::basis)
+              .reduce(BigDecimal.ZERO, BigDecimal::add);
       return new PolymarketBankrollResponse(
           properties.mode().name(),
-          null,
-          BigDecimal.ZERO,
-          BigDecimal.ZERO,
-          BigDecimal.ZERO,
-          BigDecimal.ZERO,
+          "paper",
+          simulator.availableCash(),
+          equity.subtract(account.cash()),
+          basis,
+          equity,
+          account.holdings().size(),
           0,
           0,
-          0,
-          now
-      );
+          now);
     }
 
     String maker = makerAddress();
@@ -63,12 +67,13 @@ public class PolymarketBankrollService {
           0,
           0,
           0,
-          now
-      );
+          now);
     }
 
     ContractConfig contracts = ContractConfig.forChainId(properties.polymarket().chainId());
-    BigDecimal usdc = onchainErc20.balanceOf(contracts.collateral(), maker, contracts.collateralTokenDecimals());
+    BigDecimal usdc =
+        onchainErc20.balanceOf(
+            ContractConfig.tradingCollateral(), maker, contracts.collateralTokenDecimals());
 
     JsonNode raw = dataApiClient.getPositions(maker, 500, 0);
     List<PolymarketPosition> positions = objectMapper.convertValue(raw, POSITIONS_LIST);
@@ -107,8 +112,7 @@ public class PolymarketBankrollService {
         positions.size(),
         redeemable,
         mergeable,
-        now
-    );
+        now);
   }
 
   private String makerAddress() {
@@ -116,10 +120,10 @@ public class PolymarketBankrollService {
     if (funder != null && !funder.isBlank()) {
       return funder.toLowerCase();
     }
-    return authContext.signerCredentials()
+    return authContext
+        .signerCredentials()
         .map(Credentials::getAddress)
         .map(String::toLowerCase)
         .orElse(null);
   }
 }
-

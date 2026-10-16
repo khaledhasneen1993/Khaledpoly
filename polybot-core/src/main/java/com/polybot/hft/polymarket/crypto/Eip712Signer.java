@@ -1,40 +1,184 @@
 package com.polybot.hft.polymarket.crypto;
 
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import lombok.experimental.UtilityClass;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.Sign;
 import org.web3j.utils.Numeric;
 
-import java.math.BigInteger;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-
 @UtilityClass
 public class Eip712Signer {
 
-  public static String signClobAuth(Credentials credentials, int chainId, long timestampSeconds, long nonce) {
+  public static String signClobAuth(
+      Credentials credentials, int chainId, long timestampSeconds, long nonce) {
     String address = credentials.getAddress();
 
-    byte[] domainSeparator = hashStruct(Hash.sha3("EIP712Domain(string name,string version,uint256 chainId)".getBytes(StandardCharsets.UTF_8)), hashString("ClobAuthDomain"), hashString("1"), uint256(BigInteger.valueOf(chainId)));
+    byte[] domainSeparator =
+        hashStruct(
+            Hash.sha3(
+                "EIP712Domain(string name,string version,uint256 chainId)"
+                    .getBytes(StandardCharsets.UTF_8)),
+            hashString("ClobAuthDomain"),
+            hashString("1"),
+            uint256(BigInteger.valueOf(chainId)));
 
-    byte[] messageHash = hashStruct(Hash.sha3("ClobAuth(address address,string timestamp,uint256 nonce,string message)".getBytes(StandardCharsets.UTF_8)), address(address), hashString(Long.toString(timestampSeconds)), uint256(BigInteger.valueOf(nonce)), hashString("This message attests that I control the given wallet"));
+    byte[] messageHash =
+        hashStruct(
+            Hash.sha3(
+                "ClobAuth(address address,string timestamp,uint256 nonce,string message)"
+                    .getBytes(StandardCharsets.UTF_8)),
+            address(address),
+            hashString(Long.toString(timestampSeconds)),
+            uint256(BigInteger.valueOf(nonce)),
+            hashString("This message attests that I control the given wallet"));
 
     byte[] digest = eip712Digest(domainSeparator, messageHash);
     return signDigest(credentials, digest);
   }
 
-  public static String signOrder(Credentials credentials, int chainId, String verifyingContract, String salt, String maker, String signer, String taker, String tokenId, String makerAmount, String takerAmount, String expiration, String nonce, String feeRateBps, int side, int signatureType) {
-    byte[] domainSeparator = hashStruct(Hash.sha3("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)".getBytes(StandardCharsets.UTF_8)), hashString("Polymarket CTF Exchange"), hashString("1"), uint256(BigInteger.valueOf(chainId)), address(verifyingContract));
+  public static String signOrder(
+      Credentials credentials,
+      int chainId,
+      String verifyingContract,
+      String salt,
+      String maker,
+      String signer,
+      String taker,
+      String tokenId,
+      String makerAmount,
+      String takerAmount,
+      String expiration,
+      String nonce,
+      String feeRateBps,
+      int side,
+      int signatureType) {
+    byte[] domainSeparator =
+        hashStruct(
+            Hash.sha3(
+                "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
+                    .getBytes(StandardCharsets.UTF_8)),
+            hashString("Polymarket CTF Exchange"),
+            hashString("1"),
+            uint256(BigInteger.valueOf(chainId)),
+            address(verifyingContract));
 
-    byte[] messageHash = hashStruct(Hash.sha3(("Order(uint256 salt,address maker,address signer,address taker,uint256 tokenId,uint256 makerAmount," + "uint256 takerAmount,uint256 expiration,uint256 nonce,uint256 feeRateBps,uint8 side,uint8 signatureType)").getBytes(StandardCharsets.UTF_8)), uint256(new BigInteger(salt)), address(maker), address(signer), address(taker), uint256(new BigInteger(tokenId)), uint256(new BigInteger(makerAmount)), uint256(new BigInteger(takerAmount)), uint256(new BigInteger(expiration)), uint256(new BigInteger(nonce)), uint256(new BigInteger(feeRateBps)), uint256(BigInteger.valueOf(side)), uint256(BigInteger.valueOf(signatureType)));
+    byte[] messageHash =
+        hashStruct(
+            Hash.sha3(
+                ("Order(uint256 salt,address maker,address signer,address taker,uint256"
+                     + " tokenId,uint256 makerAmount,uint256 takerAmount,uint256 expiration,uint256"
+                     + " nonce,uint256 feeRateBps,uint8 side,uint8 signatureType)")
+                    .getBytes(StandardCharsets.UTF_8)),
+            uint256(new BigInteger(salt)),
+            address(maker),
+            address(signer),
+            address(taker),
+            uint256(new BigInteger(tokenId)),
+            uint256(new BigInteger(makerAmount)),
+            uint256(new BigInteger(takerAmount)),
+            uint256(new BigInteger(expiration)),
+            uint256(new BigInteger(nonce)),
+            uint256(new BigInteger(feeRateBps)),
+            uint256(BigInteger.valueOf(side)),
+            uint256(BigInteger.valueOf(signatureType)));
 
     byte[] digest = eip712Digest(domainSeparator, messageHash);
     return signDigest(credentials, digest);
+  }
+
+  public static String signOrderV2(
+      Credentials credentials,
+      int chainId,
+      String contract,
+      String salt,
+      String maker,
+      String signer,
+      String tokenId,
+      String makerAmount,
+      String takerAmount,
+      int side,
+      int signatureType,
+      long timestampMillis,
+      String metadata,
+      String builder) {
+    return signOrderVersion(
+        credentials,
+        chainId,
+        contract,
+        salt,
+        maker,
+        signer,
+        tokenId,
+        makerAmount,
+        takerAmount,
+        side,
+        signatureType,
+        timestampMillis,
+        metadata,
+        builder,
+        "2");
+  }
+
+  public static String signOrderVersion(
+      Credentials credentials,
+      int chainId,
+      String contract,
+      String salt,
+      String maker,
+      String signer,
+      String tokenId,
+      String makerAmount,
+      String takerAmount,
+      int side,
+      int signatureType,
+      long timestampMillis,
+      String metadata,
+      String builder,
+      String version) {
+    if (!version.equals("2") && !version.equals("3"))
+      throw new IllegalArgumentException("Unsupported exchange domain");
+    byte[] domain =
+        hashStruct(
+            Hash.sha3(
+                "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
+                    .getBytes(StandardCharsets.UTF_8)),
+            hashString("Polymarket CTF Exchange"),
+            hashString(version),
+            uint256(BigInteger.valueOf(chainId)),
+            address(contract));
+    byte[] message =
+        hashStruct(
+            Hash.sha3(
+                ("Order(uint256 salt,address maker,address signer,uint256 tokenId,uint256"
+                        + " makerAmount,uint256 takerAmount,uint8 side,uint8 signatureType,uint256"
+                        + " timestamp,bytes32 metadata,bytes32 builder)")
+                    .getBytes(StandardCharsets.UTF_8)),
+            uint256(new BigInteger(salt)),
+            address(maker),
+            address(signer),
+            uint256(new BigInteger(tokenId)),
+            uint256(new BigInteger(makerAmount)),
+            uint256(new BigInteger(takerAmount)),
+            uint256(BigInteger.valueOf(side)),
+            uint256(BigInteger.valueOf(signatureType)),
+            uint256(BigInteger.valueOf(timestampMillis)),
+            bytes32(metadata),
+            bytes32(builder));
+    return signDigest(credentials, eip712Digest(domain, message));
+  }
+
+  private static byte[] bytes32(String value) {
+    byte[] result = Numeric.hexStringToByteArray(value);
+    if (result.length != 32) throw new IllegalArgumentException("Expected bytes32");
+    return result;
   }
 
   private static String signDigest(Credentials credentials, byte[] digest32) {
-    Sign.SignatureData signatureData = Sign.signMessage(digest32, credentials.getEcKeyPair(), false);
+    Sign.SignatureData signatureData =
+        Sign.signMessage(digest32, credentials.getEcKeyPair(), false);
     byte v = signatureData.getV()[0];
     if (v == 0 || v == 1) {
       v = (byte) (v + 27);

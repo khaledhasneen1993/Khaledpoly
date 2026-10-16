@@ -10,9 +10,6 @@ import com.polybot.hft.polymarket.model.ApiCreds;
 import com.polybot.hft.polymarket.model.ClobOrderType;
 import com.polybot.hft.polymarket.model.OrderBook;
 import com.polybot.hft.polymarket.model.SignedOrder;
-import org.springframework.http.HttpMethod;
-import org.web3j.crypto.Credentials;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
@@ -25,6 +22,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.http.HttpMethod;
+import org.web3j.crypto.Credentials;
 
 public final class PolymarketClobClient {
 
@@ -48,8 +47,7 @@ public final class PolymarketClobClient {
       ObjectMapper objectMapper,
       Clock clock,
       int chainId,
-      boolean useServerTime
-  ) {
+      boolean useServerTime) {
     this.requestFactory = new HttpRequestFactory(Objects.requireNonNull(baseUri, "baseUri"));
     this.transport = Objects.requireNonNull(transport, "transport");
     this.objectMapper = Objects.requireNonNull(objectMapper, "objectMapper");
@@ -63,22 +61,40 @@ public final class PolymarketClobClient {
     return Long.parseLong(raw.trim());
   }
 
+  public JsonNode getRawOrderBook(String tokenId) {
+    return getJsonNode(PolymarketClobPaths.BOOK, Map.of("token_id", tokenId), Map.of());
+  }
+
+  public JsonNode getClobMarketInfo(String condition) {
+    return getJsonNode("/clob-markets/" + condition, Map.of(), Map.of());
+  }
+
+  public JsonNode heartbeat(Credentials signer, ApiCreds creds, String id) {
+    String path = "/v1/heartbeats", body = writeJson(Map.of("heartbeat_id", id == null ? "" : id));
+    return postJsonNode(
+        path, Map.of(), l2Headers(signer, creds, HttpMethod.POST, path, body), body);
+  }
+
   public OrderBook getOrderBook(String tokenId) {
-    return getJson(PolymarketClobPaths.BOOK, Map.of("token_id", tokenId), Map.of(), OrderBook.class);
+    return getJson(
+        PolymarketClobPaths.BOOK, Map.of("token_id", tokenId), Map.of(), OrderBook.class);
   }
 
   public BigDecimal getMinimumTickSize(String tokenId) {
-    JsonNode node = getJsonNode(PolymarketClobPaths.TICK_SIZE, Map.of("token_id", tokenId), Map.of());
-    return node.get("minimum_tick_size").decimalValue();
+    JsonNode node =
+        getJsonNode(PolymarketClobPaths.TICK_SIZE, Map.of("token_id", tokenId), Map.of());
+    return new BigDecimal(node.path("minimum_tick_size").asText());
   }
 
   public boolean isNegRisk(String tokenId) {
-    JsonNode node = getJsonNode(PolymarketClobPaths.NEG_RISK, Map.of("token_id", tokenId), Map.of());
+    JsonNode node =
+        getJsonNode(PolymarketClobPaths.NEG_RISK, Map.of("token_id", tokenId), Map.of());
     return node.get("neg_risk").booleanValue();
   }
 
   public int getBaseFeeBps(String tokenId) {
-    JsonNode node = getJsonNode(PolymarketClobPaths.FEE_RATE, Map.of("token_id", tokenId), Map.of());
+    JsonNode node =
+        getJsonNode(PolymarketClobPaths.FEE_RATE, Map.of("token_id", tokenId), Map.of());
     return node.get("base_fee").intValue();
   }
 
@@ -87,7 +103,8 @@ public final class PolymarketClobClient {
   }
 
   public JsonNode samplingMarkets(Map<String, String> query) {
-    return getJsonNode(PolymarketClobPaths.SAMPLING_MARKETS, query == null ? Map.of() : query, Map.of());
+    return getJsonNode(
+        PolymarketClobPaths.SAMPLING_MARKETS, query == null ? Map.of() : query, Map.of());
   }
 
   public JsonNode getOrder(Credentials signingCredentials, ApiCreds apiCreds, String orderId) {
@@ -95,27 +112,46 @@ public final class PolymarketClobClient {
       throw new IllegalArgumentException("orderId must not be blank");
     }
     String endpoint = PolymarketClobPaths.DATA_ORDER_PREFIX + orderId.trim();
-    Map<String, String> headers = l2Headers(signingCredentials, apiCreds, HttpMethod.GET, endpoint, "");
+    Map<String, String> headers =
+        l2Headers(signingCredentials, apiCreds, HttpMethod.GET, endpoint, "");
     return getJsonNode(endpoint, Map.of(), headers);
   }
 
-  public JsonNode getOrders(Credentials signingCredentials, ApiCreds apiCreds, Map<String, String> query) {
-    Map<String, String> headers = l2Headers(signingCredentials, apiCreds, HttpMethod.GET, PolymarketClobPaths.DATA_ORDERS, "");
+  public JsonNode getOrders(
+      Credentials signingCredentials, ApiCreds apiCreds, Map<String, String> query) {
+    Map<String, String> headers =
+        l2Headers(
+            signingCredentials, apiCreds, HttpMethod.GET, PolymarketClobPaths.DATA_ORDERS, "");
     return getJsonNode(PolymarketClobPaths.DATA_ORDERS, query == null ? Map.of() : query, headers);
   }
 
-  public JsonNode getTrades(Credentials signingCredentials, ApiCreds apiCreds, Map<String, String> query) {
-    Map<String, String> headers = l2Headers(signingCredentials, apiCreds, HttpMethod.GET, PolymarketClobPaths.DATA_TRADES, "");
+  public JsonNode getTrades(
+      Credentials signingCredentials, ApiCreds apiCreds, Map<String, String> query) {
+    Map<String, String> headers =
+        l2Headers(
+            signingCredentials, apiCreds, HttpMethod.GET, PolymarketClobPaths.DATA_TRADES, "");
     return getJsonNode(PolymarketClobPaths.DATA_TRADES, query == null ? Map.of() : query, headers);
   }
 
   public ApiCreds createApiCreds(Credentials signingCredentials, long nonce) {
-    return l1Auth(signingCredentials, HttpMethod.POST, PolymarketClobPaths.AUTH_API_KEY, null, nonce, ApiCredsRaw.class)
+    return l1Auth(
+            signingCredentials,
+            HttpMethod.POST,
+            PolymarketClobPaths.AUTH_API_KEY,
+            null,
+            nonce,
+            ApiCredsRaw.class)
         .toCreds();
   }
 
   public ApiCreds deriveApiCreds(Credentials signingCredentials, long nonce) {
-    return l1Auth(signingCredentials, HttpMethod.GET, PolymarketClobPaths.AUTH_DERIVE_API_KEY, null, nonce, ApiCredsRaw.class)
+    return l1Auth(
+            signingCredentials,
+            HttpMethod.GET,
+            PolymarketClobPaths.AUTH_DERIVE_API_KEY,
+            null,
+            nonce,
+            ApiCredsRaw.class)
         .toCreds();
   }
 
@@ -136,24 +172,20 @@ public final class PolymarketClobClient {
       ApiCreds apiCreds,
       SignedOrder order,
       ClobOrderType orderType,
-      boolean deferExec
-  ) {
+      boolean deferExec) {
     Objects.requireNonNull(order, "order");
     if (order.signature() == null || order.signature().isBlank()) {
       throw new IllegalArgumentException("order.signature must be set");
     }
     Map<String, Object> payload = new LinkedHashMap<>();
     Map<String, Object> orderObj = new LinkedHashMap<>();
-    orderObj.put("salt", Long.parseLong(order.salt()));
+    orderObj.put("salt", order.salt());
     orderObj.put("maker", order.maker());
     orderObj.put("signer", order.signer());
-    orderObj.put("taker", order.taker());
     orderObj.put("tokenId", order.tokenId());
     orderObj.put("makerAmount", order.makerAmount());
     orderObj.put("takerAmount", order.takerAmount());
     orderObj.put("expiration", order.expiration());
-    orderObj.put("nonce", order.nonce());
-    orderObj.put("feeRateBps", order.feeRateBps());
     orderObj.put("side", order.side().name());
     orderObj.put("signatureType", order.signatureType());
     orderObj.put("signature", order.signature());
@@ -161,16 +193,22 @@ public final class PolymarketClobClient {
     payload.put("owner", apiCreds.key());
     payload.put("orderType", orderType.name());
     payload.put("deferExec", deferExec);
+    payload.put("postOnly", orderType == ClobOrderType.GTC || orderType == ClobOrderType.GTD);
+    orderObj.put("timestamp", Long.toString(order.timestamp()));
+    orderObj.put("metadata", order.metadata());
+    orderObj.put("builder", order.builder());
 
     String body = writeJson(payload);
-    Map<String, String> headers = l2Headers(signingCredentials, apiCreds, HttpMethod.POST, PolymarketClobPaths.ORDER, body);
+    Map<String, String> headers =
+        l2Headers(signingCredentials, apiCreds, HttpMethod.POST, PolymarketClobPaths.ORDER, body);
     return postJsonNode(PolymarketClobPaths.ORDER, Map.of(), headers, body);
   }
 
   public JsonNode cancelOrder(Credentials signingCredentials, ApiCreds apiCreds, String orderId) {
     Map<String, Object> payload = Map.of("orderID", orderId);
     String body = writeJson(payload);
-    Map<String, String> headers = l2Headers(signingCredentials, apiCreds, HttpMethod.DELETE, PolymarketClobPaths.ORDER, body);
+    Map<String, String> headers =
+        l2Headers(signingCredentials, apiCreds, HttpMethod.DELETE, PolymarketClobPaths.ORDER, body);
     return deleteJsonNode(PolymarketClobPaths.ORDER, headers, body);
   }
 
@@ -180,8 +218,7 @@ public final class PolymarketClobClient {
       String path,
       String body,
       long nonce,
-      Class<T> responseType
-  ) {
+      Class<T> responseType) {
     long ts = authTimestampSeconds();
     Map<String, String> headers = PolymarketAuthHeaders.l1(signingCredentials, chainId, ts, nonce);
 
@@ -199,8 +236,7 @@ public final class PolymarketClobClient {
       ApiCreds creds,
       HttpMethod method,
       String requestPath,
-      String body
-  ) {
+      String body) {
     long ts = authTimestampSeconds();
     return PolymarketAuthHeaders.l2(signingCredentials, creds, ts, method, requestPath, body);
   }
@@ -220,54 +256,70 @@ public final class PolymarketClobClient {
     return now.getEpochSecond() + serverTimeOffsetSeconds.get();
   }
 
-  private JsonNode getJsonNode(String path, Map<String, String> query, Map<String, String> headers) {
+  private JsonNode getJsonNode(
+      String path, Map<String, String> query, Map<String, String> headers) {
     return getJson(path, query, headers, JsonNode.class);
   }
 
-  private <T> T getJson(String path, Map<String, String> query, Map<String, String> headers, Class<T> type) {
-    HttpRequest.Builder builder = requestFactory.request(path, query)
-        .GET()
-        .timeout(HTTP_TIMEOUT)
-        .header("Accept", "application/json")
-        .header("User-Agent", DEFAULT_USER_AGENT);
+  private <T> T getJson(
+      String path, Map<String, String> query, Map<String, String> headers, Class<T> type) {
+    HttpRequest.Builder builder =
+        requestFactory
+            .request(path, query)
+            .GET()
+            .timeout(HTTP_TIMEOUT)
+            .header("Accept", "application/json")
+            .header("User-Agent", DEFAULT_USER_AGENT);
     HttpHeadersUtil.apply(builder, headers);
     HttpRequest request = builder.build();
     return sendJson(request, type);
   }
 
-  private JsonNode postJsonNode(String path, Map<String, String> query, Map<String, String> headers, String body) {
+  private JsonNode postJsonNode(
+      String path, Map<String, String> query, Map<String, String> headers, String body) {
     return postJson(path, query, headers, body, JsonNode.class);
   }
 
-  private <T> T postJson(String path, Map<String, String> query, Map<String, String> headers, String body, Class<T> type) {
-    HttpRequest.Builder builder = requestFactory.request(path, query)
-        .POST(HttpRequest.BodyPublishers.ofString(body == null ? "" : body))
-        .timeout(HTTP_TIMEOUT)
-        .header("Content-Type", "application/json")
-        .header("Accept", "application/json")
-        .header("User-Agent", DEFAULT_USER_AGENT);
+  private <T> T postJson(
+      String path,
+      Map<String, String> query,
+      Map<String, String> headers,
+      String body,
+      Class<T> type) {
+    HttpRequest.Builder builder =
+        requestFactory
+            .request(path, query)
+            .POST(HttpRequest.BodyPublishers.ofString(body == null ? "" : body))
+            .timeout(HTTP_TIMEOUT)
+            .header("Content-Type", "application/json")
+            .header("Accept", "application/json")
+            .header("User-Agent", DEFAULT_USER_AGENT);
     HttpHeadersUtil.apply(builder, headers);
     HttpRequest request = builder.build();
     return sendJson(request, type);
   }
 
   private JsonNode deleteJsonNode(String path, Map<String, String> headers, String body) {
-    HttpRequest.Builder builder = requestFactory.request(path, Map.of())
-        .method("DELETE", HttpRequest.BodyPublishers.ofString(body == null ? "" : body))
-        .timeout(HTTP_TIMEOUT)
-        .header("Content-Type", "application/json")
-        .header("Accept", "application/json")
-        .header("User-Agent", DEFAULT_USER_AGENT);
+    HttpRequest.Builder builder =
+        requestFactory
+            .request(path, Map.of())
+            .method("DELETE", HttpRequest.BodyPublishers.ofString(body == null ? "" : body))
+            .timeout(HTTP_TIMEOUT)
+            .header("Content-Type", "application/json")
+            .header("Accept", "application/json")
+            .header("User-Agent", DEFAULT_USER_AGENT);
     HttpHeadersUtil.apply(builder, headers);
     HttpRequest request = builder.build();
     return sendJson(request, JsonNode.class);
   }
 
   private String getString(String path, Map<String, String> query, Map<String, String> headers) {
-    HttpRequest.Builder builder = requestFactory.request(path, query)
-        .GET()
-        .timeout(HTTP_TIMEOUT)
-        .header("User-Agent", DEFAULT_USER_AGENT);
+    HttpRequest.Builder builder =
+        requestFactory
+            .request(path, query)
+            .GET()
+            .timeout(HTTP_TIMEOUT)
+            .header("User-Agent", DEFAULT_USER_AGENT);
     HttpHeadersUtil.apply(builder, headers);
     HttpRequest request = builder.build();
     return sendString(request);
@@ -278,7 +330,8 @@ public final class PolymarketClobClient {
   }
 
   private String sendString(HttpRequest request) {
-    boolean idempotent = "GET".equalsIgnoreCase(request.method()) || "HEAD".equalsIgnoreCase(request.method());
+    boolean idempotent =
+        "GET".equalsIgnoreCase(request.method()) || "HEAD".equalsIgnoreCase(request.method());
     return transport.sendString(request, idempotent);
   }
 
@@ -295,8 +348,7 @@ public final class PolymarketClobClient {
       return new ApiCreds(
           Optional.ofNullable(apiKey).orElse(""),
           Optional.ofNullable(secret).orElse(""),
-          Optional.ofNullable(passphrase).orElse("")
-      );
+          Optional.ofNullable(passphrase).orElse(""));
     }
   }
 }

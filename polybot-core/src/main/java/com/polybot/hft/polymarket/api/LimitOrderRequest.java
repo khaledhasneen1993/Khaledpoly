@@ -6,7 +6,6 @@ import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import java.math.BigDecimal;
 
 public record LimitOrderRequest(
@@ -21,6 +20,34 @@ public record LimitOrderRequest(
     Long nonce,
     Long expirationSeconds,
     String taker,
-    Boolean deferExec
-) {
+    Boolean deferExec,
+    String clientOrderId) {
+  public LimitOrderRequest(
+      String tokenId,
+      OrderSide side,
+      BigDecimal price,
+      BigDecimal size,
+      ClobOrderType orderType,
+      BigDecimal tickSize,
+      Boolean negRisk,
+      Integer feeRateBps,
+      Long nonce,
+      Long expirationSeconds,
+      String taker,
+      Boolean deferExec) {
+    this(
+        tokenId,
+        side,
+        price,
+        size,
+        orderType,
+        tickSize,
+        negRisk,
+        feeRateBps,
+        nonce,
+        expirationSeconds,
+        taker,
+        deferExec,
+        null);
+  }
 }

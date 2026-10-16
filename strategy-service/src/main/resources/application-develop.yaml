@@ -24,7 +24,7 @@ hft:
       # Dynamic sizing: FIXED mode for sim, AUTO_CASH for live
       quote-size: 10
       quote-size-bankroll-fraction: 0.001
-      bankroll-mode: FIXED
+      bankroll-mode: AUTO_CASH
       bankroll-usd: 500
       bankroll-refresh-millis: 10000
       bankroll-smoothing-alpha: 0.2
@@ -39,7 +39,7 @@ hft:
       complete-set-min-edge: 0.001                    # Near-zero: aggressive quoting
       complete-set-max-skew-ticks: 0                  # Max ticks to skew based on inventory
       complete-set-imbalance-shares-for-max-skew: 5000 # Shares imbalance for max skew
-      complete-set-top-up-enabled: true
+      complete-set-top-up-enabled: false
       complete-set-top-up-seconds-to-end: 120         # Start top-up this far from end
       complete-set-top-up-min-shares: 80              # Min imbalance to trigger top-up
       complete-set-fast-top-up-enabled: false
@@ -50,7 +50,7 @@ hft:
       complete-set-fast-top-up-min-edge: 0            # Breakeven or better for pair completion
 
       # Taker mode - cross the spread when edge is favorable
-      taker-mode-enabled: true
+      taker-mode-enabled: false
       taker-mode-max-edge: 0.004                      # Max edge to take (0.4 cents)
       taker-mode-max-spread: 0.01                     # Max spread to cross (1 cent)
 

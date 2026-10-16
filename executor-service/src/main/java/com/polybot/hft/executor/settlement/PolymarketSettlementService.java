@@ -9,26 +9,25 @@ import com.polybot.hft.polymarket.auth.PolymarketAuthContext;
 import com.polybot.hft.polymarket.data.PolymarketDataApiClient;
 import com.polybot.hft.polymarket.data.PolymarketPosition;
 import com.polybot.hft.polymarket.onchain.ContractConfig;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.web3j.crypto.Credentials;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.web3j.crypto.Credentials;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class PolymarketSettlementService {
 
-  private static final TypeReference<List<PolymarketPosition>> POSITIONS_LIST = new TypeReference<>() {
-  };
+  private static final TypeReference<List<PolymarketPosition>> POSITIONS_LIST =
+      new TypeReference<>() {};
 
   private final @NonNull HftProperties properties;
   private final @NonNull PolymarketAuthContext authContext;
@@ -64,8 +63,11 @@ public class PolymarketSettlementService {
         if (Boolean.TRUE.equals(p.mergeable())) mergeable++;
       }
     }
-    log.debug("settlement plan: found {} positions ({} redeemable, {} mergeable)",
-        positions.size(), redeemable, mergeable);
+    log.debug(
+        "settlement plan: found {} positions ({} redeemable, {} mergeable)",
+        positions.size(),
+        redeemable,
+        mergeable);
 
     return planFromPositions(positions);
   }
@@ -82,6 +84,9 @@ public class PolymarketSettlementService {
     }
 
     boolean dryRun = dryRunOverride != null ? dryRunOverride : settlementProperties.dryRun();
+    if (!dryRun)
+      throw new IllegalStateException(
+          "Settlement broadcast locked pending verified pUSD adapter integration");
 
     if (!inFlight.compareAndSet(false, true)) {
       return new SettlementRunResult(false, dryRun, "in-flight", List.of(), List.of());
@@ -112,56 +117,64 @@ public class PolymarketSettlementService {
   }
 
   private SettlementTxResult executeActionWithRetry(SettlementAction action) {
-    int maxRetries = settlementProperties.maxRetries() != null ? settlementProperties.maxRetries() : 3;
+    int maxRetries =
+        0; // A receipt timeout is uncertain: never blindly rebroadcast an economic action.
     Exception lastError = null;
 
     for (int attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         if (attempt > 0) {
           long backoffMs = (long) (1000 * Math.pow(2, attempt - 1)); // 1s, 2s, 4s
-          log.info("retrying settlement action (attempt {}/{}): {}", attempt + 1, maxRetries + 1, action.summary());
+          log.info(
+              "retrying settlement action (attempt {}/{}): {}",
+              attempt + 1,
+              maxRetries + 1,
+              action.summary());
           Thread.sleep(backoffMs);
         }
         executeAction(action);
         return SettlementTxResult.submitted(action);
       } catch (Exception e) {
         lastError = e;
-        log.warn("settlement action failed (attempt {}/{}): {} err={}",
-            attempt + 1, maxRetries + 1, action.summary(), e.toString());
+        log.warn(
+            "settlement action failed (attempt {}/{}): {} err={}",
+            attempt + 1,
+            maxRetries + 1,
+            action.summary(),
+            e.toString());
       }
     }
 
-    log.error("settlement action failed after {} retries: {} err={}",
-        maxRetries, action.summary(), lastError != null ? lastError.toString() : "unknown");
-    return SettlementTxResult.failed(action, lastError != null ? lastError.toString() : "unknown error");
+    log.error(
+        "settlement action failed after {} retries: {} err={}",
+        maxRetries,
+        action.summary(),
+        lastError != null ? lastError.toString() : "unknown");
+    return SettlementTxResult.failed(
+        action, lastError != null ? lastError.toString() : "unknown error");
   }
 
   private void executeAction(SettlementAction action) throws Exception {
     ContractConfig contracts = ContractConfig.forChainId(properties.polymarket().chainId());
-    String conditionalTokens = contracts.conditionalTokens();
-    String collateral = contracts.collateral();
+    String conditionalTokens = ContractConfig.collateralAdapter();
+    String collateral = ContractConfig.tradingCollateral();
 
     String calldata;
     if (action.type() == SettlementActionType.REDEEM) {
-      calldata = ConditionalTokensCallEncoder.encodeRedeemPositions(
-          collateral,
-          action.conditionId(),
-          action.indexSets()
-      );
+      calldata =
+          ConditionalTokensCallEncoder.encodeRedeemPositions(
+              collateral, action.conditionId(), action.indexSets());
     } else if (action.type() == SettlementActionType.MERGE) {
-      calldata = ConditionalTokensCallEncoder.encodeMergePositions(
-          collateral,
-          action.conditionId(),
-          action.indexSets(),
-          action.mergeAmountBaseUnits()
-      );
+      calldata =
+          ConditionalTokensCallEncoder.encodeMergePositions(
+              collateral, action.conditionId(), action.indexSets(), action.mergeAmountBaseUnits());
     } else {
       throw new IllegalArgumentException("Unknown action type: " + action.type());
     }
 
-    String factoryCalldata = ProxyWalletFactoryCallEncoder.encodeProxy(
-        List.of(ProxyWalletFactoryCallEncoder.ProxyCall.call(conditionalTokens, calldata))
-    );
+    String factoryCalldata =
+        ProxyWalletFactoryCallEncoder.encodeProxy(
+            List.of(ProxyWalletFactoryCallEncoder.ProxyCall.call(conditionalTokens, calldata)));
 
     txSender.sendFactoryProxyTx(factoryCalldata);
   }
@@ -171,7 +184,8 @@ public class PolymarketSettlementService {
       return List.of();
     }
 
-    int decimals = ContractConfig.forChainId(properties.polymarket().chainId()).conditionalTokenDecimals();
+    int decimals =
+        ContractConfig.forChainId(properties.polymarket().chainId()).conditionalTokenDecimals();
     BigInteger minMergeAmount = toBaseUnits(settlementProperties.minMergeShares(), decimals);
 
     Map<String, List<PolymarketPosition>> byCondition = new HashMap<>();
@@ -231,13 +245,15 @@ public class PolymarketSettlementService {
         continue;
       }
 
-      actions.add(SettlementAction.merge(conditionId, slug, title, indexSets, mergeAmount, decimals));
+      actions.add(
+          SettlementAction.merge(conditionId, slug, title, indexSets, mergeAmount, decimals));
     }
 
     // Redeem first (free collateral), then merge.
-    actions.sort(Comparator
-        .comparing((SettlementAction a) -> a.type() == SettlementActionType.REDEEM ? 0 : 1)
-        .thenComparing(SettlementAction::slug, Comparator.nullsLast(String::compareTo)));
+    actions.sort(
+        Comparator.comparing(
+                (SettlementAction a) -> a.type() == SettlementActionType.REDEEM ? 0 : 1)
+            .thenComparing(SettlementAction::slug, Comparator.nullsLast(String::compareTo)));
 
     return actions;
   }
@@ -247,15 +263,16 @@ public class PolymarketSettlementService {
     if (funder != null && !funder.isBlank()) {
       return funder;
     }
-    return authContext.signerCredentials()
-        .map(Credentials::getAddress)
-        .orElse(null);
+    return authContext.signerCredentials().map(Credentials::getAddress).orElse(null);
   }
 
   private static List<BigInteger> computeIndexSets(List<PolymarketPosition> positions) {
     SortedSet<Integer> idxs = new TreeSet<>();
     for (PolymarketPosition p : positions) {
-      if (p != null && p.outcomeIndex() != null && p.outcomeIndex() >= 0 && p.outcomeIndex() < 256) {
+      if (p != null
+          && p.outcomeIndex() != null
+          && p.outcomeIndex() >= 0
+          && p.outcomeIndex() < 256) {
         idxs.add(p.outcomeIndex());
       }
     }
@@ -292,7 +309,9 @@ public class PolymarketSettlementService {
     return scaled.setScale(0, RoundingMode.DOWN).toBigInteger();
   }
 
-  private static String firstNonBlank(List<PolymarketPosition> positions, java.util.function.Function<PolymarketPosition, String> extractor) {
+  private static String firstNonBlank(
+      List<PolymarketPosition> positions,
+      java.util.function.Function<PolymarketPosition, String> extractor) {
     for (PolymarketPosition p : positions) {
       if (p == null) {
         continue;
@@ -317,15 +336,29 @@ public class PolymarketSettlementService {
       String title,
       List<BigInteger> indexSets,
       BigInteger mergeAmountBaseUnits,
-      BigDecimal mergeAmountShares
-  ) {
-    static SettlementAction redeem(String conditionId, String slug, String title, List<BigInteger> indexSets) {
-      return new SettlementAction(SettlementActionType.REDEEM, conditionId, slug, title, indexSets, null, null);
+      BigDecimal mergeAmountShares) {
+    static SettlementAction redeem(
+        String conditionId, String slug, String title, List<BigInteger> indexSets) {
+      return new SettlementAction(
+          SettlementActionType.REDEEM, conditionId, slug, title, indexSets, null, null);
     }
 
-    static SettlementAction merge(String conditionId, String slug, String title, List<BigInteger> indexSets, BigInteger mergeAmountBaseUnits, int decimals) {
+    static SettlementAction merge(
+        String conditionId,
+        String slug,
+        String title,
+        List<BigInteger> indexSets,
+        BigInteger mergeAmountBaseUnits,
+        int decimals) {
       BigDecimal shares = new BigDecimal(mergeAmountBaseUnits).movePointLeft(decimals);
-      return new SettlementAction(SettlementActionType.MERGE, conditionId, slug, title, indexSets, mergeAmountBaseUnits, shares);
+      return new SettlementAction(
+          SettlementActionType.MERGE,
+          conditionId,
+          slug,
+          title,
+          indexSets,
+          mergeAmountBaseUnits,
+          shares);
     }
 
     String summary() {
@@ -336,11 +369,7 @@ public class PolymarketSettlementService {
     }
   }
 
-  public record SettlementTxResult(
-      SettlementAction action,
-      boolean submitted,
-      String error
-  ) {
+  public record SettlementTxResult(SettlementAction action, boolean submitted, String error) {
     static SettlementTxResult submitted(SettlementAction action) {
       return new SettlementTxResult(action, true, null);
     }
@@ -355,7 +384,5 @@ public class PolymarketSettlementService {
       boolean dryRun,
       String status,
       List<SettlementAction> plannedActions,
-      List<SettlementTxResult> txs
-  ) {
-  }
+      List<SettlementTxResult> txs) {}
 }

@@ -118,3 +118,6 @@ test-output/
 coverage/
 .coverage
 htmlcov/
+
+# Durable local account state (never commit)
+/state/

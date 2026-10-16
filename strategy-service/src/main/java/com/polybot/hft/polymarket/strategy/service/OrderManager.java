@@ -11,370 +11,625 @@ import com.polybot.hft.polymarket.strategy.config.GabagoolConfig;
 import com.polybot.hft.polymarket.strategy.event.OrderLifecycleEvent;
 import com.polybot.hft.polymarket.strategy.model.Direction;
 import com.polybot.hft.polymarket.strategy.model.GabagoolMarket;
-import com.polybot.hft.polymarket.strategy.model.MarketInventory;
 import com.polybot.hft.polymarket.strategy.model.OrderState;
 import com.polybot.hft.polymarket.ws.TopOfBook;
 import com.polybot.hft.strategy.executor.ExecutorApiClient;
-import lombok.extern.slf4j.Slf4j;
-
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
+import lombok.extern.slf4j.Slf4j;
 
-/**
- * Manages order placement, cancellation, and status polling.
- */
+/** Manages order placement, cancellation, and status polling. */
 @Slf4j
 public class OrderManager {
 
-    private static final Duration ORDER_STALE_TIMEOUT = Duration.ofSeconds(300);
-    private static final Duration ORDER_STATUS_POLL_INTERVAL = Duration.ofSeconds(1);
-    private static final int ERROR_MAX_LEN = 512;
+  private static final Duration ORDER_STALE_TIMEOUT = Duration.ofSeconds(300);
+  private static final Duration ORDER_STATUS_POLL_INTERVAL = Duration.ofSeconds(1);
+  private static final int ERROR_MAX_LEN = 512;
 
-    private final ExecutorApiClient executorApi;
-    private final HftEventPublisher events;
-    private final Clock clock;
-    private final String runId;
+  private final ExecutorApiClient executorApi;
+  private final HftEventPublisher events;
+  private final Clock clock;
+  private final String runId;
+  private final com.fasterxml.jackson.databind.ObjectMapper mapper =
+      new com.fasterxml.jackson.databind.ObjectMapper().findAndRegisterModules();
+  private final com.polybot.hft.state.AtomicJsonState stateFile;
+  private BiConsumer<OrderState, BigDecimal> fillListener;
 
-    private final Map<String, OrderState> ordersByTokenId = new ConcurrentHashMap<>();
+  private void persist() {
+    stateFile.save(ordersByTokenId);
+  }
 
-    public OrderManager(ExecutorApiClient executorApi, HftEventPublisher events, Clock clock, String runId) {
-        this.executorApi = executorApi;
-        this.events = events;
-        this.clock = clock;
-        this.runId = runId;
+  public void setFillListener(BiConsumer<OrderState, BigDecimal> listener) {
+    fillListener = listener;
+  }
+
+  public synchronized void close() {
+    persist();
+    stateFile.close();
+  }
+
+  private final Map<String, OrderState> ordersByTokenId = new ConcurrentHashMap<>();
+
+  public OrderManager(
+      ExecutorApiClient executorApi, HftEventPublisher events, Clock clock, String runId) {
+    this.executorApi = executorApi;
+    this.events = events;
+    this.clock = clock;
+    this.runId = runId;
+    stateFile =
+        new com.polybot.hft.state.AtomicJsonState(
+            java.nio.file.Path.of(
+                System.getProperty("polybot.orderState", "state/strategy-orders.json")),
+            mapper);
+    JsonNode saved = stateFile.load();
+    if (saved != null)
+      saved
+          .fields()
+          .forEachRemaining(
+              e ->
+                  ordersByTokenId.put(
+                      e.getKey(), mapper.convertValue(e.getValue(), OrderState.class)));
+  }
+
+  private Instant lastReconciled = Instant.EPOCH;
+
+  public synchronized void reconcileOpenOrders() {
+    if (Duration.between(lastReconciled, clock.instant()).toMillis() < 5000) return;
+    JsonNode response = executorApi.getOpenOrders();
+    JsonNode rows = response.path("data");
+    if (!rows.isArray())
+      throw new IllegalStateException("Invalid open-order reconciliation response");
+    java.util.Set<String> owned =
+        ordersByTokenId.values().stream()
+            .map(OrderState::orderId)
+            .collect(java.util.stream.Collectors.toSet());
+    for (JsonNode row : rows) {
+      String id = row.path("id").asText();
+      if (id.isBlank()) throw new IllegalStateException("Missing reconciled order ID");
+      if (!owned.contains(id)) {
+        if (!id.startsWith("sim-"))
+          throw new IllegalStateException("Unowned order requires manual reconciliation");
+        executorApi.cancelOrder(id);
+        if (!com.polybot.hft.polymarket.model.OrderStatus.terminal(
+            executorApi.getOrder(id).path("status").asText()))
+          throw new IllegalStateException("Orphan paper cancellation not confirmed");
+      }
+    }
+    lastReconciled = clock.instant();
+  }
+
+  public synchronized Map<String, OrderState> getOpenOrders() {
+    return Map.copyOf(ordersByTokenId);
+  }
+
+  public synchronized OrderState getOrder(String tokenId) {
+    return ordersByTokenId.get(tokenId);
+  }
+
+  public synchronized boolean hasOrder(String tokenId) {
+    return ordersByTokenId.containsKey(tokenId);
+  }
+
+  /** Place a maker order for a token. */
+  public synchronized void placeOrder(
+      GabagoolMarket market,
+      String tokenId,
+      Direction direction,
+      BigDecimal price,
+      BigDecimal size,
+      long secondsToEnd,
+      BigDecimal tickSize,
+      TopOfBook book,
+      TopOfBook otherBook,
+      OrderState replaced,
+      PlaceReason placeReason) {
+    String reason = replaced == null ? PlaceReason.QUOTE.name() : PlaceReason.REPLACE.name();
+    if (placeReason != null) reason = placeReason.name();
+
+    String replacedOrderId = replaced == null ? null : replaced.orderId();
+    BigDecimal replacedPrice = replaced == null ? null : replaced.price();
+    BigDecimal replacedSize = replaced == null ? null : replaced.size();
+    Long replacedAgeMillis =
+        replaced == null ? null : Duration.between(replaced.placedAt(), clock.instant()).toMillis();
+
+    String otherTokenId = direction == Direction.UP ? market.downTokenId() : market.upTokenId();
+
+    if (ordersByTokenId.containsKey(tokenId)) return;
+    String clientId = "sim-" + java.util.UUID.randomUUID();
+    ordersByTokenId.put(
+        tokenId,
+        new OrderState(
+            clientId,
+            market,
+            tokenId,
+            direction,
+            price,
+            size,
+            clock.instant(),
+            BigDecimal.ZERO,
+            null,
+            secondsToEnd));
+    persist();
+    try {
+      log.info(
+          "GABAGOOL: Placing {} order on {} at {} (size={}, secondsToEnd={})",
+          direction,
+          market.slug(),
+          price,
+          size,
+          secondsToEnd);
+
+      LimitOrderRequest request =
+          new LimitOrderRequest(
+              tokenId,
+              OrderSide.BUY,
+              price,
+              size,
+              ClobOrderType.GTC,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              clientId);
+
+      OrderSubmissionResult result = executorApi.placeLimitOrder(request);
+      String orderId = resolveOrderId(result);
+
+      if (orderId == null) {
+        log.warn("GABAGOOL: Order submission returned null orderId for {}", market.slug());
+        publishOrderEvent(
+            new OrderLifecycleEvent(
+                "gabagool-directional",
+                runId,
+                "PLACE",
+                reason,
+                market.slug(),
+                market.marketType(),
+                tokenId,
+                direction.name(),
+                secondsToEnd,
+                tickSize,
+                false,
+                "orderId null",
+                null,
+                price,
+                size,
+                replacedOrderId,
+                replacedPrice,
+                replacedSize,
+                replacedAgeMillis,
+                null,
+                book,
+                otherTokenId,
+                otherBook));
+        return;
+      }
+
+      ordersByTokenId.put(
+          tokenId,
+          new OrderState(
+              orderId,
+              market,
+              tokenId,
+              direction,
+              price,
+              size,
+              clock.instant(),
+              BigDecimal.ZERO,
+              null,
+              secondsToEnd));
+
+      persist();
+      log.info(
+          "GABAGOOL: Order placed successfully: {} (direction={}, price={}, size={})",
+          orderId,
+          direction,
+          price,
+          size);
+
+      publishOrderEvent(
+          new OrderLifecycleEvent(
+              "gabagool-directional",
+              runId,
+              "PLACE",
+              reason,
+              market.slug(),
+              market.marketType(),
+              tokenId,
+              direction.name(),
+              secondsToEnd,
+              tickSize,
+              true,
+              null,
+              orderId,
+              price,
+              size,
+              replacedOrderId,
+              replacedPrice,
+              replacedSize,
+              replacedAgeMillis,
+              null,
+              book,
+              otherTokenId,
+              otherBook));
+    } catch (Exception e) {
+      log.error("GABAGOOL: Failed to place order on {}: {}", market.slug(), e.getMessage());
+      publishOrderEvent(
+          new OrderLifecycleEvent(
+              "gabagool-directional",
+              runId,
+              "PLACE",
+              reason,
+              market.slug(),
+              market.marketType(),
+              tokenId,
+              direction.name(),
+              secondsToEnd,
+              tickSize,
+              false,
+              truncateError(e),
+              null,
+              price,
+              size,
+              replacedOrderId,
+              replacedPrice,
+              replacedSize,
+              replacedAgeMillis,
+              null,
+              book,
+              otherTokenId,
+              otherBook));
+    }
+  }
+
+  /** Cancel and replace an existing order if price/size changed. */
+  public synchronized ReplaceDecision maybeReplaceOrder(
+      String tokenId,
+      BigDecimal newPrice,
+      BigDecimal newSize,
+      GabagoolConfig cfg,
+      CancelReason cancelReason,
+      long secondsToEnd,
+      TopOfBook book,
+      TopOfBook otherBook) {
+    OrderState existing = ordersByTokenId.get(tokenId);
+    if (existing == null) {
+      return ReplaceDecision.PLACE; // No existing order, can place new one
     }
 
-    public Map<String, OrderState> getOpenOrders() {
-        return Map.copyOf(ordersByTokenId);
+    long ageMillis = Duration.between(existing.placedAt(), clock.instant()).toMillis();
+    if (ageMillis < cfg.minReplaceMillis()) {
+      return ReplaceDecision.SKIP; // Too soon to replace
     }
 
-    public OrderState getOrder(String tokenId) {
-        return ordersByTokenId.get(tokenId);
+    boolean samePrice = existing.price() != null && existing.price().compareTo(newPrice) == 0;
+    boolean sameSize = existing.size() != null && existing.size().compareTo(newSize) == 0;
+    if (samePrice && sameSize) {
+      return ReplaceDecision.SKIP; // No change needed
     }
 
-    public boolean hasOrder(String tokenId) {
-        return ordersByTokenId.containsKey(tokenId);
+    CancelReason reason =
+        (!samePrice && !sameSize)
+            ? CancelReason.REPLACE_PRICE_AND_SIZE
+            : (!samePrice ? CancelReason.REPLACE_PRICE : CancelReason.REPLACE_SIZE);
+
+    if (!safeCancel(existing, reason, secondsToEnd, book, otherBook)) return ReplaceDecision.SKIP;
+    ordersByTokenId.remove(tokenId);
+    persist();
+    return ReplaceDecision.REPLACE;
+  }
+
+  /** Cancel an order by token ID. */
+  public synchronized void cancelOrder(
+      String tokenId, CancelReason reason, Long secondsToEnd, TopOfBook book, TopOfBook otherBook) {
+    if (tokenId == null || tokenId.isBlank()) return;
+    OrderState state = ordersByTokenId.get(tokenId);
+    if (safeCancel(state, reason, secondsToEnd, book, otherBook)) {
+      ordersByTokenId.remove(tokenId);
+      persist();
+    }
+  }
+
+  /** Cancel all orders for a market. */
+  public synchronized void cancelMarketOrders(
+      GabagoolMarket market, CancelReason reason, Long secondsToEnd) {
+    if (market == null) return;
+    cancelOrder(market.upTokenId(), reason, secondsToEnd, null, null);
+    cancelOrder(market.downTokenId(), reason, secondsToEnd, null, null);
+  }
+
+  /** Cancel all orders (shutdown). */
+  public synchronized void cancelAll(CancelReason reason) {
+    for (String token : java.util.List.copyOf(ordersByTokenId.keySet()))
+      cancelOrder(token, reason, null, null, null);
+  }
+
+  /** Check pending orders for fills/timeout and invoke callback on fill. */
+  public synchronized void checkPendingOrders(BiConsumer<OrderState, BigDecimal> onFill) {
+    Instant now = clock.instant();
+
+    for (Map.Entry<String, OrderState> entry : ordersByTokenId.entrySet()) {
+      String tokenId = entry.getKey();
+      OrderState state = entry.getValue();
+      if (state == null) continue;
+
+      refreshOrderStatusIfDue(tokenId, state, now, onFill);
+      state = ordersByTokenId.get(tokenId);
+      if (state == null) continue;
+
+      Duration pendingTime = Duration.between(state.placedAt(), now);
+      if (pendingTime.compareTo(ORDER_STALE_TIMEOUT) > 0) {
+        log.info(
+            "GABAGOOL: Cancelling stale order {} tokenId={} after {}s",
+            state.orderId(),
+            tokenId,
+            pendingTime.getSeconds());
+        Long secondsToEndNow =
+            state.market() == null
+                ? null
+                : Duration.between(now, state.market().endTime()).getSeconds();
+        cancelOrder(tokenId, CancelReason.STALE_TIMEOUT, secondsToEndNow, null, null);
+      }
+    }
+  }
+
+  private void refreshOrderStatusIfDue(
+      String tokenId, OrderState state, Instant now, BiConsumer<OrderState, BigDecimal> onFill) {
+    if (state == null
+        || state.orderId() == null
+        || state.orderId().isBlank()
+        || state.orderId().startsWith("uncertain:")) return;
+
+    if (state.lastStatusCheckAt() != null
+        && Duration.between(state.lastStatusCheckAt(), now).compareTo(ORDER_STATUS_POLL_INTERVAL)
+            < 0) {
+      return;
     }
 
-    /**
-     * Place a maker order for a token.
-     */
-    public void placeOrder(GabagoolMarket market, String tokenId, Direction direction,
-                           BigDecimal price, BigDecimal size, long secondsToEnd,
-                           BigDecimal tickSize, TopOfBook book, TopOfBook otherBook,
-                           OrderState replaced, PlaceReason placeReason) {
-        String reason = replaced == null ? PlaceReason.QUOTE.name() : PlaceReason.REPLACE.name();
-        if (placeReason != null) reason = placeReason.name();
-
-        String replacedOrderId = replaced == null ? null : replaced.orderId();
-        BigDecimal replacedPrice = replaced == null ? null : replaced.price();
-        BigDecimal replacedSize = replaced == null ? null : replaced.size();
-        Long replacedAgeMillis = replaced == null ? null : Duration.between(replaced.placedAt(), clock.instant()).toMillis();
-
-        String otherTokenId = direction == Direction.UP ? market.downTokenId() : market.upTokenId();
-
-        try {
-            log.info("GABAGOOL: Placing {} order on {} at {} (size={}, secondsToEnd={})",
-                    direction, market.slug(), price, size, secondsToEnd);
-
-            LimitOrderRequest request = new LimitOrderRequest(
-                    tokenId, OrderSide.BUY, price, size, ClobOrderType.GTC,
-                    null, null, null, null, null, null, null
-            );
-
-            OrderSubmissionResult result = executorApi.placeLimitOrder(request);
-            String orderId = resolveOrderId(result);
-
-            if (orderId == null) {
-                log.warn("GABAGOOL: Order submission returned null orderId for {}", market.slug());
-                publishOrderEvent(new OrderLifecycleEvent(
-                        "gabagool-directional", runId, "PLACE", reason,
-                        market.slug(), market.marketType(), tokenId, direction.name(),
-                        secondsToEnd, tickSize, false, "orderId null",
-                        null, price, size, replacedOrderId, replacedPrice, replacedSize,
-                        replacedAgeMillis, null, book, otherTokenId, otherBook
-                ));
-                return;
-            }
-
-            ordersByTokenId.put(tokenId, new OrderState(
-                    orderId, market, tokenId, direction, price, size,
-                    clock.instant(), BigDecimal.ZERO, null, secondsToEnd
-            ));
-
-            log.info("GABAGOOL: Order placed successfully: {} (direction={}, price={}, size={})",
-                    orderId, direction, price, size);
-
-            publishOrderEvent(new OrderLifecycleEvent(
-                    "gabagool-directional", runId, "PLACE", reason,
-                    market.slug(), market.marketType(), tokenId, direction.name(),
-                    secondsToEnd, tickSize, true, null,
-                    orderId, price, size, replacedOrderId, replacedPrice, replacedSize,
-                    replacedAgeMillis, null, book, otherTokenId, otherBook
-            ));
-        } catch (Exception e) {
-            log.error("GABAGOOL: Failed to place order on {}: {}", market.slug(), e.getMessage());
-            publishOrderEvent(new OrderLifecycleEvent(
-                    "gabagool-directional", runId, "PLACE", reason,
-                    market.slug(), market.marketType(), tokenId, direction.name(),
-                    secondsToEnd, tickSize, false, truncateError(e),
-                    null, price, size, replacedOrderId, replacedPrice, replacedSize,
-                    replacedAgeMillis, null, book, otherTokenId, otherBook
-            ));
-        }
+    JsonNode order;
+    try {
+      order = executorApi.getOrder(state.orderId());
+    } catch (Exception e) {
+      ordersByTokenId.put(
+          tokenId,
+          new OrderState(
+              state.orderId(),
+              state.market(),
+              state.tokenId(),
+              state.direction(),
+              state.price(),
+              state.size(),
+              state.placedAt(),
+              state.matchedSize(),
+              now,
+              state.secondsToEndAtEntry()));
+      return;
     }
 
-    /**
-     * Cancel and replace an existing order if price/size changed.
-     */
-    public ReplaceDecision maybeReplaceOrder(String tokenId, BigDecimal newPrice, BigDecimal newSize,
-                                             GabagoolConfig cfg, CancelReason cancelReason,
-                                             long secondsToEnd, TopOfBook book, TopOfBook otherBook) {
-        OrderState existing = ordersByTokenId.get(tokenId);
-        if (existing == null) {
-            return ReplaceDecision.PLACE; // No existing order, can place new one
-        }
+    String status = firstText(order, "status", "state", "order_status", "orderStatus");
+    BigDecimal matched =
+        firstDecimal(
+            order,
+            "matched_size",
+            "matchedSize",
+            "size_matched",
+            "sizeMatched",
+            "filled_size",
+            "filledSize",
+            "size_filled",
+            "sizeFilled");
+    BigDecimal remaining =
+        firstDecimal(order, "remaining_size", "remainingSize", "size_remaining", "sizeRemaining");
 
-        long ageMillis = Duration.between(existing.placedAt(), clock.instant()).toMillis();
-        if (ageMillis < cfg.minReplaceMillis()) {
-            return ReplaceDecision.SKIP; // Too soon to replace
-        }
-
-        boolean samePrice = existing.price() != null && existing.price().compareTo(newPrice) == 0;
-        boolean sameSize = existing.size() != null && existing.size().compareTo(newSize) == 0;
-        if (samePrice && sameSize) {
-            return ReplaceDecision.SKIP; // No change needed
-        }
-
-        CancelReason reason = (!samePrice && !sameSize)
-                ? CancelReason.REPLACE_PRICE_AND_SIZE
-                : (!samePrice ? CancelReason.REPLACE_PRICE : CancelReason.REPLACE_SIZE);
-
-        safeCancel(existing, reason, secondsToEnd, book, otherBook);
-        ordersByTokenId.remove(tokenId);
-        return ReplaceDecision.REPLACE;
+    if (remaining == null && matched != null && state.size() != null) {
+      remaining = state.size().subtract(matched).max(BigDecimal.ZERO);
     }
 
-    /**
-     * Cancel an order by token ID.
-     */
-    public void cancelOrder(String tokenId, CancelReason reason, Long secondsToEnd, TopOfBook book, TopOfBook otherBook) {
-        if (tokenId == null || tokenId.isBlank()) return;
-        OrderState state = ordersByTokenId.remove(tokenId);
-        safeCancel(state, reason, secondsToEnd, book, otherBook);
+    BigDecimal prevMatched = state.matchedSize() == null ? BigDecimal.ZERO : state.matchedSize();
+    if (matched != null && matched.compareTo(prevMatched) > 0 && state.price() != null) {
+      BigDecimal delta = matched.subtract(prevMatched);
+      if (onFill != null) {
+        onFill.accept(state, delta);
+      }
     }
 
-    /**
-     * Cancel all orders for a market.
-     */
-    public void cancelMarketOrders(GabagoolMarket market, CancelReason reason, Long secondsToEnd) {
-        if (market == null) return;
-        cancelOrder(market.upTokenId(), reason, secondsToEnd, null, null);
-        cancelOrder(market.downTokenId(), reason, secondsToEnd, null, null);
+    if (isTerminalOrderStatus(status, matched, remaining, state.size())) {
+      ordersByTokenId.remove(tokenId);
+      persist();
+      return;
     }
 
-    /**
-     * Cancel all orders (shutdown).
-     */
-    public void cancelAll(CancelReason reason) {
-        ordersByTokenId.values().forEach(state -> safeCancel(state, reason, null, null, null));
-        ordersByTokenId.clear();
+    ordersByTokenId.put(
+        tokenId,
+        new OrderState(
+            state.orderId(),
+            state.market(),
+            state.tokenId(),
+            state.direction(),
+            state.price(),
+            state.size(),
+            state.placedAt(),
+            matched != null ? matched : prevMatched,
+            now,
+            state.secondsToEndAtEntry()));
+    persist();
+  }
+
+  private boolean safeCancel(
+      OrderState state,
+      CancelReason reason,
+      Long secondsToEndNow,
+      TopOfBook book,
+      TopOfBook otherBook) {
+    if (state == null) return true;
+    if (state.orderId() == null || state.orderId().startsWith("uncertain:")) return false;
+
+    boolean success = false;
+    String error = null;
+    try {
+      executorApi.cancelOrder(state.orderId());
+      JsonNode finalOrder = executorApi.getOrder(state.orderId());
+      refreshOrderStatusIfDue(
+          state.tokenId(),
+          new OrderState(
+              state.orderId(),
+              state.market(),
+              state.tokenId(),
+              state.direction(),
+              state.price(),
+              state.size(),
+              state.placedAt(),
+              state.matchedSize(),
+              null,
+              state.secondsToEndAtEntry()),
+          clock.instant(),
+          fillListener);
+      success =
+          com.polybot.hft.polymarket.model.OrderStatus.terminal(
+              firstText(finalOrder, "status", "state"));
+      if (!success) error = "Cancellation unconfirmed; ownership retained";
+    } catch (Exception e) {
+      error = truncateError(e);
     }
 
-    /**
-     * Check pending orders for fills/timeout and invoke callback on fill.
-     */
-    public void checkPendingOrders(BiConsumer<OrderState, BigDecimal> onFill) {
-        Instant now = clock.instant();
-
-        for (Map.Entry<String, OrderState> entry : ordersByTokenId.entrySet()) {
-            String tokenId = entry.getKey();
-            OrderState state = entry.getValue();
-            if (state == null) continue;
-
-            refreshOrderStatusIfDue(tokenId, state, now, onFill);
-            state = ordersByTokenId.get(tokenId);
-            if (state == null) continue;
-
-            Duration pendingTime = Duration.between(state.placedAt(), now);
-            if (pendingTime.compareTo(ORDER_STALE_TIMEOUT) > 0) {
-                log.info("GABAGOOL: Cancelling stale order {} tokenId={} after {}s",
-                        state.orderId(), tokenId, pendingTime.getSeconds());
-                Long secondsToEndNow = state.market() == null ? null
-                        : Duration.between(now, state.market().endTime()).getSeconds();
-                safeCancel(state, CancelReason.STALE_TIMEOUT, secondsToEndNow, null, null);
-                ordersByTokenId.remove(tokenId);
-            }
-        }
+    String otherTokenId = null;
+    if (state.market() != null && state.direction() != null) {
+      otherTokenId =
+          state.direction() == Direction.UP
+              ? state.market().downTokenId()
+              : state.market().upTokenId();
     }
 
-    private void refreshOrderStatusIfDue(String tokenId, OrderState state, Instant now,
-                                         BiConsumer<OrderState, BigDecimal> onFill) {
-        if (state == null || state.orderId() == null || state.orderId().isBlank()) return;
+    publishOrderEvent(
+        new OrderLifecycleEvent(
+            "gabagool-directional",
+            runId,
+            "CANCEL",
+            reason == null ? null : reason.name(),
+            state.market() == null ? null : state.market().slug(),
+            state.market() == null ? null : state.market().marketType(),
+            state.tokenId(),
+            state.direction() == null ? null : state.direction().name(),
+            secondsToEndNow,
+            null,
+            success,
+            error,
+            state.orderId(),
+            state.price(),
+            state.size(),
+            null,
+            null,
+            null,
+            null,
+            Duration.between(state.placedAt(), clock.instant()).toMillis(),
+            book,
+            otherTokenId,
+            otherBook));
+    persist();
+    return success;
+  }
 
-        if (state.lastStatusCheckAt() != null &&
-                Duration.between(state.lastStatusCheckAt(), now).compareTo(ORDER_STATUS_POLL_INTERVAL) < 0) {
-            return;
-        }
-
-        JsonNode order;
-        try {
-            order = executorApi.getOrder(state.orderId());
-        } catch (Exception e) {
-            ordersByTokenId.put(tokenId, new OrderState(
-                    state.orderId(), state.market(), state.tokenId(), state.direction(),
-                    state.price(), state.size(), state.placedAt(), state.matchedSize(),
-                    now, state.secondsToEndAtEntry()
-            ));
-            return;
-        }
-
-        String status = firstText(order, "status", "state", "order_status", "orderStatus");
-        BigDecimal matched = firstDecimal(order, "matched_size", "matchedSize", "size_matched",
-                "sizeMatched", "filled_size", "filledSize", "size_filled", "sizeFilled");
-        BigDecimal remaining = firstDecimal(order, "remaining_size", "remainingSize",
-                "size_remaining", "sizeRemaining");
-
-        if (remaining == null && matched != null && state.size() != null) {
-            remaining = state.size().subtract(matched).max(BigDecimal.ZERO);
-        }
-
-        BigDecimal prevMatched = state.matchedSize() == null ? BigDecimal.ZERO : state.matchedSize();
-        if (matched != null && matched.compareTo(prevMatched) > 0 && state.price() != null) {
-            BigDecimal delta = matched.subtract(prevMatched);
-            if (onFill != null) {
-                onFill.accept(state, delta);
-            }
-        }
-
-        if (isTerminalOrderStatus(status, matched, remaining, state.size())) {
-            ordersByTokenId.remove(tokenId);
-            return;
-        }
-
-        ordersByTokenId.put(tokenId, new OrderState(
-                state.orderId(), state.market(), state.tokenId(), state.direction(),
-                state.price(), state.size(), state.placedAt(),
-                matched != null ? matched : prevMatched, now, state.secondsToEndAtEntry()
-        ));
+  private void publishOrderEvent(OrderLifecycleEvent event) {
+    try {
+      if (!events.isEnabled()) return;
+      String key =
+          event != null && event.orderId() != null && !event.orderId().isBlank()
+              ? event.orderId()
+              : ("gabagool:"
+                  + (event == null ? "unknown" : event.marketSlug())
+                  + ":"
+                  + (event == null ? "unknown" : event.tokenId()));
+      events.publish(HftEventTypes.STRATEGY_GABAGOOL_ORDER, key, event);
+    } catch (Exception e) {
+      log.warn("Failed to publish order event: {}", e.getMessage());
     }
+  }
 
-    private void safeCancel(OrderState state, CancelReason reason, Long secondsToEndNow,
-                           TopOfBook book, TopOfBook otherBook) {
-        if (state == null || state.orderId() == null || state.orderId().isBlank()) return;
+  private static boolean isTerminalOrderStatus(
+      String status, BigDecimal matched, BigDecimal remaining, BigDecimal requestedSize) {
+    if (remaining != null && remaining.compareTo(BigDecimal.ZERO) == 0) return true;
+    if (matched != null && requestedSize != null && matched.compareTo(requestedSize) >= 0)
+      return true;
+    if (status == null || status.isBlank()) return false;
+    return com.polybot.hft.polymarket.model.OrderStatus.terminal(status);
+  }
 
-        boolean success = false;
-        String error = null;
-        try {
-            executorApi.cancelOrder(state.orderId());
-            success = true;
-        } catch (Exception e) {
-            error = truncateError(e);
-        }
-
-        String otherTokenId = null;
-        if (state.market() != null && state.direction() != null) {
-            otherTokenId = state.direction() == Direction.UP
-                    ? state.market().downTokenId() : state.market().upTokenId();
-        }
-
-        publishOrderEvent(new OrderLifecycleEvent(
-                "gabagool-directional", runId, "CANCEL", reason == null ? null : reason.name(),
-                state.market() == null ? null : state.market().slug(),
-                state.market() == null ? null : state.market().marketType(),
-                state.tokenId(), state.direction() == null ? null : state.direction().name(),
-                secondsToEndNow, null, success, error,
-                state.orderId(), state.price(), state.size(), null, null, null, null,
-                Duration.between(state.placedAt(), clock.instant()).toMillis(),
-                book, otherTokenId, otherBook
-        ));
+  private static String resolveOrderId(OrderSubmissionResult result) {
+    if (result == null) return null;
+    JsonNode resp = result.clobResponse();
+    if (resp != null) {
+      if (resp.hasNonNull("orderID")) return resp.get("orderID").asText();
+      if (resp.hasNonNull("orderId")) return resp.get("orderId").asText();
     }
+    return null;
+  }
 
-    private void publishOrderEvent(OrderLifecycleEvent event) {
-        try {
-            if (!events.isEnabled()) return;
-            String key = event != null && event.orderId() != null && !event.orderId().isBlank()
-                    ? event.orderId()
-                    : ("gabagool:" + (event == null ? "unknown" : event.marketSlug()) + ":"
-                            + (event == null ? "unknown" : event.tokenId()));
-            events.publish(HftEventTypes.STRATEGY_GABAGOOL_ORDER, key, event);
-        } catch (Exception e) {
-            log.warn("Failed to publish order event: {}", e.getMessage());
-        }
+  private static String firstText(JsonNode node, String... keys) {
+    if (node == null || keys == null) return null;
+    for (String key : keys) {
+      if (key == null || key.isBlank()) continue;
+      JsonNode v = node.get(key);
+      if (v == null || v.isNull()) continue;
+      String s = v.asText(null);
+      if (s != null && !s.isBlank()) return s;
     }
+    return null;
+  }
 
-    private static boolean isTerminalOrderStatus(String status, BigDecimal matched,
-                                                 BigDecimal remaining, BigDecimal requestedSize) {
-        if (remaining != null && remaining.compareTo(BigDecimal.ZERO) == 0) return true;
-        if (matched != null && requestedSize != null && matched.compareTo(requestedSize) >= 0) return true;
-        if (status == null || status.isBlank()) return false;
-        String s = status.trim().toUpperCase(Locale.ROOT);
-        return s.contains("FILLED") || s.contains("CANCELED") || s.contains("CANCELLED")
-                || s.contains("EXPIRED") || s.contains("REJECTED") || s.contains("FAILED")
-                || s.contains("DONE") || s.contains("CLOSED");
+  private static BigDecimal firstDecimal(JsonNode node, String... keys) {
+    if (node == null || keys == null) return null;
+    for (String key : keys) {
+      if (key == null || key.isBlank()) continue;
+      JsonNode v = node.get(key);
+      if (v == null || v.isNull()) continue;
+      try {
+        if (v.isNumber()) return v.decimalValue();
+        String s = v.asText(null);
+        if (s == null || s.isBlank()) continue;
+        return new BigDecimal(s.trim());
+      } catch (Exception ignored) {
+      }
     }
+    return null;
+  }
 
-    private static String resolveOrderId(OrderSubmissionResult result) {
-        if (result == null) return null;
-        JsonNode resp = result.clobResponse();
-        if (resp != null) {
-            if (resp.hasNonNull("orderID")) return resp.get("orderID").asText();
-            if (resp.hasNonNull("orderId")) return resp.get("orderId").asText();
-        }
-        return null;
-    }
+  private static String truncateError(Throwable t) {
+    if (t == null) return null;
+    String s = t.toString();
+    return s.length() <= ERROR_MAX_LEN ? s : s.substring(0, ERROR_MAX_LEN) + "...";
+  }
 
-    private static String firstText(JsonNode node, String... keys) {
-        if (node == null || keys == null) return null;
-        for (String key : keys) {
-            if (key == null || key.isBlank()) continue;
-            JsonNode v = node.get(key);
-            if (v == null || v.isNull()) continue;
-            String s = v.asText(null);
-            if (s != null && !s.isBlank()) return s;
-        }
-        return null;
-    }
+  public enum PlaceReason {
+    QUOTE,
+    REPLACE,
+    TOP_UP,
+    FAST_TOP_UP,
+    TAKER
+  }
 
-    private static BigDecimal firstDecimal(JsonNode node, String... keys) {
-        if (node == null || keys == null) return null;
-        for (String key : keys) {
-            if (key == null || key.isBlank()) continue;
-            JsonNode v = node.get(key);
-            if (v == null || v.isNull()) continue;
-            try {
-                if (v.isNumber()) return v.decimalValue();
-                String s = v.asText(null);
-                if (s == null || s.isBlank()) continue;
-                return new BigDecimal(s.trim());
-            } catch (Exception ignored) {}
-        }
-        return null;
-    }
+  public enum ReplaceDecision {
+    SKIP,
+    PLACE,
+    REPLACE
+  }
 
-    private static String truncateError(Throwable t) {
-        if (t == null) return null;
-        String s = t.toString();
-        return s.length() <= ERROR_MAX_LEN ? s : s.substring(0, ERROR_MAX_LEN) + "...";
-    }
-
-    public enum PlaceReason {
-        QUOTE, REPLACE, TOP_UP, FAST_TOP_UP, TAKER
-    }
-
-    public enum ReplaceDecision {
-        SKIP, PLACE, REPLACE
-    }
-
-    public enum CancelReason {
-        BOOK_STALE, OUTSIDE_TIME_WINDOW, OUTSIDE_LIFETIME,
-        REPLACE_PRICE, REPLACE_SIZE, REPLACE_PRICE_AND_SIZE,
-        STALE_TIMEOUT, SHUTDOWN, INSUFFICIENT_EDGE
-    }
+  public enum CancelReason {
+    BOOK_STALE,
+    OUTSIDE_TIME_WINDOW,
+    OUTSIDE_LIFETIME,
+    REPLACE_PRICE,
+    REPLACE_SIZE,
+    REPLACE_PRICE_AND_SIZE,
+    STALE_TIMEOUT,
+    SHUTDOWN,
+    INSUFFICIENT_EDGE
+  }
 }

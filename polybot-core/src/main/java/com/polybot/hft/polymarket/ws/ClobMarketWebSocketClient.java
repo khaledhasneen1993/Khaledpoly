@@ -9,12 +9,6 @@ import com.polybot.hft.events.HftEventsProperties;
 import com.polybot.hft.events.payload.MarketTopOfBookEvent;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -36,6 +30,11 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
@@ -53,6 +52,15 @@ public class ClobMarketWebSocketClient {
   private final @NonNull HftEventPublisher events;
 
   private final Map<String, TopOfBook> topOfBookByAssetId = new ConcurrentHashMap<>();
+  private final Map<String, Long> lastSourceByAsset = new ConcurrentHashMap<>();
+  private final AtomicBoolean resnapshotRequired = new AtomicBoolean(false);
+  private final Map<String, LocalOrderBook> depthByAssetId = new ConcurrentHashMap<>();
+  private final Map<String, BigDecimal> ticksByAssetId = new ConcurrentHashMap<>();
+
+  public Optional<BigDecimal> observedTickSize(String token) {
+    return Optional.ofNullable(ticksByAssetId.get(token));
+  }
+
   private final Set<String> subscribedAssetIds = ConcurrentHashMap.newKeySet();
   private final Map<String, AtomicLong> lastTobEventAtMillisByAssetId = new ConcurrentHashMap<>();
 
@@ -64,18 +72,20 @@ public class ClobMarketWebSocketClient {
   private final AtomicLong lastReconnectAttemptAtMillis = new AtomicLong(0);
   private final AtomicBoolean maintenanceScheduled = new AtomicBoolean(false);
 
-  private final ScheduledExecutorService pingExecutor = Executors.newSingleThreadScheduledExecutor(r -> {
-    Thread t = new Thread(r, "clob-ws-ping");
-    t.setDaemon(true);
-    return t;
-  });
+  private final ScheduledExecutorService pingExecutor =
+      Executors.newSingleThreadScheduledExecutor(
+          r -> {
+            Thread t = new Thread(r, "clob-ws-ping");
+            t.setDaemon(true);
+            return t;
+          });
 
   private volatile WebSocket webSocket;
-  @Getter
-  private volatile boolean started = false;
+  @Getter private volatile boolean started = false;
 
   private static URI buildMarketWsUri(String baseWsUrl) {
-    String base = baseWsUrl.endsWith("/") ? baseWsUrl.substring(0, baseWsUrl.length() - 1) : baseWsUrl;
+    String base =
+        baseWsUrl.endsWith("/") ? baseWsUrl.substring(0, baseWsUrl.length() - 1) : baseWsUrl;
     return URI.create(base + "/ws/market");
   }
 
@@ -141,7 +151,10 @@ public class ClobMarketWebSocketClient {
     if (assetIds == null || assetIds.isEmpty() || max <= 0) {
       return "[]";
     }
-    return assetIds.stream().limit(max).map(ClobMarketWebSocketClient::suffix).collect(Collectors.joining(", ", "[", assetIds.size() > max ? ", ...]" : "]"));
+    return assetIds.stream()
+        .limit(max)
+        .map(ClobMarketWebSocketClient::suffix)
+        .collect(Collectors.joining(", ", "[", assetIds.size() > max ? ", ...]" : "]"));
   }
 
   private static String suffix(String tokenId) {
@@ -159,11 +172,17 @@ public class ClobMarketWebSocketClient {
     if (assetIds == null || assetIds.isEmpty()) {
       return List.of();
     }
-    return assetIds.stream().filter(s -> s != null && !s.isBlank()).map(String::trim).distinct().collect(Collectors.toList());
+    return assetIds.stream()
+        .filter(s -> s != null && !s.isBlank())
+        .map(String::trim)
+        .distinct()
+        .collect(Collectors.toList());
   }
 
   public Optional<TopOfBook> getTopOfBook(String assetId) {
-    return Optional.ofNullable(topOfBookByAssetId.get(assetId));
+    return depthByAssetId.containsKey(assetId)
+        ? Optional.ofNullable(topOfBookByAssetId.get(assetId))
+        : Optional.empty();
   }
 
   public int subscribedAssetCount() {
@@ -187,7 +206,9 @@ public class ClobMarketWebSocketClient {
       return;
     }
     if (!subscribedAssetIds.isEmpty()) {
-      log.info("Market WS enabled; warm-started with {} cached subscriptions.", subscribedAssetIds.size());
+      log.info(
+          "Market WS enabled; warm-started with {} cached subscriptions.",
+          subscribedAssetIds.size());
       return;
     }
     log.info("Market WS enabled; waiting for market asset subscriptions.");
@@ -217,8 +238,9 @@ public class ClobMarketWebSocketClient {
   /**
    * Replace the current subscription set (prunes old assets).
    *
-   * Important for WS decision-time coverage: add-only subscriptions accumulate expired markets over time,
-   * which bloats caches and makes "fresh TOB" effectively unattainable for the active universe.
+   * <p>Important for WS decision-time coverage: add-only subscriptions accumulate expired markets
+   * over time, which bloats caches and makes "fresh TOB" effectively unattainable for the active
+   * universe.
    */
   public void setSubscribedAssets(List<String> assetIds) {
     if (!properties.polymarket().marketWsEnabled()) {
@@ -254,7 +276,7 @@ public class ClobMarketWebSocketClient {
     WebSocket ws = this.webSocket;
     if (ws != null) {
       try {
-        ws.sendClose(WebSocket.NORMAL_CLOSURE, "resubscribe").join();
+        ws.sendClose(WebSocket.NORMAL_CLOSURE, "resubscribe").orTimeout(2, TimeUnit.SECONDS).join();
       } catch (Exception ignored) {
       }
     }
@@ -262,6 +284,11 @@ public class ClobMarketWebSocketClient {
     started = false;
     lastMessageAtMillis.set(0);
     lastTobEventAtMillisByAssetId.clear();
+    topOfBookByAssetId.clear();
+    depthByAssetId.clear();
+    resnapshotRequired.set(false);
+    lastSourceByAsset.clear();
+    ticksByAssetId.clear();
     connectLocked();
   }
 
@@ -274,31 +301,47 @@ public class ClobMarketWebSocketClient {
     URI wsUri = buildMarketWsUri(properties.polymarket().clobWsUrl());
     log.info("Connecting to CLOB market websocket: {}", wsUri);
 
-    CompletableFuture<WebSocket> cf = httpClient.newWebSocketBuilder().buildAsync(wsUri, new Listener());
-    this.webSocket = cf.join();
+    CompletableFuture<WebSocket> cf =
+        httpClient.newWebSocketBuilder().buildAsync(wsUri, new Listener());
+    try {
+      this.webSocket = cf.orTimeout(10, TimeUnit.SECONDS).join();
+    } catch (RuntimeException e) {
+      started = false;
+      throw e;
+    }
 
     if (maintenanceScheduled.compareAndSet(false, true)) {
-      pingExecutor.scheduleAtFixedRate(() -> {
-        WebSocket ws = this.webSocket;
-        if (ws != null) {
-          try {
-            ws.sendPing(ByteBuffer.wrap(new byte[]{1}));
-          } catch (Exception ignored) {
-          }
-        }
-      }, 10, 10, TimeUnit.SECONDS);
+      pingExecutor.scheduleAtFixedRate(
+          () -> {
+            WebSocket ws = this.webSocket;
+            if (ws != null) {
+              try {
+                ws.sendText("PING", true);
+              } catch (Exception ignored) {
+              }
+            }
+          },
+          10,
+          10,
+          TimeUnit.SECONDS);
 
-      pingExecutor.scheduleAtFixedRate(this::logHeartbeat, HEARTBEAT_LOG_INTERVAL_SECONDS, HEARTBEAT_LOG_INTERVAL_SECONDS, TimeUnit.SECONDS);
+      pingExecutor.scheduleAtFixedRate(
+          this::logHeartbeat,
+          HEARTBEAT_LOG_INTERVAL_SECONDS,
+          HEARTBEAT_LOG_INTERVAL_SECONDS,
+          TimeUnit.SECONDS);
       pingExecutor.scheduleAtFixedRate(this::maintainConnectionSafely, 5, 5, TimeUnit.SECONDS);
 
       long snapshotMillis = eventsProperties.marketWsSnapshotPublishMillis();
       if (snapshotMillis > 0) {
-        pingExecutor.scheduleAtFixedRate(this::republishSnapshotsSafely, snapshotMillis, snapshotMillis, TimeUnit.MILLISECONDS);
+        pingExecutor.scheduleAtFixedRate(
+            this::republishSnapshotsSafely, snapshotMillis, snapshotMillis, TimeUnit.MILLISECONDS);
       }
 
       long flushMillis = properties.polymarket().marketWsCacheFlushMillis();
       if (flushMillis > 0 && isCachePersistenceEnabled()) {
-        pingExecutor.scheduleAtFixedRate(this::flushCacheSafely, flushMillis, flushMillis, TimeUnit.MILLISECONDS);
+        pingExecutor.scheduleAtFixedRate(
+            this::flushCacheSafely, flushMillis, flushMillis, TimeUnit.MILLISECONDS);
       }
     }
   }
@@ -309,7 +352,7 @@ public class ClobMarketWebSocketClient {
     WebSocket ws = this.webSocket;
     if (ws != null) {
       try {
-        ws.sendClose(WebSocket.NORMAL_CLOSURE, "shutdown").join();
+        ws.sendClose(WebSocket.NORMAL_CLOSURE, "shutdown").orTimeout(2, TimeUnit.SECONDS).join();
       } catch (Exception ignored) {
       }
     }
@@ -334,7 +377,10 @@ public class ClobMarketWebSocketClient {
       return;
     }
     ws.sendText(buildSubscribeMessage(snapshot), true);
-    log.info("Subscribed to {} market assets via WS (e.g. {})", snapshot.size(), sampleAssetSuffixes(snapshot, 4));
+    log.info(
+        "Subscribed to {} market assets via WS (e.g. {})",
+        snapshot.size(),
+        sampleAssetSuffixes(snapshot, 4));
   }
 
   private void handleMessage(String message) {
@@ -348,7 +394,10 @@ public class ClobMarketWebSocketClient {
       JsonNode node = objectMapper.readTree(message);
       handleMessageNode(node);
     } catch (Exception e) {
-      log.debug("Failed to parse ws message: {}", message);
+      topOfBookByAssetId.clear();
+      depthByAssetId.clear();
+      resnapshotRequired.set(true);
+      log.warn("Invalid market message; books invalidated: {}", e.getMessage());
     }
   }
 
@@ -364,6 +413,18 @@ public class ClobMarketWebSocketClient {
     }
 
     String eventType = node.path("event_type").asText("");
+    if ((eventType.equals("book") || eventType.equals("price_change")) && !sourceFresh(node)) {
+      String asset = node.path("asset_id").asText(null);
+      if (asset != null) {
+        topOfBookByAssetId.remove(asset);
+        depthByAssetId.remove(asset);
+      } else {
+        topOfBookByAssetId.clear();
+        depthByAssetId.clear();
+      }
+      resnapshotRequired.set(true);
+      return;
+    }
     switch (eventType) {
       case "book" -> {
         bookMessages.incrementAndGet();
@@ -373,12 +434,36 @@ public class ClobMarketWebSocketClient {
         priceChangeMessages.incrementAndGet();
         handlePriceChange(node);
       }
+      case "tick_size_change" -> {
+        String asset = node.path("asset_id").asText();
+        BigDecimal tick = parseDecimal(node.path("new_tick_size").asText());
+        if (tick != null && tick.signum() > 0) ticksByAssetId.put(asset, tick);
+      }
       case "last_trade_price" -> {
         lastTradeMessages.incrementAndGet();
         handleLastTradePrice(node);
       }
-      default -> {
-      }
+      default -> {}
+    }
+  }
+
+  private boolean acceptSource(String asset, JsonNode node) {
+    long stamp = Long.parseLong(node.path("timestamp").asText());
+    if (stamp < 100000000000L) stamp = Math.multiplyExact(stamp, 1000);
+    Long previous = lastSourceByAsset.get(asset);
+    if (previous != null && stamp < previous) return false;
+    lastSourceByAsset.put(asset, stamp);
+    return true;
+  }
+
+  private boolean sourceFresh(JsonNode node) {
+    try {
+      long stamp = Long.parseLong(node.path("timestamp").asText());
+      if (stamp < 100000000000L) stamp = Math.multiplyExact(stamp, 1000);
+      long age = clock.millis() - stamp;
+      return age >= -1000 && age <= 2000;
+    } catch (RuntimeException e) {
+      return false;
     }
   }
 
@@ -402,7 +487,7 @@ public class ClobMarketWebSocketClient {
     long reconnectBackoffMillis = properties.polymarket().marketWsReconnectBackoffMillis();
     long now = System.currentTimeMillis();
 
-    boolean disconnected = !started || webSocket == null;
+    boolean disconnected = !started || webSocket == null || resnapshotRequired.get();
     long lastAt = lastMessageAtMillis.get();
     boolean stale = staleTimeoutMillis > 0 && lastAt > 0 && (now - lastAt) > staleTimeoutMillis;
     if (!disconnected && !stale) {
@@ -410,14 +495,21 @@ public class ClobMarketWebSocketClient {
     }
 
     long prevAttempt = lastReconnectAttemptAtMillis.get();
-    if (reconnectBackoffMillis > 0 && prevAttempt > 0 && now - prevAttempt < reconnectBackoffMillis) {
+    if (reconnectBackoffMillis > 0
+        && prevAttempt > 0
+        && now - prevAttempt < reconnectBackoffMillis) {
       return;
     }
     lastReconnectAttemptAtMillis.set(now);
 
     String reason = disconnected ? "disconnected" : "stale";
     long lastAgo = lastAt <= 0 ? -1 : now - lastAt;
-    log.warn("Market WS reconnecting (reason={}, subscribed={}, tobKnown={}, lastMsgAgoMs={})", reason, subscribedAssetIds.size(), topOfBookByAssetId.size(), lastAgo);
+    log.warn(
+        "Market WS reconnecting (reason={}, subscribed={}, tobKnown={}, lastMsgAgoMs={})",
+        reason,
+        subscribedAssetIds.size(),
+        topOfBookByAssetId.size(),
+        lastAgo);
 
     synchronized (this) {
       if (subscribedAssetIds.isEmpty()) {
@@ -447,8 +539,18 @@ public class ClobMarketWebSocketClient {
         fresh++;
       }
     }
-    log.info("Market WS heartbeat subscribed={} tobKnown={} tobFresh({}ms)={} msgs={} book={} priceChange={} lastTrade={} lastMsg={}",
-        subscribed, known, FRESH_TOB_LOG_THRESHOLD_MILLIS, fresh, messagesReceived.get(), bookMessages.get(), priceChangeMessages.get(), lastTradeMessages.get(), lastAgo);
+    log.info(
+        "Market WS heartbeat subscribed={} tobKnown={} tobFresh({}ms)={} msgs={} book={}"
+            + " priceChange={} lastTrade={} lastMsg={}",
+        subscribed,
+        known,
+        FRESH_TOB_LOG_THRESHOLD_MILLIS,
+        fresh,
+        messagesReceived.get(),
+        bookMessages.get(),
+        priceChangeMessages.get(),
+        lastTradeMessages.get(),
+        lastAgo);
   }
 
   private void republishSnapshotsSafely() {
@@ -473,7 +575,8 @@ public class ClobMarketWebSocketClient {
     long staleTimeoutMillis = properties.polymarket().marketWsStaleTimeoutMillis();
     long nowMillis = System.currentTimeMillis();
     long lastAt = lastMessageAtMillis.get();
-    boolean stale = staleTimeoutMillis > 0 && lastAt > 0 && (nowMillis - lastAt) > staleTimeoutMillis;
+    boolean stale =
+        staleTimeoutMillis > 0 && lastAt > 0 && (nowMillis - lastAt) > staleTimeoutMillis;
     if (stale) {
       return;
     }
@@ -485,15 +588,15 @@ public class ClobMarketWebSocketClient {
         continue;
       }
 
-      TopOfBook snapshot = new TopOfBook(
-          tob.bestBid(),
-          tob.bestAsk(),
-          tob.bestBidSize(),
-          tob.bestAskSize(),
-          tob.lastTradePrice(),
-          now,
-          tob.lastTradeAt()
-      );
+      TopOfBook snapshot =
+          new TopOfBook(
+              tob.bestBid(),
+              tob.bestAsk(),
+              tob.bestBidSize(),
+              tob.bestAskSize(),
+              tob.lastTradePrice(),
+              tob.updatedAt(),
+              tob.lastTradeAt());
       topOfBookByAssetId.put(assetId, snapshot);
       maybePublishTopOfBook(assetId, snapshot);
     }
@@ -504,32 +607,44 @@ public class ClobMarketWebSocketClient {
     if (assetId == null) {
       return;
     }
+    if (!acceptSource(assetId, node)) return;
     JsonNode bidsNode = node.has("bids") ? node.get("bids") : node.get("buys");
     JsonNode asksNode = node.has("asks") ? node.get("asks") : node.get("sells");
 
-    TopLevel bestBidLevel = extractBestLevel(bidsNode, true);
-    TopLevel bestAskLevel = extractBestLevel(asksNode, false);
-
-    BigDecimal bestBid = bestBidLevel == null ? null : bestBidLevel.price();
-    BigDecimal bestBidSize = bestBidLevel == null ? null : bestBidLevel.size();
-    BigDecimal bestAsk = bestAskLevel == null ? null : bestAskLevel.price();
-    BigDecimal bestAskSize = bestAskLevel == null ? null : bestAskLevel.size();
+    LocalOrderBook depth = new LocalOrderBook();
+    depth.snapshot(bidsNode, asksNode);
+    depthByAssetId.put(assetId, depth);
+    LocalOrderBook.Best best = depth.best();
+    BigDecimal bestBid = best.bid(),
+        bestBidSize = best.bidSize(),
+        bestAsk = best.ask(),
+        bestAskSize = best.askSize();
     BigDecimal lastTradePrice = parseDecimal(node.path("last_trade_price").asText(null));
 
     Instant now = Instant.now(clock);
-    TopOfBook tob = topOfBookByAssetId.compute(assetId, (k, prev) -> {
-      BigDecimal prevLast = prev == null ? null : prev.lastTradePrice();
-      Instant prevTradeAt = prev == null ? null : prev.lastTradeAt();
+    TopOfBook tob =
+        topOfBookByAssetId.compute(
+            assetId,
+            (k, prev) -> {
+              BigDecimal prevLast = prev == null ? null : prev.lastTradePrice();
+              Instant prevTradeAt = prev == null ? null : prev.lastTradeAt();
 
-      BigDecimal nextLast = lastTradePrice != null ? lastTradePrice : prevLast;
-      Instant nextTradeAt = prevTradeAt;
-      if (nextLast != null && (prevLast == null || (lastTradePrice != null && prevLast != null && lastTradePrice.compareTo(prevLast) != 0))) {
-        nextTradeAt = now;
-      }
-      BigDecimal nextBidSize = bestBidSize != null ? bestBidSize : (prev == null ? null : prev.bestBidSize());
-      BigDecimal nextAskSize = bestAskSize != null ? bestAskSize : (prev == null ? null : prev.bestAskSize());
-      return new TopOfBook(bestBid, bestAsk, nextBidSize, nextAskSize, nextLast, now, nextTradeAt);
-    });
+              BigDecimal nextLast = lastTradePrice != null ? lastTradePrice : prevLast;
+              Instant nextTradeAt = prevTradeAt;
+              if (nextLast != null
+                  && (prevLast == null
+                      || (lastTradePrice != null
+                          && prevLast != null
+                          && lastTradePrice.compareTo(prevLast) != 0))) {
+                nextTradeAt = now;
+              }
+              BigDecimal nextBidSize =
+                  bestBidSize != null ? bestBidSize : (prev == null ? null : prev.bestBidSize());
+              BigDecimal nextAskSize =
+                  bestAskSize != null ? bestAskSize : (prev == null ? null : prev.bestAskSize());
+              return new TopOfBook(
+                  bestBid, bestAsk, nextBidSize, nextAskSize, nextLast, now, nextTradeAt);
+            });
     maybePublishTopOfBook(assetId, tob);
   }
 
@@ -544,20 +659,41 @@ public class ClobMarketWebSocketClient {
       if (assetId == null) {
         continue;
       }
-      BigDecimal bestBid = parseDecimal(change.path("best_bid").asText(null));
-      BigDecimal bestAsk = parseDecimal(change.path("best_ask").asText(null));
-      BigDecimal bestBidSize = parseDecimal(change.path("best_bid_size").asText(null));
-      BigDecimal bestAskSize = parseDecimal(change.path("best_ask_size").asText(null));
+      if (!acceptSource(assetId, node)) continue;
+      LocalOrderBook depth = depthByAssetId.get(assetId);
+      if (depth == null) {
+        topOfBookByAssetId.remove(assetId);
+        continue;
+      }
+      try {
+        depth.change(
+            change.path("side").asText(),
+            new BigDecimal(change.path("price").asText()),
+            new BigDecimal(change.path("size").asText()));
+      } catch (RuntimeException e) {
+        depthByAssetId.remove(assetId);
+        topOfBookByAssetId.remove(assetId);
+        resnapshotRequired.set(true);
+        continue;
+      }
+      LocalOrderBook.Best best = depth.best();
+      BigDecimal bestBid = best.bid(),
+          bestAsk = best.ask(),
+          bestBidSize = best.bidSize(),
+          bestAskSize = best.askSize();
 
-      TopOfBook tob = topOfBookByAssetId.compute(assetId, (k, prev) -> new TopOfBook(
-          bestBid != null ? bestBid : (prev == null ? null : prev.bestBid()),
-          bestAsk != null ? bestAsk : (prev == null ? null : prev.bestAsk()),
-          bestBidSize != null ? bestBidSize : (prev == null ? null : prev.bestBidSize()),
-          bestAskSize != null ? bestAskSize : (prev == null ? null : prev.bestAskSize()),
-          prev == null ? null : prev.lastTradePrice(),
-          now,
-          prev == null ? null : prev.lastTradeAt()
-      ));
+      TopOfBook tob =
+          topOfBookByAssetId.compute(
+              assetId,
+              (k, prev) ->
+                  new TopOfBook(
+                      bestBid,
+                      bestAsk,
+                      bestBidSize,
+                      bestAskSize,
+                      prev == null ? null : prev.lastTradePrice(),
+                      now,
+                      prev == null ? null : prev.lastTradeAt()));
       maybePublishTopOfBook(assetId, tob);
     }
   }
@@ -569,15 +705,18 @@ public class ClobMarketWebSocketClient {
     }
     BigDecimal price = parseDecimal(node.path("price").asText(null));
     Instant now = Instant.now(clock);
-    TopOfBook tob = topOfBookByAssetId.compute(assetId, (k, prev) -> new TopOfBook(
-        prev == null ? null : prev.bestBid(),
-        prev == null ? null : prev.bestAsk(),
-        prev == null ? null : prev.bestBidSize(),
-        prev == null ? null : prev.bestAskSize(),
-        price,
-        now,
-        now
-    ));
+    TopOfBook tob =
+        topOfBookByAssetId.compute(
+            assetId,
+            (k, prev) ->
+                new TopOfBook(
+                    prev == null ? null : prev.bestBid(),
+                    prev == null ? null : prev.bestAsk(),
+                    prev == null ? null : prev.bestBidSize(),
+                    prev == null ? null : prev.bestAskSize(),
+                    price,
+                    prev == null ? Instant.EPOCH : prev.updatedAt(),
+                    now));
     maybePublishTopOfBook(assetId, tob);
   }
 
@@ -590,9 +729,11 @@ public class ClobMarketWebSocketClient {
     }
 
     long minIntervalMillis = eventsProperties.marketWsTobMinIntervalMillis();
-    long nowMillis = tob.updatedAt() != null ? tob.updatedAt().toEpochMilli() : System.currentTimeMillis();
+    long nowMillis =
+        tob.updatedAt() != null ? tob.updatedAt().toEpochMilli() : System.currentTimeMillis();
     if (minIntervalMillis > 0) {
-      AtomicLong last = lastTobEventAtMillisByAssetId.computeIfAbsent(assetId, k -> new AtomicLong(0L));
+      AtomicLong last =
+          lastTobEventAtMillisByAssetId.computeIfAbsent(assetId, k -> new AtomicLong(0L));
       while (true) {
         long prev = last.get();
         if (nowMillis - prev < minIntervalMillis) {
@@ -604,16 +745,19 @@ public class ClobMarketWebSocketClient {
       }
     }
 
-    events.publish(tob.updatedAt(), HftEventTypes.MARKET_WS_TOB, assetId, new MarketTopOfBookEvent(
-        assetId,
-        tob.bestBid(),
-        tob.bestBidSize(),
-        tob.bestAsk(),
-        tob.bestAskSize(),
-        tob.lastTradePrice(),
+    events.publish(
         tob.updatedAt(),
-        tob.lastTradeAt()
-    ));
+        HftEventTypes.MARKET_WS_TOB,
+        assetId,
+        new MarketTopOfBookEvent(
+            assetId,
+            tob.bestBid(),
+            tob.bestBidSize(),
+            tob.bestAsk(),
+            tob.bestAskSize(),
+            tob.lastTradePrice(),
+            tob.updatedAt(),
+            tob.lastTradeAt()));
   }
 
   private record TopLevel(BigDecimal price, BigDecimal size) {}
@@ -644,13 +788,19 @@ public class ClobMarketWebSocketClient {
         return;
       }
       MarketWsCacheSnapshot snapshot = objectMapper.readValue(json, MarketWsCacheSnapshot.class);
-      if (snapshot == null || snapshot.topOfBookByAssetId() == null || snapshot.topOfBookByAssetId().isEmpty()) {
+      if (snapshot == null
+          || snapshot.topOfBookByAssetId() == null
+          || snapshot.topOfBookByAssetId().isEmpty()) {
         return;
       }
       topOfBookByAssetId.putAll(snapshot.topOfBookByAssetId());
-      log.info("Loaded market WS TOB cache from {} (assets={})", pathStr, snapshot.topOfBookByAssetId().size());
+      log.info(
+          "Loaded market WS TOB cache from {} (assets={})",
+          pathStr,
+          snapshot.topOfBookByAssetId().size());
 
-      if (Boolean.TRUE.equals(eventsProperties.marketWsCachePublishOnStart()) && events.isEnabled()) {
+      if (Boolean.TRUE.equals(eventsProperties.marketWsCachePublishOnStart())
+          && events.isEnabled()) {
         for (Map.Entry<String, TopOfBook> e : snapshot.topOfBookByAssetId().entrySet()) {
           if (e == null) {
             continue;
@@ -662,10 +812,13 @@ public class ClobMarketWebSocketClient {
           }
           maybePublishTopOfBook(assetId, tob);
         }
-        log.info("Republished {} cached market WS TOBs on startup", snapshot.topOfBookByAssetId().size());
+        log.info(
+            "Republished {} cached market WS TOBs on startup",
+            snapshot.topOfBookByAssetId().size());
       }
 
-      // Optional warm-start: if no asset list was configured, reuse the last subscribed set to connect immediately.
+      // Optional warm-start: if no asset list was configured, reuse the last subscribed set to
+      // connect immediately.
       if (properties.polymarket().marketAssetIds().isEmpty()
           && snapshot.subscribedAssetIds() != null
           && !snapshot.subscribedAssetIds().isEmpty()
@@ -700,15 +853,20 @@ public class ClobMarketWebSocketClient {
       Files.createDirectories(parent);
     }
 
-    MarketWsCacheSnapshot snapshot = new MarketWsCacheSnapshot(
-        Instant.now(clock),
-        subscribedAssetIds.stream().sorted().toList(),
-        new HashMap<>(topOfBookByAssetId)
-    );
+    MarketWsCacheSnapshot snapshot =
+        new MarketWsCacheSnapshot(
+            Instant.now(clock),
+            subscribedAssetIds.stream().sorted().toList(),
+            new HashMap<>(topOfBookByAssetId));
 
     String json = objectMapper.writeValueAsString(snapshot);
     Path tmp = path.resolveSibling(path.getFileName() + ".tmp");
-    Files.writeString(tmp, json, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+    Files.writeString(
+        tmp,
+        json,
+        StandardOpenOption.CREATE,
+        StandardOpenOption.TRUNCATE_EXISTING,
+        StandardOpenOption.WRITE);
     try {
       Files.move(tmp, path, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
     } catch (Exception e) {
@@ -719,14 +877,12 @@ public class ClobMarketWebSocketClient {
   private record MarketWsCacheSnapshot(
       Instant snapshotAt,
       List<String> subscribedAssetIds,
-      Map<String, TopOfBook> topOfBookByAssetId
-  ) {}
+      Map<String, TopOfBook> topOfBookByAssetId) {}
 
   private final class Listener implements WebSocket.Listener {
     private final StringBuilder buf = new StringBuilder(8192);
 
-    private Listener() {
-    }
+    private Listener() {}
 
     @Override
     public void onOpen(WebSocket webSocket) {

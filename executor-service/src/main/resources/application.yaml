@@ -5,6 +5,7 @@ spring:
     name: executor-service
 
 server:
+  address: ${POLYBOT_BIND_ADDRESS:127.0.0.1}
   port: 8080
 
 hft:
@@ -18,3 +19,6 @@ hft:
       api-passphrase: ${POLYMARKET_API_PASSPHRASE:}
       nonce: ${POLYMARKET_API_NONCE:0}
 
+
+polybot:
+  executor-token: ${POLYBOT_EXECUTOR_TOKEN:}

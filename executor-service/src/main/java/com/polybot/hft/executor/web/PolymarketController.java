@@ -1,6 +1,7 @@
 package com.polybot.hft.executor.web;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polybot.hft.config.HftProperties;
 import com.polybot.hft.domain.OrderSide;
 import com.polybot.hft.events.HftEventPublisher;
@@ -9,14 +10,14 @@ import com.polybot.hft.executor.events.ExecutorCancelOrderEvent;
 import com.polybot.hft.executor.events.ExecutorLimitOrderEvent;
 import com.polybot.hft.executor.events.ExecutorMarketOrderEvent;
 import com.polybot.hft.executor.events.ExecutorOrderError;
-import com.polybot.hft.executor.portfolio.PolymarketBankrollService;
 import com.polybot.hft.executor.metrics.ExecutorMetricsService;
 import com.polybot.hft.executor.order.ExecutorOrderMonitor;
+import com.polybot.hft.executor.portfolio.PolymarketBankrollService;
 import com.polybot.hft.executor.sim.PaperExchangeSimulator;
-import com.polybot.hft.polymarket.api.PolymarketAccountResponse;
 import com.polybot.hft.polymarket.api.LimitOrderRequest;
 import com.polybot.hft.polymarket.api.MarketOrderRequest;
 import com.polybot.hft.polymarket.api.OrderSubmissionResult;
+import com.polybot.hft.polymarket.api.PolymarketAccountResponse;
 import com.polybot.hft.polymarket.api.PolymarketBankrollResponse;
 import com.polybot.hft.polymarket.api.PolymarketHealthResponse;
 import com.polybot.hft.polymarket.auth.PolymarketAuthContext;
@@ -26,19 +27,17 @@ import com.polybot.hft.polymarket.model.OrderBook;
 import com.polybot.hft.polymarket.service.PolymarketTradingService;
 import com.polybot.hft.polymarket.ws.ClobMarketWebSocketClient;
 import com.polybot.hft.polymarket.ws.TopOfBook;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
+import java.math.BigDecimal;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.UUID;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.UUID;
 import org.web3j.crypto.Credentials;
 
 @RestController
@@ -74,7 +73,8 @@ public class PolymarketController {
   }
 
   private String signerAddress() {
-    return authContext.signerCredentials()
+    return authContext
+        .signerCredentials()
         .map(Credentials::getAddress)
         .map(PolymarketController::normalizeAddress)
         .orElse(null);
@@ -91,9 +91,8 @@ public class PolymarketController {
 
   @GetMapping("/health")
   public ResponseEntity<PolymarketHealthResponse> getHealth(
-      @RequestParam(name="deep", required=false, defaultValue="false") boolean deep,
-      @RequestParam(name="tokenId", required=false) String tokenId
-  ) {
+      @RequestParam(name = "deep", required = false, defaultValue = "false") boolean deep,
+      @RequestParam(name = "tokenId", required = false) String tokenId) {
     log.info("api /health deep={} tokenId={}", deep, tokenId);
     return ResponseEntity.ok(tradingService.getHealth(deep, tokenId));
   }
@@ -102,12 +101,13 @@ public class PolymarketController {
   public ResponseEntity<PolymarketAccountResponse> getAccount() {
     return ResponseEntity.ok(
         new PolymarketAccountResponse(
-            properties.mode().name(),
-            signerAddress(),
-            makerAddress(),
-            funderAddress()
-        )
-    );
+            properties.mode().name(), signerAddress(), makerAddress(), funderAddress()));
+  }
+
+  @GetMapping("/paper-ledger")
+  public Object paperLedger() {
+    if (!simulator.enabled()) throw new IllegalStateException("Paper account disabled");
+    return simulator.accountState();
   }
 
   @GetMapping("/bankroll")
@@ -117,10 +117,9 @@ public class PolymarketController {
 
   @GetMapping("/positions")
   public ResponseEntity<JsonNode> getPositions(
-      @RequestParam(name="user", required=false) String user,
-      @RequestParam(name="limit", required=false, defaultValue="200") int limit,
-      @RequestParam(name="offset", required=false, defaultValue="0") int offset
-  ) {
+      @RequestParam(name = "user", required = false) String user,
+      @RequestParam(name = "limit", required = false, defaultValue = "200") int limit,
+      @RequestParam(name = "offset", required = false, defaultValue = "0") int offset) {
     if (simulator.enabled()) {
       return ResponseEntity.ok(objectMapper.valueToTree(simulator.getPositions(limit, offset)));
     }
@@ -153,23 +152,32 @@ public class PolymarketController {
   @GetMapping("/marketdata/top/{tokenId}")
   public ResponseEntity<TopOfBook> getTopOfBook(@PathVariable String tokenId) {
     log.info("api /marketdata/top tokenId={}", tokenId);
-    return marketWebSocketClient.getTopOfBook(tokenId)
+    return marketWebSocketClient
+        .getTopOfBook(tokenId)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
   }
 
   @PostMapping("/orders/limit")
-  public ResponseEntity<OrderSubmissionResult> placeLimitOrder(@Valid @RequestBody LimitOrderRequest request) {
-    log.info("api /orders/limit tokenId={} side={} price={} size={} orderType={}",
-        request.tokenId(), request.side(), request.price(), request.size(), request.orderType());
+  public ResponseEntity<OrderSubmissionResult> placeLimitOrder(
+      @Valid @RequestBody LimitOrderRequest request) {
+    log.info(
+        "api /orders/limit tokenId={} side={} price={} size={} orderType={}",
+        request.tokenId(),
+        request.side(),
+        request.price(),
+        request.size(),
+        request.orderType());
     try {
       metricsService.recordOrderPlaced();
-      OrderSubmissionResult result = simulator.enabled()
-          ? simulator.placeLimitOrder(request)
-          : tradingService.placeLimitOrder(request);
+      OrderSubmissionResult result =
+          simulator.enabled()
+              ? simulator.placeLimitOrder(request)
+              : tradingService.placeLimitOrder(request);
       String orderId = resolveOrderId(result);
       if (!simulator.enabled() && orderId != null && !orderId.isBlank()) {
-        orderMonitor.trackNewOrder(orderId, request.tokenId(), request.side(), request.price(), request.size());
+        orderMonitor.trackNewOrder(
+            orderId, request.tokenId(), request.side(), request.price(), request.size());
       }
       safePublishLimitOrderEvent(request, result, null);
       return ResponseEntity.ok(result);
@@ -180,19 +188,28 @@ public class PolymarketController {
   }
 
   @PostMapping("/orders/market")
-  public ResponseEntity<OrderSubmissionResult> placeMarketOrder(@Valid @RequestBody MarketOrderRequest request) {
-    log.info("api /orders/market tokenId={} side={} amount={} price={} orderType={}",
-        request.tokenId(), request.side(), request.amount(), request.price(), request.orderType());
+  public ResponseEntity<OrderSubmissionResult> placeMarketOrder(
+      @Valid @RequestBody MarketOrderRequest request) {
+    log.info(
+        "api /orders/market tokenId={} side={} amount={} price={} orderType={}",
+        request.tokenId(),
+        request.side(),
+        request.amount(),
+        request.price(),
+        request.orderType());
     try {
       metricsService.recordOrderPlaced();
-      OrderSubmissionResult result = simulator.enabled()
-          ? simulator.placeMarketOrder(request)
-          : tradingService.placeMarketOrder(request);
+      OrderSubmissionResult result =
+          simulator.enabled()
+              ? simulator.placeMarketOrder(request)
+              : tradingService.placeMarketOrder(request);
       String orderId = resolveOrderId(result);
       if (!simulator.enabled() && orderId != null && !orderId.isBlank()) {
-        // For BUY market orders, request.amount is USDC; size in shares is unknown without querying.
+        // For BUY market orders, request.amount is USDC; size in shares is unknown without
+        // querying.
         BigDecimal size = request.side() == OrderSide.SELL ? request.amount() : null;
-        orderMonitor.trackNewOrder(orderId, request.tokenId(), request.side(), request.price(), size);
+        orderMonitor.trackNewOrder(
+            orderId, request.tokenId(), request.side(), request.price(), size);
       }
       safePublishMarketOrderEvent(request, result, null);
       return ResponseEntity.ok(result);
@@ -206,9 +223,10 @@ public class PolymarketController {
   public ResponseEntity<JsonNode> cancelOrder(@PathVariable String orderId) {
     log.info("api /orders/cancel orderId={}", orderId);
     try {
-      JsonNode result = simulator.enabled()
-          ? simulator.cancelOrder(orderId)
-          : tradingService.cancelOrder(orderId);
+      JsonNode result =
+          simulator.enabled()
+              ? simulator.cancelOrder(orderId)
+              : tradingService.cancelOrder(orderId);
       safePublishCancelOrderEvent(orderId, result, null);
       return ResponseEntity.ok(result);
     } catch (RuntimeException e) {
@@ -220,7 +238,8 @@ public class PolymarketController {
   @GetMapping("/orders/{orderId}")
   public ResponseEntity<JsonNode> getOrder(@PathVariable String orderId) {
     log.info("api /orders/get orderId={}", orderId);
-    return ResponseEntity.ok(simulator.enabled() ? simulator.getOrder(orderId) : tradingService.getOrder(orderId));
+    return ResponseEntity.ok(
+        simulator.enabled() ? simulator.getOrder(orderId) : tradingService.getOrder(orderId));
   }
 
   @GetMapping("/orders")
@@ -228,8 +247,7 @@ public class PolymarketController {
       @RequestParam(name = "market", required = false) String market,
       @RequestParam(name = "asset_id", required = false) String assetId,
       @RequestParam(name = "id", required = false) String id,
-      @RequestParam(name = "next_cursor", required = false) String nextCursor
-  ) {
+      @RequestParam(name = "next_cursor", required = false) String nextCursor) {
     Map<String, String> query = new LinkedHashMap<>();
     if (market != null && !market.isBlank()) {
       query.put("market", market);
@@ -243,8 +261,14 @@ public class PolymarketController {
     if (nextCursor != null && !nextCursor.isBlank()) {
       query.put("next_cursor", nextCursor);
     }
-    log.info("api /orders/list market={} asset_id={} id={} next_cursor={}", market, assetId, id, nextCursor);
-    return ResponseEntity.ok(tradingService.getOrders(query));
+    log.info(
+        "api /orders/list market={} asset_id={} id={} next_cursor={}",
+        market,
+        assetId,
+        id,
+        nextCursor);
+    return ResponseEntity.ok(
+        simulator.enabled() ? simulator.getOrders(query) : tradingService.getOrders(query));
   }
 
   @GetMapping("/trades")
@@ -255,8 +279,7 @@ public class PolymarketController {
       @RequestParam(name = "before", required = false) Integer before,
       @RequestParam(name = "after", required = false) Integer after,
       @RequestParam(name = "id", required = false) String id,
-      @RequestParam(name = "next_cursor", required = false) String nextCursor
-  ) {
+      @RequestParam(name = "next_cursor", required = false) String nextCursor) {
     Map<String, String> query = new LinkedHashMap<>();
     if (makerAddress != null && !makerAddress.isBlank()) {
       query.put("maker_address", makerAddress);
@@ -279,11 +302,21 @@ public class PolymarketController {
     if (nextCursor != null && !nextCursor.isBlank()) {
       query.put("next_cursor", nextCursor);
     }
-    log.info("api /trades maker_address={} market={} asset_id={} before={} after={} id={} next_cursor={}", makerAddress, market, assetId, before, after, id, nextCursor);
+    log.info(
+        "api /trades maker_address={} market={} asset_id={} before={} after={} id={}"
+            + " next_cursor={}",
+        makerAddress,
+        market,
+        assetId,
+        before,
+        after,
+        id,
+        nextCursor);
     return ResponseEntity.ok(tradingService.getTrades(query));
   }
 
-  private void safePublishLimitOrderEvent(LimitOrderRequest request, OrderSubmissionResult result, RuntimeException error) {
+  private void safePublishLimitOrderEvent(
+      LimitOrderRequest request, OrderSubmissionResult result, RuntimeException error) {
     if (!events.isEnabled()) {
       return;
     }
@@ -309,14 +342,13 @@ public class PolymarketController {
               mode,
               error == null,
               orderId,
-              err
-          )
-      );
+              err));
     } catch (Exception ignored) {
     }
   }
 
-  private void safePublishMarketOrderEvent(MarketOrderRequest request, OrderSubmissionResult result, RuntimeException error) {
+  private void safePublishMarketOrderEvent(
+      MarketOrderRequest request, OrderSubmissionResult result, RuntimeException error) {
     if (!events.isEnabled()) {
       return;
     }
@@ -341,25 +373,24 @@ public class PolymarketController {
               mode,
               error == null,
               orderId,
-              err
-          )
-      );
+              err));
     } catch (Exception ignored) {
     }
   }
 
-  private void safePublishCancelOrderEvent(String orderId, JsonNode result, RuntimeException error) {
+  private void safePublishCancelOrderEvent(
+      String orderId, JsonNode result, RuntimeException error) {
     if (!events.isEnabled()) {
       return;
     }
     try {
-      String mode = result != null && result.hasNonNull("mode") ? result.get("mode").asText(null) : null;
+      String mode =
+          result != null && result.hasNonNull("mode") ? result.get("mode").asText(null) : null;
       ExecutorOrderError err = error == null ? null : toOrderError(error);
       events.publish(
           HftEventTypes.EXECUTOR_ORDER_CANCEL,
           orderId,
-          new ExecutorCancelOrderEvent(orderId, mode, error == null, err)
-      );
+          new ExecutorCancelOrderEvent(orderId, mode, error == null, err));
     } catch (Exception ignored) {
     }
   }
@@ -394,16 +425,14 @@ public class PolymarketController {
           phe.statusCode(),
           phe.method(),
           phe.uri().toString(),
-          truncate(phe.getMessage(), ERROR_MAX_LEN)
-      );
+          truncate(phe.getMessage(), ERROR_MAX_LEN));
     }
     return new ExecutorOrderError(
         e.getClass().getSimpleName(),
         null,
         null,
         null,
-        truncate(e.getMessage() != null ? e.getMessage() : e.toString(), ERROR_MAX_LEN)
-    );
+        truncate(e.getMessage() != null ? e.getMessage() : e.toString(), ERROR_MAX_LEN));
   }
 
   private static String truncate(String s, int max) {

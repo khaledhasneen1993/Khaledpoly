@@ -8,12 +8,6 @@ import com.polybot.ingestor.config.IngestorProperties;
 import com.polybot.ingestor.polymarket.PolymarketClobApiClient;
 import com.polybot.ingestor.polymarket.PolymarketDataApiClient;
 import com.polybot.ingestor.polymarket.PolymarketGammaApiClient;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Clock;
@@ -24,6 +18,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -44,7 +43,8 @@ public class PolymarketMarketContextIngestor {
   private final @NonNull ObjectMapper objectMapper;
   private final @NonNull Clock clock;
 
-  private final EvictingKeySet seenMarketTradeKeys = new EvictingKeySet(DEFAULT_SEEN_MARKET_TRADE_KEYS_CAPACITY);
+  private final EvictingKeySet seenMarketTradeKeys =
+      new EvictingKeySet(DEFAULT_SEEN_MARKET_TRADE_KEYS_CAPACITY);
 
   private final AtomicLong publishedGammaSnapshots = new AtomicLong(0);
   private final AtomicLong publishedClobTobs = new AtomicLong(0);
@@ -61,8 +61,7 @@ public class PolymarketMarketContextIngestor {
       String proxyAddress,
       String userTradeKey,
       Instant userTradeAt,
-      JsonNode userTrade
-  ) {
+      JsonNode userTrade) {
     if (!properties.marketContext().enabled()) {
       return;
     }
@@ -93,15 +92,15 @@ public class PolymarketMarketContextIngestor {
     long maxAgeSeconds = properties.marketContext().onTradeContextMaxAgeSeconds();
     long ageSeconds = Math.max(0, (nowMillis - userTradeAt.toEpochMilli()) / 1000L);
     if (ageSeconds <= maxAgeSeconds) {
-      maybePublishClobTobContext(username, proxyAddress, userTradeKey, userTradeAt, userTrade, state, nowMillis);
+      maybePublishClobTobContext(
+          username, proxyAddress, userTradeKey, userTradeAt, userTrade, state, nowMillis);
       maybeFetchAndPublishMarketTrades(slug, state, nowMillis);
     }
   }
 
   @Scheduled(
       initialDelayString = "15000",
-      fixedDelayString = "${ingestor.market-context.gamma-poll-interval-seconds:60}000"
-  )
+      fixedDelayString = "${ingestor.market-context.gamma-poll-interval-seconds:60}000")
   public void pollGammaMarkets() {
     if (!properties.marketContext().enabled()) {
       return;
@@ -127,7 +126,7 @@ public class PolymarketMarketContextIngestor {
       }
 
       GammaMarket gamma = state.gamma;
-        if (gamma != null) {
+      if (gamma != null) {
         if (isTerminalGammaMarket(gamma)) {
           continue;
         }
@@ -155,8 +154,7 @@ public class PolymarketMarketContextIngestor {
       String proxyAddress,
       String userTradeKey,
       MarketState state,
-      long nowMillis
-  ) {
+      long nowMillis) {
     long minIntervalMillis = properties.marketContext().gammaMinIntervalSeconds() * 1000L;
     if (nowMillis - state.lastGammaFetchAtMillis < minIntervalMillis) {
       return;
@@ -191,33 +189,39 @@ public class PolymarketMarketContextIngestor {
     Map<String, Object> data = new LinkedHashMap<>();
     data.put("slug", market.slug());
     if (username != null && proxyAddress != null && userTradeKey != null) {
-      data.put("trigger", Map.of(
-          "username", username,
-          "proxyAddress", proxyAddress,
-          "tradeKey", userTradeKey
-      ));
+      data.put(
+          "trigger",
+          Map.of(
+              "username", username,
+              "proxyAddress", proxyAddress,
+              "tradeKey", userTradeKey));
     }
     data.put("market", market.rawMarket());
     data.put("event", market.rawEvent());
     data.put("capturedAt", Instant.ofEpochMilli(nowMillis).toString());
 
-    String key = "gamma:%s:%s:%s:%s".formatted(
-        market.slug(),
-        String.valueOf(market.closed()),
-        String.valueOf(market.resolved()),
-        market.resolution() == null ? "" : market.resolution()
-    );
+    String key =
+        "gamma:%s:%s:%s:%s"
+            .formatted(
+                market.slug(),
+                String.valueOf(market.closed()),
+                String.valueOf(market.resolved()),
+                market.resolution() == null ? "" : market.resolution());
     events.publish(Instant.ofEpochMilli(nowMillis), GAMMA_MARKET_EVENT_TYPE, key, data);
     publishedGammaSnapshots.incrementAndGet();
 
     if (Boolean.TRUE.equals(market.resolved()) || market.resolution() != null) {
-      log.info("market-context gamma resolved slug={} resolved={} resolution={}", market.slug(), market.resolved(), market.resolution());
+      log.info(
+          "market-context gamma resolved slug={} resolved={} resolution={}",
+          market.slug(),
+          market.resolved(),
+          market.resolution());
     }
   }
 
   /**
-   * Publishes a CLOB top-of-book snapshot for the traded token and, when Gamma market metadata is available,
-   * also snapshots other outcomes in the same market at the same trigger time.
+   * Publishes a CLOB top-of-book snapshot for the traded token and, when Gamma market metadata is
+   * available, also snapshots other outcomes in the same market at the same trigger time.
    */
   private void maybePublishClobTobContext(
       String username,
@@ -226,8 +230,7 @@ public class PolymarketMarketContextIngestor {
       Instant userTradeAt,
       JsonNode userTrade,
       MarketState state,
-      long nowMillis
-  ) {
+      long nowMillis) {
     String tradedTokenId = textOrNull(userTrade.path("asset"));
     if (tradedTokenId == null) {
       return;
@@ -244,7 +247,17 @@ public class PolymarketMarketContextIngestor {
         if ((tokenOutcome == null || tokenOutcome.isBlank()) && tokenId.equals(tradedTokenId)) {
           tokenOutcome = textOrNull(userTrade.path("outcome"));
         }
-        maybePublishClobTobForToken(username, proxyAddress, userTradeKey, userTradeAt, state.slug, tokenId, tokenOutcome, userTrade, state, nowMillis);
+        maybePublishClobTobForToken(
+            username,
+            proxyAddress,
+            userTradeKey,
+            userTradeAt,
+            state.slug,
+            tokenId,
+            tokenOutcome,
+            userTrade,
+            state,
+            nowMillis);
       }
       return;
     }
@@ -260,8 +273,7 @@ public class PolymarketMarketContextIngestor {
         textOrNull(userTrade.path("outcome")),
         userTrade,
         state,
-        nowMillis
-    );
+        nowMillis);
   }
 
   private static String outcomeForToken(GammaMarket gamma, String tokenId) {
@@ -292,8 +304,7 @@ public class PolymarketMarketContextIngestor {
       String tokenOutcome,
       JsonNode userTrade,
       MarketState state,
-      long nowMillis
-  ) {
+      long nowMillis) {
     if (tokenId == null) {
       return;
     }
@@ -313,8 +324,7 @@ public class PolymarketMarketContextIngestor {
           cached.fetchedAtMillis,
           true,
           nowMillis - cached.fetchedAtMillis,
-          tokenOutcome
-      );
+          tokenOutcome);
       return;
     }
 
@@ -344,8 +354,7 @@ public class PolymarketMarketContextIngestor {
         nowMillis,
         false,
         0L,
-        tokenOutcome
-    );
+        tokenOutcome);
   }
 
   private void publishClobTobEvent(
@@ -360,18 +369,18 @@ public class PolymarketMarketContextIngestor {
       long tobCapturedAtMillis,
       boolean fromCache,
       long cacheAgeMillis,
-      String tokenOutcome
-  ) {
+      String tokenOutcome) {
     Map<String, Object> data = new LinkedHashMap<>();
     data.put("marketSlug", marketSlug);
     data.put("tokenId", tokenId);
     data.put("outcome", tokenOutcome);
-    data.put("trigger", Map.of(
-        "username", username,
-        "proxyAddress", proxyAddress,
-        "tradeKey", userTradeKey,
-        "tradeAt", userTradeAt.toString()
-    ));
+    data.put(
+        "trigger",
+        Map.of(
+            "username", username,
+            "proxyAddress", proxyAddress,
+            "tradeKey", userTradeKey,
+            "tradeAt", userTradeAt.toString()));
     data.put("book", tob);
     data.put("capturedAt", Instant.ofEpochMilli(tobCapturedAtMillis).toString());
     if (fromCache) {
@@ -394,7 +403,8 @@ public class PolymarketMarketContextIngestor {
     int limit = properties.marketContext().marketTradesLimit();
     ArrayNode trades;
     try {
-      trades = dataApi.getMarketTrades(slug, limit, 0);
+      if (state.gamma == null || state.gamma.conditionId() == null) return;
+      trades = dataApi.getMarketTrades(state.gamma.conditionId(), limit, 0);
     } catch (Exception e) {
       failures.incrementAndGet();
       log.debug("market-context market trades fetch failed slug={} error={}", slug, e.toString());
@@ -409,7 +419,8 @@ public class PolymarketMarketContextIngestor {
       }
 
       long tsSeconds = trade.path("timestamp").asLong(0);
-      Instant ts = tsSeconds > 0 ? Instant.ofEpochSecond(tsSeconds) : Instant.ofEpochMilli(nowMillis);
+      Instant ts =
+          tsSeconds > 0 ? Instant.ofEpochSecond(tsSeconds) : Instant.ofEpochMilli(nowMillis);
       String tx = trade.path("transactionHash").asText(null);
       String asset = trade.path("asset").asText("");
       String side = trade.path("side").asText("");
@@ -474,8 +485,7 @@ public class PolymarketMarketContextIngestor {
         outcomes,
         outcomePrices,
         event,
-        market
-    );
+        market);
   }
 
   private String gammaSignature(GammaMarket market) {
@@ -483,7 +493,8 @@ public class PolymarketMarketContextIngestor {
     String conditionId = market.conditionId() == null ? "" : market.conditionId();
     String resolution = market.resolution() == null ? "" : market.resolution();
     String resolved = market.resolved() == null ? "" : String.valueOf(market.resolved());
-    String umaResolutionStatus = market.umaResolutionStatus() == null ? "" : market.umaResolutionStatus();
+    String umaResolutionStatus =
+        market.umaResolutionStatus() == null ? "" : market.umaResolutionStatus();
     String resolvedOutcome = resolvedOutcomeFromPrices(market.outcomes(), market.outcomePrices());
     if (resolvedOutcome == null) {
       resolvedOutcome = "";
@@ -492,17 +503,17 @@ public class PolymarketMarketContextIngestor {
     String end = market.endDate() == null ? "" : market.endDate().toString();
     String tokenIds = String.join(",", market.clobTokenIds());
     String outcomes = String.join(",", market.outcomes());
-    return "%s|%s|%s|%s|%s|%s|%s|%s|%s".formatted(
-        marketId,
-        conditionId,
-        resolved,
-        resolution,
-        resolvedOutcome,
-        umaResolutionStatus,
-        closed,
-        end,
-        tokenIds + "::" + outcomes
-    );
+    return "%s|%s|%s|%s|%s|%s|%s|%s|%s"
+        .formatted(
+            marketId,
+            conditionId,
+            resolved,
+            resolution,
+            resolvedOutcome,
+            umaResolutionStatus,
+            closed,
+            end,
+            tokenIds + "::" + outcomes);
   }
 
   private static boolean isTerminalGammaMarket(GammaMarket market) {
@@ -518,7 +529,8 @@ public class PolymarketMarketContextIngestor {
     return resolvedOutcomeFromPrices(market.outcomes(), market.outcomePrices()) != null;
   }
 
-  private static String resolvedOutcomeFromPrices(List<String> outcomes, List<String> outcomePrices) {
+  private static String resolvedOutcomeFromPrices(
+      List<String> outcomes, List<String> outcomePrices) {
     if (outcomes == null || outcomePrices == null) {
       return null;
     }
@@ -574,7 +586,10 @@ public class PolymarketMarketContextIngestor {
 
     BigDecimal bid = priceOrNull(bestBid);
     BigDecimal ask = priceOrNull(bestAsk);
-    BigDecimal mid = bid != null && ask != null ? bid.add(ask).divide(BigDecimal.valueOf(2), 18, RoundingMode.HALF_UP) : null;
+    BigDecimal mid =
+        bid != null && ask != null
+            ? bid.add(ask).divide(BigDecimal.valueOf(2), 18, RoundingMode.HALF_UP)
+            : null;
     BigDecimal spread = bid != null && ask != null ? ask.subtract(bid) : null;
 
     // Extract full book levels (top 10)
@@ -615,7 +630,8 @@ public class PolymarketMarketContextIngestor {
     return out;
   }
 
-  private static List<Map<String, Object>> extractLevels(JsonNode levels, int limit, boolean descending) {
+  private static List<Map<String, Object>> extractLevels(
+      JsonNode levels, int limit, boolean descending) {
     List<Map<String, Object>> result = new ArrayList<>();
     if (levels == null || !levels.isArray()) {
       return result;
@@ -628,14 +644,15 @@ public class PolymarketMarketContextIngestor {
     }
 
     // Sort by price (descending for bids, ascending for asks)
-    levelList.sort((a, b) -> {
-      BigDecimal pa = priceOrNull(a);
-      BigDecimal pb = priceOrNull(b);
-      if (pa == null && pb == null) return 0;
-      if (pa == null) return 1;
-      if (pb == null) return -1;
-      return descending ? pb.compareTo(pa) : pa.compareTo(pb);
-    });
+    levelList.sort(
+        (a, b) -> {
+          BigDecimal pa = priceOrNull(a);
+          BigDecimal pb = priceOrNull(b);
+          if (pa == null && pb == null) return 0;
+          if (pa == null) return 1;
+          if (pb == null) return -1;
+          return descending ? pb.compareTo(pa) : pa.compareTo(pb);
+        });
 
     // Extract top N levels
     int count = Math.min(limit, levelList.size());
@@ -644,10 +661,10 @@ public class PolymarketMarketContextIngestor {
       BigDecimal price = priceOrNull(level);
       BigDecimal size = sizeOrNull(level);
       if (price != null && size != null && price.doubleValue() > 0 && size.doubleValue() > 0) {
-        result.add(Map.of(
-            "price", price.doubleValue(),
-            "size", size.doubleValue()
-        ));
+        result.add(
+            Map.of(
+                "price", price.doubleValue(),
+                "size", size.doubleValue()));
       }
     }
 
@@ -658,8 +675,7 @@ public class PolymarketMarketContextIngestor {
       List<Map<String, Object>> bidLevels,
       List<Map<String, Object>> askLevels,
       double midPrice,
-      double percentRange
-  ) {
+      double percentRange) {
     if (midPrice <= 0) return null;
 
     double lowerBound = midPrice * (1 - percentRange);
@@ -838,7 +854,8 @@ public class PolymarketMarketContextIngestor {
     return v.trim();
   }
 
-  private static String buildTradeKey(String slug, String transactionHash, String asset, String side, long tsSeconds) {
+  private static String buildTradeKey(
+      String slug, String transactionHash, String asset, String side, long tsSeconds) {
     String tx = transactionHash == null ? "" : transactionHash.trim();
     String a = asset == null ? "" : asset.trim();
     String s = side == null ? "" : side.trim();
@@ -907,8 +924,7 @@ public class PolymarketMarketContextIngestor {
     }
   }
 
-  private record CachedTob(long fetchedAtMillis, Map<String, Object> tob) {
-  }
+  private record CachedTob(long fetchedAtMillis, Map<String, Object> tob) {}
 
   private record GammaMarket(
       String slug,
@@ -927,7 +943,5 @@ public class PolymarketMarketContextIngestor {
       List<String> outcomes,
       List<String> outcomePrices,
       JsonNode rawEvent,
-      JsonNode rawMarket
-  ) {
-  }
+      JsonNode rawMarket) {}
 }

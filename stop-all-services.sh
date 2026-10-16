@@ -1,56 +1,17 @@
 #!/usr/bin/env bash
-
-echo "=========================================="
-echo "Stopping All Polybot Services"
-echo "=========================================="
-echo ""
-
+set -euo pipefail
 cd "$(dirname "$0")"
-
-# Function to stop a service
-stop_service() {
-    local service_name=$1
-    local pid_file="logs/${service_name}.pid"
-
-    if [ -f "$pid_file" ]; then
-        local pid=$(cat "$pid_file")
-        if ps -p $pid > /dev/null 2>&1; then
-            echo "Stopping ${service_name} (PID: $pid)..."
-            kill $pid
-            sleep 2
-
-            # Force kill if still running
-            if ps -p $pid > /dev/null 2>&1; then
-                echo "  Force stopping ${service_name}..."
-                kill -9 $pid
-            fi
-            echo "  ✓ Stopped"
-        else
-            echo "${service_name} is not running (stale PID file)"
-        fi
-        rm -f "$pid_file"
-    else
-        echo "${service_name}: No PID file found"
-    fi
-}
-
-# Stop services in reverse order
-stop_service "analytics-service"
-stop_service "ingestor-service"
-stop_service "strategy-service"
-stop_service "executor-service"
-
-# Stop infrastructure orchestrator last (it will stop all Docker stacks)
-echo ""
-echo "Stopping infrastructure-orchestrator-service..."
-echo "(This will stop: Redpanda, ClickHouse, Prometheus, Grafana, Alertmanager)"
-stop_service "infrastructure-orchestrator-service"
-
-# Wait for Docker cleanup
-sleep 2
-
-echo ""
-echo "=========================================="
-echo "✓ All services stopped"
-echo "=========================================="
-echo ""
+for service in strategy-service executor-service ingestor-service analytics-service infrastructure-orchestrator-service; do
+  file="logs/$service.pid"; [[ -f "$file" ]] || continue
+  pid=$(cat "$file"); [[ "$pid" =~ ^[0-9]+$ ]] || { echo "Invalid PID file: $file"; exit 1; }
+  if kill -0 "$pid" 2>/dev/null; then
+    [[ -r "/proc/$pid/cmdline" ]] || { echo "Cannot verify process $pid"; exit 1; }
+    command_line=$(tr '\0' ' ' < "/proc/$pid/cmdline")
+    [[ "$command_line" == *"$service-0.0.1-SNAPSHOT.jar"* ]] || { echo "PID no longer belongs to $service"; exit 1; }
+    kill -TERM "$pid"
+    for ((attempt=0;attempt<15;attempt++)); do kill -0 "$pid" 2>/dev/null || break; sleep 1; done
+    if kill -0 "$pid" 2>/dev/null; then echo "$service has not stopped; keeping its PID file"; exit 1; fi
+  fi
+  rm -f "$file"
+done
+echo "Services stopped. Durable account state retained."
