@@ -61,6 +61,7 @@ public final class ResearchSession implements AutoCloseable {
   private long now = -1, nextDecision, sequence;
   private boolean entryStopped;
   private boolean failed;
+  private boolean insideFrame;
   private BigDecimal exitLossUsed = ZERO;
   private int riskBreaches;
 
@@ -144,6 +145,27 @@ public final class ResearchSession implements AutoCloseable {
       throw new IllegalStateException("Research session failed; restart/reconciliation required");
     if (at < now) throw new IllegalArgumentException("Causal clock regression");
     now = at;
+    if (kind.equals("FRAME")) {
+      if (insideFrame || !data.path("events").isArray())
+        throw new IllegalArgumentException("Invalid or nested research frame");
+      // Validate the envelope before applying anything. No persisted actions/metadata in a frame.
+      for (var event : data.path("events"))
+        if (!Set.of("BOOK", "TRADE", "TICK_SIZE", "GAP").contains(event.path("kind").asText())
+            || !event.path("data").isObject())
+          throw new IllegalArgumentException("Invalid research frame event");
+      insideFrame = true;
+      try {
+        for (var event : data.path("events"))
+          accept(event.path("kind").asText(), at, event.path("data"));
+      } catch (RuntimeException e) {
+        failed = true;
+        throw e;
+      } finally {
+        insideFrame = false;
+      }
+      if (!data.path("events").isEmpty()) advanceActions();
+      return;
+    }
     if (kind.equals("META")) {
       ResearchMarket m = mapper.convertValue(data, ResearchMarket.class);
       if (m.observedMs() > at) throw new IllegalArgumentException("Future metadata");
@@ -280,6 +302,10 @@ public final class ResearchSession implements AutoCloseable {
       }
       output.accept("MARKET_UNAVAILABLE", data);
     } else throw new IllegalArgumentException("Unknown research input " + kind);
+    if (!insideFrame) advanceActions();
+  }
+
+  private void advanceActions() {
     expire();
     executePending();
     merge();
@@ -420,15 +446,17 @@ public final class ResearchSession implements AutoCloseable {
         continue;
       }
       Book a = books.get(m.first()), b = books.get(m.second());
-      if (!fresh(a)
-          || !fresh(b)
-          || a.bids.isEmpty()
-          || a.asks.isEmpty()
-          || b.bids.isEmpty()
-          || b.asks.isEmpty()
-          || now - m.observedMs() > cfg.metadataMaxAgeMs()) {
+      String unavailable =
+          a == null || b == null
+              ? "BOOK_MISSING"
+              : !fresh(a) || !fresh(b)
+                  ? "BOOK_STALE"
+                  : a.bids.isEmpty() || a.asks.isEmpty() || b.bids.isEmpty() || b.asks.isEmpty()
+                      ? "EMPTY_DEPTH"
+                      : now - m.observedMs() > cfg.metadataMaxAgeMs() ? "METADATA_STALE" : null;
+      if (unavailable != null) {
         cancelAll(m);
-        metrics.decision("STALE_DATA", null);
+        metrics.decision(unavailable, null);
         continue;
       }
       BigDecimal imbalance = holding(m.first()).shares().subtract(holding(m.second()).shares());
@@ -470,10 +498,14 @@ public final class ResearchSession implements AutoCloseable {
                   depth,
                   cfg.activationMs(),
                   ZERO);
-      if (q.compareTo(m.minSize()) < 0
-          || edge.multiply(q).subtract(cfg.mergeCost()).compareTo(required.multiply(q)) < 0) {
+      boolean small = q.compareTo(m.minSize()) < 0;
+      boolean insufficientEdge =
+          edge.multiply(q).subtract(cfg.mergeCost()).compareTo(required.multiply(q)) < 0;
+      if (small || insufficientEdge) {
         cancelAll(m);
-        metrics.decision("NET_EDGE_OR_MIN_SIZE", edge);
+        metrics.decision(
+            small && insufficientEdge ? "MIN_SIZE_AND_NET_EDGE" : small ? "MIN_SIZE" : "NET_EDGE",
+            edge);
         continue;
       }
       List<String> open = open(m);

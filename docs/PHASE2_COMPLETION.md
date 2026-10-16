@@ -1,3 +1,5 @@
+> Current frame/clock correctness and diagnostic follow-up: [ATOMIC_FRAME_VALIDATION.md](ATOMIC_FRAME_VALIDATION.md). Earlier evidence below is historical; empirical acceptance remains NO_GO.
+
 # Phase 2: remaining implementation and evidence gates
 
 The previously listed implementation gaps are now implemented on `phase2-paper-validation`.

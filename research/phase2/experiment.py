@@ -46,6 +46,9 @@ def calibrate(tape, split):
             rows+=1
             if r['kind']=='CLOCK_SYNC': rtts.append(r['data']['rttMs'])
             if r['kind']=='RESEARCH_BOOK': lags.append(r['arrivalMs']-r['data']['sourceMs'])
+            if r['kind']=='RESEARCH_FRAME':
+                for event in r['data']['events']:
+                    if event['kind']=='BOOK': lags.append(r['arrivalMs']-event['data']['sourceMs'])
     percentile=lambda xs: None if not xs else sorted(xs)[min(len(xs)-1,int(.95*(len(xs)-1)))]
     return {'trainingSha256':digest(tape),'trainingRows':rows,'sourceLagP95Ms':percentile(lags),'clockRttP95Ms':percentile(rtts),
             'conservativeActivationLowerBoundMs':max(250,percentile(rtts) or 0),
@@ -72,6 +75,8 @@ def evaluate(frozen, baseline, stress):
         require(r.get('windowStartMs')==int(start.timestamp()*1000) and r.get('windowEndMs')==int(end.timestamp()*1000),label+': performance includes observations outside the heldout window')
         require(r.get('replayMode')=='closed-loop',label+': action replay is not a strategy experiment')
         require(r.get('strategyIndependentDataset') is True,label+': independent collector provenance missing')
+        require(r.get('frameAtomicity')=='recorded-frame-v1',label+': atomic frame provenance missing')
+        require(r.get('decisionClock')=='recorded-inputs',label+': recorded decision clock missing')
         require(r.get('recordingClosedCleanly') is True,label+': incomplete recording')
         require(re.fullmatch(r'[0-9a-f]{40}',str(r.get('strategyRevision',''))) is not None,label+': replay strategy revision missing')
         require(re.fullmatch(r'[0-9a-f]{40}',str(r.get('revision',''))) is not None,label+': code provenance missing')

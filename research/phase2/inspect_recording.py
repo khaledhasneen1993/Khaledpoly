@@ -40,6 +40,30 @@ def inspect(tape):
     last_journal = {}
     run_id = None
     clean = False
+    framed = False
+    pending_frame = None
+    previous_frame = 0
+    observations = collections.Counter()
+    heartbeats = 0
+    last_heartbeat = {}
+    disconnects = []
+
+    def observation(kind, data, at):
+        observations[kind] += 1
+        if kind == 'GAP':
+            gaps[data.get('reason', 'unknown')] += 1
+            if data.get('reason') == 'disconnect' and len(disconnects) < 20:
+                disconnects.append(dict(at=at, **data))
+            if data.get('reason') == 'stale_source':
+                age, process = data.get('callbackSourceAgeMs'), data.get('processingAgeMs')
+                stage = 'unmeasured'
+                if age is not None and process is not None:
+                    stage = 'already_stale_at_callback' if age > 2000 else 'crossed_limit_during_processing'
+                    if age < -1000:
+                        stage = 'future_source_or_clock_error'
+                stale_stages[stage] += 1
+        elif kind == 'BOOK':
+            normalization.add(at - data['sourceMs'])
     with pathlib.Path(tape).open() as stream:
         for line in stream:
             row = json.loads(line)
@@ -65,18 +89,29 @@ def inspect(tape):
                 # Bound memory even for a long recording with repeated transport failures.
                 if len(errors) < 20:
                     errors.append(data)
-            elif kind == 'RESEARCH_GAP':
-                gaps[data.get('reason', 'unknown')] += 1
-                if data.get('reason') == 'stale_source':
-                    age = data.get('callbackSourceAgeMs')
-                    process = data.get('processingAgeMs')
-                    stage = 'unmeasured'
-                    if age is not None and process is not None:
-                        stage = 'already_stale_at_callback' if age > 2000 else 'crossed_limit_during_processing'
-                        if age < -1000:
-                            stage = 'future_source_or_clock_error'
-                    stale_stages[stage] += 1
+            elif kind == 'DATASET_CONFIG':
+                framed = data.get('format') == 'normalized-public-v2'
+            elif kind == 'RESEARCH_FRAME':
+                frame_id = data.get('frameId')
+                if not framed or pending_frame is None or frame_id != pending_frame:
+                    raise ValueError('Frame has no matching raw observation')
+                if not isinstance(data.get('events'), list):
+                    raise ValueError('Invalid frame events')
+                for event in data['events']:
+                    if event.get('kind') not in {'BOOK', 'TRADE', 'TICK_SIZE', 'GAP'}:
+                        raise ValueError('Invalid frame event')
+                    observation(event['kind'], event['data'], row['arrivalMs'])
+                previous_frame, pending_frame = frame_id, None
+            elif kind in {'RESEARCH_BOOK', 'RESEARCH_GAP', 'RESEARCH_TRADE', 'RESEARCH_TICK_SIZE'}:
+                if framed and kind != 'RESEARCH_GAP':
+                    raise ValueError('Unframed market observation in v2 dataset')
+                observation(kind[9:], data, row['arrivalMs'])
             elif kind == 'RAW_MARKET':
+                if framed:
+                    frame_id = data.get('frameId', -1)
+                    if pending_frame is not None or frame_id <= previous_frame:
+                        raise ValueError('Missing, duplicate or unordered frame boundary')
+                    pending_frame = frame_id
                 received = data.get('callbackReceivedMs', row['arrivalMs'])
                 if 'callbackReceivedMs' in data:
                     dispatch.add(row['arrivalMs'] - received)
@@ -90,8 +125,9 @@ def inspect(tape):
                             source_age.add(received - stamp)
                 except (ValueError, TypeError, AttributeError):
                     pass
-            elif kind == 'RESEARCH_BOOK':
-                normalization.add(row['arrivalMs'] - data['sourceMs'])
+            elif kind == 'WS_HEARTBEAT':
+                heartbeats += 1
+                last_heartbeat = data
             elif kind == 'WS_PIPELINE':
                 intervals += 1
                 frames += data['frames']
@@ -100,7 +136,12 @@ def inspect(tape):
                 append = max(append, data['maxRawAppendMicros'])
                 queue_wait = max(queue_wait, data.get('maxQueueWaitMicros', 0))
                 last_journal = data['journal']
-    return {'run': pathlib.Path(tape).parent.name, 'events': dict(counts),
+    if pending_frame is not None:
+        raise ValueError('Raw observation without completed frame')
+    return {'frameAtomicity': 'recorded-frame-v1' if framed else 'legacy-unframed',
+            'normalizedEvents': dict(observations),
+            'heartbeat': {'samples': heartbeats, 'lastSample': last_heartbeat, 'disconnects': disconnects},
+            'run': pathlib.Path(tape).parent.name, 'events': dict(counts),
             'durationMs': None if first is None else last - first, 'errors': errors,
             'gapReasons': dict(gaps), 'staleStages': dict(stale_stages),
             'callbackSourceAge': source_age.report(), 'callbackToJournal': dispatch.report(),

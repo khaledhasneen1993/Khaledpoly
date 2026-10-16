@@ -21,7 +21,7 @@ class ExperimentTest(unittest.TestCase):
   with tempfile.TemporaryDirectory() as d:
    d=pathlib.Path(d);start=(dt.datetime.now(e.UTC)+dt.timedelta(days=1)).replace(hour=0,minute=0,second=0,microsecond=0)
    f=e.freeze(e.ROOT/'research-config.json',start.isoformat(),d/'freeze.json')
-   b=dict(replayMode='closed-loop',strategyIndependentDataset=True,recordingClosedCleanly=True,revision='1'*40,strategyRevision='1'*40,
+   b=dict(frameAtomicity='recorded-frame-v1',decisionClock='recorded-inputs',replayMode='closed-loop',strategyIndependentDataset=True,recordingClosedCleanly=True,revision='1'*40,strategyRevision='1'*40,
     firstArrivalMs=int(start.timestamp()*1000),lastArrivalMs=int((start+dt.timedelta(days=7)).timestamp()*1000),
     windowStartMs=int(start.timestamp()*1000),windowEndMs=int((start+dt.timedelta(days=7)).timestamp()*1000),freezeSha256=e.digest(d/'freeze.json'),
     inputSha256='unit-fixture',configuration=f['configuration'],resolvedTradedMarkets=100,executions=[{'liquidity':'MAKER'}]*100,
@@ -30,5 +30,7 @@ class ExperimentTest(unittest.TestCase):
    s=dict(b);s['configuration']=dict(b['configuration']);s['configuration'].update(activationMs=1000,cancelMs=1000,queueMultiplier='4',feeMultiplier='2',mergeCost='0.06',redemptionCost='0.06')
    (d/'b.json').write_text(json.dumps(b));(d/'s.json').write_text(json.dumps(s));r=e.evaluate(d/'freeze.json',d/'b.json',d/'s.json')
    self.assertEqual(r['failures'],[]);self.assertEqual(r['decision'],'GO_EXTENDED_PAPER');self.assertFalse(r['liveAllowed'])
+   b['frameAtomicity']='legacy-unframed';(d/'b.json').write_text(json.dumps(b));self.assertFalse(e.evaluate(d/'freeze.json',d/'b.json',d/'s.json')['phase3Allowed'])
+   b['frameAtomicity']='recorded-frame-v1';(d/'b.json').write_text(json.dumps(b))
    s['windowStartMs']-=1;(d/'s.json').write_text(json.dumps(s));self.assertFalse(e.evaluate(d/'freeze.json',d/'b.json',d/'s.json')['phase3Allowed'])
 if __name__=='__main__':unittest.main()

@@ -167,3 +167,8 @@ a three-second processing stall, explicit overflow/book blocking, and reconnect 
 decoder lock is owned elsewhere. The public collector again runs for 900 seconds, followed by all
 three full strategy replay modes, to qualify this receiving change. Until that actual run is reviewed,
 no claim is made that all slow-consumer disconnects have been eliminated. Acceptance remains NO_GO.
+
+
+The completed receiving follow-up still observed four 1013 slow-consumer closes. See
+[atomic-frame diagnosis and recorded-clock correction](ATOMIC_FRAME_VALIDATION.md) for the actual
+result, the independent half-updated-pair defect and current validation contract.

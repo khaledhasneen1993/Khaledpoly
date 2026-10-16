@@ -90,8 +90,8 @@ public class ResearchFeed {
       journal.record(
           "DATASET_CONFIG",
           null,
-          Map.of("schema", 1, "format", "normalized-public-v1", "strategyIndependent", true));
-      ws.onTape(this::emit);
+          Map.of("schema", 1, "format", "normalized-public-v2", "strategyIndependent", true));
+      ws.onFrame(this::emit);
     }
   }
 

@@ -30,6 +30,25 @@ class RecordingTest(unittest.TestCase):
             self.assertTrue(report['recordingClosedCleanly'])
             self.assertEqual(report['decision'], 'NO_GO')
 
+    def test_atomic_frame_provenance_and_nested_quality_are_checked(self):
+        with tempfile.TemporaryDirectory() as root:
+            rows = [dict(arrivalMs=1000, kind='DATASET_CONFIG', data=dict(format='normalized-public-v2')),
+                    dict(arrivalMs=1001, kind='RAW_MARKET', data=dict(frameId=1, text='{}')),
+                    dict(arrivalMs=1002, kind='RESEARCH_FRAME', data=dict(frameId=1, events=[
+                        dict(kind='BOOK', data=dict(sourceMs=1000)),
+                        dict(kind='GAP', data=dict(reason='invalid_depth'))])),
+                    dict(arrivalMs=1003, kind='RUN_END', data=dict(complete=True))]
+            report = MODULE.inspect(self.tape(root, rows))
+            self.assertEqual(report['frameAtomicity'], 'recorded-frame-v1')
+            self.assertEqual(report['normalizedEvents'], dict(BOOK=1, GAP=1))
+            self.assertEqual(report['gapReasons'], dict(invalid_depth=1))
+            self.assertEqual(report['normalizedSourceAge']['maxMs'], 2)
+            rows[2]['data']['frameId'] = 2
+            with self.assertRaisesRegex(ValueError, 'matching raw'):
+                MODULE.inspect(self.tape(root, rows))
+            with self.assertRaisesRegex(ValueError, 'without completed frame'):
+                MODULE.inspect(self.tape(root, rows[:2] + rows[3:]))
+
     def test_incomplete_capture_stays_incomplete(self):
         with tempfile.TemporaryDirectory() as root:
             report = MODULE.inspect(self.tape(root, [dict(arrivalMs=1000, kind='RESEARCH_TICK', data={})]))

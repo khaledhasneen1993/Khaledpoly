@@ -64,7 +64,7 @@ public final class PaperMatchingEngine {
     if (kind.equals("GAP")) {
       invalidate(terminal);
       orders.clear();
-      return new Update(List.of(), Map.copyOf(terminal));
+      return new Update(List.of(), Collections.unmodifiableMap(new LinkedHashMap<>(terminal)));
     }
     var staleTokens = new HashSet<String>();
     for (var o : orders.values())
@@ -203,7 +203,8 @@ public final class PaperMatchingEngine {
       default -> throw new IllegalArgumentException("Unknown matching event: " + kind);
     }
     terminal.keySet().forEach(orders::remove);
-    return new Update(List.copyOf(fills), Map.copyOf(terminal));
+    return new Update(
+        List.copyOf(fills), Collections.unmodifiableMap(new LinkedHashMap<>(terminal)));
   }
 
   private void invalidate(Map<String, String> terminal) {

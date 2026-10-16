@@ -61,7 +61,30 @@ public class ClobMarketWebSocketClient {
     tapeListeners.add(listener);
   }
 
+  private final java.util.List<java.util.function.BiConsumer<String, JsonNode>> frameListeners =
+      new CopyOnWriteArrayList<>();
+
+  /** Atomic research input; legacy onTape consumers still receive individual observations. */
+  public void onFrame(java.util.function.BiConsumer<String, JsonNode> listener) {
+    frameListeners.add(listener);
+  }
+
+  private record FrameEvent(String kind, Map<String, Object> data) {}
+
+  private java.util.List<FrameEvent> frameEvents;
+  private long frameSequence;
+
   private void tape(String kind, Map<String, Object> data) {
+    if (frameEvents != null) {
+      frameEvents.add(new FrameEvent(kind, data));
+      return;
+    }
+    JsonNode node = objectMapper.valueToTree(data);
+    for (var listener : frameListeners) listener.accept(kind, node);
+    dispatchTape(kind, data);
+  }
+
+  private void dispatchTape(String kind, Map<String, Object> data) {
     JsonNode node = objectMapper.valueToTree(data);
     for (var listener : tapeListeners) listener.accept(kind, node);
   }
@@ -124,6 +147,7 @@ public class ClobMarketWebSocketClient {
   private final AtomicLong maxIngressCallbackMicros = new AtomicLong();
   private final MarketFrameQueue frames = new MarketFrameQueue(512, 8L * 1024 * 1024);
   private volatile WebSocket blockedSocket;
+  private volatile HeartbeatProbe heartbeat = new HeartbeatProbe();
 
   private void enqueueFrame(WebSocket source, String message, long receivedMs, long receivedNanos) {
     if (stopping || source != webSocket || source == blockedSocket) return;
@@ -435,19 +459,7 @@ public class ClobMarketWebSocketClient {
     }
 
     if (maintenanceScheduled.compareAndSet(false, true)) {
-      pingExecutor.scheduleAtFixedRate(
-          () -> {
-            WebSocket ws = this.webSocket;
-            if (ws != null) {
-              try {
-                ws.sendText("PING", true);
-              } catch (Exception ignored) {
-              }
-            }
-          },
-          10,
-          10,
-          TimeUnit.SECONDS);
+      pingExecutor.scheduleAtFixedRate(this::sendHeartbeat, 10, 10, TimeUnit.SECONDS);
 
       pingExecutor.scheduleAtFixedRate(
           this::logHeartbeat,
@@ -467,6 +479,30 @@ public class ClobMarketWebSocketClient {
         pingExecutor.scheduleAtFixedRate(
             this::flushCacheSafely, flushMillis, flushMillis, TimeUnit.MILLISECONDS);
       }
+    }
+  }
+
+  private void sendHeartbeat() {
+    WebSocket ws = webSocket;
+    if (stopping || ws == null) return;
+    HeartbeatProbe probe = heartbeat;
+    probe.ping(clock.millis(), System.nanoTime(), () -> ws.sendText("PING", true));
+    if (journal != null && journal.enabled()) {
+      var data = new HashMap<String, Object>(probe.snapshot());
+      data.put("queuedFrames", frames.pendingFrames());
+      data.put("queuedBytes", frames.pendingBytes());
+      data.put(
+          "lastIngressAgeMs", Math.max(0, System.currentTimeMillis() - lastMessageAtMillis.get()));
+      long gcCount = 0, gcMillis = 0;
+      for (var gc : java.lang.management.ManagementFactory.getGarbageCollectorMXBeans()) {
+        gcCount += Math.max(0, gc.getCollectionCount());
+        gcMillis += Math.max(0, gc.getCollectionTime());
+      }
+      data.put("gcCount", gcCount);
+      data.put("gcMillis", gcMillis);
+      data.put(
+          "heapUsedBytes", Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
+      journal.record("WS_HEARTBEAT", null, data);
     }
   }
 
@@ -565,18 +601,30 @@ public class ClobMarketWebSocketClient {
     messagesReceived.incrementAndGet();
     lastMessageAtMillis.set(System.currentTimeMillis());
     long rawDoneNanos = startedNanos;
+    long frameId = ++frameSequence;
+    frameEvents = new java.util.ArrayList<>();
     try {
       if (journal != null)
         journal.record(
-            "RAW_MARKET", null, Map.of("text", message, "callbackReceivedMs", receivedMs));
+            "RAW_MARKET",
+            null,
+            Map.of("text", message, "callbackReceivedMs", receivedMs, "frameId", frameId));
       rawDoneNanos = System.nanoTime();
       JsonNode node = objectMapper.readTree(message);
       handleMessageNode(node, receivedMs);
     } catch (Exception e) {
+      frameEvents.clear();
       invalidateAllBooks();
       gap("invalid_message");
       log.warn("Invalid market message; books invalidated: {}", e.getMessage());
     } finally {
+      var completed = frameEvents;
+      frameEvents = null;
+      // One availability clock and one strategy transition for the entire socket message.
+      // No listener can observe a new first leg with an old second leg from that same message.
+      JsonNode frame = objectMapper.valueToTree(Map.of("frameId", frameId, "events", completed));
+      for (var listener : frameListeners) listener.accept("FRAME", frame);
+      for (var event : completed) dispatchTape(event.kind(), event.data());
       pipelineTiming(receivedNanos, startedNanos, rawDoneNanos);
     }
   }
@@ -1128,6 +1176,7 @@ public class ClobMarketWebSocketClient {
     @Override
     public void onOpen(WebSocket webSocket) {
       log.info("CLOB market websocket opened");
+      heartbeat = new HeartbeatProbe();
       ClobMarketWebSocketClient.this.webSocket = webSocket;
       lastMessageAtMillis.set(System.currentTimeMillis());
       sendSubscribeLocked();
@@ -1155,7 +1204,11 @@ public class ClobMarketWebSocketClient {
       if (last) {
         String message = buf.toString();
         buf.setLength(0);
-        enqueueFrame(webSocket, message, receivedMs, receivedNanos);
+        if ("PONG".equalsIgnoreCase(message)) {
+          // No disk IO on the receive callback; the timer/close records these counters.
+          heartbeat.pong(receivedMs, receivedNanos);
+          lastMessageAtMillis.set(System.currentTimeMillis());
+        } else enqueueFrame(webSocket, message, receivedMs, receivedNanos);
       }
       webSocket.request(1);
       maxIngressCallbackMicros.accumulateAndGet(
@@ -1179,8 +1232,18 @@ public class ClobMarketWebSocketClient {
           started = false;
           topOfBookByAssetId.clear();
           depthByAssetId.clear();
-          if (!stopping)
-            tape("GAP", Map.of("reason", "disconnect", "status", statusCode, "detail", reason));
+          if (!stopping) {
+            var detail = new HashMap<String, Object>(heartbeat.snapshot());
+            detail.put("reason", "disconnect");
+            detail.put("status", statusCode);
+            detail.put("detail", reason);
+            detail.put("queuedFrames", frames.pendingFrames());
+            detail.put("queuedBytes", frames.pendingBytes());
+            detail.put(
+                "lastIngressAgeMs",
+                Math.max(0, System.currentTimeMillis() - lastMessageAtMillis.get()));
+            tape("GAP", detail);
+          }
         }
       }
       return WebSocket.Listener.super.onClose(webSocket, statusCode, reason);

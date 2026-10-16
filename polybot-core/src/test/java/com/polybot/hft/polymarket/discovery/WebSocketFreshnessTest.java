@@ -47,6 +47,33 @@ class WebSocketFreshnessTest {
   }
 
   @Test
+  void oneFrameDeliversBothBooksAfterCachesHaveCompletedAndLegacyListenersRemainSupported() {
+    var clock = new MutableClock();
+    var client = client(clock);
+    var frames = new java.util.ArrayList<com.fasterxml.jackson.databind.JsonNode>();
+    var legacy = new java.util.ArrayList<String>();
+    client.onFrame(
+        (k, n) -> {
+          assertThat(k).isEqualTo("FRAME");
+          assertThat(client.getTopOfBook("123")).isPresent();
+          assertThat(client.getTopOfBook("456")).isPresent();
+          frames.add(n);
+        });
+    client.onTape((k, n) -> legacy.add(k));
+    ReflectionTestUtils.invokeMethod(
+        client,
+        "handleMessage",
+        "["
+            + book(clock.millis(), "0.5")
+            + ","
+            + book(clock.millis(), "0.4").replace("123", "456")
+            + "]");
+    assertThat(frames).hasSize(1);
+    assertThat(frames.getFirst().path("events")).hasSize(2);
+    assertThat(legacy).containsExactly("BOOK", "BOOK");
+  }
+
+  @Test
   void ignoresOutOfOrderBookAndTradeDoesNotRefreshBookAge() {
     var clock = new MutableClock();
     var client = client(clock);

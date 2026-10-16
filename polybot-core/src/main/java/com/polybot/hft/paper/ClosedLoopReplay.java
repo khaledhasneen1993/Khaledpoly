@@ -39,14 +39,10 @@ public final class ClosedLoopReplay {
     var clock = new VirtualClock();
     var audit = new ArrayList<Map<String, Object>>();
     var normalizer = new RawTapeNormalizer(mapper);
-    boolean clean = false, declared = false;
-    long seq = 0,
-        first = -1,
-        last = -1,
-        rawTick = -1,
-        maxInputGap = 0,
-        previousInput = -1,
-        maxLag = 0;
+    boolean clean = false, ended = false, declared = false, framed = false;
+    String pendingRaw = null;
+    long pendingFrameId = -1, previousFrameId = 0;
+    long seq = 0, first = -1, last = -1, maxInputGap = 0, previousInput = -1, maxLag = 0;
     String runId = null, revision = "unrecorded";
     var manifest = tape.resolveSibling("manifest.json");
     if (Files.exists(manifest))
@@ -78,34 +74,52 @@ public final class ClosedLoopReplay {
         if (at < 0 || at < last) throw new IllegalArgumentException("Receive clock regression");
         if (first < 0) first = at;
         last = at;
+        if (ended) throw new IllegalArgumentException("Events after RUN_END");
         String kind = row.path("kind").asText();
         JsonNode data = row.path("data");
-        clean = kind.equals("RUN_END");
+        ended = kind.equals("RUN_END");
+        clean = ended && data.path("complete").asBoolean(false);
         if (kind.equals("DATASET_CONFIG")) {
+          framed = data.path("format").asText().equals("normalized-public-v2");
           declared =
               data.path("strategyIndependent").asBoolean(false)
-                  && data.path("format").asText().equals("normalized-public-v1");
+                  && (framed || data.path("format").asText().equals("normalized-public-v1"));
           continue;
         }
+        if (kind.equals("RAW_MARKET") && framed) {
+          long frameId = data.path("frameId").asLong(-1);
+          if (pendingFrameId != -1 || frameId <= previousFrameId)
+            throw new IllegalArgumentException("Missing, duplicate or unordered frame boundary");
+          pendingFrameId = frameId;
+          pendingRaw = raw ? PaperMatchingEngine.required(data, "text") : null;
+          continue;
+        }
+        if (kind.equals("RESEARCH_FRAME")
+            && (!framed || data.path("frameId").asLong(-1) != pendingFrameId))
+          throw new IllegalArgumentException("Frame has no matching raw observation");
         if (at < windowStart) {
           if (kind.equals("RESEARCH_META"))
             initialMetadata.put(data.path("condition").asText(), data);
+          if (kind.equals("RESEARCH_FRAME")) {
+            previousFrameId = pendingFrameId;
+            pendingFrameId = -1;
+            pendingRaw = null;
+          }
           continue;
         }
-        if (at > windowEnd) continue;
+        if (at > windowEnd) {
+          if (kind.equals("RESEARCH_FRAME")) {
+            previousFrameId = pendingFrameId;
+            pendingFrameId = -1;
+            pendingRaw = null;
+          }
+          continue;
+        }
         if (!started) {
           started = true;
           clock.at = at;
           for (var meta : initialMetadata.values())
             if (meta.path("endMs").asLong() > windowStart) session.accept("META", at, meta);
-        }
-        if (raw) {
-          if (rawTick < 0) rawTick = at;
-          while (rawTick < at) {
-            clock.at = rawTick;
-            session.accept("TICK", rawTick, mapper.createObjectNode());
-            rawTick += config.decisionMillis();
-          }
         }
         clock.at = at;
         if (raw && kind.equals("RAW_MARKET")) {
@@ -117,6 +131,34 @@ public final class ClosedLoopReplay {
           if (data.has("sourceMs")) maxLag = Math.max(maxLag, at - data.path("sourceMs").asLong());
           String input = kind.substring(9);
           if (input.equals("FEED_ERROR")) input = "GAP";
+          if (input.equals("FRAME")) {
+            long frameId = data.path("frameId").asLong(-1);
+            if (!framed || frameId != pendingFrameId)
+              throw new IllegalArgumentException("Frame has no matching raw observation");
+            if (raw) {
+              var events = mapper.createArrayNode();
+              normalizer.accept(
+                  pendingRaw,
+                  at,
+                  (type, n) -> {
+                    var event = mapper.createObjectNode();
+                    event.put("kind", type);
+                    event.set("data", n);
+                    events.add(event);
+                  });
+              var decoded = mapper.createObjectNode();
+              decoded.put("frameId", frameId);
+              decoded.set("events", events);
+              data = decoded;
+            }
+            for (var event : data.path("events"))
+              if (event.path("data").has("sourceMs"))
+                maxLag = Math.max(maxLag, at - event.path("data").path("sourceMs").asLong());
+            previousFrameId = frameId;
+            pendingFrameId = -1;
+            pendingRaw = null;
+          } else if (framed && Set.of("BOOK", "TRADE", "TICK_SIZE").contains(input))
+            throw new IllegalArgumentException("Unframed market observation in v2 dataset");
           if (raw && input.equals("GAP")) {
             String reason = data.path("reason").asText();
             // Decoder invalidations come from the raw frame itself, not twice from its derived row.
@@ -131,7 +173,7 @@ public final class ClosedLoopReplay {
                     "decoder_failure")
                 .contains(reason)) normalizer.reset();
           }
-          if (raw && Set.of("BOOK", "TRADE", "TICK").contains(input)) continue;
+          if (raw && Set.of("BOOK", "TRADE", "TICK_SIZE").contains(input)) continue;
           if (input.equals("META")) {
             var m = mapper.convertValue(data, ResearchMarket.class);
             marketDays.add(
@@ -140,7 +182,11 @@ public final class ClosedLoopReplay {
           session.accept(input, at, data);
         }
       }
+      if (pendingFrameId != -1)
+        throw new IllegalArgumentException("Raw observation without completed frame");
       var result = new LinkedHashMap<String, Object>(session.report());
+      result.put("frameAtomicity", framed ? "recorded-frame-v1" : "legacy-unframed");
+      result.put("decisionClock", "recorded-inputs");
       result.put("schema", 2);
       result.put("windowStartMs", windowStart);
       result.put("windowEndMs", windowEnd);
