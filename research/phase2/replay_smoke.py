@@ -3,10 +3,10 @@
 import json,pathlib,subprocess,sys
 root=pathlib.Path(sys.argv[1]);jar='executor-service/target/executor-service-0.0.1-SNAPSHOT.jar'
 for tape in root.glob('*/events.jsonl'):
- for mode in ['baseline','stress']:
+ for mode,flags in [('baseline',[]),('stress',['--stress']),('raw-baseline',['--raw'])]:
   out=tape.parent/('replay-'+mode)
   cmd=['java','-Dloader.main=com.polybot.hft.executor.replay.ClosedLoopMain','-cp',jar,'org.springframework.boot.loader.launch.PropertiesLauncher',str(tape),str(out),'research/phase2/research-config.json']
-  if mode=='stress':cmd.append('--stress')
+  cmd.extend(flags)
   subprocess.run(cmd,check=True)
   r=json.loads((out/'report.json').read_text())
   print(json.dumps({'mode':mode,'cash':r['cash'],'netRealizedPnl':r['netRealizedPnl'],'fills':len(r['executions']),'dataGaps':r['dataGaps'],'decision':r['decision']}))

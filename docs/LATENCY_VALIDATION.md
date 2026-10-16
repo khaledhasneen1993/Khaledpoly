@@ -94,3 +94,28 @@ recovery and disabled-market restart behavior. Test HTTP mocks use the subclass 
 requiring runtime Java agent attachment. The push collector is extended to 900 seconds to include at
 least one 15-minute clock boundary, followed by baseline/stress replay. This longer run remains a
 bounded diagnostic, separate from the registered seven-day acceptance experiment.
+
+## Raw decoder isolation correction
+
+A raw replay diagnostic on the same 176.218-second tape initially counted 13,696 invalidations.
+Direct decoder inspection traced 13,683 to repeated delta-without-snapshot fallout after one old
+source event globally deleted every cached book. This differed from the streaming adapter. Raw
+normalization now ignores source regressions without refreshing state, isolates an invalid/missing
+book to its token, preserves that token's source watermark even before an initial snapshot, and
+requires a non-regressing full snapshot to restore it. Repeated deltas while awaiting that snapshot
+remain untradable; no synthetic snapshot, fill or cancellation credit is introduced. Actual transport
+reconnects reset decoder state. Derived depth invalidations are not counted again when raw frames
+have already independently produced them.
+
+The complete raw strategy replay now reports 10 invalidations, cash 500 and zero fills/PnL on that
+same diagnostic recording, matching its normalized report's invalidation count. This is a bug fix in
+book-state isolation and duplicate accounting, not a change to acceptance or an inference of missing
+fills. New tests cover unrelated-book isolation, incomplete snapshot recovery, transport reset and
+rejecting an older snapshot after a newer delta. The full suite now contains 86 Java tests, plus the
+existing seven Python checks. CI also runs raw baseline alongside normalized baseline and stress.
+
+The investigation's 900-second collector is running at commit `ddb11d0c0067056e5da619ed8bfda03c48df3e1c`
+in run `38957407035`. Subsequent routine pushes return to the 180-second smoke rather than launching
+another 15-minute collection for a decoder-only correction; that does not shorten or cancel the
+already-running investigation. Its recorded collector revision and the replay implementation revision
+remain separately visible. Neither duration substitutes for the heldout acceptance window.

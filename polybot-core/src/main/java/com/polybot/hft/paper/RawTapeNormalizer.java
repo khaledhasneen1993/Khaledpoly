@@ -13,6 +13,7 @@ public final class RawTapeNormalizer {
   private final ObjectMapper mapper;
   private final Map<String, LocalOrderBook> books = new HashMap<>();
   private final Map<String, Long> stamps = new HashMap<>();
+  private final Set<String> awaitingSnapshots = new HashSet<>();
 
   public RawTapeNormalizer(ObjectMapper mapper) {
     this.mapper = mapper;
@@ -45,36 +46,37 @@ public final class RawTapeNormalizer {
             .add(change);
       for (var batch : batches.entrySet()) {
         String t = batch.getKey();
-        if (stamp < stamps.getOrDefault(t, -1L)) {
-          gap(out, "source_regression");
-          return;
-        }
+        // Match the streaming adapter: older observations cannot replace newer state.
+        if (stamp < stamps.getOrDefault(t, -1L)) continue;
+        stamps.put(t, stamp);
         var b = books.get(t);
         if (b == null) {
-          gap(out, "delta_without_snapshot");
-          return;
+          invalidateToken(t, out, "delta_without_snapshot");
+          continue;
         }
-        stamps.put(t, stamp);
         try {
           b.changes(batch.getValue());
         } catch (RuntimeException e) {
-          books.remove(t);
-          out.accept("GAP", mapper.valueToTree(Map.of("reason", "invalid_depth", "token", t)));
+          invalidateToken(t, out, "invalid_depth");
           continue;
         }
         emitBook(t, b, stamp, out);
       }
     } else if (type.equals("book")) {
       String t = PaperMatchingEngine.required(n, "asset_id");
-      if (stamp < stamps.getOrDefault(t, -1L)) {
-        gap(out, "source_regression");
+      if (stamp < stamps.getOrDefault(t, -1L)) return;
+      stamps.put(t, stamp);
+      var b = new LocalOrderBook();
+      try {
+        b.snapshot(
+            n.has("bids") ? n.get("bids") : n.path("buys"),
+            n.has("asks") ? n.get("asks") : n.path("sells"));
+      } catch (RuntimeException e) {
+        invalidateToken(t, out, "invalid_depth");
         return;
       }
-      var b = new LocalOrderBook();
-      b.snapshot(
-          n.has("bids") ? n.get("bids") : n.path("buys"),
-          n.has("asks") ? n.get("asks") : n.path("sells"));
       books.put(t, b);
+      awaitingSnapshots.remove(t);
       stamps.put(t, stamp);
       emitBook(t, b, stamp, out);
     } else if (type.equals("tick_size_change"))
@@ -115,14 +117,21 @@ public final class RawTapeNormalizer {
     out.accept("BOOK", mapper.valueToTree(data));
   }
 
+  private void invalidateToken(String token, BiConsumer<String, JsonNode> out, String reason) {
+    books.remove(token);
+    if (awaitingSnapshots.add(token))
+      out.accept("GAP", mapper.valueToTree(Map.of("reason", reason, "token", token)));
+  }
+
   private void gap(BiConsumer<String, JsonNode> out, String reason) {
     books.clear();
-    stamps.clear();
+    awaitingSnapshots.clear();
     out.accept("GAP", mapper.valueToTree(Map.of("reason", reason)));
   }
 
   public void reset() {
     books.clear();
     stamps.clear();
+    awaitingSnapshots.clear();
   }
 }
