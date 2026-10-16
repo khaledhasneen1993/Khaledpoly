@@ -346,4 +346,61 @@ class ResearchSessionTest {
       assertThat((Map<?, ?>) session.report().get("decisionReasons")).isNotEmpty();
     }
   }
+
+  @Test
+  void unavailableMarketCancelsEntriesAndPersistsDisabledMetadataWithoutRefreshingItsClock() {
+    try (var l = new AccountLedger(dir.resolve("ledger.json"), mapper, b("500"), limits, clock);
+        var s = open(l)) {
+      enter(s);
+      assertThat(l.snapshot().orders()).hasSize(2);
+      input(
+          s,
+          "MARKET_UNAVAILABLE",
+          600,
+          mapper.createObjectNode().put("condition", condition).put("status", 404));
+      tick(s, 900);
+      assertThat(l.snapshot().orders().values())
+          .allSatisfy(
+              o -> {
+                assertThat(o.remaining()).isZero();
+                assertThat(o.status()).isEqualTo("CANCELED");
+              });
+      assertThat(l.availableCash()).isEqualByComparingTo("500");
+      assertThat(s.markets().getFirst().accepting()).isFalse();
+      assertThat(s.markets().getFirst().observedMs()).isEqualTo(base);
+      assertThat(s.report().get("halted")).isEqualTo(false);
+    }
+    try (var l = new AccountLedger(dir.resolve("ledger.json"), mapper, b("500"), limits, clock);
+        var s = open(l)) {
+      assertThat(s.markets().getFirst().accepting()).isFalse();
+      books(s, 1000, "0.4", "0.6", "0.4", "0.6");
+      tick(s, 1251);
+      assertThat(l.snapshot().orders().values())
+          .allSatisfy(
+              o -> {
+                assertThat(o.remaining()).isZero();
+                assertThat(o.status()).isEqualTo("CANCELED");
+              });
+      assertThat(l.availableCash()).isEqualByComparingTo("500");
+    }
+  }
+
+  @Test
+  void rawCrossedSplitUpdateIsRejectedAndOnlyFullSnapshotRestoresBook() throws Exception {
+    var decoder = new RawTapeNormalizer(mapper);
+    var kinds = new ArrayList<String>();
+    String snapshot =
+        "{\"event_type\":\"book\",\"asset_id\":\"a\",\"timestamp\":\""
+            + base
+            + "\",\"bids\":[{\"price\":\"0.13\",\"size\":\"10\"}],\"asks\":[{\"price\":\"0.14\",\"size\":\"10\"}]}";
+    decoder.accept(snapshot, base, (k, n) -> kinds.add(k));
+    String cross =
+        "{\"event_type\":\"price_change\",\"timestamp\":\""
+            + base
+            + "\",\"price_changes\":[{\"asset_id\":\"a\",\"side\":\"BUY\",\"price\":\"0.14\",\"size\":\"91\"}]}";
+    decoder.accept(cross, base, (k, n) -> kinds.add(k));
+    assertThat(kinds).containsExactly("BOOK", "GAP");
+    decoder.accept(snapshot, base, (k, n) -> kinds.add(k));
+    assertThat(kinds).containsExactly("BOOK", "GAP", "BOOK");
+  }
 }

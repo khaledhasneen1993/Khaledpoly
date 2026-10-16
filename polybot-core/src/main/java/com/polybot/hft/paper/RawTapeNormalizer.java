@@ -54,8 +54,14 @@ public final class RawTapeNormalizer {
           gap(out, "delta_without_snapshot");
           return;
         }
-        b.changes(batch.getValue());
         stamps.put(t, stamp);
+        try {
+          b.changes(batch.getValue());
+        } catch (RuntimeException e) {
+          books.remove(t);
+          out.accept("GAP", mapper.valueToTree(Map.of("reason", "invalid_depth", "token", t)));
+          continue;
+        }
         emitBook(t, b, stamp, out);
       }
     } else if (type.equals("book")) {

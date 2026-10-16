@@ -1,0 +1,127 @@
+{
+  "sourceCommit": "8c6018d9d5a1b69c10ad4841a4c08bbe51f6cf41",
+  "workflowRun": 38932952075,
+  "artifactId": 12059223402,
+  "summary": {
+    "run": "paper-ingestor-2845cdb5-f32c-48b5-baa7-3c7fec858236",
+    "events": {
+      "DATASET_CONFIG": 1,
+      "RESEARCH_TICK": 700,
+      "CLOCK_SYNC": 10,
+      "METADATA_EVIDENCE": 32,
+      "RESEARCH_META": 32,
+      "RESEARCH_FEED_ERROR": 4,
+      "PUBLIC_SUBSCRIPTION": 3,
+      "RAW_MARKET": 60808,
+      "RESEARCH_BOOK": 119721,
+      "APPLICATION_EVENT": 1354,
+      "WS_PIPELINE": 90,
+      "RESEARCH_TRADE": 51,
+      "RESEARCH_GAP": 6,
+      "RUN_END": 1
+    },
+    "durationMs": 176218,
+    "errors": [
+      {
+        "message": "IllegalStateException: Public API HTTP 404",
+        "retryAfter": 1792168494886
+      },
+      {
+        "message": "IllegalStateException: Public API HTTP 404",
+        "retryAfter": 1792168513321
+      },
+      {
+        "message": "IllegalStateException: Public API HTTP 404",
+        "retryAfter": 1792168533469
+      },
+      {
+        "message": "IllegalStateException: Public API HTTP 404",
+        "retryAfter": 1792168557625
+      }
+    ],
+    "gapReasons": {
+      "invalid_depth": 4,
+      "reconnect": 2
+    },
+    "staleStages": {},
+    "callbackSourceAge": {
+      "count": 60817,
+      "maxMs": 717,
+      "upperBoundMs": {
+        "100": 49740,
+        "250": 9993,
+        "500": 943,
+        "1000": 141
+      }
+    },
+    "callbackToJournal": {
+      "count": 60808,
+      "maxMs": 6,
+      "upperBoundMs": {
+        "0": 60557,
+        "1": 247,
+        "5": 3,
+        "10": 1
+      }
+    },
+    "normalizedSourceAge": {
+      "count": 119721,
+      "maxMs": 707,
+      "upperBoundMs": {
+        "100": 97969,
+        "250": 19661,
+        "500": 1823,
+        "1000": 268
+      }
+    },
+    "recordingClosedCleanly": true,
+    "pipeline": {
+      "intervals": 90,
+      "frames": 60492,
+      "maxCallbackProcessingMicros": 11991,
+      "maxRawAppendMicros": 6011,
+      "lastJournalSample": {
+        "maxAppendMicros": 10639,
+        "writtenBytes": 426679211,
+        "pendingBytes": 7845,
+        "maxCommitMicros": 10474,
+        "commits": 4241,
+        "records": 181855,
+        "failed": false
+      }
+    },
+    "decision": "NO_GO",
+    "reason": "Short diagnostic capture does not meet the preregistered heldout acceptance gate"
+  },
+  "replays": {
+    "baseline": {
+      "cash": 500,
+      "netRealizedPnl": 0,
+      "fills": 0,
+      "dataGaps": 10,
+      "riskBreaches": 0,
+      "inputSha256": "c3542d5c55a194eaa4d727ae0de9591abed95b6bb4a93b3ea45790061f6a774c",
+      "decisionReasons": {
+        "OUTSIDE_MARKET": 1060,
+        "STALE_DATA": 349,
+        "NET_EDGE_OR_MIN_SIZE": 715
+      },
+      "decision": "NO_GO"
+    },
+    "stress": {
+      "cash": 500,
+      "netRealizedPnl": 0,
+      "fills": 0,
+      "dataGaps": 10,
+      "riskBreaches": 0,
+      "inputSha256": "c3542d5c55a194eaa4d727ae0de9591abed95b6bb4a93b3ea45790061f6a774c",
+      "decisionReasons": {
+        "NET_EDGE_OR_MIN_SIZE": 715,
+        "STALE_DATA": 349,
+        "OUTSIDE_MARKET": 1060
+      },
+      "decision": "NO_GO"
+    }
+  },
+  "note": "Different market traffic and durations; diagnostic evidence, not a controlled latency comparison or an accepted performance run."
+}

@@ -101,4 +101,29 @@ class WebSocketFreshnessTest {
     assertThat(gaps.getFirst().path("callbackSourceAgeMs").asLong()).isZero();
     assertThat(gaps.getFirst().path("processingAgeMs").asLong()).isEqualTo(3000);
   }
+
+  @Test
+  void splitVenueUpdateStaysUntradableUntilFullSnapshotAndThenAvoidsRedundantReconnect() {
+    var clock = new MutableClock();
+    var client = client(clock);
+    long at = clock.millis();
+    ReflectionTestUtils.invokeMethod(client, "handleMessage", book(at, "0.5"));
+    String cross =
+        "{\"event_type\":\"price_change\",\"timestamp\":\""
+            + at
+            + "\",\"price_changes\":[{\"asset_id\":\"123\",\"side\":\"BUY\",\"price\":\"0.6\",\"size\":\"10\"}]}";
+    ReflectionTestUtils.invokeMethod(client, "handleMessage", cross);
+    assertThat(client.getTopOfBook("123")).isEmpty();
+    assertThat((Boolean) ReflectionTestUtils.invokeMethod(client, "needsResnapshot")).isTrue();
+    // The venue's second delta removes the crossed ask but cannot substitute for a full snapshot.
+    ReflectionTestUtils.invokeMethod(
+        client,
+        "handleMessage",
+        cross.replace("BUY", "SELL").replace("\"size\":\"10\"", "\"size\":\"0\""));
+    assertThat(client.getTopOfBook("123")).isEmpty();
+    assertThat((Boolean) ReflectionTestUtils.invokeMethod(client, "needsResnapshot")).isTrue();
+    ReflectionTestUtils.invokeMethod(client, "handleMessage", book(at, "0.5"));
+    assertThat(client.getTopOfBook("123")).isPresent();
+    assertThat((Boolean) ReflectionTestUtils.invokeMethod(client, "needsResnapshot")).isFalse();
+  }
 }

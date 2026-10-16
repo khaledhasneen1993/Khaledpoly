@@ -79,7 +79,19 @@ public class ClobMarketWebSocketClient {
 
   private final Map<String, TopOfBook> topOfBookByAssetId = new ConcurrentHashMap<>();
   private final Map<String, Long> lastSourceByAsset = new ConcurrentHashMap<>();
-  private final AtomicBoolean resnapshotRequired = new AtomicBoolean(false);
+  private final Set<String> invalidatedAssets = ConcurrentHashMap.newKeySet();
+
+  private boolean needsResnapshot() {
+    return !invalidatedAssets.isEmpty();
+  }
+
+  private void invalidateAllBooks() {
+    invalidatedAssets.addAll(subscribedAssetIds);
+    invalidatedAssets.addAll(depthByAssetId.keySet());
+    topOfBookByAssetId.clear();
+    depthByAssetId.clear();
+  }
+
   private final Map<String, LocalOrderBook> depthByAssetId = new ConcurrentHashMap<>();
   private final Map<String, BigDecimal> ticksByAssetId = new ConcurrentHashMap<>();
 
@@ -314,7 +326,7 @@ public class ClobMarketWebSocketClient {
     lastTobEventAtMillisByAssetId.clear();
     topOfBookByAssetId.clear();
     depthByAssetId.clear();
-    resnapshotRequired.set(false);
+    invalidatedAssets.clear();
     lastSourceByAsset.clear();
     ticksByAssetId.clear();
     connectLocked();
@@ -468,9 +480,7 @@ public class ClobMarketWebSocketClient {
       JsonNode node = objectMapper.readTree(message);
       handleMessageNode(node, receivedMs);
     } catch (Exception e) {
-      topOfBookByAssetId.clear();
-      depthByAssetId.clear();
-      resnapshotRequired.set(true);
+      invalidateAllBooks();
       gap("invalid_message");
       log.warn("Invalid market message; books invalidated: {}", e.getMessage());
     } finally {
@@ -493,13 +503,12 @@ public class ClobMarketWebSocketClient {
     if ((eventType.equals("book") || eventType.equals("price_change")) && !sourceFresh(node)) {
       String asset = node.path("asset_id").asText(null);
       if (asset != null) {
+        invalidatedAssets.add(asset);
         topOfBookByAssetId.remove(asset);
         depthByAssetId.remove(asset);
       } else {
-        topOfBookByAssetId.clear();
-        depthByAssetId.clear();
+        invalidateAllBooks();
       }
-      resnapshotRequired.set(true);
       long stamp = node.path("timestamp").asLong(-1);
       if (stamp > 0 && stamp < 100000000000L) stamp *= 1000;
       long observedMs = clock.millis();
@@ -587,7 +596,7 @@ public class ClobMarketWebSocketClient {
     long reconnectBackoffMillis = properties.polymarket().marketWsReconnectBackoffMillis();
     long now = System.currentTimeMillis();
 
-    boolean disconnected = !started || webSocket == null || resnapshotRequired.get();
+    boolean disconnected = !started || webSocket == null || needsResnapshot();
     long lastAt = lastMessageAtMillis.get();
     boolean stale = staleTimeoutMillis > 0 && lastAt > 0 && (now - lastAt) > staleTimeoutMillis;
     if (!disconnected && !stale) {
@@ -714,6 +723,8 @@ public class ClobMarketWebSocketClient {
     LocalOrderBook depth = new LocalOrderBook();
     depth.snapshot(bidsNode, asksNode);
     depthByAssetId.put(assetId, depth);
+    // Only a validated full snapshot restores confidence, never a best-price hint or lone delta.
+    invalidatedAssets.remove(assetId);
     LocalOrderBook.Best best = depth.best();
     BigDecimal bestBid = best.bid(),
         bestBidSize = best.bidSize(),
@@ -777,8 +788,18 @@ public class ClobMarketWebSocketClient {
       } catch (RuntimeException e) {
         depthByAssetId.remove(assetId);
         topOfBookByAssetId.remove(assetId);
-        resnapshotRequired.set(true);
-        gap("invalid_depth");
+        invalidatedAssets.add(assetId);
+        tape(
+            "GAP",
+            Map.of(
+                "reason",
+                "invalid_depth",
+                "token",
+                assetId,
+                "sourceMs",
+                lastSourceByAsset.get(assetId),
+                "detail",
+                e.getMessage()));
         continue;
       }
       LocalOrderBook.Best best = depth.best();

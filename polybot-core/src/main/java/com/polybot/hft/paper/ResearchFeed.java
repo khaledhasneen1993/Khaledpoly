@@ -143,10 +143,7 @@ public class ResearchFeed {
                     + "-et");
           }
       }
-      for (String slug : slugs) {
-        JsonNode list = get("https://gamma-api.polymarket.com/markets?slug=" + slug);
-        if (list.isArray() && list.size() == 1) metadata(list.get(0));
-      }
+      for (String slug : slugs) discover(slug);
       var active = new TreeSet<String>();
       for (var m : markets.values())
         if (!resolved.contains(m.condition())
@@ -189,6 +186,30 @@ public class ResearchFeed {
     }
   }
 
+  private void discover(String slug) throws Exception {
+    String condition =
+        markets.values().stream()
+            .filter(m -> m.evidence().endsWith("slug=" + slug))
+            .map(ResearchMarket::condition)
+            .findFirst()
+            .orElse("");
+    try {
+      JsonNode list = get("https://gamma-api.polymarket.com/markets?slug=" + slug);
+      if (list.isArray() && list.size() == 1) {
+        condition = list.get(0).path("conditionId").asText("");
+        metadata(list.get(0));
+      }
+    } catch (PublicApiFailure e) {
+      // A disappearing/unscheduled book cannot starve the rest of the universe.
+      // Global transport, rate-limit and server failures still stop this poll/back off.
+      if (e.status != 404) throw e;
+      emit(
+          "MARKET_UNAVAILABLE",
+          mapper.valueToTree(
+              Map.of("slug", slug, "condition", condition, "url", e.url, "status", e.status)));
+    }
+  }
+
   private void metadata(JsonNode row) throws Exception {
     if (!row.path("active").asBoolean(false)
         || row.path("closed").asBoolean(true)
@@ -207,6 +228,7 @@ public class ResearchFeed {
     String condition = row.path("conditionId").asText();
     long end = Instant.parse(row.path("endDate").asText()).toEpochMilli();
     String slug = row.path("slug").asText();
+    if (end <= clock.millis()) return; // Expired discovery rows need no tradable CLOB book.
     int duration = slug.contains("updown-5m-") ? 300 : slug.contains("updown-15m-") ? 900 : 3600;
     long start = end - duration * 1000L;
     JsonNode book = get("https://clob.polymarket.com/book?token_id=" + ids.get(0));
@@ -275,6 +297,17 @@ public class ResearchFeed {
     }
   }
 
+  static final class PublicApiFailure extends IllegalStateException {
+    final int status;
+    final String url;
+
+    PublicApiFailure(int status, String url) {
+      super("Public API HTTP " + status + " at " + url);
+      this.status = status;
+      this.url = url;
+    }
+  }
+
   private JsonNode get(String url) throws Exception {
     var response =
         http.send(
@@ -289,8 +322,7 @@ public class ResearchFeed {
           retryDeadline(response.headers().firstValue("Retry-After").orElse(""), clock.millis());
       throw new IllegalStateException("Public API rate limit");
     }
-    if (response.statusCode() != 200)
-      throw new IllegalStateException("Public API HTTP " + response.statusCode());
+    if (response.statusCode() != 200) throw new PublicApiFailure(response.statusCode(), url);
     return mapper.readTree(response.body());
   }
 }

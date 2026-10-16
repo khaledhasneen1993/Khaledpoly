@@ -54,3 +54,43 @@ The acceptance file, fees, queue model, risk limits, strategy thresholds and liv
 This engineering smoke is training/diagnostic data, not the heldout seven-day experiment. The frozen
 implementation digest is renewed before the still-future candidate window; freezing does not start
 collection. Current acceptance remains NO_GO pending actual independent evidence.
+
+## Completed public verification and recovery follow-up
+
+Run `38932952075` at commit `8c6018d9d5a1b69c10ad4841a4c08bbe51f6cf41` passed all checks.
+The 176.218-second clean recording captured 60,808 raw frames, 119,721 books and 51 venue prints.
+There were **zero stale-source signals**; maximum callback source age was 717 ms and maximum
+normalized book source age 707 ms. Callback-processing maximum was 11.991 ms. The last periodic
+journal sample showed 181,855 records / 4,241 commits with no failed writer. Traffic and durations
+differ from the previous capture, so this is encouraging observational evidence, not a controlled
+causal benchmark or a promise that future feeds cannot lag. Full summary and baseline/stress outputs
+are preserved in `research/phase2/validation/latency-public-summary.json` and artifact `12059223402`.
+Both full strategy replays completed with cash 500, PnL 0, zero fills and 10 invalidations: six WS
+signals (four depth invalidations, two reconnects) plus four HTTP feed errors. Acceptance stays NO_GO.
+
+Inspection of the actual frames found two split updates affecting both outcome tokens: the first
+frame produced a locked reconstructed book, the next frame at the same source timestamp explicitly
+removed the opposing level, followed immediately by full venue book snapshots. The client correctly
+invalidated/canceled at the first frame, but a sticky resnapshot flag forced a redundant reconnect
+even after valid full snapshots had restored both assets. Recovery now tracks invalidated assets
+individually. Only a fresh, source-monotone, validated full snapshot clears that asset's recovery
+requirement. A delta or a best-price hint cannot restore a missing book. Unrecovered assets still
+trigger the existing bounded reconnect policy. These invalidations remain visible; no fills or
+queue cancellation credit are inferred from those split messages. Raw decoding now rejects a crossed
+delta as a recorded invalidation and can continue to a subsequent full snapshot instead of crashing.
+
+A missing CLOB book in one discovery row previously aborted the entire metadata poll. Discovery now
+skips already-expired tradable-book lookups, reports the exact public URL/status for a per-market
+404, continues the remaining universe and resolution polling, and disables a known affected market
+without refreshing its metadata timestamp. Its maker cancels retain modeled acknowledgement delay;
+pending takers are removed. The disabled metadata persists across restart until verified META restores
+it. Rate limits, network/server failures and errors in resolution polling still fail/back off globally;
+404 is not a fabricated empty response or resolution. Official API reference checked:
+https://docs.polymarket.com/market-data/realtime-data and https://data-api.polymarket.com/v2/docs .
+
+The recovery follow-up passes **83 Java tests and seven Python tests** locally, including failed-book
+isolation, global Retry-After, expired discovery, split-frame snapshot recovery, raw crossed-book
+recovery and disabled-market restart behavior. Test HTTP mocks use the subclass mock maker to avoid
+requiring runtime Java agent attachment. The push collector is extended to 900 seconds to include at
+least one 15-minute clock boundary, followed by baseline/stress replay. This longer run remains a
+bounded diagnostic, separate from the registered seven-day acceptance experiment.

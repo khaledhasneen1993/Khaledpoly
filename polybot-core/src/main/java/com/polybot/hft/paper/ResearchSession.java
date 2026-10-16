@@ -255,6 +255,30 @@ public final class ResearchSession implements AutoCloseable {
                 "message",
                 "Depth invalidated; resting orders canceled"));
       }
+    } else if (kind.equals("MARKET_UNAVAILABLE")) {
+      // Disable only the affected known market; never refresh its metadata freshness clock.
+      ResearchMarket m = markets.get(data.path("condition").asText());
+      if (m != null) {
+        markets.put(
+            m.condition(),
+            new ResearchMarket(
+                m.condition(),
+                m.first(),
+                m.second(),
+                m.startMs(),
+                m.endMs(),
+                m.tick(),
+                m.minSize(),
+                m.feeRate(),
+                m.feeExponent(),
+                false,
+                m.observedMs(),
+                m.evidence()));
+        cancelAll(m);
+        pending.removeIf(p -> p.condition().equals(m.condition()));
+        save();
+      }
+      output.accept("MARKET_UNAVAILABLE", data);
     } else throw new IllegalArgumentException("Unknown research input " + kind);
     expire();
     executePending();
