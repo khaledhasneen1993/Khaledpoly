@@ -119,3 +119,51 @@ in run `38957407035`. Subsequent routine pushes return to the 180-second smoke r
 another 15-minute collection for a decoder-only correction; that does not shorten or cancel the
 already-running investigation. Its recorded collector revision and the replay implementation revision
 remain separately visible. Neither duration substitutes for the heldout acceptance window.
+
+## Longer rollover capture: consumer backpressure remains observable
+
+The 900-second investigation at `ddb11d0c0067056e5da619ed8bfda03c48df3e1c` completed successfully in
+run `38957407035`, artifact `12072386579`. The clean tape spans 896.154 seconds after startup and
+contains 391,578 raw frames, 768,886 normalized books, 511 public prints and two verified resolution
+observations. There were no HTTP feed errors or stale-source signals; maximum source age was 1,682 ms.
+Both full strategy baseline/stress completed with cash 500, PnL 0, no fills, no risk breaches, no pending
+orders/takers, and zero remaining inventory. Two markets resolved; none was traded, so they do not
+satisfy the resolved-traded-market gate. Summary: `validation/rollover-public-summary.json`.
+
+There were 47 explicit invalidations: 40 crossed-depth signals, three disconnects and four reconnects.
+The venue supplied close code 1013 / "slow consumer: send buffer full" on three disconnects; another
+resubscription occurred around the 20:00 UTC market boundary. This is direct evidence that a short
+clean latency smoke cannot certify consumer throughput. It does not prove the sole cause of each
+venue-side send-buffer failure. No such disconnect or depth invalidation is hidden from the gate.
+
+## Bounded asynchronous receiving
+
+The receive callback now copies a complete message and enqueues it before requesting more input.
+A single decoder preserves receive order while raw recording, normalization and PAPER listeners run
+off the callback. The queue allows at most 512 waiting frames and 8 MiB of reserved UTF-16 payload
+bytes including in-flight work; fragmented assembly also has an explicit 4 Mi-character bound.
+There is no unbounded queue or optimistic timestamp rewrite. Callback receipt is preserved separately;
+recorded availability/strategy decisions still use actual processing time, and the original two-second
+source-age check still applies after queueing.
+
+Overflow immediately blocks book access for that socket and schedules an explicit decoder_overflow
+invalidation. Pending frames from a blocked or replaced socket are not interpreted as fresh data.
+A new connection/full snapshot is required; decoder failure also blocks that socket. Reconnect/reset
+and close/error invalidation serialize against the decoder, preventing old in-flight frames from
+repopulating books after a disconnect. Reconnect scheduling does not wait for the decoder while an
+external caller could hold the simulator monitor, avoiding an inversion of those locks. Subscription
+recovery tickets are released before the connection monitor is exposed to subsequent updates.
+
+Normal stop drains already accepted frames before the research feed stops, then closes the socket.
+Decoder drain does not interrupt a FileChannel writer. A drain timeout throws rather than presenting
+itself as successful completion. Metrics distinguish ingress callback cost, decoder cost, queue wait,
+queue bytes/frames and journal cost. The inspector retains compatibility with earlier timing records.
+Java callback ownership/sequential invocation was checked against the primary JDK 21 Listener docs:
+https://docs.oracle.com/en/java/javase/21/docs/api/java.net.http/java/net/http/WebSocket.Listener.html .
+
+Local verify now passes 92 Java tests and seven Python tests. New cases exercise nonblocking producer
+behavior, FIFO drain, byte and frame bounds, rejected-work exclusion, preserved callback clocks under
+a three-second processing stall, explicit overflow/book blocking, and reconnect scheduling while the
+decoder lock is owned elsewhere. The public collector again runs for 900 seconds, followed by all
+three full strategy replay modes, to qualify this receiving change. Until that actual run is reviewed,
+no claim is made that all slow-consumer disconnects have been eliminated. Acceptance remains NO_GO.

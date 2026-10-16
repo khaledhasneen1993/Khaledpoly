@@ -121,7 +121,14 @@ public final class ClosedLoopReplay {
             String reason = data.path("reason").asText();
             // Decoder invalidations come from the raw frame itself, not twice from its derived row.
             if (reason.equals("invalid_depth")) continue;
-            if (Set.of("reconnect", "disconnect", "socket_error", "invalid_message", "stale_source")
+            if (Set.of(
+                    "reconnect",
+                    "disconnect",
+                    "socket_error",
+                    "invalid_message",
+                    "stale_source",
+                    "decoder_overflow",
+                    "decoder_failure")
                 .contains(reason)) normalizer.reset();
           }
           if (raw && Set.of("BOOK", "TRADE", "TICK").contains(input)) continue;

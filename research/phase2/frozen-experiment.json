@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "implementationSha256": "8cc13a89417d9823d9c1b90956ef702b0e9fb8037a245d48d57b6fd517442350",
-  "createdAt": "2026-10-16T19:52:45.685664+00:00",
+  "implementationSha256": "8fda18c94b570b76afa366d4e68dbd71499fb3715a8e015f14b445416a5535da",
+  "createdAt": "2026-10-16T20:21:21.589317+00:00",
   "holdoutStart": "2026-10-17T00:00:00+00:00",
   "holdoutEnd": "2026-10-24T00:00:00+00:00",
   "configFileSha256": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",

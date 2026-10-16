@@ -1,0 +1,167 @@
+{
+  "sourceCommit": "ddb11d0c0067056e5da619ed8bfda03c48df3e1c",
+  "workflowRun": 38957407035,
+  "artifactId": 12072386579,
+  "summary": {
+    "run": "paper-ingestor-2859c0ea-773f-4369-9549-07b848aec936",
+    "events": {
+      "DATASET_CONFIG": 1,
+      "RESEARCH_TICK": 3577,
+      "CLOCK_SYNC": 55,
+      "METADATA_EVIDENCE": 220,
+      "RESEARCH_META": 220,
+      "PUBLIC_SUBSCRIPTION": 5,
+      "RAW_MARKET": 391578,
+      "RESEARCH_BOOK": 768886,
+      "APPLICATION_EVENT": 11496,
+      "WS_PIPELINE": 849,
+      "RESEARCH_GAP": 47,
+      "RESEARCH_TRADE": 511,
+      "RESEARCH_TICK_SIZE": 8,
+      "RESEARCH_RESOLUTION": 2,
+      "RUN_END": 1
+    },
+    "durationMs": 896154,
+    "errors": [],
+    "gapReasons": {
+      "disconnect": 3,
+      "reconnect": 4,
+      "invalid_depth": 40
+    },
+    "staleStages": {},
+    "callbackSourceAge": {
+      "count": 391593,
+      "maxMs": 1682,
+      "upperBoundMs": {
+        "50": 286402,
+        "100": 77822,
+        "250": 24379,
+        "500": 2458,
+        "1000": 37,
+        "1500": 488,
+        "2000": 7
+      }
+    },
+    "callbackToJournal": {
+      "count": 391578,
+      "maxMs": 69,
+      "upperBoundMs": {
+        "0": 390166,
+        "1": 1339,
+        "5": 51,
+        "10": 5,
+        "25": 13,
+        "50": 2,
+        "100": 2
+      }
+    },
+    "normalizedSourceAge": {
+      "count": 768886,
+      "maxMs": 1682,
+      "upperBoundMs": {
+        "50": 562082,
+        "100": 153404,
+        "250": 47615,
+        "500": 4741,
+        "1000": 70,
+        "1500": 960,
+        "2000": 14
+      }
+    },
+    "recordingClosedCleanly": true,
+    "pipeline": {
+      "intervals": 849,
+      "frames": 391330,
+      "maxCallbackProcessingMicros": 68761,
+      "maxRawAppendMicros": 68615,
+      "lastJournalSample": {
+        "pendingBytes": 84602,
+        "maxCommitMicros": 71514,
+        "commits": 32800,
+        "records": 1176707,
+        "failed": false,
+        "maxAppendMicros": 18641,
+        "writtenBytes": 2766103268
+      }
+    },
+    "decision": "NO_GO",
+    "reason": "Short diagnostic capture does not meet the preregistered heldout acceptance gate"
+  },
+  "replays": {
+    "baseline": {
+      "cash": 500.0,
+      "netRealizedPnl": 0.0,
+      "fills": 0,
+      "dataGaps": 47,
+      "riskBreaches": 0,
+      "resolvedMarkets": 2,
+      "resolvedTradedMarkets": 0,
+      "holdings": {
+        "89468251599920044460377473425129177297333827518158705319898401201253934054857": {
+          "shares": 0,
+          "basis": 0
+        },
+        "78279011250708823475932042440160862687066569168340634432827578902623470104315": {
+          "shares": 0,
+          "basis": 0
+        },
+        "58678389461868010636716820055055712314797409865366468748876744947917588214944": {
+          "shares": 0,
+          "basis": 0
+        },
+        "110199362272519269548728770562021217944480007359281206618653215040756615842173": {
+          "shares": 0,
+          "basis": 0
+        }
+      },
+      "openOrderCount": 0,
+      "pendingTakers": 0,
+      "inputSha256": "8b9dc30904c2aaf79a78ac71528496dc1094906b273a7e796a56b65a755f82c5",
+      "decisionReasons": {
+        "OUTSIDE_MARKET": 8228,
+        "PRICE_BOUND_OR_STALE_TICK": 64,
+        "STALE_DATA": 1577,
+        "NET_EDGE_OR_MIN_SIZE": 5497
+      },
+      "decision": "NO_GO"
+    },
+    "stress": {
+      "cash": 500.0,
+      "netRealizedPnl": 0.0,
+      "fills": 0,
+      "dataGaps": 47,
+      "riskBreaches": 0,
+      "resolvedMarkets": 2,
+      "resolvedTradedMarkets": 0,
+      "holdings": {
+        "58678389461868010636716820055055712314797409865366468748876744947917588214944": {
+          "shares": 0,
+          "basis": 0
+        },
+        "78279011250708823475932042440160862687066569168340634432827578902623470104315": {
+          "shares": 0,
+          "basis": 0
+        },
+        "89468251599920044460377473425129177297333827518158705319898401201253934054857": {
+          "shares": 0,
+          "basis": 0
+        },
+        "110199362272519269548728770562021217944480007359281206618653215040756615842173": {
+          "shares": 0,
+          "basis": 0
+        }
+      },
+      "openOrderCount": 0,
+      "pendingTakers": 0,
+      "inputSha256": "8b9dc30904c2aaf79a78ac71528496dc1094906b273a7e796a56b65a755f82c5",
+      "decisionReasons": {
+        "NET_EDGE_OR_MIN_SIZE": 5497,
+        "STALE_DATA": 1577,
+        "PRICE_BOUND_OR_STALE_TICK": 64,
+        "OUTSIDE_MARKET": 8228
+      },
+      "decision": "NO_GO"
+    }
+  },
+  "finding": "Three venue 1013 slow-consumer disconnects remain despite zero stale-source signals. Follow-up decouples callbacks from decoding with bounded memory and explicit overflow invalidation. NO_GO; no profitability evidence."
+}

@@ -36,7 +36,7 @@ def inspect(tape):
     source_age = Histogram()
     dispatch = Histogram()
     normalization = Histogram()
-    frames = processing = append = intervals = 0
+    frames = processing = append = intervals = queue_wait = ingress = 0
     last_journal = {}
     run_id = None
     clean = False
@@ -95,8 +95,10 @@ def inspect(tape):
             elif kind == 'WS_PIPELINE':
                 intervals += 1
                 frames += data['frames']
-                processing = max(processing, data['maxCallbackProcessingMicros'])
+                processing = max(processing, data.get('maxDecoderProcessingMicros', data.get('maxCallbackProcessingMicros', 0)))
+                ingress = max(ingress, data.get('maxIngressCallbackMicros', 0))
                 append = max(append, data['maxRawAppendMicros'])
+                queue_wait = max(queue_wait, data.get('maxQueueWaitMicros', 0))
                 last_journal = data['journal']
     return {'run': pathlib.Path(tape).parent.name, 'events': dict(counts),
             'durationMs': None if first is None else last - first, 'errors': errors,
@@ -104,7 +106,8 @@ def inspect(tape):
             'callbackSourceAge': source_age.report(), 'callbackToJournal': dispatch.report(),
             'normalizedSourceAge': normalization.report(), 'recordingClosedCleanly': clean,
             'pipeline': {'intervals': intervals, 'frames': frames,
-                         'maxCallbackProcessingMicros': processing, 'maxRawAppendMicros': append,
+                         'maxDecoderProcessingMicros': processing, 'maxIngressCallbackMicros': ingress, 'maxRawAppendMicros': append,
+                         'maxQueueWaitMicros': queue_wait,
                          'lastJournalSample': last_journal},
             'decision': 'NO_GO',
             'reason': 'Short diagnostic capture does not meet the preregistered heldout acceptance gate'}

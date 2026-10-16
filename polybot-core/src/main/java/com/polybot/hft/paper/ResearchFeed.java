@@ -43,7 +43,11 @@ public class ResearchFeed {
 
   @PreDestroy
   void stop() {
-    stopping = true;
+    try {
+      if (enabled) ws.stopAndDrainFrames();
+    } finally {
+      stopping = true;
+    }
   }
 
   private volatile long retryAfter;

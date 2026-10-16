@@ -118,6 +118,66 @@ public class ClobMarketWebSocketClient {
             return t;
           });
 
+  private final Object decodeLock = new Object();
+  private final java.util.concurrent.atomic.AtomicReference<Object> reconnectTicket =
+      new java.util.concurrent.atomic.AtomicReference<>();
+  private final AtomicLong maxIngressCallbackMicros = new AtomicLong();
+  private final MarketFrameQueue frames = new MarketFrameQueue(512, 8L * 1024 * 1024);
+  private volatile WebSocket blockedSocket;
+
+  private void enqueueFrame(WebSocket source, String message, long receivedMs, long receivedNanos) {
+    if (stopping || source != webSocket || source == blockedSocket) return;
+    lastMessageAtMillis.set(System.currentTimeMillis());
+    if (frames.offer(
+        2L * message.length(),
+        () -> {
+          synchronized (decodeLock) {
+            if (source == webSocket && source != blockedSocket) {
+              try {
+                handleMessage(message, receivedMs, receivedNanos);
+              } catch (RuntimeException failure) {
+                blockSocket(source, receivedMs, "decoder_failure");
+                throw failure;
+              }
+            }
+          }
+        })) return;
+    overflowSocket(source, receivedMs);
+  }
+
+  private void overflowSocket(WebSocket source, long receivedMs) {
+    blockSocket(source, receivedMs, "decoder_overflow");
+  }
+
+  private void blockSocket(WebSocket source, long receivedMs, String reason) {
+    if (source != webSocket || source == blockedSocket) return;
+    blockedSocket = source;
+    log.warn("Market decoder blocked pending resnapshot (reason={})", reason);
+    pingExecutor.execute(
+        () -> {
+          synchronized (decodeLock) {
+            if (source != webSocket || source != blockedSocket) return;
+            invalidateAllBooks();
+            tape(
+                "GAP",
+                Map.of(
+                    "reason",
+                    reason,
+                    "callbackReceivedMs",
+                    receivedMs,
+                    "queuedFrames",
+                    frames.pendingFrames(),
+                    "queuedBytes",
+                    frames.pendingBytes()));
+          }
+        });
+  }
+
+  public void stopAndDrainFrames() {
+    stopping = true;
+    frames.close();
+  }
+
   private volatile boolean stopping;
   private volatile WebSocket webSocket;
   @Getter private volatile boolean started = false;
@@ -219,6 +279,7 @@ public class ClobMarketWebSocketClient {
   }
 
   public Optional<TopOfBook> getTopOfBook(String assetId) {
+    if (webSocket != null && webSocket == blockedSocket) return Optional.empty();
     return depthByAssetId.containsKey(assetId)
         ? Optional.ofNullable(topOfBookByAssetId.get(assetId))
         : Optional.empty();
@@ -312,28 +373,51 @@ public class ClobMarketWebSocketClient {
   }
 
   private void reconnectLocked() {
-    gap("reconnect");
-    WebSocket ws = this.webSocket;
-    if (ws != null) {
-      try {
-        ws.sendClose(WebSocket.NORMAL_CLOSURE, "resubscribe").orTimeout(2, TimeUnit.SECONDS).join();
-      } catch (Exception ignored) {
-      }
-    }
-    this.webSocket = null;
-    started = false;
-    lastMessageAtMillis.set(0);
-    lastTobEventAtMillisByAssetId.clear();
-    topOfBookByAssetId.clear();
-    depthByAssetId.clear();
-    invalidatedAssets.clear();
-    lastSourceByAsset.clear();
-    ticksByAssetId.clear();
-    connectLocked();
+    // Callers may own the simulator monitor. Never wait for a decoder that calls that simulator.
+    Object ticket = new Object();
+    if (stopping || !reconnectTicket.compareAndSet(null, ticket)) return;
+    pingExecutor.execute(
+        () -> {
+          try {
+
+            WebSocket ws;
+            synchronized (decodeLock) {
+              ws = this.webSocket;
+              this.webSocket = null;
+              started = false;
+              gap("reconnect");
+              lastMessageAtMillis.set(0);
+              lastTobEventAtMillisByAssetId.clear();
+              topOfBookByAssetId.clear();
+              depthByAssetId.clear();
+              invalidatedAssets.clear();
+              lastSourceByAsset.clear();
+              ticksByAssetId.clear();
+              blockedSocket = null;
+            }
+            if (ws != null) {
+              try {
+                ws.sendClose(WebSocket.NORMAL_CLOSURE, "resubscribe")
+                    .orTimeout(2, TimeUnit.SECONDS)
+                    .join();
+              } catch (Exception ignored) {
+              }
+            }
+            synchronized (this) {
+              try {
+                if (!stopping) connectLocked();
+              } finally {
+                reconnectTicket.compareAndSet(ticket, null);
+              }
+            }
+          } finally {
+            reconnectTicket.compareAndSet(ticket, null);
+          }
+        });
   }
 
   private void connectLocked() {
-    if (started) {
+    if (stopping || started) {
       return;
     }
     started = true;
@@ -388,7 +472,7 @@ public class ClobMarketWebSocketClient {
 
   @PreDestroy
   void shutdown() {
-    stopping = true;
+    stopAndDrainFrames();
     flushCacheSafely();
     WebSocket ws = this.webSocket;
     if (ws != null) {
@@ -432,17 +516,18 @@ public class ClobMarketWebSocketClient {
   }
 
   private long pipelineWindowNanos = System.nanoTime();
-  private long pipelineFrames, maxProcessingMicros, maxRawAppendMicros;
+  private long pipelineFrames, maxProcessingMicros, maxRawAppendMicros, maxQueueWaitMicros;
 
   private final Object pipelineLock = new Object();
 
-  private void pipelineTiming(long receivedNanos, long rawDoneNanos) {
+  private void pipelineTiming(long receivedNanos, long startedNanos, long rawDoneNanos) {
     synchronized (pipelineLock) {
       if (journal == null || !journal.enabled()) return;
       long now = System.nanoTime();
       pipelineFrames++;
-      maxProcessingMicros = Math.max(maxProcessingMicros, (now - receivedNanos) / 1000);
-      maxRawAppendMicros = Math.max(maxRawAppendMicros, (rawDoneNanos - receivedNanos) / 1000);
+      maxProcessingMicros = Math.max(maxProcessingMicros, (now - startedNanos) / 1000);
+      maxRawAppendMicros = Math.max(maxRawAppendMicros, (rawDoneNanos - startedNanos) / 1000);
+      maxQueueWaitMicros = Math.max(maxQueueWaitMicros, (startedNanos - receivedNanos) / 1000);
       if (now - pipelineWindowNanos < 1_000_000_000L) return;
       journal.record(
           "WS_PIPELINE",
@@ -452,26 +537,34 @@ public class ClobMarketWebSocketClient {
               pipelineFrames,
               "intervalMicros",
               (now - pipelineWindowNanos) / 1000,
-              "maxCallbackProcessingMicros",
+              "maxDecoderProcessingMicros",
               maxProcessingMicros,
+              "maxIngressCallbackMicros",
+              maxIngressCallbackMicros.get(),
               "maxRawAppendMicros",
               maxRawAppendMicros,
+              "maxQueueWaitMicros",
+              maxQueueWaitMicros,
+              "queuedFrames",
+              frames.pendingFrames(),
+              "queuedBytes",
+              frames.pendingBytes(),
               "journal",
               journal.stats()));
-      pipelineFrames = maxProcessingMicros = maxRawAppendMicros = 0;
+      pipelineFrames = maxProcessingMicros = maxRawAppendMicros = maxQueueWaitMicros = 0;
       pipelineWindowNanos = System.nanoTime();
     }
   }
 
   private void handleMessage(String message, long receivedMs, long receivedNanos) {
-    if (stopping) return;
+    long startedNanos = System.nanoTime();
     if ("PONG".equalsIgnoreCase(message) || "PING".equalsIgnoreCase(message)) {
       lastMessageAtMillis.set(System.currentTimeMillis());
       return;
     }
     messagesReceived.incrementAndGet();
     lastMessageAtMillis.set(System.currentTimeMillis());
-    long rawDoneNanos = receivedNanos;
+    long rawDoneNanos = startedNanos;
     try {
       if (journal != null)
         journal.record(
@@ -484,7 +577,7 @@ public class ClobMarketWebSocketClient {
       gap("invalid_message");
       log.warn("Invalid market message; books invalidated: {}", e.getMessage());
     } finally {
-      pipelineTiming(receivedNanos, rawDoneNanos);
+      pipelineTiming(receivedNanos, startedNanos, rawDoneNanos);
     }
   }
 
@@ -585,7 +678,7 @@ public class ClobMarketWebSocketClient {
   }
 
   private void maintainConnection() {
-    if (!properties.polymarket().marketWsEnabled()) {
+    if (stopping || !properties.polymarket().marketWsEnabled()) {
       return;
     }
     if (subscribedAssetIds.isEmpty()) {
@@ -596,7 +689,8 @@ public class ClobMarketWebSocketClient {
     long reconnectBackoffMillis = properties.polymarket().marketWsReconnectBackoffMillis();
     long now = System.currentTimeMillis();
 
-    boolean disconnected = !started || webSocket == null || needsResnapshot();
+    boolean disconnected =
+        !started || webSocket == null || webSocket == blockedSocket || needsResnapshot();
     long lastAt = lastMessageAtMillis.get();
     boolean stale = staleTimeoutMillis > 0 && lastAt > 0 && (now - lastAt) > staleTimeoutMillis;
     if (!disconnected && !stale) {
@@ -1042,18 +1136,30 @@ public class ClobMarketWebSocketClient {
 
     @Override
     public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
-      if (stopping || ClobMarketWebSocketClient.this.webSocket != webSocket) {
+      if (stopping
+          || ClobMarketWebSocketClient.this.webSocket != webSocket
+          || webSocket == blockedSocket) {
         webSocket.request(1);
         return null;
       }
       long receivedMs = clock.millis(), receivedNanos = System.nanoTime();
+      if ((long) buf.length() + data.length() > 4L * 1024 * 1024) {
+        buf.setLength(0);
+        overflowSocket(webSocket, receivedMs);
+        webSocket.request(1);
+        maxIngressCallbackMicros.accumulateAndGet(
+            (System.nanoTime() - receivedNanos) / 1000, Math::max);
+        return null;
+      }
       buf.append(data);
       if (last) {
         String message = buf.toString();
         buf.setLength(0);
-        handleMessage(message, receivedMs, receivedNanos);
+        enqueueFrame(webSocket, message, receivedMs, receivedNanos);
       }
       webSocket.request(1);
+      maxIngressCallbackMicros.accumulateAndGet(
+          (System.nanoTime() - receivedNanos) / 1000, Math::max);
       return null;
     }
 
@@ -1067,12 +1173,15 @@ public class ClobMarketWebSocketClient {
     @Override
     public CompletionStage<?> onClose(WebSocket webSocket, int statusCode, String reason) {
       log.warn("CLOB market websocket closed (status={}, reason={})", statusCode, reason);
-      if (ClobMarketWebSocketClient.this.webSocket == webSocket) {
-        ClobMarketWebSocketClient.this.webSocket = null;
-        started = false;
-        topOfBookByAssetId.clear();
-        depthByAssetId.clear();
-        if (!stopping) gap("disconnect");
+      synchronized (decodeLock) {
+        if (ClobMarketWebSocketClient.this.webSocket == webSocket) {
+          ClobMarketWebSocketClient.this.webSocket = null;
+          started = false;
+          topOfBookByAssetId.clear();
+          depthByAssetId.clear();
+          if (!stopping)
+            tape("GAP", Map.of("reason", "disconnect", "status", statusCode, "detail", reason));
+        }
       }
       return WebSocket.Listener.super.onClose(webSocket, statusCode, reason);
     }
@@ -1080,12 +1189,14 @@ public class ClobMarketWebSocketClient {
     @Override
     public void onError(WebSocket webSocket, Throwable error) {
       log.warn("CLOB market websocket error: {}", error.toString());
-      if (ClobMarketWebSocketClient.this.webSocket == webSocket) {
-        ClobMarketWebSocketClient.this.webSocket = null;
-        started = false;
-        topOfBookByAssetId.clear();
-        depthByAssetId.clear();
-        if (!stopping) gap("socket_error");
+      synchronized (decodeLock) {
+        if (ClobMarketWebSocketClient.this.webSocket == webSocket) {
+          ClobMarketWebSocketClient.this.webSocket = null;
+          started = false;
+          topOfBookByAssetId.clear();
+          depthByAssetId.clear();
+          if (!stopping) gap("socket_error");
+        }
       }
     }
   }
