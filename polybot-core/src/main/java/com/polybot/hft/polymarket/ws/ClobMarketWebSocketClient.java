@@ -416,6 +416,42 @@ public class ClobMarketWebSocketClient {
   }
 
   private void handleMessage(String message) {
+    handleMessage(message, clock.millis(), System.nanoTime());
+  }
+
+  private long pipelineWindowNanos = System.nanoTime();
+  private long pipelineFrames, maxProcessingMicros, maxRawAppendMicros;
+
+  private final Object pipelineLock = new Object();
+
+  private void pipelineTiming(long receivedNanos, long rawDoneNanos) {
+    synchronized (pipelineLock) {
+      if (journal == null || !journal.enabled()) return;
+      long now = System.nanoTime();
+      pipelineFrames++;
+      maxProcessingMicros = Math.max(maxProcessingMicros, (now - receivedNanos) / 1000);
+      maxRawAppendMicros = Math.max(maxRawAppendMicros, (rawDoneNanos - receivedNanos) / 1000);
+      if (now - pipelineWindowNanos < 1_000_000_000L) return;
+      journal.record(
+          "WS_PIPELINE",
+          null,
+          Map.of(
+              "frames",
+              pipelineFrames,
+              "intervalMicros",
+              (now - pipelineWindowNanos) / 1000,
+              "maxCallbackProcessingMicros",
+              maxProcessingMicros,
+              "maxRawAppendMicros",
+              maxRawAppendMicros,
+              "journal",
+              journal.stats()));
+      pipelineFrames = maxProcessingMicros = maxRawAppendMicros = 0;
+      pipelineWindowNanos = System.nanoTime();
+    }
+  }
+
+  private void handleMessage(String message, long receivedMs, long receivedNanos) {
     if (stopping) return;
     if ("PONG".equalsIgnoreCase(message) || "PING".equalsIgnoreCase(message)) {
       lastMessageAtMillis.set(System.currentTimeMillis());
@@ -423,26 +459,32 @@ public class ClobMarketWebSocketClient {
     }
     messagesReceived.incrementAndGet();
     lastMessageAtMillis.set(System.currentTimeMillis());
+    long rawDoneNanos = receivedNanos;
     try {
-      if (journal != null) journal.record("RAW_MARKET", null, Map.of("text", message));
+      if (journal != null)
+        journal.record(
+            "RAW_MARKET", null, Map.of("text", message, "callbackReceivedMs", receivedMs));
+      rawDoneNanos = System.nanoTime();
       JsonNode node = objectMapper.readTree(message);
-      handleMessageNode(node);
+      handleMessageNode(node, receivedMs);
     } catch (Exception e) {
       topOfBookByAssetId.clear();
       depthByAssetId.clear();
       resnapshotRequired.set(true);
       gap("invalid_message");
       log.warn("Invalid market message; books invalidated: {}", e.getMessage());
+    } finally {
+      pipelineTiming(receivedNanos, rawDoneNanos);
     }
   }
 
-  private void handleMessageNode(JsonNode node) {
+  private void handleMessageNode(JsonNode node, long receivedMs) {
     if (node == null || node.isNull()) {
       return;
     }
     if (node.isArray()) {
       for (JsonNode n : node) {
-        handleMessageNode(n);
+        handleMessageNode(n, receivedMs);
       }
       return;
     }
@@ -458,7 +500,24 @@ public class ClobMarketWebSocketClient {
         depthByAssetId.clear();
       }
       resnapshotRequired.set(true);
-      gap("stale_source");
+      long stamp = node.path("timestamp").asLong(-1);
+      if (stamp > 0 && stamp < 100000000000L) stamp *= 1000;
+      long observedMs = clock.millis();
+      tape(
+          "GAP",
+          Map.of(
+              "reason",
+              "stale_source",
+              "sourceMs",
+              stamp,
+              "callbackReceivedMs",
+              receivedMs,
+              "observedMs",
+              observedMs,
+              "callbackSourceAgeMs",
+              receivedMs - stamp,
+              "processingAgeMs",
+              observedMs - receivedMs));
       return;
     }
     switch (eventType) {
@@ -966,11 +1025,12 @@ public class ClobMarketWebSocketClient {
         webSocket.request(1);
         return null;
       }
+      long receivedMs = clock.millis(), receivedNanos = System.nanoTime();
       buf.append(data);
       if (last) {
         String message = buf.toString();
         buf.setLength(0);
-        handleMessage(message);
+        handleMessage(message, receivedMs, receivedNanos);
       }
       webSocket.request(1);
       return null;

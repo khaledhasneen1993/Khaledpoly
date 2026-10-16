@@ -49,4 +49,67 @@ class PaperJournalTest {
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("sequence");
   }
+
+  @Test
+  void groupsCommitsButIdleFlushAndClosePersistAllRows() throws Exception {
+    var j = new PaperJournal(mapper, Clock.systemUTC(), dir.toString(), "batch", "abc");
+    for (int i = 0; i < 1000; i++) j.record("TICK", null, Map.of("i", i));
+    assertThat(((Number) j.stats().get("commits")).longValue()).isLessThan(1000);
+    // Deterministically invoke the same idle timer operation; no scheduler timing assertion.
+    org.springframework.test.util.ReflectionTestUtils.invokeMethod(j, "scheduledCommit");
+    assertThat(j.stats().get("pendingBytes")).isEqualTo(0L);
+    j.close();
+    j.close();
+    Path tape;
+    try (var paths = Files.walk(dir)) {
+      tape = paths.filter(p -> p.toString().endsWith("events.jsonl")).findFirst().orElseThrow();
+    }
+    var rows = Files.readAllLines(tape);
+    assertThat(rows).hasSize(1001);
+    for (int i = 0; i < rows.size(); i++)
+      assertThat(mapper.readTree(rows.get(i)).path("seq").asInt()).isEqualTo(i + 1);
+    assertThatThrownBy(() -> j.record("LATE", null, Map.of())).hasMessageContaining("closed");
+  }
+
+  @Test
+  void backgroundCommitFailureLatchesAndNeverWritesCleanEnd() throws Exception {
+    var j = new PaperJournal(mapper, Clock.systemUTC(), dir.toString(), "failure", "abc");
+    j.record("TICK", null, Map.of());
+    ((java.nio.channels.FileChannel)
+            org.springframework.test.util.ReflectionTestUtils.getField(j, "file"))
+        .close();
+    org.springframework.test.util.ReflectionTestUtils.setField(j, "pendingBytes", 1L);
+    org.springframework.test.util.ReflectionTestUtils.invokeMethod(j, "scheduledCommit");
+    assertThat(j.stats().get("failed")).isEqualTo(true);
+    assertThatThrownBy(() -> j.record("LATE", null, Map.of())).hasMessageContaining("failed");
+    j.close();
+    try (var paths = Files.walk(dir)) {
+      Path tape =
+          paths.filter(p -> p.toString().endsWith("events.jsonl")).findFirst().orElseThrow();
+      assertThat(Files.readString(tape)).doesNotContain("RUN_END");
+    }
+  }
+
+  @Test
+  void concurrentProducersRetainOneContiguousCausalSequence() throws Exception {
+    try (var j = new PaperJournal(mapper, Clock.systemUTC(), dir.toString(), "concurrent", "abc");
+        var pool = java.util.concurrent.Executors.newFixedThreadPool(4)) {
+      var tasks = new ArrayList<java.util.concurrent.Future<?>>();
+      for (int t = 0; t < 4; t++)
+        tasks.add(
+            pool.submit(
+                () -> {
+                  for (int i = 0; i < 200; i++) j.record("TICK", null, Map.of("i", i));
+                }));
+      for (var task : tasks) task.get();
+    }
+    try (var paths = Files.walk(dir)) {
+      Path tape =
+          paths.filter(p -> p.toString().endsWith("events.jsonl")).findFirst().orElseThrow();
+      var rows = Files.readAllLines(tape);
+      assertThat(rows).hasSize(801);
+      for (int i = 0; i < rows.size(); i++)
+        assertThat(mapper.readTree(rows.get(i)).path("seq").asInt()).isEqualTo(i + 1);
+    }
+  }
 }

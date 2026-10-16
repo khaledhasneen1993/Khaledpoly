@@ -71,4 +71,34 @@ class WebSocketFreshnessTest {
     ReflectionTestUtils.invokeMethod(client, "handleMessage", book(clock.millis() - 10000, "0.4"));
     assertThat(client.getTopOfBook("123")).isEmpty();
   }
+
+  @Test
+  void slowRecorderDoesNotTurnStaleSourceIntoFreshDataAndExposesStageDelay() {
+    var clock = new MutableClock();
+    var client = client(clock);
+    long at = clock.millis();
+    var gaps = new java.util.ArrayList<com.fasterxml.jackson.databind.JsonNode>();
+    client.onTape(
+        (kind, data) -> {
+          if (kind.equals("GAP")) gaps.add(data);
+        });
+    var recorder =
+        new com.polybot.hft.paper.PaperJournal(new ObjectMapper(), clock, "", "test", "abc") {
+          @Override
+          public synchronized long record(String kind, Long sourceMs, Object data) {
+            if (kind.equals("RAW_MARKET")) {
+              assertThat(((java.util.Map<?, ?>) data).get("callbackReceivedMs")).isEqualTo(at);
+              clock.now = clock.now.plusSeconds(3);
+            }
+            return clock.millis();
+          }
+        };
+    ReflectionTestUtils.setField(client, "journal", recorder);
+    ReflectionTestUtils.invokeMethod(client, "handleMessage", book(at, "0.5"));
+    assertThat(client.getTopOfBook("123")).isEmpty();
+    assertThat(gaps).hasSize(1);
+    assertThat(gaps.getFirst().path("reason").asText()).isEqualTo("stale_source");
+    assertThat(gaps.getFirst().path("callbackSourceAgeMs").asLong()).isZero();
+    assertThat(gaps.getFirst().path("processingAgeMs").asLong()).isEqualTo(3000);
+  }
 }

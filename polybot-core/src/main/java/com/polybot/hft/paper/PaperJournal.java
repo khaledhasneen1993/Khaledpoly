@@ -3,10 +3,12 @@ package com.polybot.hft.paper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PreDestroy;
 import java.io.*;
+import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.file.*;
 import java.time.Clock;
 import java.util.*;
+import java.util.concurrent.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +21,14 @@ public class PaperJournal implements AutoCloseable {
   private final long origin = System.nanoTime();
   private long seq;
   private FileChannel file;
-  private boolean failed;
+  // Research observations may be group-committed. AccountLedger remains independently fsynced.
+  static final long COMMIT_MILLIS = 25;
+  static final int COMMIT_BYTES = 256 * 1024;
+  private BufferedOutputStream output;
+  private ScheduledExecutorService flusher;
+  private long pendingBytes, lastCommitNanos = System.nanoTime(), commits, writtenBytes;
+  private long maxCommitMicros, maxAppendMicros;
+  private boolean failed, closed;
 
   public PaperJournal(
       ObjectMapper mapper,
@@ -46,6 +55,16 @@ public class PaperJournal implements AutoCloseable {
                   Map.of(
                       "schema",
                       1,
+                      "durability",
+                      Map.of(
+                          "policy",
+                          "group-commit-v1",
+                          "intervalMs",
+                          COMMIT_MILLIS,
+                          "batchThresholdBytes",
+                          COMMIT_BYTES,
+                          "requiresCleanRunEnd",
+                          true),
                       "runId",
                       runId,
                       "service",
@@ -62,6 +81,16 @@ public class PaperJournal implements AutoCloseable {
       file =
           FileChannel.open(
               run.resolve("events.jsonl"), StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+      output = new BufferedOutputStream(Channels.newOutputStream(file), COMMIT_BYTES);
+      flusher =
+          Executors.newSingleThreadScheduledExecutor(
+              r -> {
+                Thread t = new Thread(r, "paper-tape-commit");
+                t.setDaemon(true);
+                return t;
+              });
+      flusher.scheduleWithFixedDelay(
+          this::scheduledCommit, COMMIT_MILLIS, COMMIT_MILLIS, TimeUnit.MILLISECONDS);
     } catch (IOException e) {
       throw new IllegalStateException("Cannot open paper tape", e);
     }
@@ -73,6 +102,8 @@ public class PaperJournal implements AutoCloseable {
 
   public synchronized long record(String kind, Long sourceMs, Object data) {
     if (failed) throw new IllegalStateException("Paper tape failed; restart required");
+    if (closed) throw new IllegalStateException("Paper tape is closed");
+    long started = System.nanoTime();
     long at = clock.millis();
     if (file == null) return at;
     try {
@@ -87,9 +118,12 @@ public class PaperJournal implements AutoCloseable {
       row.put("data", data);
       byte[] bytes =
           (mapper.writeValueAsString(row) + "\n").getBytes(java.nio.charset.StandardCharsets.UTF_8);
-      var buffer = java.nio.ByteBuffer.wrap(bytes);
-      while (buffer.hasRemaining()) file.write(buffer);
-      file.force(false);
+      output.write(bytes);
+      writtenBytes += bytes.length;
+      pendingBytes += bytes.length;
+      if (pendingBytes >= COMMIT_BYTES
+          || System.nanoTime() - lastCommitNanos >= COMMIT_MILLIS * 1_000_000L) commit();
+      maxAppendMicros = Math.max(maxAppendMicros, (System.nanoTime() - started) / 1000);
       return at;
     } catch (IOException e) {
       failed = true;
@@ -97,14 +131,68 @@ public class PaperJournal implements AutoCloseable {
     }
   }
 
+  private void commit() throws IOException {
+    if (pendingBytes == 0) return;
+    long started = System.nanoTime();
+    output.flush();
+    file.force(false);
+    pendingBytes = 0;
+    lastCommitNanos = System.nanoTime();
+    commits++;
+    maxCommitMicros = Math.max(maxCommitMicros, (lastCommitNanos - started) / 1000);
+  }
+
+  private synchronized void scheduledCommit() {
+    if (closed || failed) return;
+    try {
+      commit();
+    } catch (IOException e) {
+      // The next producer fails closed; close will never attest a clean end.
+      failed = true;
+    }
+  }
+
+  public synchronized Map<String, Object> stats() {
+    return Map.of(
+        "records",
+        seq,
+        "writtenBytes",
+        writtenBytes,
+        "pendingBytes",
+        pendingBytes,
+        "commits",
+        commits,
+        "maxCommitMicros",
+        maxCommitMicros,
+        "maxAppendMicros",
+        maxAppendMicros,
+        "failed",
+        failed);
+  }
+
   @PreDestroy
   public synchronized void close() {
-    if (file != null)
-      try {
-        if (file.isOpen() && !failed) record("RUN_END", null, Map.of("complete", true));
-        file.close();
-      } catch (IOException e) {
-        throw new IllegalStateException(e);
+    if (closed) return;
+    if (flusher != null) flusher.shutdownNow();
+    try {
+      if (file != null && file.isOpen()) {
+        if (failed) throw new IOException("Paper tape failed; no clean RUN_END");
+        record("RUN_END", null, Map.of("complete", true));
+        commit();
       }
+    } catch (IOException e) {
+      failed = true;
+      throw new IllegalStateException("Cannot finalize paper tape", e);
+    } finally {
+      closed = true;
+      if (file != null) {
+        try {
+          file.close();
+        } catch (IOException e) {
+          failed = true;
+          throw new IllegalStateException("Cannot close paper tape", e);
+        }
+      }
+    }
   }
 }
