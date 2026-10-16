@@ -6,6 +6,7 @@
   "failures": [
     "baseline: replay not bound to this preregistered split",
     "baseline: performance includes observations outside the heldout window",
+    "baseline: replay strategy revision missing",
     "baseline: code provenance missing",
     "baseline: seven complete heldout UTC days missing",
     "baseline: insufficient verified resolved markets",
@@ -13,6 +14,7 @@
     "baseline: markout evidence missing",
     "stress: replay not bound to this preregistered split",
     "stress: performance includes observations outside the heldout window",
+    "stress: replay strategy revision missing",
     "stress: code provenance missing",
     "stress: seven complete heldout UTC days missing",
     "stress: insufficient verified resolved markets",
@@ -24,5 +26,5 @@
   ],
   "baselineSha256": "b8616db08f6c8fff9a9baaf5416f58566ca21a744eee2e76097d7e6a500c02e4",
   "stressSha256": "b1890faec51c1f95095187002163ffcec52688c2317106ed5175065d0721925b",
-  "freezeSha256": "2e6a4366b9fe84b3397ea8196561656a820f9d3aa55689043d57da2e7d883a21"
+  "freezeSha256": "3186c9826699c839f4abfa27c36f76fc67ed21d766000cc33576f558c7f5d605"
 }

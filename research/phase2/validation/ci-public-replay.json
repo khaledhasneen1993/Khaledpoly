@@ -1,0 +1,30 @@
+{
+  "base": {
+    "inputSha256": "720f1ba8d809c89b4c492baa3cf2d188fa4de7ec3bbb86b210aa39f7cad9823e",
+    "cash": 500,
+    "netRealizedPnl": 0,
+    "dataGaps": 28,
+    "resolvedTradedMarkets": 0,
+    "decisionReasons": {
+      "OUTSIDE_MARKET": 674,
+      "NET_EDGE_OR_MIN_SIZE": 517,
+      "STALE_DATA": 117,
+      "PRICE_BOUND_OR_STALE_TICK": 43
+    },
+    "fills": 0
+  },
+  "stress": {
+    "inputSha256": "720f1ba8d809c89b4c492baa3cf2d188fa4de7ec3bbb86b210aa39f7cad9823e",
+    "cash": 500,
+    "netRealizedPnl": 0,
+    "dataGaps": 28,
+    "resolvedTradedMarkets": 0,
+    "decisionReasons": {
+      "STALE_DATA": 117,
+      "NET_EDGE_OR_MIN_SIZE": 517,
+      "OUTSIDE_MARKET": 674,
+      "PRICE_BOUND_OR_STALE_TICK": 43
+    },
+    "fills": 0
+  }
+}

@@ -38,8 +38,13 @@ public final class RawTapeNormalizer {
       return;
     }
     if (type.equals("price_change")) {
-      for (var change : n.path("price_changes")) {
-        String t = change.path("asset_id").asText();
+      var batches = new LinkedHashMap<String, com.fasterxml.jackson.databind.node.ArrayNode>();
+      for (var change : n.path("price_changes"))
+        batches
+            .computeIfAbsent(change.path("asset_id").asText(), k -> mapper.createArrayNode())
+            .add(change);
+      for (var batch : batches.entrySet()) {
+        String t = batch.getKey();
         if (stamp < stamps.getOrDefault(t, -1L)) {
           gap(out, "source_regression");
           return;
@@ -49,10 +54,7 @@ public final class RawTapeNormalizer {
           gap(out, "delta_without_snapshot");
           return;
         }
-        b.change(
-            change.path("side").asText(),
-            PaperMatchingEngine.decimal(change, "price"),
-            PaperMatchingEngine.decimal(change, "size"));
+        b.changes(batch.getValue());
         stamps.put(t, stamp);
         emitBook(t, b, stamp, out);
       }

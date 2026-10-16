@@ -14,8 +14,12 @@ def digest(p):
     return h.hexdigest()
 def implementation_digest():
     repo=ROOT.parents[1]
-    files=sorted((repo/'polybot-core/src/main/java/com/polybot/hft/paper').glob('*.java'))
-    files += [repo/'polybot-core/src/main/java/com/polybot/hft/risk/AccountLedger.java']
+    files=[]
+    for module in ['polybot-core','executor-service','strategy-service']:
+        files.extend((repo/module/'src/main/java').rglob('*.java'))
+        files.append(repo/module/'pom.xml')
+    files.extend([repo/'pom.xml',pathlib.Path(__file__).resolve()])
+    files=sorted(files)
     h=hashlib.sha256()
     for p in files: h.update(str(p.relative_to(repo)).encode());h.update(p.read_bytes())
     return h.hexdigest()
@@ -69,6 +73,7 @@ def evaluate(frozen, baseline, stress):
         require(r.get('replayMode')=='closed-loop',label+': action replay is not a strategy experiment')
         require(r.get('strategyIndependentDataset') is True,label+': independent collector provenance missing')
         require(r.get('recordingClosedCleanly') is True,label+': incomplete recording')
+        require(re.fullmatch(r'[0-9a-f]{40}',str(r.get('strategyRevision',''))) is not None,label+': replay strategy revision missing')
         require(re.fullmatch(r'[0-9a-f]{40}',str(r.get('revision',''))) is not None,label+': code provenance missing')
         require(r.get('firstArrivalMs',10**30)<=int(start.timestamp()*1000) and r.get('lastArrivalMs',-1)>=int(end.timestamp()*1000),label+': seven complete heldout UTC days missing')
         require(r.get('resolvedTradedMarkets',0)>=criteria['minimumResolvedMarkets'],label+': insufficient verified resolved markets')

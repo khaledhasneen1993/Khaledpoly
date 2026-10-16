@@ -89,7 +89,7 @@ Delivery is at least once: transport retries may duplicate a notification after 
 
 ## Freeze, train and test
 
-The original `acceptance.json` is unchanged. Freeze must precede the heldout window. It binds the
+The replay wrapper verifies a clean fresh build and records the strategy revision separately from the collector revision. The original `acceptance.json` is unchanged. Freeze must precede the heldout window. It binds the
 configuration, acceptance criteria, and implementation digest. A historical date cannot be declared
 heldout retroactively. Calibration reads training data only and refuses any row in the heldout window.
 It reports source lag/clock RTT and conservative latency bounds. Public L2 lacks own FIFO labels;
@@ -116,7 +116,7 @@ recordings, changed frozen code/configuration, or insufficient samples mean NO_G
 always remains false. A GO only permits extended PAPER / phase-three research.
 
 GitHub verification also runs a bounded 90-second independent public-data smoke on pushes to the
-phase-two branch and saves `phase2-public-recording` as an artifact. This checks the collector, not
+phase-two branch and runs both baseline/stress closed-loop replays before saving `phase2-public-recording` as an artifact. This checks the collector, not
 the seven-day performance gate. `inspect_recording.py` reports actual errors and counts without
 inventing fills when a public endpoint is blocked or unavailable.
 

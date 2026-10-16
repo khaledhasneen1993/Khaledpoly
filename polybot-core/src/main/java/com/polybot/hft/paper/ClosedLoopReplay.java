@@ -138,6 +138,10 @@ public final class ClosedLoopReplay {
       result.put("strategyIndependentDataset", declared);
       result.put("recordingClosedCleanly", clean);
       result.put("revision", revision);
+      result.put(
+          "strategyRevision",
+          System.getProperty(
+              "paper.replay.revision", System.getenv().getOrDefault("GITHUB_SHA", "unrecorded")));
       result.put("firstArrivalMs", first);
       result.put("lastArrivalMs", last);
       result.put("marketDays", marketDays);

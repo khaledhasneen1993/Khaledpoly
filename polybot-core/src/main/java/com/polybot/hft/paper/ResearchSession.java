@@ -429,6 +429,14 @@ public final class ResearchSession implements AutoCloseable {
           cfg.orderShares()
               .min(depth.multiply(new BigDecimal("0.1")))
               .setScale(2, RoundingMode.DOWN);
+      if (ap.compareTo(m.tick()) < 0
+          || bp.compareTo(m.tick()) < 0
+          || ap.compareTo(ONE.subtract(m.tick())) > 0
+          || bp.compareTo(ONE.subtract(m.tick())) > 0) {
+        cancelAll(m);
+        metrics.decision("PRICE_BOUND_OR_STALE_TICK", null);
+        continue;
+      }
       BigDecimal edge = ONE.subtract(ap).subtract(bp),
           required =
               PairPolicy.requiredEdge(
@@ -746,7 +754,12 @@ public final class ResearchSession implements AutoCloseable {
   }
 
   private BigDecimal bid(Book b, BigDecimal tick) {
-    return b.bids.lastKey().add(tick).min(b.asks.firstKey().subtract(tick));
+    return b.bids
+        .lastKey()
+        .add(tick)
+        .min(b.asks.firstKey().subtract(tick))
+        .divide(tick, 0, RoundingMode.FLOOR)
+        .multiply(tick);
   }
 
   private BigDecimal cost(ResearchMarket m) {

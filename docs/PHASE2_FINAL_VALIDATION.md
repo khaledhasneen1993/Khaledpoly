@@ -5,7 +5,7 @@ market performance or approval to proceed to phase 3.
 
 ## Verified locally
 
-- All seven Maven reactor projects passed `verify`: **71 Java tests, zero failures/errors/skips**.
+- All seven Maven reactor projects passed `verify`: **73 Java tests, zero failures/errors/skips**.
 - Four Python evaluator tests passed. They verify retroactive-freeze rejection, training/holdout
   separation, NO_GO on missing evidence, and the complete-evidence GO branch on an explicitly
   synthetic unit fixture. LIVE remains false even in that fixture.
@@ -48,3 +48,26 @@ or sent; adapters are opt-in and their local durable-outbox behavior is tested. 
 The original acceptance thresholds are unchanged. The frozen candidate window is 2026-10-17 through
 2026-10-24 UTC; capture is not automatically scheduled by a freeze file. Missing that window requires
 a new future freeze. **Current gate: NO_GO; phase3Allowed=false; liveAllowed=false.**
+
+## Real GitHub recording and data-driven regressions
+
+Run `38927626046` successfully collected public venue data for 87.83 seconds: 12,637 raw WS frames,
+24,339 normalized depth updates, 43 public prints, 20 metadata observations, and five clock samples.
+There were 28 gap/invalidation signals (16 stale-source, six depth-invalidations, six reconnects).
+The complete artifact is linked from that Actions run; summarized evidence is committed under
+`research/phase2/validation/ci-public-initial.json`.
+
+Closed-loop replay of that actual recording exposed an extreme-price/stale-tick boundary. It is
+now guarded before reservation, with tick rounding and a regression test. Venue price-change batches
+also now validate their final per-asset state atomically, rather than rejecting transient intermediate
+crossings. Invalid final batches still fail closed and roll back. Inactive/future market instances are
+excluded from WS subscriptions; unresolved conditions remain polled for explicit resolution. Shutdown
+ignores late WS callbacks. These changes preserve the 2-second source-age requirement and original
+risk/acceptance thresholds. They are engineering fixes derived from training/smoke data before the
+heldout window, not optimization on heldout returns.
+
+After the price-boundary fix, baseline and stress both completed the actual recording: cash 500,
+net realized PnL 0, zero bot fills, and 28 recorded gaps. Evidence is in
+`research/phase2/validation/ci-public-replay.json`. Public prints are not bot fills. This does not meet
+the sample or profitability gate. The workflow now automatically runs both full-strategy replays
+on every collected smoke dataset, so recording success alone cannot hide a replay failure.

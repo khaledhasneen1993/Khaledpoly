@@ -149,7 +149,9 @@ public class ResearchFeed {
       }
       var active = new TreeSet<String>();
       for (var m : markets.values())
-        if (!resolved.contains(m.condition()) && clock.millis() < m.endMs() + 60000) {
+        if (!resolved.contains(m.condition())
+            && clock.millis() >= m.startMs()
+            && clock.millis() < m.endMs()) {
           active.add(m.first());
           active.add(m.second());
         }

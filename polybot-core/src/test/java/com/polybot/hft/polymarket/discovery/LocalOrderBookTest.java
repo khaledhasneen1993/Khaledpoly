@@ -21,4 +21,23 @@ class LocalOrderBookTest {
     assertThatThrownBy(() -> b.change("BUY", new BigDecimal("0.52"), BigDecimal.ONE))
         .isInstanceOf(IllegalStateException.class);
   }
+
+  @org.junit.jupiter.api.Test
+  void venueBatchValidatesFinalStateAndRollsBackInvalidBatches() throws Exception {
+    var mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+    var book = new com.polybot.hft.polymarket.ws.LocalOrderBook();
+    book.snapshot(
+        mapper.readTree("[{\"price\":\"0.4\",\"size\":\"10\"}]"),
+        mapper.readTree("[{\"price\":\"0.5\",\"size\":\"10\"}]"));
+    book.changes(
+        mapper.readTree(
+            "[{\"side\":\"BUY\",\"price\":\"0.6\",\"size\":\"10\"},{\"side\":\"SELL\",\"price\":\"0.5\",\"size\":\"0\"},{\"side\":\"SELL\",\"price\":\"0.7\",\"size\":\"10\"}]"));
+    org.assertj.core.api.Assertions.assertThat(book.best().bid()).isEqualByComparingTo("0.6");
+    org.assertj.core.api.Assertions.assertThatThrownBy(
+            () ->
+                book.changes(
+                    mapper.readTree("[{\"side\":\"SELL\",\"price\":\"0.3\",\"size\":\"10\"}]")))
+        .isInstanceOf(IllegalStateException.class);
+    org.assertj.core.api.Assertions.assertThat(book.best().ask()).isEqualByComparingTo("0.7");
+  }
 }

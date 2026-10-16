@@ -333,4 +333,17 @@ class ResearchSessionTest {
     decoder.accept(mapper.writeValueAsString(frame), base, (k, n) -> kinds.add(k));
     assertThat(kinds).containsExactly("GAP");
   }
+
+  @Test
+  void extremeMarketPriceAndDelayedTickCannotSubmitNegativePrice() {
+    try (var l = new AccountLedger(dir.resolve("ledger.json"), mapper, b("500"), limits, clock);
+        var session = open(l)) {
+      input(session, "META", 0, mapper.valueToTree(market()));
+      books(session, 0, "0.001", "0.002", "0.998", "0.999");
+      tick(session, 250);
+      assertThat(l.snapshot().orders()).isEmpty();
+      assertThat(l.snapshot().cash()).isEqualByComparingTo("500");
+      assertThat((Map<?, ?>) session.report().get("decisionReasons")).isNotEmpty();
+    }
+  }
 }

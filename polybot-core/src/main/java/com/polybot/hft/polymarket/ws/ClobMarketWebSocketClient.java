@@ -106,6 +106,7 @@ public class ClobMarketWebSocketClient {
             return t;
           });
 
+  private volatile boolean stopping;
   private volatile WebSocket webSocket;
   @Getter private volatile boolean started = false;
 
@@ -375,6 +376,7 @@ public class ClobMarketWebSocketClient {
 
   @PreDestroy
   void shutdown() {
+    stopping = true;
     flushCacheSafely();
     WebSocket ws = this.webSocket;
     if (ws != null) {
@@ -414,6 +416,7 @@ public class ClobMarketWebSocketClient {
   }
 
   private void handleMessage(String message) {
+    if (stopping) return;
     if ("PONG".equalsIgnoreCase(message) || "PING".equalsIgnoreCase(message)) {
       lastMessageAtMillis.set(System.currentTimeMillis());
       return;
@@ -693,8 +696,14 @@ public class ClobMarketWebSocketClient {
       return;
     }
     Instant now = Instant.now(clock);
-    for (JsonNode change : changes) {
-      String assetId = change.path("asset_id").asText(null);
+    var batches =
+        new java.util.LinkedHashMap<String, com.fasterxml.jackson.databind.node.ArrayNode>();
+    for (JsonNode change : changes)
+      batches
+          .computeIfAbsent(change.path("asset_id").asText(), k -> objectMapper.createArrayNode())
+          .add(change);
+    for (var batch : batches.entrySet()) {
+      String assetId = batch.getKey();
       if (assetId == null) {
         continue;
       }
@@ -705,10 +714,7 @@ public class ClobMarketWebSocketClient {
         continue;
       }
       try {
-        depth.change(
-            change.path("side").asText(),
-            new BigDecimal(change.path("price").asText()),
-            new BigDecimal(change.path("size").asText()));
+        depth.changes(batch.getValue());
       } catch (RuntimeException e) {
         depthByAssetId.remove(assetId);
         topOfBookByAssetId.remove(assetId);
@@ -956,7 +962,7 @@ public class ClobMarketWebSocketClient {
 
     @Override
     public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
-      if (ClobMarketWebSocketClient.this.webSocket != webSocket) {
+      if (stopping || ClobMarketWebSocketClient.this.webSocket != webSocket) {
         webSocket.request(1);
         return null;
       }
@@ -985,7 +991,7 @@ public class ClobMarketWebSocketClient {
         started = false;
         topOfBookByAssetId.clear();
         depthByAssetId.clear();
-        gap("disconnect");
+        if (!stopping) gap("disconnect");
       }
       return WebSocket.Listener.super.onClose(webSocket, statusCode, reason);
     }
@@ -998,7 +1004,7 @@ public class ClobMarketWebSocketClient {
         started = false;
         topOfBookByAssetId.clear();
         depthByAssetId.clear();
-        gap("socket_error");
+        if (!stopping) gap("socket_error");
       }
     }
   }

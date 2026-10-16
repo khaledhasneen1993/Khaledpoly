@@ -1,0 +1,25 @@
+[
+  {
+    "run": "paper-ingestor-445a5f05-446a-4122-9e63-99aa7ee8ca10",
+    "events": {
+      "DATASET_CONFIG": 1,
+      "RESEARCH_TICK": 346,
+      "CLOCK_SYNC": 5,
+      "METADATA_EVIDENCE": 20,
+      "RESEARCH_META": 20,
+      "PUBLIC_SUBSCRIPTION": 7,
+      "RAW_MARKET": 12637,
+      "RESEARCH_GAP": 28,
+      "RESEARCH_BOOK": 24339,
+      "APPLICATION_EVENT": 1292,
+      "RESEARCH_TRADE": 43,
+      "RESEARCH_TICK_SIZE": 8,
+      "RUN_END": 1
+    },
+    "durationMs": 87830,
+    "errors": [],
+    "decision": "NO_GO",
+    "reason": "Short recording cannot meet preregistered seven-day holdout and sample requirements",
+    "sourceRun": "https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/38927626046"
+  }
+]

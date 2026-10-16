@@ -47,6 +47,32 @@ public final class LocalOrderBook {
     validate();
   }
 
+  /**
+   * Apply one venue batch atomically: intermediate levels may cross while the final book does not.
+   */
+  public synchronized void changes(JsonNode rows) {
+    var nextBids = new TreeMap<>(bids);
+    var nextAsks = new TreeMap<>(asks);
+    if (!rows.isArray()) throw new IllegalArgumentException("Invalid depth batch");
+    for (var row : rows) {
+      String side = row.path("side").asText();
+      if (!side.equals("BUY") && !side.equals("SELL"))
+        throw new IllegalArgumentException("Invalid side");
+      put(
+          side.equals("BUY") ? nextBids : nextAsks,
+          new BigDecimal(row.path("price").asText()),
+          new BigDecimal(row.path("size").asText()));
+    }
+    if (!nextBids.isEmpty()
+        && !nextAsks.isEmpty()
+        && nextBids.lastKey().compareTo(nextAsks.firstKey()) >= 0)
+      throw new IllegalStateException("Crossed final batch");
+    bids.clear();
+    bids.putAll(nextBids);
+    asks.clear();
+    asks.putAll(nextAsks);
+  }
+
   private void validate() {
     if (!bids.isEmpty() && !asks.isEmpty() && bids.lastKey().compareTo(asks.firstKey()) >= 0)
       throw new IllegalStateException("Crossed book; require resnapshot");
