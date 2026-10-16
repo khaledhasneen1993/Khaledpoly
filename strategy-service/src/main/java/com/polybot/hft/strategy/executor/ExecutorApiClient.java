@@ -65,6 +65,25 @@ public class ExecutorApiClient {
     return sendJson(request, OrderSubmissionResult.class);
   }
 
+  public com.polybot.hft.polymarket.model.MarketConstraints getMarketConstraints(String token) {
+    var request =
+        baseRequest("/api/polymarket/market-constraints/" + token, Map.of())
+            .GET()
+            .timeout(HTTP_TIMEOUT)
+            .build();
+    return sendJson(request, com.polybot.hft.polymarket.model.MarketConstraints.class);
+  }
+
+  public JsonNode placePaperPair(com.polybot.hft.polymarket.api.PaperPairRequest pair) {
+    var request =
+        baseRequest("/api/polymarket/paper-pairs", Map.of())
+            .POST(HttpRequest.BodyPublishers.ofString(writeJson(pair)))
+            .timeout(Duration.ofSeconds(30))
+            .header("Content-Type", "application/json")
+            .build();
+    return sendJson(request, JsonNode.class);
+  }
+
   public void cancelOrder(String orderId) {
     String path = "/api/polymarket/orders/" + orderId;
     HttpRequest request =

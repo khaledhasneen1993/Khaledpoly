@@ -52,6 +52,24 @@ public final class LocalOrderBook {
       throw new IllegalStateException("Crossed book; require resnapshot");
   }
 
+  public synchronized Map<String, Object> depth() {
+    return Map.of(
+        "bids",
+        bids.entrySet().stream()
+            .map(
+                e ->
+                    Map.of(
+                        "price", e.getKey().toPlainString(), "size", e.getValue().toPlainString()))
+            .toList(),
+        "asks",
+        asks.entrySet().stream()
+            .map(
+                e ->
+                    Map.of(
+                        "price", e.getKey().toPlainString(), "size", e.getValue().toPlainString()))
+            .toList());
+  }
+
   public synchronized Best best() {
     return new Best(
         bids.isEmpty() ? null : bids.lastKey(),

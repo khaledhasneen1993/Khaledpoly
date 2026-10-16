@@ -179,3 +179,7 @@ Trading prediction markets carries financial risk. Always validate with paper mo
 ## License
 
 MIT. See `LICENSE`.
+
+## Phase 2 research
+
+Phase 2 implementation is in progress. See [implementation, run instructions, validation and remaining gates](docs/PHASE2.md). Conservative maker fills replace the old random heuristic. LIVE remains locked; synthetic replay results do not demonstrate profitability.

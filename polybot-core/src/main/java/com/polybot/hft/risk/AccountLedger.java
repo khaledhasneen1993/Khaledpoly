@@ -157,25 +157,45 @@ public final class AccountLedger implements AutoCloseable {
   public synchronized void reserve(
       String id, String token, boolean buy, BigDecimal price, BigDecimal size) {
     healthy();
-    if (state.orders().containsKey(id)) throw new IllegalArgumentException("Duplicate order");
+    commit(reserved(state, id, token, buy, price, size));
+  }
+
+  /** Both legs commit together; validation failure leaves no one-sided reservation. */
+  public synchronized void reservePair(
+      String upId,
+      String up,
+      String downId,
+      String down,
+      BigDecimal upPrice,
+      BigDecimal downPrice,
+      BigDecimal size) {
+    healthy();
+    if (up.equals(down) || upId.equals(downId))
+      throw new IllegalArgumentException("Distinct pair required");
+    State first = reserved(state, upId, up, true, upPrice, size);
+    commit(reserved(first, downId, down, true, downPrice, size));
+  }
+
+  private State reserved(
+      State view, String id, String token, boolean buy, BigDecimal price, BigDecimal size) {
+    if (view.orders().containsKey(id)) throw new IllegalArgumentException("Duplicate order");
     if (price.signum() <= 0 || price.compareTo(BigDecimal.ONE) >= 0 || size.signum() <= 0)
       throw new IllegalArgumentException("Invalid price or size");
     BigDecimal cost = price.multiply(size);
     if (cost.compareTo(limits.maxOrder()) > 0)
       throw new IllegalStateException("Order cap exceeded");
     if (buy) {
-      if (cost.compareTo(available(state)) > 0)
+      if (cost.compareTo(available(view)) > 0)
         throw new IllegalStateException("Insufficient available cash");
       BigDecimal tokenExposure =
-          state
-              .holdings()
+          view.holdings()
               .getOrDefault(token, new Holding(BigDecimal.ZERO, BigDecimal.ZERO))
               .basis();
       BigDecimal gross =
-          state.holdings().values().stream()
+          view.holdings().values().stream()
               .map(Holding::basis)
               .reduce(BigDecimal.ZERO, BigDecimal::add);
-      for (var o : state.orders().values())
+      for (var o : view.orders().values())
         if (o.buy()) {
           BigDecimal value = o.price().multiply(o.remaining());
           gross = gross.add(value);
@@ -186,28 +206,21 @@ public final class AccountLedger implements AutoCloseable {
         throw new IllegalStateException("Inventory exposure cap exceeded");
     } else {
       BigDecimal reserved =
-          state.orders().values().stream()
+          view.orders().values().stream()
               .filter(o -> !o.buy() && o.token().equals(token))
               .map(Reservation::remaining)
               .reduce(BigDecimal.ZERO, BigDecimal::add);
-      if (state
-              .holdings()
+      if (view.holdings()
               .getOrDefault(token, new Holding(BigDecimal.ZERO, BigDecimal.ZERO))
               .shares()
               .subtract(reserved)
               .compareTo(size)
           < 0) throw new IllegalStateException("Insufficient available inventory");
     }
-    var orders = new HashMap<>(state.orders());
+    var orders = new HashMap<>(view.orders());
     orders.put(id, new Reservation(token, buy, price, size, size, BigDecimal.ZERO, "OPEN"));
-    commit(
-        next(
-            state.cash(),
-            state.realized(),
-            state.fees(),
-            state.holdings(),
-            orders,
-            state.executions()));
+    return next(
+        view.cash(), view.realized(), view.fees(), view.holdings(), orders, view.executions());
   }
 
   public synchronized boolean fill(
@@ -283,6 +296,77 @@ public final class AccountLedger implements AutoCloseable {
               orders,
               state.executions()));
     }
+  }
+
+  /**
+   * Virtual complete-set redemption. Caller must verify token membership in the SAME binary
+   * condition.
+   */
+  public synchronized boolean merge(
+      String operation, String up, String down, BigDecimal quantity, BigDecimal cost) {
+    if (up.equals(down) || quantity.signum() <= 0 || cost.signum() < 0)
+      throw new IllegalArgumentException("Invalid merge");
+    return settle(operation, Map.of(up, quantity, down, quantity), quantity, cost);
+  }
+
+  /** Explicit verified resolution payouts; never infer resolution from an expiring quote. */
+  public synchronized boolean redeem(
+      String operation, Map<String, BigDecimal> payouts, BigDecimal cost) {
+    if (payouts.isEmpty() || cost.signum() < 0)
+      throw new IllegalArgumentException("Invalid redemption");
+    var quantities = new HashMap<String, BigDecimal>();
+    BigDecimal proceeds = BigDecimal.ZERO;
+    for (var e : payouts.entrySet()) {
+      if (e.getValue().signum() < 0 || e.getValue().compareTo(BigDecimal.ONE) > 0)
+        throw new IllegalArgumentException("Invalid payout");
+      BigDecimal q =
+          state
+              .holdings()
+              .getOrDefault(e.getKey(), new Holding(BigDecimal.ZERO, BigDecimal.ZERO))
+              .shares();
+      quantities.put(e.getKey(), q);
+      proceeds = proceeds.add(q.multiply(e.getValue()));
+    }
+    return settle(operation, quantities, proceeds, cost);
+  }
+
+  private boolean settle(
+      String operation, Map<String, BigDecimal> quantities, BigDecimal proceeds, BigDecimal cost) {
+    if (state.executions().contains(operation)) return false;
+    if (failed) throw new IllegalStateException("Persistence failed");
+    var holdings = new HashMap<>(state.holdings());
+    BigDecimal removed = BigDecimal.ZERO;
+    for (var e : quantities.entrySet()) {
+      var h = holdings.getOrDefault(e.getKey(), new Holding(BigDecimal.ZERO, BigDecimal.ZERO));
+      BigDecimal reserved =
+          state.orders().values().stream()
+              .filter(o -> !o.buy() && o.token().equals(e.getKey()))
+              .map(Reservation::remaining)
+              .reduce(BigDecimal.ZERO, BigDecimal::add);
+      if (e.getValue().compareTo(h.shares().subtract(reserved)) > 0)
+        throw new IllegalStateException("Settlement uses reserved inventory");
+      BigDecimal basis =
+          h.shares().signum() == 0
+              ? BigDecimal.ZERO
+              : h.basis().multiply(e.getValue()).divide(h.shares(), 18, RoundingMode.HALF_EVEN);
+      removed = removed.add(basis);
+      holdings.put(
+          e.getKey(), new Holding(h.shares().subtract(e.getValue()), h.basis().subtract(basis)));
+    }
+    BigDecimal cash = state.cash().add(proceeds).subtract(cost);
+    var ids = new HashSet<>(state.executions());
+    ids.add(operation);
+    State result =
+        next(
+            cash,
+            state.realized().add(proceeds).subtract(removed).subtract(cost),
+            state.fees().add(cost),
+            holdings,
+            state.orders(),
+            ids);
+    if (available(result).signum() < 0) throw new IllegalStateException("Settlement exceeds cash");
+    commit(result);
+    return true;
   }
 
   public synchronized BigDecimal mark(Map<String, BigDecimal> bids) {

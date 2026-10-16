@@ -1,0 +1,27 @@
+<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Polybot PAPER</title>
+<style>
+:root{font-family:system-ui,sans-serif;background:#101722;color:#eef2f6}body{max-width:1100px;margin:auto;padding:28px}h1{font-size:28px}p{color:#a9bbce}input,button{font:inherit;padding:10px;border:1px solid #3b5066;border-radius:8px;background:#192738;color:#fff}button{cursor:pointer;background:#236458}label{display:block;margin-bottom:8px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:24px 0}.card{background:#192738;border:1px solid #30445a;border-radius:12px;padding:18px}.value{font-size:26px;direction:ltr;text-align:right;margin-top:12px}table{width:100%;border-collapse:collapse}td,th{padding:12px;text-align:right;border-bottom:1px solid #30445a}section{margin-top:26px;overflow:auto}#status{min-height:24px;color:#f5c476}small{color:#a9bbce}code{direction:ltr;display:inline-block}summary{cursor:pointer}
+</style>
+<h1>Polybot · حساب PAPER</h1><p>أموال وعمليات افتراضية. أرقام المحاكاة لا تثبت ربحية التداول الحقيقي. المكافآت المفترضة = صفر.</p>
+<p><small>أعداد التعبئة والـ markout لجلسة التشغيل الحالية؛ أرصدة الحساب والربح المحقق متراكمة عبر الجلسات.</small></p>
+<label for="token">رمز الوصول إلى المنفّذ (إذا كان مفعّلاً)</label><input id="token" type="password" autocomplete="off" placeholder="X-Polybot-Token"><button id="start">بدء المتابعة</button> <button id="stop">إيقاف</button><p id="status" role="status">لم يتم الاتصال بعد.</p><div id="cards" class="cards"></div>
+<section><h2>المخزون والتكلفة</h2><table><thead><tr><th>الأصل</th><th>الكمية</th><th>التكلفة</th></tr></thead><tbody id="holdings"></tbody></table></section>
+<section><h2>الحجوزات المفتوحة</h2><table><thead><tr><th>الأمر</th><th>الجانب</th><th>السعر</th><th>المتبقّي</th><th>الحالة</th></tr></thead><tbody id="orders"></tbody></table></section>
+<section><h2>Markout بعد التنفيذ</h2><p>قيمة حركة السعر × الكمية عند أول دفتر صالح حول الأفق. القيم الغائبة تعني عدم وجود عينة صالحة.</p><table><thead><tr><th>الأفق</th><th>المجموع الافتراضي</th><th>العينات</th></tr></thead><tbody id="markouts"></tbody></table></section>
+<script>
+'use strict';let timer=null,controller=null;const $=id=>document.getElementById(id);
+function cell(row,value){const td=document.createElement('td');td.textContent=value??'—';row.append(td)}
+function row(id,values){const tr=document.createElement('tr');values.forEach(v=>cell(tr,v));$(id).append(tr)}
+function card(title,value){const div=document.createElement('div');div.className='card';const label=document.createElement('div');label.textContent=title;const n=document.createElement('div');n.className='value';n.textContent=value??'—';div.append(label,n);$('cards').append(div)}
+async function refresh(){controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),5000);try{
+ const headers={};if($('token').value)headers['X-Polybot-Token']=$('token').value;
+ const [m,l]=await Promise.all(['/api/polymarket/paper-metrics','/api/polymarket/paper-ledger'].map(async path=>{const r=await fetch(path,{headers,signal:controller.signal,cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);return r.json()}));
+ for(const id of ['cards','holdings','orders','markouts'])$(id).replaceChildren();
+ card('النقد',l.cash);card('النقد المتاح',m.availableCash);card('الربح المحقق بعد التكلفة',m.netRealizedPnl);card('الرسوم والتسوية',m.feesAndSettlementCosts);card('اكتمال الأزواج بالكمية',m.quantityPairCompletion==null?'—':(Number(m.quantityPairCompletion)*100).toFixed(2)+'%');card('فجوات البيانات',m.dataGaps);card('عدد التعبئات',m.fills);card('مخزون غير مغطّى عند الانتهاء',m.residualExpiryWorstCaseNotional);
+ Object.entries(l.holdings).filter(([,h])=>Number(h.shares)>0).forEach(([token,h])=>row('holdings',[token,h.shares,h.basis]));
+ Object.entries(l.orders).filter(([,o])=>Number(o.remaining)>0).forEach(([id,o])=>row('orders',[id,o.buy?'شراء':'بيع',o.price,o.remaining,o.status]));
+ for(const h of [1000,5000,30000])row('markouts',[h/1000+' ثانية',m.markoutPnl?.[h]??'—',m.markoutSamples?.[h]??0]);
+ $('status').textContent=m.halted?'الحساب متوقف بسبب المخاطر أو فشل الاستعادة.':'آخر تحديث: '+new Date().toLocaleTimeString('ar');
+ }catch(e){$('status').textContent='تعذّر التحديث: '+e.message+' · البيانات المعروضة قديمة.'}finally{clearTimeout(timeout);if(timer!==null)timer=setTimeout(refresh,5000)}}
+$('start').onclick=()=>{if(timer!==null)return;timer=0;refresh()};$('stop').onclick=()=>{clearTimeout(timer);timer=null;controller?.abort()};
+</script></html>

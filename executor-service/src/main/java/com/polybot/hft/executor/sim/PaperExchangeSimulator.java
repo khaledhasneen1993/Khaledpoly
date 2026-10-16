@@ -31,7 +31,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ThreadLocalRandom;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -83,8 +82,81 @@ public class PaperExchangeSimulator {
       "${executor.account.state-path:state/paper-account.json}")
   private String statePath;
 
+  private final @NonNull com.polybot.hft.paper.PaperJournal journal;
+
+  @org.springframework.beans.factory.annotation.Value("${paper.matching.activation-ms:250}")
+  private long activationMillis;
+
+  @org.springframework.beans.factory.annotation.Value("${paper.matching.cancel-ms:250}")
+  private long cancelMillis;
+
+  @org.springframework.beans.factory.annotation.Value("${paper.matching.queue-multiplier:2}")
+  private BigDecimal queueMultiplier;
+
+  private com.polybot.hft.paper.PaperMatchingEngine matching;
+  private final com.polybot.hft.paper.PaperMetrics metrics =
+      new com.polybot.hft.paper.PaperMetrics();
+
+  public synchronized Map<String, Object> paperMetrics() {
+    if (!enabled() || ledger == null || matching == null)
+      throw new IllegalStateException("Paper account unavailable");
+    var result = new java.util.LinkedHashMap<String, Object>(metrics.snapshot(clock.millis()));
+    BigDecimal total = BigDecimal.ZERO, paired = BigDecimal.ZERO, residual = BigDecimal.ZERO;
+    for (var pair : pairs.values()) {
+      BigDecimal up = BigDecimal.ZERO, down = BigDecimal.ZERO;
+      for (var o : ledger.snapshot().orders().values())
+        if (o.buy()) {
+          if (o.token().equals(pair.up())) up = up.add(o.filled());
+          if (o.token().equals(pair.down())) down = down.add(o.filled());
+        }
+      total = total.add(up).add(down);
+      paired = paired.add(up.min(down).multiply(BigDecimal.valueOf(2)));
+      if (!clock.instant().isBefore(pair.end())) {
+        var holdings = ledger.snapshot().holdings();
+        BigDecimal uq =
+            holdings
+                .getOrDefault(
+                    pair.up(),
+                    new com.polybot.hft.risk.AccountLedger.Holding(
+                        BigDecimal.ZERO, BigDecimal.ZERO))
+                .shares();
+        BigDecimal dq =
+            holdings
+                .getOrDefault(
+                    pair.down(),
+                    new com.polybot.hft.risk.AccountLedger.Holding(
+                        BigDecimal.ZERO, BigDecimal.ZERO))
+                .shares();
+        residual = residual.add(uq.subtract(dq).abs());
+      }
+    }
+    result.put(
+        "quantityPairCompletion",
+        total.signum() == 0 ? null : paired.divide(total, 8, RoundingMode.DOWN));
+    result.put("residualExpiryWorstCaseNotional", residual);
+    result.put("dataGaps", matching.gaps());
+    result.put("duplicatePrintsSuppressed", matching.duplicates());
+    result.put("availableCash", ledger.availableCash());
+    result.put("netRealizedPnl", ledger.snapshot().realized());
+    result.put("feesAndSettlementCosts", ledger.snapshot().fees());
+    result.put("halted", ledger.snapshot().halted() || recoveryBlocked);
+    return result;
+  }
+
   private com.polybot.hft.risk.AccountLedger ledger;
   private volatile boolean recoveryBlocked;
+
+  private record PairMarket(
+      String condition, String up, String down, Instant end, Instant unhedgedAt) {}
+
+  private final Map<String, PairMarket> pairs = new java.util.TreeMap<>();
+  private com.polybot.hft.state.AtomicJsonState pairFile;
+
+  @org.springframework.beans.factory.annotation.Value("${paper.settlement.merge-cost:0.01}")
+  private BigDecimal mergeCost;
+
+  @org.springframework.beans.factory.annotation.Value("${paper.portfolio.gross-budget:100}")
+  private BigDecimal portfolioBudget;
 
   public com.polybot.hft.risk.AccountLedger.State accountState() {
     return ledger.snapshot();
@@ -107,6 +179,7 @@ public class PaperExchangeSimulator {
           throw new IllegalStateException("Inventory book stale");
         marks.put(e.getKey(), book.bestBid());
       }
+    journal.record("ACCOUNT_MARK", null, marks);
     BigDecimal equity = ledger.mark(marks);
     if (ledger.snapshot().halted()) {
       for (String id : java.util.List.copyOf(ordersById.keySet())) cancelOrder(id);
@@ -118,6 +191,7 @@ public class PaperExchangeSimulator {
   @jakarta.annotation.PreDestroy
   void closeLedger() {
     if (ledger != null) ledger.close();
+    if (pairFile != null) pairFile.close();
   }
 
   private final ConcurrentMap<String, SimOrder> ordersById = new ConcurrentHashMap<>();
@@ -132,6 +206,8 @@ public class PaperExchangeSimulator {
     }
     if (hft.mode() != HftProperties.TradingMode.PAPER)
       throw new IllegalStateException("Simulator requires PAPER mode");
+    if (mergeCost.signum() < 0 || portfolioBudget.signum() <= 0)
+      throw new IllegalArgumentException("Invalid paper cost/budget");
     ledger =
         new com.polybot.hft.risk.AccountLedger(
             java.nio.file.Path.of(statePath),
@@ -140,10 +216,53 @@ public class PaperExchangeSimulator {
             new com.polybot.hft.risk.AccountLedger.Limits(
                 maxOrder, maxTokenExposure, maxGrossExposure, dailyLoss, drawdown),
             clock);
+    pairFile =
+        new com.polybot.hft.state.AtomicJsonState(
+            java.nio.file.Path.of(statePath + ".pairs"), objectMapper);
+    var savedPairs = pairFile.load();
+    if (savedPairs != null)
+      savedPairs
+          .fields()
+          .forEachRemaining(
+              e ->
+                  pairs.put(e.getKey(), objectMapper.convertValue(e.getValue(), PairMarket.class)));
+    matching =
+        new com.polybot.hft.paper.PaperMatchingEngine(
+            activationMillis, cancelMillis, 2000, queueMultiplier);
+    journal.record(
+        "MATCHING_CONFIG",
+        null,
+        Map.of(
+            "activationMs",
+            activationMillis,
+            "cancelMs",
+            cancelMillis,
+            "queueMultiplier",
+            queueMultiplier,
+            "maxBookAgeMs",
+            2000,
+            "fillsEnabled",
+            sim.fillsEnabled(),
+            "account",
+            ledger.snapshot(),
+            "pairs",
+            pairs,
+            "mergeCost",
+            mergeCost,
+            "portfolioBudget",
+            portfolioBudget,
+            "limits",
+            new com.polybot.hft.risk.AccountLedger.Limits(
+                maxOrder, maxTokenExposure, maxGrossExposure, dailyLoss, drawdown)));
     // Recover outstanding paper orders from their durable reservations. No fill is invented during
     // downtime.
     for (var e : ledger.snapshot().orders().entrySet()) {
       var o = e.getValue();
+      // Queue priority cannot be reconstructed across downtime. Cancel; never reset it to zero.
+      if (o.remaining().signum() > 0) {
+        ledger.cancel(e.getKey());
+        o = ledger.snapshot().orders().get(e.getKey());
+      }
       ordersById.put(
           e.getKey(),
           new SimOrder(
@@ -165,15 +284,14 @@ public class PaperExchangeSimulator {
     ledger.snapshot().orders().values().forEach(o -> recoveredTokens.add(o.token()));
     if (!recoveredTokens.isEmpty())
       marketWs.subscribeAssets(java.util.List.copyOf(recoveredTokens));
+    marketWs.onTape(this::onMarketTape);
     log.info(
-        "paper-exchange simulator enabled (fillsEnabled={}, fillPollMillis={}, makerP0={},"
-            + " makerMultPerTick={}, makerPMax={}, makerFillFrac={})",
+        "Paper matching model conservative-l2-v1 (fillsEnabled={}; activation={}ms; cancel={}ms;"
+            + " queue={})",
         sim.fillsEnabled(),
-        sim.fillPollMillis(),
-        sim.makerFillProbabilityPerPoll(),
-        sim.makerFillProbabilityMultiplierPerTick(),
-        sim.makerFillProbabilityMaxPerPoll(),
-        sim.makerFillFractionOfRemaining());
+        activationMillis,
+        cancelMillis,
+        queueMultiplier);
   }
 
   public boolean enabled() {
@@ -184,21 +302,6 @@ public class PaperExchangeSimulator {
     Objects.requireNonNull(request, "request");
     if (!enabled() || recoveryBlocked) throw new IllegalStateException("Paper account unavailable");
     if (hft.risk().killSwitch()) throw new IllegalStateException("Kill switch active");
-    equity();
-    var constraints = marketPolicy.resolve(request.tokenId());
-    constraints.validate(request, clock);
-    TopOfBook book =
-        marketWs
-            .getTopOfBook(request.tokenId())
-            .orElseThrow(() -> new IllegalStateException("No live book"));
-    if (book.updatedAt() == null
-        || java.time.Duration.between(book.updatedAt(), clock.instant()).toMillis() > 2000)
-      throw new IllegalStateException("Stale live book");
-    if (request.side() == OrderSide.BUY && request.price().compareTo(book.bestAsk()) >= 0)
-      throw new IllegalArgumentException("Post-only order would cross");
-    if (request.side() == OrderSide.SELL && request.price().compareTo(book.bestBid()) <= 0)
-      throw new IllegalArgumentException("Post-only order would cross");
-    marketWs.subscribeAssets(List.of(request.tokenId()));
     String orderId =
         request.clientOrderId() == null ? "sim-" + UUID.randomUUID() : request.clientOrderId();
     SimOrder previous = ordersById.get(orderId);
@@ -213,6 +316,9 @@ public class PaperExchangeSimulator {
           null,
           objectMapper.createObjectNode().put("orderID", orderId).put("status", previous.status));
     }
+    equity();
+    validateMaker(request);
+    marketWs.subscribeAssets(List.of(request.tokenId()));
     BigDecimal size = request.size() == null ? BigDecimal.ZERO : request.size();
     BigDecimal matched = BigDecimal.ZERO;
     BigDecimal remaining = size.max(BigDecimal.ZERO);
@@ -228,9 +334,24 @@ public class PaperExchangeSimulator {
             "OPEN",
             matched,
             remaining);
-    ledger.reserve(
-        orderId, request.tokenId(), request.side() == OrderSide.BUY, request.price(), size);
+    if (!ledger.snapshot().orders().containsKey(orderId))
+      ledger.reserve(
+          orderId, request.tokenId(), request.side() == OrderSide.BUY, request.price(), size);
     ordersById.put(orderId, order);
+    matchingInput(
+        "ORDER",
+        objectMapper.valueToTree(
+            Map.of(
+                "id",
+                orderId,
+                "token",
+                request.tokenId(),
+                "side",
+                request.side().name(),
+                "price",
+                request.price().toPlainString(),
+                "size",
+                size.toPlainString())));
     publishOrderStatus(order, null);
 
     ObjectNode resp =
@@ -241,6 +362,109 @@ public class PaperExchangeSimulator {
             .put("orderId", orderId)
             .put("status", "OPEN");
     return new OrderSubmissionResult(hft.mode(), null, resp);
+  }
+
+  public com.polybot.hft.polymarket.model.MarketConstraints marketConstraints(String token) {
+    return marketPolicy.resolve(token);
+  }
+
+  private void validateMaker(LimitOrderRequest request) {
+    var constraints = marketPolicy.resolve(request.tokenId());
+    constraints.validate(request, clock);
+    journal.record(
+        "MARKET_CONSTRAINTS", null, Map.of("token", request.tokenId(), "constraints", constraints));
+    TopOfBook book =
+        marketWs
+            .getTopOfBook(request.tokenId())
+            .orElseThrow(() -> new IllegalStateException("No live book"));
+    if (book.updatedAt() == null
+        || java.time.Duration.between(book.updatedAt(), clock.instant()).toMillis() > 2000)
+      throw new IllegalStateException("Stale live book");
+    if (request.side() == OrderSide.BUY && request.price().compareTo(book.bestAsk()) >= 0)
+      throw new IllegalArgumentException("Post-only order would cross");
+    if (request.side() == OrderSide.SELL && request.price().compareTo(book.bestBid()) <= 0)
+      throw new IllegalArgumentException("Post-only order would cross");
+  }
+
+  public synchronized Object placePair(com.polybot.hft.polymarket.api.PaperPairRequest pair) {
+    var up = Objects.requireNonNull(pair.up());
+    var down = Objects.requireNonNull(pair.down());
+    if (!enabled() || recoveryBlocked || hft.risk().killSwitch())
+      throw new IllegalStateException("Paper account unavailable");
+    if (ordersById.containsKey(up.clientOrderId())
+        || ordersById.containsKey(down.clientOrderId())) {
+      if (!ordersById.containsKey(up.clientOrderId())
+          || !ordersById.containsKey(down.clientOrderId()))
+        throw new IllegalStateException("Incomplete pair recovery required");
+      return List.of(placeLimitOrder(up), placeLimitOrder(down));
+    }
+    var holdings = ledger.snapshot().holdings();
+    BigDecimal heldUp =
+        holdings
+            .getOrDefault(
+                up.tokenId(),
+                new com.polybot.hft.risk.AccountLedger.Holding(BigDecimal.ZERO, BigDecimal.ZERO))
+            .shares();
+    BigDecimal heldDown =
+        holdings
+            .getOrDefault(
+                down.tokenId(),
+                new com.polybot.hft.risk.AccountLedger.Holding(BigDecimal.ZERO, BigDecimal.ZERO))
+            .shares();
+    if (heldUp.compareTo(heldDown) != 0)
+      throw new IllegalStateException("Existing unhedged inventory blocks new pairs");
+    equity();
+    validateMaker(up);
+    validateMaker(down);
+    var uc = marketPolicy.resolve(up.tokenId());
+    var dc = marketPolicy.resolve(down.tokenId());
+    if (!uc.condition().equals(dc.condition())
+        || uc.negativeRisk()
+        || dc.negativeRisk()
+        || up.tokenId().equals(down.tokenId())
+        || up.side() != OrderSide.BUY
+        || down.side() != OrderSide.BUY
+        || up.size().compareTo(down.size()) != 0
+        || up.clientOrderId() == null
+        || down.clientOrderId() == null
+        || up.price().add(down.price()).compareTo(BigDecimal.ONE) >= 0)
+      throw new IllegalArgumentException("Invalid binary complete set");
+    // MarketPolicy verifies membership; reject markets with more than two outcomes before
+    // merge/pairing.
+    if (!marketPolicy.binaryPair(up.tokenId(), down.tokenId()))
+      throw new IllegalArgumentException("Not a verified binary pair");
+    BigDecimal gross =
+        ledger.snapshot().holdings().values().stream()
+            .map(com.polybot.hft.risk.AccountLedger.Holding::basis)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    for (var order : ledger.snapshot().orders().values())
+      if (order.buy()) gross = gross.add(order.price().multiply(order.remaining()));
+    if (gross.add(up.price().add(down.price()).multiply(up.size())).compareTo(portfolioBudget) > 0)
+      throw new IllegalStateException("Correlated portfolio budget exceeded");
+    PairMarket registration =
+        new PairMarket(uc.condition(), up.tokenId(), down.tokenId(), uc.endTime(), null);
+    pairs.put(uc.condition(), registration);
+    pairFile.save(pairs);
+    journal.record("PAIR_MARKET", null, registration);
+    journal.record("PAIR_RESERVATION", null, pair);
+    ledger.reservePair(
+        up.clientOrderId(),
+        up.tokenId(),
+        down.clientOrderId(),
+        down.tokenId(),
+        up.price(),
+        down.price(),
+        up.size());
+    try {
+      return List.of(placeLimitOrder(up), placeLimitOrder(down));
+    } catch (RuntimeException e) {
+      recoveryBlocked = true;
+      ledger.halt();
+      matchingInput("GAP", objectMapper.valueToTree(Map.of("reason", "pair_submission_failed")));
+      ledger.cancel(up.clientOrderId());
+      ledger.cancel(down.clientOrderId());
+      throw e;
+    }
   }
 
   public OrderSubmissionResult placeMarketOrder(MarketOrderRequest request) {
@@ -269,16 +493,16 @@ public class PaperExchangeSimulator {
             .put("orderId", orderId)
             .put("status", order.status);
       }
-      ledger.cancel(orderId);
-      order.status = "CANCELED";
+      matchingInput("CANCEL", objectMapper.valueToTree(Map.of("id", orderId)));
     }
     publishOrderStatus(order, null);
     return objectMapper
         .createObjectNode()
         .put("mode", "SIM")
-        .put("canceled", true)
+        .put("canceled", isTerminal(order.status))
+        .put("pending", !isTerminal(order.status))
         .put("orderId", orderId)
-        .put("status", "CANCELED");
+        .put("status", order.status);
   }
 
   public synchronized JsonNode getOrders(Map<String, String> query) {
@@ -398,105 +622,162 @@ public class PaperExchangeSimulator {
     }
   }
 
-  @Scheduled(initialDelayString = "5000", fixedDelayString = "${executor.sim.fill-poll-millis:250}")
-  void simulateFills() {
-    if (!enabled()) {
-      return;
-    }
-    if (!Boolean.TRUE.equals(sim.fillsEnabled())) {
-      return;
-    }
-
-    for (SimOrder order : ordersById.values()) {
-      if (order == null) {
-        continue;
-      }
-      simulateOne(order);
+  @Scheduled(initialDelay = 100, fixedDelay = 50)
+  synchronized void simulateFills() {
+    if (enabled() && matching != null) {
+      matchingInput("TICK", objectMapper.createObjectNode());
+      checkPairRisk();
     }
   }
 
-  private void simulateOne(SimOrder order) {
-    if (order == null) {
-      return;
-    }
-    if (order.side != OrderSide.BUY) {
-      return;
-    }
-
-    TopOfBook tob = marketWs.getTopOfBook(order.tokenId).orElse(null);
-    if (tob == null || tob.bestBid() == null || tob.bestAsk() == null || tob.updatedAt() == null) {
-      return;
-    }
-    long ageMs = Math.max(0, Instant.now(clock).toEpochMilli() - tob.updatedAt().toEpochMilli());
-    if (ageMs > 2_000) {
-      return;
-    }
-
-    BigDecimal bestBid = tob.bestBid();
-    BigDecimal bestAsk = tob.bestAsk();
-    BigDecimal price = order.requestedPrice;
-    if (price == null) {
-      return;
-    }
-
-    // Crossed book -> fill immediately at best ask (taker-like).
-    if (bestAsk.compareTo(price) <= 0) {
-      fill(order, order.remainingSize, bestAsk, "TAKER");
-      return;
-    }
-
-    // Maker-like fill heuristic: if we're at/above the best bid, we sometimes get hit.
-    if (bestBid.compareTo(price) > 0) {
-      return;
-    }
-
-    double p = sim.makerFillProbabilityPerPoll();
-    if (p <= 0) {
-      return;
-    }
-
-    // Queue/priority proxy: if we improve above the best bid, fill odds increase.
-    int ticksAboveBestBid = 0;
+  private synchronized void onMarketTape(String kind, JsonNode data) {
+    if (!enabled() || matching == null) return;
+    if (kind.equals("TRADE") && !sim.fillsEnabled()) return;
     try {
-      BigDecimal tickSize = BigDecimal.valueOf(0.01);
-      BigDecimal diff = price.subtract(bestBid);
-      if (diff.compareTo(BigDecimal.ZERO) > 0 && tickSize.compareTo(BigDecimal.ZERO) > 0) {
-        ticksAboveBestBid = diff.divide(tickSize, 0, RoundingMode.DOWN).intValue();
-      }
-    } catch (Exception ignored) {
+      matchingInput(kind, data);
+    } catch (RuntimeException e) {
+      recoveryBlocked = true;
+      ledger.halt();
+      for (var order : ordersById.values())
+        if (!isTerminal(order.status)) {
+          ledger.cancel(order.orderId);
+          order.status = "CANCELED";
+          publishOrderStatus(order, e.getMessage());
+        }
+      throw e;
     }
+  }
 
-    double mult = sim.makerFillProbabilityMultiplierPerTick();
-    if (ticksAboveBestBid > 0 && mult > 0 && mult != 1.0) {
-      p = p * Math.pow(mult, ticksAboveBestBid);
+  private void matchingInput(String kind, JsonNode data) {
+    long at =
+        journal.record(
+            "MATCH_" + kind, data.has("sourceMs") ? data.path("sourceMs").asLong() : null, data);
+    var update = matching.accept(kind, at, data);
+    if (kind.equals("BOOK")) metrics.book(data, at);
+    for (var f : update.fills()) {
+      fill(ordersById.get(f.id()), f.size(), f.price(), "MAKER");
+      metrics.fill(f);
+      journal.record("PAPER_FILL", null, f);
     }
-    double maxP = sim.makerFillProbabilityMaxPerPoll();
-    if (maxP > 0) {
-      p = Math.min(p, maxP);
+    update
+        .terminal()
+        .forEach(
+            (id, status) -> {
+              SimOrder order = ordersById.get(id);
+              if (order == null) return;
+              if (!status.equals("FILLED")) ledger.cancel(id);
+              order.status = status;
+              publishOrderStatus(order, null);
+            });
+    if (!update.fills().isEmpty()) {
+      mergeCompleteSets();
+      updatePairRiskTimes();
     }
-    if (p <= 0) {
-      return;
+  }
+
+  private void updatePairRiskTimes() {
+    boolean changed = false;
+    for (var pair : List.copyOf(pairs.values())) {
+      var h = ledger.snapshot().holdings();
+      BigDecimal up =
+          h.getOrDefault(
+                  pair.up(),
+                  new com.polybot.hft.risk.AccountLedger.Holding(BigDecimal.ZERO, BigDecimal.ZERO))
+              .shares();
+      BigDecimal down =
+          h.getOrDefault(
+                  pair.down(),
+                  new com.polybot.hft.risk.AccountLedger.Holding(BigDecimal.ZERO, BigDecimal.ZERO))
+              .shares();
+      Instant since =
+          up.compareTo(down) == 0
+              ? null
+              : pair.unhedgedAt() == null ? clock.instant() : pair.unhedgedAt();
+      if (!Objects.equals(since, pair.unhedgedAt())) {
+        var next = new PairMarket(pair.condition(), pair.up(), pair.down(), pair.end(), since);
+        pairs.put(pair.condition(), next);
+        journal.record("PAIR_RISK_CLOCK", null, next);
+        changed = true;
+      }
     }
-    if (ThreadLocalRandom.current().nextDouble() > p) {
-      return;
-    }
-    BigDecimal remaining;
-    synchronized (order) {
-      remaining = order.remainingSize;
-      if (remaining == null
-          || remaining.compareTo(BigDecimal.ZERO) <= 0
-          || isTerminal(order.status)) {
+    if (changed) pairFile.save(pairs);
+  }
+
+  private void checkPairRisk() {
+    if (recoveryBlocked) return;
+    for (var pair : pairs.values()) {
+      var h = ledger.snapshot().holdings();
+      BigDecimal up =
+          h.getOrDefault(
+                  pair.up(),
+                  new com.polybot.hft.risk.AccountLedger.Holding(BigDecimal.ZERO, BigDecimal.ZERO))
+              .shares();
+      BigDecimal down =
+          h.getOrDefault(
+                  pair.down(),
+                  new com.polybot.hft.risk.AccountLedger.Holding(BigDecimal.ZERO, BigDecimal.ZERO))
+              .shares();
+      BigDecimal imbalance = up.subtract(down).abs();
+      if (imbalance.signum() > 0
+          && (pair.unhedgedAt() == null
+              || java.time.Duration.between(pair.unhedgedAt(), clock.instant()).toMillis() >= 30000
+              || imbalance.compareTo(new BigDecimal("25")) >= 0)) {
+        recoveryBlocked = true;
+        ledger.halt();
+        journal.record(
+            "RISK_HALT",
+            null,
+            Map.of(
+                "reason",
+                "unhedged_age_or_size",
+                "condition",
+                pair.condition(),
+                "shares",
+                imbalance));
+        matchingInput("GAP", objectMapper.valueToTree(Map.of("reason", "unhedged_risk")));
         return;
       }
     }
-    BigDecimal fill =
-        remaining
-            .multiply(BigDecimal.valueOf(sim.makerFillFractionOfRemaining()))
-            .setScale(2, RoundingMode.DOWN);
-    if (fill.compareTo(BigDecimal.valueOf(0.01)) < 0) {
-      fill = remaining.min(BigDecimal.valueOf(0.01));
+  }
+
+  private void mergeCompleteSets() {
+    for (var pair : pairs.values()) {
+      var holdings = ledger.snapshot().holdings();
+      BigDecimal up =
+          holdings
+              .getOrDefault(
+                  pair.up(),
+                  new com.polybot.hft.risk.AccountLedger.Holding(BigDecimal.ZERO, BigDecimal.ZERO))
+              .shares();
+      BigDecimal down =
+          holdings
+              .getOrDefault(
+                  pair.down(),
+                  new com.polybot.hft.risk.AccountLedger.Holding(BigDecimal.ZERO, BigDecimal.ZERO))
+              .shares();
+      BigDecimal quantity = up.min(down);
+      if (quantity.compareTo(mergeCost) <= 0) continue;
+      String operation = "paper-merge:" + UUID.randomUUID();
+      journal.record(
+          "MERGE",
+          null,
+          Map.of(
+              "id",
+              operation,
+              "up",
+              pair.up(),
+              "down",
+              pair.down(),
+              "quantity",
+              quantity,
+              "cost",
+              mergeCost));
+      ledger.merge(operation, pair.up(), pair.down(), quantity, mergeCost);
+      for (String token : List.of(pair.up(), pair.down())) {
+        var h = ledger.snapshot().holdings().get(token);
+        positionsByTokenId.put(token, new Position(h.shares(), h.basis()));
+      }
     }
-    fill(order, fill, price, "MAKER");
   }
 
   private synchronized void fill(
@@ -520,8 +801,8 @@ public class PaperExchangeSimulator {
       if (remaining.compareTo(BigDecimal.ZERO) <= 0) {
         return;
       }
-      applied = fillSize.min(remaining).setScale(2, RoundingMode.DOWN);
-      if (applied.compareTo(BigDecimal.valueOf(0.01)) < 0) {
+      applied = fillSize.min(remaining);
+      if (applied.signum() <= 0) {
         return;
       }
       matched = (order.matchedSize == null ? BigDecimal.ZERO : order.matchedSize).add(applied);
@@ -541,15 +822,8 @@ public class PaperExchangeSimulator {
       order.status = nextStatus;
     }
 
-    // Update positions
-    positionsByTokenId.compute(
-        order.tokenId,
-        (k, prev) -> {
-          Position cur = prev == null ? new Position(BigDecimal.ZERO, BigDecimal.ZERO) : prev;
-          BigDecimal shares = cur.shares.add(applied);
-          BigDecimal cost = cur.costUsd.add(fillPrice.multiply(applied));
-          return new Position(shares, cost);
-        });
+    var holding = ledger.snapshot().holdings().get(order.tokenId);
+    positionsByTokenId.put(order.tokenId, new Position(holding.shares(), holding.basis()));
 
     publishOrderStatus(order, null);
     publishUserTrade(order, applied, fillPrice, kind);
@@ -712,18 +986,7 @@ public class PaperExchangeSimulator {
   }
 
   private static boolean isTerminal(String status) {
-    if (status == null) {
-      return false;
-    }
-    String s = status.trim().toUpperCase(Locale.ROOT);
-    return s.contains("FILLED")
-        || s.contains("CANCELED")
-        || s.contains("CANCELLED")
-        || s.contains("EXPIRED")
-        || s.contains("REJECTED")
-        || s.contains("FAILED")
-        || s.contains("DONE")
-        || s.contains("CLOSED");
+    return com.polybot.hft.polymarket.model.OrderStatus.terminal(status);
   }
 
   private static boolean decimalEq(BigDecimal a, BigDecimal b) {

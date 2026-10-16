@@ -45,4 +45,4 @@ for service in "${services[@]}"; do
   [[ "$ready" == true ]] || { echo "$service readiness timed out"; cleanup_failure; exit 1; }
 done
 trap - ERR
-echo "PAPER services ready. Phase-one fills are disabled; this is not a profitability simulation."
+echo "PAPER services ready. Conservative print-based fills require EXECUTOR_SIM_FILLS_ENABLED=true. Dashboard: http://127.0.0.1:8080/paper.html. Research results require heldout validation."

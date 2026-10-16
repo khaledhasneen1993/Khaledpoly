@@ -62,6 +62,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration><mainClass>com.polybot.hft.ExecutorServiceApplication</mainClass></configuration>
             </plugin>
         </plugins>
     </build>

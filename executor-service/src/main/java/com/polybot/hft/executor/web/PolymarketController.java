@@ -104,6 +104,21 @@ public class PolymarketController {
             properties.mode().name(), signerAddress(), makerAddress(), funderAddress()));
   }
 
+  @GetMapping("/market-constraints/{token}")
+  public Object marketConstraints(@PathVariable String token) {
+    return simulator.marketConstraints(token);
+  }
+
+  @GetMapping("/paper-metrics")
+  public Object paperMetrics() {
+    return simulator.paperMetrics();
+  }
+
+  @PostMapping("/paper-pairs")
+  public Object paperPair(@RequestBody com.polybot.hft.polymarket.api.PaperPairRequest request) {
+    return simulator.placePair(request);
+  }
+
   @GetMapping("/paper-ledger")
   public Object paperLedger() {
     if (!simulator.enabled()) throw new IllegalStateException("Paper account disabled");

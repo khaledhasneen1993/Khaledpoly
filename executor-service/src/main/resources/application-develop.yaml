@@ -16,12 +16,7 @@ logging:
 executor:
   sim:
     enabled: true
-    fills-enabled: false
-    fill-poll-millis: 500
-    maker-fill-probability-per-poll: 0.01
-    maker-fill-probability-multiplier-per-tick: 1.0
-    maker-fill-probability-max-per-poll: 0.015
-    maker-fill-fraction-of-remaining: 0.25
+    fills-enabled: ${EXECUTOR_SIM_FILLS_ENABLED:false}
 
   onchain:
     rpc-url: ${POLYGON_RPC_URL:https://polygon-rpc.com}

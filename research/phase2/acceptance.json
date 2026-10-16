@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "registeredBeforePerformanceEvaluation": true,
+  "scope": "Promotion to extended PAPER only. LIVE remains locked.",
+  "initialCash": "500",
+  "minimumResolvedMarkets": 100,
+  "minimumMakerFills": 100,
+  "minimumHeldoutDays": 7,
+  "minimumQuantityPairCompletion": "0.95",
+  "maximumDrawdownFraction": "0.10",
+  "maximumResidualExpiryNotional": "5",
+  "maximumDataGaps": 0,
+  "maximumRiskBreaches": 0,
+  "netPnlMustBePositive": true,
+  "stressNetPnlMustBePositive": true,
+  "stress": {"activationMs": 1000, "cancelMs": 1000, "queueMultiplier": "4", "feeMultiplier": "2", "extraSettlementCost": "0.05"},
+  "heldoutPolicy": "Chronological, last 7 complete UTC days; freeze config before opening holdout. No retuning on holdout.",
+  "unknowns": "Missing samples, resolutions, costs, markouts, config/revision provenance, or holdout provenance mean NO-GO; never zero-fill missing observations."
+}

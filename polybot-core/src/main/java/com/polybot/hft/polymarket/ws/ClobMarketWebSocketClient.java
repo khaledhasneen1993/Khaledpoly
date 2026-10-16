@@ -51,6 +51,32 @@ public class ClobMarketWebSocketClient {
   private final @NonNull HftEventsProperties eventsProperties;
   private final @NonNull HftEventPublisher events;
 
+  @org.springframework.beans.factory.annotation.Autowired
+  private com.polybot.hft.paper.PaperJournal journal;
+
+  private final java.util.List<java.util.function.BiConsumer<String, JsonNode>> tapeListeners =
+      new CopyOnWriteArrayList<>();
+
+  public void onTape(java.util.function.BiConsumer<String, JsonNode> listener) {
+    tapeListeners.add(listener);
+  }
+
+  private void tape(String kind, Map<String, Object> data) {
+    JsonNode node = objectMapper.valueToTree(data);
+    for (var listener : tapeListeners) listener.accept(kind, node);
+  }
+
+  private void gap(String reason) {
+    tape("GAP", Map.of("reason", reason));
+  }
+
+  private void depthTape(String token) {
+    var data = new HashMap<String, Object>(depthByAssetId.get(token).depth());
+    data.put("token", token);
+    data.put("sourceMs", lastSourceByAsset.get(token));
+    tape("BOOK", data);
+  }
+
   private final Map<String, TopOfBook> topOfBookByAssetId = new ConcurrentHashMap<>();
   private final Map<String, Long> lastSourceByAsset = new ConcurrentHashMap<>();
   private final AtomicBoolean resnapshotRequired = new AtomicBoolean(false);
@@ -273,6 +299,7 @@ public class ClobMarketWebSocketClient {
   }
 
   private void reconnectLocked() {
+    gap("reconnect");
     WebSocket ws = this.webSocket;
     if (ws != null) {
       try {
@@ -361,7 +388,8 @@ public class ClobMarketWebSocketClient {
 
   private String buildSubscribeMessage(List<String> assetIds) {
     try {
-      return objectMapper.writeValueAsString(Map.of("assets_ids", assetIds, "type", "market"));
+      return objectMapper.writeValueAsString(
+          Map.of("assets_ids", assetIds, "type", "market", "custom_feature_enabled", true));
     } catch (Exception e) {
       throw new IllegalStateException("Failed to build market ws subscribe message", e);
     }
@@ -376,7 +404,9 @@ public class ClobMarketWebSocketClient {
     if (snapshot.isEmpty()) {
       return;
     }
-    ws.sendText(buildSubscribeMessage(snapshot), true);
+    String subscription = buildSubscribeMessage(snapshot);
+    if (journal != null) journal.record("PUBLIC_SUBSCRIPTION", null, Map.of("text", subscription));
+    ws.sendText(subscription, true);
     log.info(
         "Subscribed to {} market assets via WS (e.g. {})",
         snapshot.size(),
@@ -391,12 +421,14 @@ public class ClobMarketWebSocketClient {
     messagesReceived.incrementAndGet();
     lastMessageAtMillis.set(System.currentTimeMillis());
     try {
+      if (journal != null) journal.record("RAW_MARKET", null, Map.of("text", message));
       JsonNode node = objectMapper.readTree(message);
       handleMessageNode(node);
     } catch (Exception e) {
       topOfBookByAssetId.clear();
       depthByAssetId.clear();
       resnapshotRequired.set(true);
+      gap("invalid_message");
       log.warn("Invalid market message; books invalidated: {}", e.getMessage());
     }
   }
@@ -423,6 +455,7 @@ public class ClobMarketWebSocketClient {
         depthByAssetId.clear();
       }
       resnapshotRequired.set(true);
+      gap("stale_source");
       return;
     }
     switch (eventType) {
@@ -645,6 +678,7 @@ public class ClobMarketWebSocketClient {
               return new TopOfBook(
                   bestBid, bestAsk, nextBidSize, nextAskSize, nextLast, now, nextTradeAt);
             });
+    depthTape(assetId);
     maybePublishTopOfBook(assetId, tob);
   }
 
@@ -674,6 +708,7 @@ public class ClobMarketWebSocketClient {
         depthByAssetId.remove(assetId);
         topOfBookByAssetId.remove(assetId);
         resnapshotRequired.set(true);
+        gap("invalid_depth");
         continue;
       }
       LocalOrderBook.Best best = depth.best();
@@ -694,6 +729,7 @@ public class ClobMarketWebSocketClient {
                       prev == null ? null : prev.lastTradePrice(),
                       now,
                       prev == null ? null : prev.lastTradeAt()));
+      depthTape(assetId);
       maybePublishTopOfBook(assetId, tob);
     }
   }
@@ -703,6 +739,26 @@ public class ClobMarketWebSocketClient {
     if (assetId == null) {
       return;
     }
+    if (!sourceFresh(node)) return;
+    long source = Long.parseLong(node.path("timestamp").asText());
+    if (source < 100000000000L) source *= 1000;
+    // Full message fingerprint, not just transaction hash (one transaction can contain many
+    // prints).
+    tape(
+        "TRADE",
+        Map.of(
+            "token",
+            assetId,
+            "side",
+            node.path("side").asText(),
+            "price",
+            node.path("price").asText(),
+            "size",
+            node.path("size").asText(),
+            "sourceMs",
+            source,
+            "tradeId",
+            node.toString()));
     BigDecimal price = parseDecimal(node.path("price").asText(null));
     Instant now = Instant.now(clock);
     TopOfBook tob =
@@ -895,6 +951,10 @@ public class ClobMarketWebSocketClient {
 
     @Override
     public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
+      if (ClobMarketWebSocketClient.this.webSocket != webSocket) {
+        webSocket.request(1);
+        return null;
+      }
       buf.append(data);
       if (last) {
         String message = buf.toString();
@@ -918,6 +978,9 @@ public class ClobMarketWebSocketClient {
       if (ClobMarketWebSocketClient.this.webSocket == webSocket) {
         ClobMarketWebSocketClient.this.webSocket = null;
         started = false;
+        topOfBookByAssetId.clear();
+        depthByAssetId.clear();
+        gap("disconnect");
       }
       return WebSocket.Listener.super.onClose(webSocket, statusCode, reason);
     }
@@ -928,6 +991,9 @@ public class ClobMarketWebSocketClient {
       if (ClobMarketWebSocketClient.this.webSocket == webSocket) {
         ClobMarketWebSocketClient.this.webSocket = null;
         started = false;
+        topOfBookByAssetId.clear();
+        depthByAssetId.clear();
+        gap("socket_error");
       }
     }
   }

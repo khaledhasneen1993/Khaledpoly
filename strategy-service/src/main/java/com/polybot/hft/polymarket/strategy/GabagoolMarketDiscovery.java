@@ -32,6 +32,15 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class GabagoolMarketDiscovery {
 
+  @org.springframework.beans.factory.annotation.Value("${paper.universe.five-minute:false}")
+  private boolean fiveMinute;
+
+  @org.springframework.beans.factory.annotation.Value("${paper.universe.fifteen-minute:true}")
+  private boolean fifteenMinute;
+
+  @org.springframework.beans.factory.annotation.Value("${paper.universe.hourly:true}")
+  private boolean hourly;
+
   private static final Duration HTTP_TIMEOUT = Duration.ofSeconds(10);
   private static final ZoneId ET_ZONE = ZoneId.of("America/New_York");
 
@@ -84,9 +93,11 @@ public class GabagoolMarketDiscovery {
                   m -> {
                     // Avoid tracking future market instances that haven't started trading yet.
                     Duration duration =
-                        "updown-15m".equals(m.marketType())
-                            ? Duration.ofMinutes(15)
-                            : Duration.ofHours(1);
+                        "updown-5m".equals(m.marketType())
+                            ? Duration.ofMinutes(5)
+                            : "updown-15m".equals(m.marketType())
+                                ? Duration.ofMinutes(15)
+                                : Duration.ofHours(1);
                     Instant startTime = m.endTime().minus(duration);
                     return !now.isBefore(startTime);
                   })
@@ -124,12 +135,19 @@ public class GabagoolMarketDiscovery {
     Instant now = Instant.now();
 
     List<String> candidates = new ArrayList<>();
-    candidates.addAll(candidateUpDown15mSlugs("btc", now));
-    candidates.addAll(candidateUpDown15mSlugs("eth", now));
+    if (fiveMinute)
+      for (String asset : List.of("btc", "eth"))
+        candidates.addAll(candidateIntervalSlugs(asset, now, 300));
+    if (fifteenMinute) {
+      candidates.addAll(candidateUpDown15mSlugs("btc", now));
+      candidates.addAll(candidateUpDown15mSlugs("eth", now));
+    }
 
     ZonedDateTime nowEt = ZonedDateTime.ofInstant(now, ET_ZONE);
-    candidates.addAll(candidateUpOrDown1hSlugs("bitcoin", nowEt));
-    candidates.addAll(candidateUpOrDown1hSlugs("ethereum", nowEt));
+    if (hourly) {
+      candidates.addAll(candidateUpOrDown1hSlugs("bitcoin", nowEt));
+      candidates.addAll(candidateUpOrDown1hSlugs("ethereum", nowEt));
+    }
 
     List<DiscoveredMarket> markets = new ArrayList<>(candidates.size());
     Set<String> seenSlugs = new HashSet<>();
@@ -147,6 +165,16 @@ public class GabagoolMarketDiscovery {
       log.debug("GABAGOOL DISCOVERY: Candidates: {}", candidates);
     }
     return markets;
+  }
+
+  static List<String> candidateIntervalSlugs(String asset, Instant now, int seconds) {
+    if (seconds != 300 && seconds != 900)
+      throw new IllegalArgumentException("Unsupported interval");
+    long current = Math.floorDiv(now.getEpochSecond(), seconds) * seconds;
+    return List.of(
+        asset + "-updown-" + (seconds / 60) + "m-" + (current - seconds),
+        asset + "-updown-" + (seconds / 60) + "m-" + current,
+        asset + "-updown-" + (seconds / 60) + "m-" + (current + seconds));
   }
 
   private static List<String> candidateUpDown15mSlugs(String assetPrefix, Instant now) {
@@ -210,7 +238,9 @@ public class GabagoolMarketDiscovery {
 
       // Determine market type
       String marketType;
-      if (slug.contains("updown-15m")) {
+      if (slug.contains("updown-5m")) {
+        marketType = "updown-5m";
+      } else if (slug.contains("updown-15m")) {
         marketType = "updown-15m";
       } else if (slug.contains("up-or-down")) {
         marketType = "up-or-down";
@@ -319,7 +349,9 @@ public class GabagoolMarketDiscovery {
 
       // Determine market type
       String marketType;
-      if (eventSlug.contains("updown-15m")) {
+      if (eventSlug.contains("updown-5m")) {
+        marketType = "updown-5m";
+      } else if (eventSlug.contains("updown-15m")) {
         marketType = "updown-15m";
       } else if (eventSlug.contains("up-or-down")) {
         marketType = "up-or-down";
@@ -438,14 +470,15 @@ public class GabagoolMarketDiscovery {
 
   private Instant parseEndTimeFromSlug(String slug, String marketType) {
     try {
-      if (marketType.equals("updown-15m")) {
+      if (marketType.equals("updown-15m") || marketType.equals("updown-5m")) {
         // Slug format: btc-updown-15m-1734364800
         // The last part is the epoch timestamp, add 15 min for end time
         String[] parts = slug.split("-");
         if (parts.length >= 4) {
           String epochStr = parts[parts.length - 1];
           long epoch = Long.parseLong(epochStr);
-          return Instant.ofEpochSecond(epoch + 900); // +15 minutes
+          return Instant.ofEpochSecond(
+              epoch + (marketType.equals("updown-5m") ? 300 : 900)); // +15 minutes
         }
       } else {
         // 1hour markets: bitcoin-up-or-down-december-16-8am-et

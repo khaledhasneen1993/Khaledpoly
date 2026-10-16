@@ -95,7 +95,10 @@ public final class PolymarketClobClient {
   public int getBaseFeeBps(String tokenId) {
     JsonNode node =
         getJsonNode(PolymarketClobPaths.FEE_RATE, Map.of("token_id", tokenId), Map.of());
-    return node.get("base_fee").intValue();
+    JsonNode value = node.hasNonNull("base_fee") ? node.get("base_fee") : node.get("fee_rate_bps");
+    if (value == null || !value.asText().matches("[0-9]+"))
+      throw new IllegalStateException("Unknown fee rate");
+    return new java.math.BigDecimal(value.asText()).intValueExact();
   }
 
   public JsonNode markets(Map<String, String> query) {

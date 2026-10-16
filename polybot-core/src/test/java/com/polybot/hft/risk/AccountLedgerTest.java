@@ -131,4 +131,37 @@ class AccountLedgerTest {
       assertThat(l.availableCash()).isEqualByComparingTo("100");
     }
   }
+
+  @Test
+  void pairReservationIsAtomicAndMergeRecognizesNetProfit() {
+    try (var l = open()) {
+      assertThatThrownBy(() -> l.reservePair("u", "up", "d", "down", b("0.4"), b("0.5"), b("120")))
+          .isInstanceOf(IllegalStateException.class);
+      assertThat(l.snapshot().orders()).isEmpty();
+      l.reservePair("u", "up", "d", "down", b("0.4"), b("0.5"), b("10"));
+      assertThat(l.availableCash()).isEqualByComparingTo("91");
+      l.fill("fu", "u", b("10"), b("0.4"), b("0"));
+      l.fill("fd", "d", b("10"), b("0.5"), b("0"));
+      assertThat(l.merge("m", "up", "down", b("10"), b("0.01"))).isTrue();
+      assertThat(l.merge("m", "up", "down", b("10"), b("0.01"))).isFalse();
+      assertThat(l.snapshot().cash()).isEqualByComparingTo("100.99");
+      assertThat(l.snapshot().realized()).isEqualByComparingTo("0.99");
+      assertThat(l.snapshot().holdings().get("up").shares()).isEqualByComparingTo("0");
+    }
+  }
+
+  @Test
+  void resolutionUsesExplicitPayoutAndNeverSpentReservedInventory() {
+    try (var l = open()) {
+      l.reservePair("u", "up", "d", "down", b("0.4"), b("0.5"), b("10"));
+      l.fill("fu", "u", b("10"), b("0.4"), b("0"));
+      l.fill("fd", "d", b("10"), b("0.5"), b("0"));
+      l.reserve("sell", "up", false, b("0.6"), b("1"));
+      assertThatThrownBy(() -> l.merge("m", "up", "down", b("10"), b("0")))
+          .isInstanceOf(IllegalStateException.class);
+      l.cancel("sell");
+      l.redeem("resolution", Map.of("up", b("1"), "down", b("0")), b("0.1"));
+      assertThat(l.snapshot().realized()).isEqualByComparingTo("0.9");
+    }
+  }
 }

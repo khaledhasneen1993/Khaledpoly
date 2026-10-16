@@ -115,6 +115,79 @@ public class OrderManager {
     return ordersByTokenId.containsKey(tokenId);
   }
 
+  /** Persist BOTH intents before the atomic executor reservation; uncertainty stays recoverable. */
+  public synchronized void placePair(
+      GabagoolMarket market,
+      BigDecimal up,
+      BigDecimal down,
+      BigDecimal quantity,
+      long secondsToEnd) {
+    if (hasOrder(market.upTokenId()) || hasOrder(market.downTokenId())) return;
+    String uid = "sim-" + java.util.UUID.randomUUID(), did = "sim-" + java.util.UUID.randomUUID();
+    ordersByTokenId.put(
+        market.upTokenId(),
+        new OrderState(
+            uid,
+            market,
+            market.upTokenId(),
+            Direction.UP,
+            up,
+            quantity,
+            clock.instant(),
+            BigDecimal.ZERO,
+            null,
+            secondsToEnd));
+    ordersByTokenId.put(
+        market.downTokenId(),
+        new OrderState(
+            did,
+            market,
+            market.downTokenId(),
+            Direction.DOWN,
+            down,
+            quantity,
+            clock.instant(),
+            BigDecimal.ZERO,
+            null,
+            secondsToEnd));
+    persist();
+    var ur =
+        new LimitOrderRequest(
+            market.upTokenId(),
+            OrderSide.BUY,
+            up,
+            quantity,
+            ClobOrderType.GTC,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            uid);
+    var dr =
+        new LimitOrderRequest(
+            market.downTokenId(),
+            OrderSide.BUY,
+            down,
+            quantity,
+            ClobOrderType.GTC,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            did);
+    executorApi.placePaperPair(new com.polybot.hft.polymarket.api.PaperPairRequest(ur, dr));
+    events.publish(
+        "strategy.pair.submitted",
+        market.slug(),
+        Map.of("up", ur, "down", dr, "secondsToEnd", secondsToEnd));
+  }
+
   /** Place a maker order for a token. */
   public synchronized void placeOrder(
       GabagoolMarket market,

@@ -90,6 +90,10 @@ public class PositionTracker {
     }
   }
 
+  public BigDecimal grossBasis() {
+    return positionsCache.get().openNotionalUsd();
+  }
+
   /** Get inventory for a market. */
   public MarketInventory getInventory(String marketSlug) {
     return inventoryByMarket.computeIfAbsent(marketSlug, k -> MarketInventory.empty());
