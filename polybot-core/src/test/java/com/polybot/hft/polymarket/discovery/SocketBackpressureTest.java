@@ -14,6 +14,45 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 class SocketBackpressureTest {
   @Test
+  void diagnosticsSeparateCallbackSilenceFromDecoderActivity() {
+    var helper = new WebSocketFreshnessTest();
+    var clock = new WebSocketFreshnessTest.MutableClock();
+    var client = helper.client(clock);
+    var socket = mock(WebSocket.class);
+    when(socket.sendText("PING", true)).thenReturn(CompletableFuture.completedFuture(socket));
+    ReflectionTestUtils.setField(client, "webSocket", socket);
+    ((java.util.concurrent.atomic.AtomicLong)
+            ReflectionTestUtils.getField(client, "lastIngressNanos"))
+        .set(System.nanoTime() - 5_000_000_000L);
+    ((java.util.concurrent.atomic.AtomicLong)
+            ReflectionTestUtils.getField(client, "lastMessageAtMillis"))
+        .set(System.currentTimeMillis());
+    var samples = new java.util.ArrayList<Map<?, ?>>();
+    var journal =
+        new PaperJournal(new ObjectMapper(), clock, "", "test", "abc") {
+          @Override
+          public synchronized boolean enabled() {
+            return true;
+          }
+
+          @Override
+          public synchronized long record(String kind, Long source, Object data) {
+            if (kind.equals("WS_HEARTBEAT")) samples.add((Map<?, ?>) data);
+            return clock.millis();
+          }
+        };
+    ReflectionTestUtils.setField(client, "journal", journal);
+    try {
+      ReflectionTestUtils.invokeMethod(client, "sendHeartbeat");
+      assertThat(samples).hasSize(1);
+      assertThat((Long) samples.getFirst().get("lastIngressAgeMs")).isGreaterThanOrEqualTo(5000L);
+      assertThat((Long) samples.getFirst().get("lastActivityAgeMs")).isLessThan(5000L);
+    } finally {
+      ReflectionTestUtils.invokeMethod(client, "shutdown");
+    }
+  }
+
+  @Test
   @Timeout(10)
   void queuedFramesKeepCallbackClocksAndStaleDataCannotBecomeFresh() throws Exception {
     var helper = new WebSocketFreshnessTest();

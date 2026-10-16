@@ -77,3 +77,10 @@ finding until independently diagnosed. PAPER only; empirical acceptance remains 
 
 The implementation freeze is renewed before the future Oct 17–24 UTC candidate window. Freezing
 records a candidate; it does not schedule or start a seven-day collector.
+
+A telemetry follow-up separates monotonic callback-silence age from the legacy last-activity clock,
+which also advances during decoding. A regression proves decoder activity cannot make ingress appear
+fresh. Earlier 4fd0c94 diagnostics labeled that combined clock `lastIngressAgeMs`; interpret that
+older field as activity age. New captures retain both explicitly named clocks. Final local suite:
+98 Java tests and eight Python checks. After the 300-second frame investigation, routine push
+recordings return to 180 seconds; neither is an uptime or acceptance qualification.
