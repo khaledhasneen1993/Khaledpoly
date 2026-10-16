@@ -99,6 +99,10 @@ public final class AccountLedger implements AutoCloseable {
     }
   }
 
+  public synchronized boolean persistenceFailed() {
+    return failed;
+  }
+
   public synchronized State snapshot() {
     return state;
   }
@@ -158,6 +162,13 @@ public final class AccountLedger implements AutoCloseable {
       String id, String token, boolean buy, BigDecimal price, BigDecimal size) {
     healthy();
     commit(reserved(state, id, token, buy, price, size));
+  }
+
+  /** Inventory-only risk exit remains possible after a loss halt; never opens a short. */
+  public synchronized void reserveRiskSale(
+      String id, String token, BigDecimal price, BigDecimal size) {
+    if (failed) throw new IllegalStateException("Persistence failed");
+    commit(reserved(state, id, token, false, price, size));
   }
 
   /** Both legs commit together; validation failure leaves no one-sided reservation. */

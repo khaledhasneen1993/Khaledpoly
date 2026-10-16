@@ -182,4 +182,4 @@ MIT. See `LICENSE`.
 
 ## Phase 2 research
 
-Phase 2 implementation is in progress. See [implementation, run instructions, validation and remaining gates](docs/PHASE2.md). Conservative maker fills replace the old random heuristic. LIVE remains locked; synthetic replay results do not demonstrate profitability.
+Phase 2 now includes shared closed-loop PAPER/replay, inventory exits, terminal-resolution ingestion and a frozen heldout evaluator. See [operation and evidence gates](docs/PHASE2_COMPLETION.md). Empirical acceptance is still NO_GO; phase 3 remains blocked. Conservative maker fills replace the old random heuristic. LIVE remains locked; synthetic replay results do not demonstrate profitability.

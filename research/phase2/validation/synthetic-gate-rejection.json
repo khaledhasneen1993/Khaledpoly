@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "decision": "NO_GO",
+  "phase3Allowed": false,
+  "liveAllowed": false,
+  "failures": [
+    "baseline: replay not bound to this preregistered split",
+    "baseline: performance includes observations outside the heldout window",
+    "baseline: code provenance missing",
+    "baseline: seven complete heldout UTC days missing",
+    "baseline: insufficient verified resolved markets",
+    "baseline: insufficient maker fills",
+    "baseline: markout evidence missing",
+    "stress: replay not bound to this preregistered split",
+    "stress: performance includes observations outside the heldout window",
+    "stress: code provenance missing",
+    "stress: seven complete heldout UTC days missing",
+    "stress: insufficient verified resolved markets",
+    "stress: insufficient maker fills",
+    "stress: quantity completion below threshold or unknown",
+    "stress: outstanding execution intentions remain",
+    "stress: markout evidence missing",
+    "stress: net realized PnL is not positive"
+  ],
+  "baselineSha256": "b8616db08f6c8fff9a9baaf5416f58566ca21a744eee2e76097d7e6a500c02e4",
+  "stressSha256": "b1890faec51c1f95095187002163ffcec52688c2317106ed5175065d0721925b",
+  "freezeSha256": "2e6a4366b9fe84b3397ea8196561656a820f9d3aa55689043d57da2e7d883a21"
+}

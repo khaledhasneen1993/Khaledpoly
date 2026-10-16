@@ -9,4 +9,9 @@ command -v mvn >/dev/null || { echo 'Maven is required to bind this recording to
 mvn --batch-mode --no-transfer-progress verify
 export EXECUTOR_SIM_FILLS_ENABLED=true
 export HFT_MODE=PAPER
+export POLYBOT_RESEARCH=true
+export PAPER_CLOSED_LOOP_CONFIG="$PWD/research/phase2/research-config.json"
+export PAPER_CLOSED_LOOP_ENABLED=true
+export PAPER_MARKET_DATA_ENABLED=true
+export HFT_STRATEGY_GABAGOOL_ENABLED=false
 exec ./start-all-services.sh

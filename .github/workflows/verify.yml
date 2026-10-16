@@ -14,6 +14,22 @@ jobs:
           java-version: '21'
           cache: maven
       - run: mvn --batch-mode --no-transfer-progress verify
+      - run: python3 -m unittest discover -s research/phase2/tests -v
+      - name: Record public data smoke (PAPER, no account)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/phase2-paper-validation'
+        timeout-minutes: 3
+        run: |
+          status=0
+          timeout --signal=TERM --kill-after=20 90 java -jar executor-service/target/executor-service-0.0.1-SNAPSHOT.jar --server.port=18080 --spring.application.name=paper-ingestor --hft.mode=PAPER --hft.events.enabled=false --executor.sim.enabled=false --hft.strategy.gabagool.enabled=false --hft.polymarket.market-ws-enabled=true --paper.market-data.enabled=true --paper.record.directory=research/output/public-smoke --paper.record.revision=${{ github.sha }} > research-public-smoke.log 2>&1 || status=$?
+          test "$status" = 0 -o "$status" = 124
+          python3 research/phase2/inspect_recording.py research/output/public-smoke
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push' && github.ref == 'refs/heads/phase2-paper-validation' && always()
+        with:
+          name: phase2-public-recording
+          path: |
+            research/output/public-smoke/
+            research-public-smoke.log
       - uses: actions/upload-artifact@v4
         if: always()
         with:

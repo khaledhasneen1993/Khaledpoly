@@ -470,7 +470,12 @@ public class ClobMarketWebSocketClient {
       case "tick_size_change" -> {
         String asset = node.path("asset_id").asText();
         BigDecimal tick = parseDecimal(node.path("new_tick_size").asText());
-        if (tick != null && tick.signum() > 0) ticksByAssetId.put(asset, tick);
+        if (tick != null && tick.signum() > 0) {
+          ticksByAssetId.put(asset, tick);
+          long stamp = node.path("timestamp").asLong(-1);
+          if (stamp > 0 && stamp < 100000000000L) stamp *= 1000;
+          tape("TICK_SIZE", Map.of("token", asset, "tick", tick, "sourceMs", stamp));
+        }
       }
       case "last_trade_price" -> {
         lastTradeMessages.incrementAndGet();

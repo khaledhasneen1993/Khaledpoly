@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "initialCash": "500",
+  "orderShares": "5",
+  "minimumEdge": "0.01",
+  "portfolioBudget": "100",
+  "activationMs": 250,
+  "cancelMs": 250,
+  "maxBookAgeMs": 2000,
+  "queueMultiplier": "2",
+  "mergeCost": "0.01",
+  "redemptionCost": "0.01",
+  "unhedgedMs": 30000,
+  "maxUnhedged": "25",
+  "maxExitLoss": "2.5",
+  "feeMultiplier": "1",
+  "decisionMillis": 250,
+  "metadataMaxAgeMs": 60000
+}

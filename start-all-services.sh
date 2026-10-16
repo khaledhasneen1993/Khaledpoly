@@ -7,6 +7,7 @@ command -v curl >/dev/null || { echo "curl is required"; exit 1; }
 mkdir -p logs state
 light="${POLYBOT_LIGHT:-true}"
 services=(executor-service strategy-service)
+[[ "${POLYBOT_RESEARCH:-false}" == true ]] && services=(executor-service)
 if [[ "$light" != true ]]; then
   command -v docker >/dev/null || { echo "Docker Compose is required for full mode"; exit 1; }
   docker compose -f compose.yaml config --quiet

@@ -1,0 +1,24 @@
+[
+  {
+    "run": "paper-ingestor-82969f0d-49d1-4011-84c2-2f20cb4bed8f",
+    "events": {
+      "DATASET_CONFIG": 1,
+      "RESEARCH_TICK": 112,
+      "RESEARCH_FEED_ERROR": 2,
+      "RUN_END": 1
+    },
+    "durationMs": 29722,
+    "errors": [
+      {
+        "message": "ConnectException: null",
+        "retryAfter": 1792165687787
+      },
+      {
+        "message": "ConnectException: null",
+        "retryAfter": 1792165704806
+      }
+    ],
+    "decision": "NO_GO",
+    "reason": "Short recording cannot meet preregistered seven-day holdout and sample requirements"
+  }
+]

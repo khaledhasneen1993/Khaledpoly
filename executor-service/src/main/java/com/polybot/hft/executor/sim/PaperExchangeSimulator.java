@@ -93,11 +93,40 @@ public class PaperExchangeSimulator {
   @org.springframework.beans.factory.annotation.Value("${paper.matching.queue-multiplier:2}")
   private BigDecimal queueMultiplier;
 
+  @org.springframework.beans.factory.annotation.Value("${paper.closed-loop.enabled:false}")
+  private boolean closedLoop;
+
+  @org.springframework.beans.factory.annotation.Value("${paper.closed-loop.config:}")
+  private String researchConfigPath;
+
+  @org.springframework.beans.factory.annotation.Autowired
+  private com.polybot.hft.paper.ResearchFeed researchFeed;
+
+  private com.polybot.hft.paper.ResearchSession researchSession;
+  private com.polybot.hft.paper.PaperAlertOutbox alertOutbox;
+
+  public boolean coordinatedResearch() {
+    return closedLoop;
+  }
+
+  public java.util.List<com.polybot.hft.paper.PaperAlertOutbox.Alert> pendingAlerts(long at) {
+    return alertOutbox == null ? List.of() : alertOutbox.pending(at);
+  }
+
+  public void acknowledgeAlert(String key, boolean success, long at) {
+    if (alertOutbox != null) alertOutbox.acknowledge(key, success, at);
+  }
+
+  public Object alerts() {
+    return alertOutbox == null ? List.of() : alertOutbox.snapshot();
+  }
+
   private com.polybot.hft.paper.PaperMatchingEngine matching;
   private final com.polybot.hft.paper.PaperMetrics metrics =
       new com.polybot.hft.paper.PaperMetrics();
 
   public synchronized Map<String, Object> paperMetrics() {
+    if (researchSession != null) return researchSession.report();
     if (!enabled() || ledger == null || matching == null)
       throw new IllegalStateException("Paper account unavailable");
     var result = new java.util.LinkedHashMap<String, Object>(metrics.snapshot(clock.millis()));
@@ -145,6 +174,7 @@ public class PaperExchangeSimulator {
 
   private com.polybot.hft.risk.AccountLedger ledger;
   private volatile boolean recoveryBlocked;
+  private volatile boolean researchStopping;
 
   private record PairMarket(
       String condition, String up, String down, Instant end, Instant unhedgedAt) {}
@@ -190,6 +220,9 @@ public class PaperExchangeSimulator {
 
   @jakarta.annotation.PreDestroy
   void closeLedger() {
+    researchStopping = true;
+    if (researchSession != null) researchSession.close();
+    if (alertOutbox != null) alertOutbox.close();
     if (ledger != null) ledger.close();
     if (pairFile != null) pairFile.close();
   }
@@ -216,6 +249,69 @@ public class PaperExchangeSimulator {
             new com.polybot.hft.risk.AccountLedger.Limits(
                 maxOrder, maxTokenExposure, maxGrossExposure, dailyLoss, drawdown),
             clock);
+    if (closedLoop) {
+      com.polybot.hft.paper.ResearchConfig cfg;
+      try {
+        cfg =
+            researchConfigPath.isBlank()
+                ? com.polybot.hft.paper.ResearchConfig.defaults()
+                : objectMapper.readValue(
+                    java.nio.file.Files.readString(java.nio.file.Path.of(researchConfigPath)),
+                    com.polybot.hft.paper.ResearchConfig.class);
+      } catch (Exception e) {
+        throw new IllegalArgumentException("Cannot load frozen research config", e);
+      }
+      if (cfg.initialCash().compareTo(initialCash) != 0)
+        throw new IllegalArgumentException("Research/account initial capital mismatch");
+      alertOutbox =
+          new com.polybot.hft.paper.PaperAlertOutbox(
+              java.nio.file.Path.of(statePath + ".alerts"), objectMapper);
+      journal.record(
+          "CLOSED_LOOP_CONFIG",
+          null,
+          Map.of(
+              "configuration",
+              cfg,
+              "limits",
+              new com.polybot.hft.risk.AccountLedger.Limits(
+                  maxOrder, maxTokenExposure, maxGrossExposure, dailyLoss, drawdown),
+              "account",
+              ledger.snapshot()));
+      researchSession =
+          new com.polybot.hft.paper.ResearchSession(
+              ledger,
+              cfg,
+              objectMapper,
+              java.nio.file.Path.of(statePath + ".research"),
+              (kind, data) -> {
+                journal.record("SESSION_" + kind, null, data);
+                if (kind.equals("ALERT")) {
+                  var n = objectMapper.valueToTree(data);
+                  alertOutbox.add(
+                      n.path("key").asText(), n.path("message").asText(), clock.millis());
+                }
+              });
+      researchFeed.recover(researchSession.markets());
+      researchFeed.listen(
+          input -> {
+            synchronized (this) {
+              if (recoveryBlocked || researchStopping) return;
+              try {
+                String kind = input.kind().equals("FEED_ERROR") ? "GAP" : input.kind();
+                researchSession.accept(kind, input.at(), input.data());
+              } catch (RuntimeException e) {
+                recoveryBlocked = true;
+                researchSession.suspend();
+                alertOutbox.add(
+                    "session-failure",
+                    e.getClass().getSimpleName() + ": " + e.getMessage(),
+                    clock.millis());
+                throw e;
+              }
+            }
+          });
+      return;
+    }
     pairFile =
         new com.polybot.hft.state.AtomicJsonState(
             java.nio.file.Path.of(statePath + ".pairs"), objectMapper);
@@ -299,6 +395,7 @@ public class PaperExchangeSimulator {
   }
 
   public synchronized OrderSubmissionResult placeLimitOrder(LimitOrderRequest request) {
+    if (closedLoop) throw new IllegalStateException("Closed-loop research owns this PAPER account");
     Objects.requireNonNull(request, "request");
     if (!enabled() || recoveryBlocked) throw new IllegalStateException("Paper account unavailable");
     if (hft.risk().killSwitch()) throw new IllegalStateException("Kill switch active");
@@ -387,6 +484,7 @@ public class PaperExchangeSimulator {
   }
 
   public synchronized Object placePair(com.polybot.hft.polymarket.api.PaperPairRequest pair) {
+    if (closedLoop) throw new IllegalStateException("Closed-loop research owns this PAPER account");
     var up = Objects.requireNonNull(pair.up());
     var down = Objects.requireNonNull(pair.down());
     if (!enabled() || recoveryBlocked || hft.risk().killSwitch())
@@ -473,6 +571,11 @@ public class PaperExchangeSimulator {
   }
 
   public synchronized JsonNode cancelOrder(String orderId) {
+    if (researchSession != null) {
+      researchSession.cancel(orderId);
+      return objectMapper.createObjectNode().put("pending", true).put("canceled", false);
+    }
+
     if (orderId == null || orderId.isBlank()) {
       return objectMapper.createObjectNode().put("canceled", false);
     }
@@ -507,6 +610,26 @@ public class PaperExchangeSimulator {
 
   public synchronized JsonNode getOrders(Map<String, String> query) {
     ArrayNode rows = objectMapper.createArrayNode();
+    if (researchSession != null) {
+      ledger
+          .snapshot()
+          .orders()
+          .forEach(
+              (id, o) -> {
+                if (o.remaining().signum() > 0)
+                  rows.add(
+                      objectMapper
+                          .createObjectNode()
+                          .put("id", id)
+                          .put("asset_id", o.token())
+                          .put("status", o.status())
+                          .put("price", o.price())
+                          .put("original_size", o.original())
+                          .put("size_matched", o.filled()));
+              });
+      return objectMapper.createObjectNode().set("data", rows);
+    }
+
     for (SimOrder order : ordersById.values()) {
       if (isTerminal(order.status)) continue;
       String token = query.get("asset_id");
@@ -525,6 +648,19 @@ public class PaperExchangeSimulator {
   }
 
   public JsonNode getOrder(String orderId) {
+    if (researchSession != null) {
+      var o = ledger.snapshot().orders().get(orderId);
+      return o == null
+          ? objectMapper.createObjectNode().put("status", "UNKNOWN")
+          : objectMapper
+              .createObjectNode()
+              .put("orderId", orderId)
+              .put("tokenId", o.token())
+              .put("status", o.status())
+              .put("matched_size", o.filled())
+              .put("remaining_size", o.remaining());
+    }
+
     if (orderId == null || orderId.isBlank()) {
       return objectMapper.createObjectNode().put("error", "orderId blank");
     }
@@ -558,6 +694,15 @@ public class PaperExchangeSimulator {
   }
 
   public PolymarketPosition[] getPositions(int limit, int offset) {
+    if (researchSession != null) {
+      positionsByTokenId.clear();
+      ledger
+          .snapshot()
+          .holdings()
+          .forEach(
+              (token, h) -> positionsByTokenId.put(token, new Position(h.shares(), h.basis())));
+    }
+
     if (limit <= 0) {
       limit = 200;
     }
@@ -613,6 +758,7 @@ public class PaperExchangeSimulator {
 
   @Scheduled(initialDelay = 5000, fixedDelay = 2000)
   void monitorAccount() {
+    if (closedLoop) return;
     if (!enabled() || ledger == null) return;
     try {
       equity();
@@ -632,6 +778,10 @@ public class PaperExchangeSimulator {
 
   private synchronized void onMarketTape(String kind, JsonNode data) {
     if (!enabled() || matching == null) return;
+    if (kind.equals("TICK_SIZE")) {
+      matchingInput("GAP", objectMapper.valueToTree(Map.of("reason", "tick_size_change")));
+      return;
+    }
     if (kind.equals("TRADE") && !sim.fillsEnabled()) return;
     try {
       matchingInput(kind, data);

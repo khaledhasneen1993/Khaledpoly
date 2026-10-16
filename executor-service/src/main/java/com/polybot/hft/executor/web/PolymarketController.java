@@ -109,6 +109,11 @@ public class PolymarketController {
     return simulator.marketConstraints(token);
   }
 
+  @GetMapping("/paper-alerts")
+  public Object paperAlerts() {
+    return simulator.alerts();
+  }
+
   @GetMapping("/paper-metrics")
   public Object paperMetrics() {
     return simulator.paperMetrics();

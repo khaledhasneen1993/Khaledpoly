@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "implementationSha256": "60d8581360c329acb4a758852fd07ab03f2580a7553ee9c8d6c0b3e4bfa28e85",
+  "createdAt": "2026-10-16T15:51:58.105985+00:00",
+  "holdoutStart": "2026-10-17T00:00:00+00:00",
+  "holdoutEnd": "2026-10-24T00:00:00+00:00",
+  "configFileSha256": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+  "configuration": {
+    "schema": 1,
+    "initialCash": "500",
+    "orderShares": "5",
+    "minimumEdge": "0.01",
+    "portfolioBudget": "100",
+    "activationMs": 250,
+    "cancelMs": 250,
+    "maxBookAgeMs": 2000,
+    "queueMultiplier": "2",
+    "mergeCost": "0.01",
+    "redemptionCost": "0.01",
+    "unhedgedMs": 30000,
+    "maxUnhedged": "25",
+    "maxExitLoss": "2.5",
+    "feeMultiplier": "1",
+    "decisionMillis": 250,
+    "metadataMaxAgeMs": 60000
+  },
+  "acceptanceSha256": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+  "acceptance": {
+    "schema": 1,
+    "registeredBeforePerformanceEvaluation": true,
+    "scope": "Promotion to extended PAPER only. LIVE remains locked.",
+    "initialCash": "500",
+    "minimumResolvedMarkets": 100,
+    "minimumMakerFills": 100,
+    "minimumHeldoutDays": 7,
+    "minimumQuantityPairCompletion": "0.95",
+    "maximumDrawdownFraction": "0.10",
+    "maximumResidualExpiryNotional": "5",
+    "maximumDataGaps": 0,
+    "maximumRiskBreaches": 0,
+    "netPnlMustBePositive": true,
+    "stressNetPnlMustBePositive": true,
+    "stress": {
+      "activationMs": 1000,
+      "cancelMs": 1000,
+      "queueMultiplier": "4",
+      "feeMultiplier": "2",
+      "extraSettlementCost": "0.05"
+    },
+    "heldoutPolicy": "Chronological, last 7 complete UTC days; freeze config before opening holdout. No retuning on holdout.",
+    "unknowns": "Missing samples, resolutions, costs, markouts, config/revision provenance, or holdout provenance mean NO-GO; never zero-fill missing observations."
+  }
+}

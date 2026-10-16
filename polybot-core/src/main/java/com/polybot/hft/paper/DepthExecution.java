@@ -8,7 +8,10 @@ import java.util.*;
  * depth.
  */
 public final class DepthExecution {
-  public record Result(BigDecimal size, BigDecimal notional, BigDecimal fee, BigDecimal average) {}
+  public record Leg(BigDecimal size, BigDecimal price, BigDecimal fee) {}
+
+  public record Result(
+      BigDecimal size, BigDecimal notional, BigDecimal fee, BigDecimal average, List<Leg> legs) {}
 
   public static Result sweep(
       NavigableMap<BigDecimal, BigDecimal> levels,
@@ -17,17 +20,25 @@ public final class DepthExecution {
       BigDecimal limit,
       FeeModel fees) {
     if (quantity.signum() <= 0) throw new IllegalArgumentException("Invalid quantity");
+    var legs = new ArrayList<Leg>();
     BigDecimal left = quantity, value = BigDecimal.ZERO, fee = BigDecimal.ZERO;
     for (var e : (buy ? levels : levels.descendingMap()).entrySet()) {
       if (buy ? e.getKey().compareTo(limit) > 0 : e.getKey().compareTo(limit) < 0) break;
       if (e.getValue().signum() < 0) throw new IllegalArgumentException("Negative depth");
       BigDecimal take = left.min(e.getValue());
       value = value.add(take.multiply(e.getKey()));
-      fee = fee.add(fees.fee(take, e.getKey(), false));
+      BigDecimal cost = fees.fee(take, e.getKey(), false);
+      fee = fee.add(cost);
+      if (take.signum() > 0) legs.add(new Leg(take, e.getKey(), cost));
       left = left.subtract(take);
       if (left.signum() == 0) break;
     }
     if (left.signum() > 0) throw new IllegalStateException("Insufficient depth for FOK");
-    return new Result(quantity, value, fee, value.divide(quantity, 12, RoundingMode.HALF_EVEN));
+    return new Result(
+        quantity,
+        value,
+        fee,
+        value.divide(quantity, 18, RoundingMode.HALF_EVEN),
+        List.copyOf(legs));
   }
 }

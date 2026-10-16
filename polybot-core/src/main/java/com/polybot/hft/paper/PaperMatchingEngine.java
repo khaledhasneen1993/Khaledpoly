@@ -191,6 +191,13 @@ public final class PaperMatchingEngine {
           }
         }
       }
+      case "CLOSE" -> {
+        String token = required(n, "token");
+        books.remove(token);
+        orders.values().stream()
+            .filter(o -> o.token.equals(token))
+            .forEach(o -> terminal.put(o.id, "CANCELED"));
+      }
       case "GAP" -> invalidate(terminal);
       case "TICK" -> {}
       default -> throw new IllegalArgumentException("Unknown matching event: " + kind);
