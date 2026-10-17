@@ -102,3 +102,24 @@ rather than being counted as accepted. Conflicting requests, snapshots,
 and journal rows fail closed. These are **not** durable venue order
 receipts and do not make actual reservations; separate integration
 with the Java PAPER execution ledger is still required.
+
+
+### Operator invocation (PAPER SCREEN only)
+
+Read-only receipts use the same authenticated executor token as the
+existing research client. The token is passed via a local environment
+variable, **never** CLI arguments, files, output logs or PR commits.
+The externally generated envelope must be bound to the identical
+recent validated snapshot.
+
+    python3 -m research.phase6.paper_screen_bridge \
+      --origin http://127.0.0.1:8080 \
+      --snapshot ./recent-paper-snapshot.json \
+      --envelope ./external-strategy-envelope.json \
+      --outbox ./output/phase6-screen-001
+
+First run may POST ONLY to Java \`/screen\`; restarting with that
+exact archived snapshot and outbox performs **GET-only** reconciliation,
+including when the original snapshot is now stale. Starting a fresh
+outbox from a stale snapshot remains forbidden. The token and
+execution permissions are never expanded to an exchange/wallet.

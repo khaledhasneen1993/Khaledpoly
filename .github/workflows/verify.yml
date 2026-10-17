@@ -19,6 +19,7 @@ jobs:
       - run: python3 -m unittest discover -s research/phase4/tests -v
       - run: python3 -m unittest discover -s research/phase5/tests -v
       - run: python3 -m unittest discover -s research/phase6/tests -v
+      - run: python3 -m research.phase6.paper_screen_bridge --help
       - run: python3 -m research.phase5.offline_benchmark --help
       - run: python3 -m research.phase5.cex_signals --help
       - run: python3 -m research.phase5.fill_research --help

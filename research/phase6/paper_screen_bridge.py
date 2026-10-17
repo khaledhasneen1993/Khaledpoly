@@ -170,3 +170,32 @@ class DurablePaperScreen:
                     'executionEnabled':False,'decision':'NO_GO'}
         finally:
             os.close(lock_fd)
+
+
+
+def main():
+    import argparse
+    parser=argparse.ArgumentParser(
+        description='Screen external PAPER proposals in Java durable inbox (NO ORDERS)')
+    parser.add_argument('--origin',required=True,help='Java PAPER endpoint; HTTPS or local HTTP')
+    parser.add_argument('--snapshot',required=True,help='Exact recent PAPER snapshot JSON')
+    parser.add_argument('--envelope',required=True,help='Strict versioned external strategy JSON')
+    parser.add_argument('--outbox',required=True,help='Immutable local screen request journal')
+    parser.add_argument('--token-env',default='POLYBOT_EXECUTOR_TOKEN',
+                        help='Environment variable with API token; never logged or written')
+    args=parser.parse_args()
+    import re
+    if not re.fullmatch('[A-Z][A-Z0-9_]{0,63}',args.token_env):
+        parser.error('Invalid environment token name')
+    token=os.environ.get(args.token_env)
+    if not token:
+        parser.error('Missing executor token environment variable')
+    observation=decode(Path(args.snapshot).read_text(encoding='utf-8'))
+    envelope=decode(Path(args.envelope).read_text(encoding='utf-8'))
+    client=PaperScreenClient(args.origin,token)
+    outcome=DurablePaperScreen(client).run(args.outbox,observation,envelope)
+    print(dumps(outcome))
+
+
+if __name__=='__main__':
+    main()
