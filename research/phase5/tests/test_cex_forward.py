@@ -16,7 +16,7 @@ def spot(at,ids,price,venue='binance-spot'):
             {'execId':str(n),'price':str(price+n),'size':'1','time':str(at+n*10),
              'symbol':'BTCUSDT','side':'Sell'} for n in ids]}}
     return {'status':'SAMPLED_PUBLIC_TRADES','venue':venue,'symbol':'BTCUSDT',
-            'polledMs':at+100,'receivedMs':at+100,
+            'polledMs':at+300,'receivedMs':at+300,
             'payload':payload,'payloadSha256':fingerprint(payload)}
 
 class CexForwardTest(unittest.TestCase):
@@ -37,7 +37,7 @@ class CexForwardTest(unittest.TestCase):
     def test_disconnect_censors_not_a_loss(self):
         one=spot(T,list(range(1,6)),100)
         failed={'venue':'binance-spot','symbol':'BTCUSDT','status':'HTTP_BACKOFF',
-                'polledMs':T+1100}
+                'polledMs':T+1500}
         result=forward_test([one,failed],horizon_ms=1000,max_label_delay_ms=2000)
         row=result['perVenueStrategy']['binance-spot/BTCUSDT/momentum']
         self.assertEqual(row['labeledNonoverlapping'],0)
