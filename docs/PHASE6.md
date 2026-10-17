@@ -167,3 +167,31 @@ the same stale cash/holdings snapshot is forbidden: collect a fresh
 \`ResearchSnapshot\`, re-evaluate the centralized budget, and use a new
 generation/outbox. This deliberately trades throughput for correct,
 atomic account reservation and prevents cross-strategy overspend.
+
+
+## Java ledger concurrency, reconciliation and measured latency baseline
+
+JUnit regression tests now exercise the original durable Java
+\`AccountLedger\`, not a substituted Python cash ledger:
+
+- 32 simultaneous two-leg reservation attempts share a gross-risk cap;
+  only complete atomic batches may succeed. The surviving reservations
+  and cash remain identical after process restart.
+- 24 duplicate fill notifications share one execution ID; fees, share
+  basis and cash are applied **once**, including after restart.
+- 20 independent fully recorded buy/sell roundtrips reopen the durable
+  ledger between buys and sells, verifying cash, fees, realized basis
+  and 40 execution IDs against separate explicit arithmetic. Their
+  artificial positive PnL is a **fixture value, not a real result**.
+- A separate 12-roundtrip baseline measures reserve/fill/reopen P50
+  and P95 monotonic-clock microsecond latency of the real persisted
+  state writer. The output starts with
+  \`PHASE6_PAPER_LEDGER_BASELINE\` in CI test logs. The runner and
+  filesystem change between jobs, so this **is not** a production
+  latency guarantee or a hard SLO. No gRPC/Rust/C++ redesign is justified
+  until end-to-end network/strategy/execution timing is measured.
+
+The Python tests also check a **single atomic two-leg virtual intent**
+and the exclusive process lock on its durable outbox. Independent
+virtual intents sharing one stale snapshot are rejected before any
+remote PAPER request. These tests do not create actual venue fills.
