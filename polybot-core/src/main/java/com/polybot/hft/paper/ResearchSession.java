@@ -346,7 +346,9 @@ public final class ResearchSession implements AutoCloseable {
                   token,
                   mid.subtract(old).abs(),
                   (a, v) ->
-                      a.multiply(new BigDecimal("0.9")).add(v.multiply(new BigDecimal("0.1"))));
+                      a.multiply(new BigDecimal("0.9"))
+                          .add(v.multiply(new BigDecimal("0.1")))
+                          .setScale(18, RoundingMode.HALF_EVEN));
           }
         }
       }

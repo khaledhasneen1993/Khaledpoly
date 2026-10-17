@@ -11,7 +11,8 @@ public final class ClosedLoopMain {
   public static void main(String[] args) throws Exception {
     if (args.length < 3)
       throw new IllegalArgumentException(
-          "Usage: closed-loop DATA.jsonl NEW-OUT CONFIG.json [--stress] [--raw]");
+          "Usage: closed-loop DATA.jsonl NEW-OUT CONFIG.json [--stress] [--raw] [--external-paper]"
+              + " [--freeze FILE]");
     String freezePath = null;
     for (int i = 3; i < args.length; i++)
       if (args[i].equals("--freeze")) {

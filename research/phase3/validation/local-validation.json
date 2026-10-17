@@ -2,7 +2,7 @@
   "scope": "PHASE3_SHARED_VIRTUAL_EXECUTION_AND_RESEARCH_TOOLKIT",
   "phase2Reference": "bf9458a6b236522c95ef52f5e43bc184ada275c1",
   "java": {
-    "tests": 114,
+    "tests": 116,
     "failures": 0,
     "errors": 0,
     "skipped": 0
@@ -12,7 +12,7 @@
     "failures": 0
   },
   "phase3Python": {
-    "tests": 44,
+    "tests": 45,
     "failures": 0
   },
   "javaToPythonHttpContract": "PASS",
@@ -47,5 +47,8 @@
   },
   "externalPaperExecution": "PASS_ATOMIC_RESERVATIONS_IDEMPOTENT_RECOVERY_PRINT_MATCHING_RAW_NORMALIZED_REPLAY",
   "multiOutcomePaperSettlement": "PASS_ATOMIC_COMPLETE_UNIVERSE_TERMINAL_ACCOUNTING",
-  "labelPipeline": "PASS_CAUSAL_FEATURES_CENSORED_HORIZONS_MEASURED_MARKOUTS_GROUP_PURGING"
+  "labelPipeline": "PASS_CAUSAL_FEATURES_CENSORED_HORIZONS_MEASURED_MARKOUTS_GROUP_PURGING",
+  "recoveredAccountReplay": "PASS_PRESERVES_CASH_AND_HOLDINGS_REJECTS_CHANGED_CONFIG",
+  "simultaneousPartialFillMarkouts": "PASS_DISTINCT_FILL_IDENTITIES_QUANTITY_WEIGHTING_MISSING_SAMPLE_CENSORING",
+  "boundedVolatilityTelemetry": "PASS_1250_BOOK_UPDATES_MAX_SCALE_18_JSON_READABLE"
 }

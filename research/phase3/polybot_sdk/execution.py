@@ -58,6 +58,7 @@ class PaperExecutionClient(PaperClient):
             raise ValueError('Oversized terminal receipt')
         result = decode(raw)
         if (result.get('virtualOnly') is not True or result.get('liveAllowed') is not False
+                or result.get('executionEnabled') is not False
                 or result.get('id') != 'settle:' + event_id
                 or result.get('status') not in ('PAPER_GROUP_REDEEMED', 'PAPER_GROUP_ALREADY_REDEEMED', 'PAPER_GROUP_DEFERRED')):
             raise ValueError('Invalid virtual settlement receipt')

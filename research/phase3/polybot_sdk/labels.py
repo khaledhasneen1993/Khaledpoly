@@ -11,6 +11,7 @@ def build_labels(tape, directory):
     tape, directory = Path(tape), Path(directory)
     directory.mkdir(parents=True, mode=0o700, exist_ok=False)
     orders, fills, cancellations, markouts, groups = {}, defaultdict(list), {}, {}, {}
+    markout_identities = set()
     previous, sequence, run, ended, last, gaps, unavailable = -1, 0, None, False, -1, [], 0
     checksum = hashlib.sha256()
     with tape.open('rb') as stream:
@@ -54,9 +55,11 @@ def build_labels(tape, directory):
                         or integer(data['sourceMs']) < integer(data['fillAt']) + integer(data['horizonMs'])):
                     raise ValueError('Noncausal markout')
                 key = data['id'], integer(data['fillAt']), integer(data['horizonMs'])
-                if key in markouts:
-                    raise ValueError('Duplicate markout sample')
-                markouts[key] = data
+                identity = key + (integer(data.get('fillSequence', 0)),)
+                if identity in markout_identities or number(data['quantity']) <= 0:
+                    raise ValueError('Duplicate/invalid markout sample')
+                markout_identities.add(identity)
+                markouts.setdefault(key, []).append(data)
             elif kind == 'SESSION_PROPOSAL_GROUP':
                 identity = data['groupId']
                 if identity in groups:
@@ -103,9 +106,17 @@ def build_labels(tape, directory):
             row['groupId'] = group
         if row['cancelMs'] is not None and row['cancelMs'] > end:
             row['cancelMs'] = None
-        sample = markouts.get((identity, first, 5000))
-        if sample is not None and integer(sample['observedMs']) <= end:
-            row.update(markout=sample['perShare'], markoutObservedMs=sample['observedMs'])
+        samples = markouts.get((identity, first, 5000), [])
+        if samples and all(integer(sample['observedMs']) <= end for sample in samples):
+            # One frame can partially fill the same order several times at the same timestamp.
+            # Keep each actual fill sample distinct and weight the first-fill instant by quantity.
+            quantity = sum((number(sample['quantity']) for sample in samples), number(0))
+            filled_quantity = sum((quantity for at, quantity in fills[identity] if at == first), number(0))
+            if quantity > filled_quantity:
+                raise ValueError('Markout quantity exceeds its actual fill instant')
+            if quantity == filled_quantity:
+                markout = sum((number(sample['perShare']) * number(sample['quantity']) for sample in samples), number(0)) / quantity
+                row.update(markout=markout, markoutObservedMs=max(integer(sample['observedMs']) for sample in samples))
         # Validate even censored rows so invalid evidence cannot hide among rejected examples.
         example(row)
         rows.append(row)

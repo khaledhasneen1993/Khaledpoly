@@ -237,6 +237,128 @@ class ExternalPaperSessionTest {
   }
 
   @Test
+  void externalReplayRestoresRecoveredHoldingsInsteadOfResettingCash() throws Exception {
+    clock.at = base;
+    try (var ledger =
+            new AccountLedger(dir.resolve("ledger.json"), mapper, b("500"), limits, clock);
+        var session =
+            new ResearchSession(
+                ledger,
+                ResearchConfig.defaults(),
+                mapper,
+                dir.resolve("session.json"),
+                (k, v) -> {},
+                true,
+                "old")) {
+      seed(session);
+      ledger.reserve("owned", "a", true, b(".4"), b("5"));
+      ledger.fill("seed-fill", "owned", b("5"), b(".4"), BigDecimal.ZERO);
+    }
+    clock.at = base + 1000;
+    try (var journal =
+            new PaperJournal(mapper, clock, dir.resolve("tapes").toString(), "restart", "test");
+        var ledger =
+            new AccountLedger(dir.resolve("ledger.json"), mapper, b("500"), limits, clock);
+        var session =
+            new ResearchSession(
+                ledger,
+                ResearchConfig.defaults(),
+                mapper,
+                dir.resolve("session.json"),
+                (k, v) -> journal.record("SESSION_" + k, null, v),
+                true,
+                "recovered")) {
+      journal.record(
+          "DATASET_CONFIG",
+          null,
+          Map.of("format", "normalized-public-v2", "strategyIndependent", false));
+      journal.record("RESEARCH_TICK", null, Map.of());
+      session.accept("TICK", clock.millis(), node(Map.of()));
+      assertThat(session.report().get("halted")).isEqualTo(true);
+    }
+    Path tape;
+    try (var paths = Files.walk(dir.resolve("tapes"))) {
+      tape =
+          paths
+              .filter(p -> p.getFileName().toString().equals("events.jsonl"))
+              .findFirst()
+              .orElseThrow();
+    }
+    var replay =
+        ClosedLoopReplay.runExternal(
+            tape, dir.resolve("audit"), ResearchConfig.defaults(), limits, mapper, false);
+    assertThat((BigDecimal) replay.get("cash")).isEqualByComparingTo("498");
+    assertThat(((JsonNode) replay.get("startingCash")).decimalValue()).isEqualByComparingTo("498");
+    JsonNode holdings = mapper.valueToTree(replay.get("holdings"));
+    assertThat(holdings.path("a").path("shares").decimalValue()).isEqualByComparingTo("5");
+    assertThat(replay.get("halted")).isEqualTo(true);
+    assertThatThrownBy(
+            () ->
+                ClosedLoopReplay.runExternal(
+                    tape,
+                    dir.resolve("changed-config"),
+                    ResearchConfig.defaults().stress(),
+                    limits,
+                    mapper,
+                    false))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("recovered account");
+  }
+
+  @Test
+  void sustainedBookUpdatesKeepVolatilityTelemetryBoundedAndReplayReadable() throws Exception {
+    clock.at = base;
+    var features = new ArrayList<JsonNode>();
+    try (var ledger =
+            new AccountLedger(dir.resolve("ledger.json"), mapper, b("500"), limits, clock);
+        var session =
+            new ResearchSession(
+                ledger,
+                ResearchConfig.defaults(),
+                mapper,
+                dir.resolve("session.json"),
+                (k, v) -> {
+                  if (k.equals("ORDER_FEATURES")) features.add(node(v));
+                },
+                true,
+                "s")) {
+      seed(session);
+      var request = proposal(session, "sustained-books");
+      for (int i = 251; i <= 1500; i++)
+        session.accept(
+            "BOOK",
+            base + i,
+            node(
+                Map.of(
+                    "token",
+                    "a",
+                    "sourceMs",
+                    base + i,
+                    "bids",
+                    List.of(Map.of("price", i % 2 == 0 ? ".4" : ".41", "size", "100")),
+                    "asks",
+                    List.of(Map.of("price", ".6", "size", "100")))));
+      var observation = session.researchSnapshot(base + 1500);
+      request.put("sequence", observation.path("sequence").asLong());
+      for (var leg : request.path("legs")) ((ObjectNode) leg).put("expiresMs", base + 2000);
+      session.accept("EXTERNAL_PROPOSAL", base + 1501, request);
+      assertThat(session.externalReply("sustained-books").path("status").asText())
+          .isEqualTo("PAPER_SUBMITTED");
+      assertThat(features).isNotEmpty();
+      for (var feature : features) {
+        String json = mapper.writeValueAsString(feature);
+        assertThat(mapper.readTree(json).path("orderId").asText())
+            .isEqualTo(feature.path("orderId").asText());
+        assertThat(mapper.readTree(json).path("features").path("volatility").decimalValue())
+            .isEqualByComparingTo(feature.path("features").path("volatility").decimalValue());
+        assertThat(feature.path("features").path("volatility").decimalValue().scale())
+            .isLessThanOrEqualTo(18);
+        assertThat(json.length()).isLessThan(2000);
+      }
+    }
+  }
+
+  @Test
   void restartCancelsUnknownQueueAndCannotExecuteSameIdAgain() {
     clock.at = base;
     ObjectNode request;

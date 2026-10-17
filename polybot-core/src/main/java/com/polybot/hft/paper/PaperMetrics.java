@@ -18,7 +18,7 @@ public final class PaperMetrics {
     this.observation = observation;
   }
 
-  private record Pending(PaperMatchingEngine.Fill fill, int horizon) {}
+  private record Pending(PaperMatchingEngine.Fill fill, int horizon, int fillSequence) {}
 
   private final List<Pending> pending = new ArrayList<>();
   private final Map<Integer, BigDecimal> totals = new TreeMap<>();
@@ -30,7 +30,7 @@ public final class PaperMetrics {
     fills++;
     if (f.buy()) bought = bought.add(f.size());
     else sold = sold.add(f.size());
-    for (int h : new int[] {1000, 5000, 30000}) pending.add(new Pending(f, h));
+    for (int h : new int[] {1000, 5000, 30000}) pending.add(new Pending(f, h, fills));
   }
 
   public synchronized void book(JsonNode n, long at) {
@@ -62,6 +62,8 @@ public final class PaperMetrics {
             Map.of(
                 "id",
                 p.fill.id(),
+                "fillSequence",
+                p.fillSequence(),
                 "token",
                 p.fill.token(),
                 "fillAt",

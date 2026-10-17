@@ -87,6 +87,46 @@ class ExecutionAndLabelsTest(unittest.TestCase):
             self.assertTrue(all(D(row['markout']) == D('.09') for row in rows))
             self.assertIsNone(train(rows, BASE + 100000)['model'])
 
+    def test_simultaneous_partial_fills_weight_markouts_without_colliding(self):
+        tape = ROOT / 'executor-service/target/phase3-execution-events.jsonl'
+        source = [decode(line) for line in tape.read_text().splitlines()]
+        identity = next(row['data']['id'] for row in source if row['kind'] == 'SESSION_FILL')
+        rows = []
+        for row in source:
+            if row['kind'] == 'SESSION_FILL' and row['data']['id'] == identity:
+                row['data']['size'] = '2'
+                rows.append(row)
+                extra = decode(dumps(row))
+                extra['data']['size'] = '3'
+                rows.append(extra)
+            elif row['kind'] == 'SESSION_MARKOUT' and row['data']['id'] == identity:
+                row['data']['quantity'] = '2'
+                rows.append(row)
+                extra = decode(dumps(row))
+                extra['data'].update(fillSequence=999, quantity='3', perShare='.19')
+                rows.append(extra)
+            else:
+                rows.append(row)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'tape.jsonl'
+            for seq, row in enumerate(rows, 1):
+                row['seq'] = seq
+            path.write_text(''.join(dumps(row) + '\n' for row in rows))
+            output = Path(directory) / 'labels'
+            build_labels(path, output)
+            labels = [decode(line) for line in (output / 'labels.jsonl').read_text().splitlines()]
+            label = next(row for row in labels if row['orderId'] == identity)
+            self.assertEqual(D(label['markout']), D('.15'))
+            partial = [row for row in rows if not (row['kind'] == 'SESSION_MARKOUT'
+                       and row['data'].get('fillSequence') == 999)]
+            for seq, row in enumerate(partial, 1):
+                row['seq'] = seq
+            path.write_text(''.join(dumps(row) + '\n' for row in partial))
+            censored = Path(directory) / 'missing-markout'
+            build_labels(path, censored)
+            labels = [decode(line) for line in (censored / 'labels.jsonl').read_text().splitlines()]
+            self.assertNotIn('markout', next(row for row in labels if row['orderId'] == identity))
+
     def test_label_builder_refuses_incomplete_recording(self):
         with tempfile.TemporaryDirectory() as directory:
             tape = Path(directory) / 'tape.jsonl'
