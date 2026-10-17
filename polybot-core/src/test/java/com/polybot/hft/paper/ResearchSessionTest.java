@@ -320,7 +320,7 @@ class ResearchSessionTest {
             + "\",\"price_changes\":[{\"asset_id\":\"a\",\"side\":\"BUY\",\"price\":\"0.4\",\"size\":\"10\"}]}",
         base,
         (k, n) -> kinds.add(k));
-    assertThat(kinds).containsExactly("GAP");
+    assertThat(kinds).isEmpty();
     kinds.clear();
     var frame =
         mapper

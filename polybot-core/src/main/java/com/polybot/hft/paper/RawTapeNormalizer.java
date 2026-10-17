@@ -21,21 +21,38 @@ public final class RawTapeNormalizer {
 
   public void accept(String text, long arrival, BiConsumer<String, JsonNode> output)
       throws java.io.IOException {
-    if (text.equals("PING") || text.equals("PONG")) return;
-    JsonNode root = mapper.readTree(text);
-    if (root.isArray()) {
-      for (var n : root) one(n, arrival, output);
-    } else one(root, arrival, output);
+    if (text.equalsIgnoreCase("PING") || text.equalsIgnoreCase("PONG")) return;
+    var pending = new ArrayList<Map.Entry<String, JsonNode>>();
+    BiConsumer<String, JsonNode> collect = (kind, data) -> pending.add(Map.entry(kind, data));
+    try {
+      JsonNode root = mapper.readTree(text);
+      if (root != null && root.isArray()) {
+        for (var n : root) one(n, arrival, collect);
+      } else one(root, arrival, collect);
+    } catch (Exception invalid) {
+      // Streaming rejects the whole frame on a malformed full snapshot or message.
+      // Never expose the earlier half of that frame to a strategy.
+      gap(output, "invalid_message");
+      return;
+    }
+    pending.forEach(event -> output.accept(event.getKey(), event.getValue()));
   }
 
   private void one(JsonNode n, long arrival, BiConsumer<String, JsonNode> out) {
+    if (n == null || n.isNull()) return;
     String type = n.path("event_type").asText();
     if (!Set.of("book", "price_change", "last_trade_price", "tick_size_change").contains(type))
       return;
     long stamp = n.path("timestamp").asLong(-1);
     if (stamp > 0 && stamp < 100000000000L) stamp *= 1000;
-    if (stamp < 0 || stamp > arrival || arrival - stamp > 2000) {
-      gap(out, "stale_source");
+    boolean fresh = stamp >= 0 && arrival - stamp >= 0 && arrival - stamp <= 2000;
+    // The streaming adapter drops stale historical trade notifications without invalidating depth.
+    if (type.equals("last_trade_price") && !fresh) return;
+    if ((type.equals("book") || type.equals("price_change")) && !fresh) {
+      String token = n.path("asset_id").asText(null);
+      if (token != null) books.remove(token);
+      else books.clear();
+      out.accept("GAP", mapper.valueToTree(Map.of("reason", "stale_source", "sourceMs", stamp)));
       return;
     }
     if (type.equals("price_change")) {
@@ -50,14 +67,12 @@ public final class RawTapeNormalizer {
         if (stamp < stamps.getOrDefault(t, -1L)) continue;
         stamps.put(t, stamp);
         var b = books.get(t);
-        if (b == null) {
-          invalidateToken(t, out, "delta_without_snapshot");
-          continue;
-        }
+        // Match streaming: a delta cannot reconstruct missing depth; wait for a full snapshot.
+        if (b == null) continue;
         try {
           b.changes(batch.getValue());
         } catch (RuntimeException e) {
-          invalidateToken(t, out, "invalid_depth");
+          invalidateToken(t, stamp, out, "invalid_depth");
           continue;
         }
         emitBook(t, b, stamp, out);
@@ -67,14 +82,9 @@ public final class RawTapeNormalizer {
       if (stamp < stamps.getOrDefault(t, -1L)) return;
       stamps.put(t, stamp);
       var b = new LocalOrderBook();
-      try {
-        b.snapshot(
-            n.has("bids") ? n.get("bids") : n.path("buys"),
-            n.has("asks") ? n.get("asks") : n.path("sells"));
-      } catch (RuntimeException e) {
-        invalidateToken(t, out, "invalid_depth");
-        return;
-      }
+      b.snapshot(
+          n.has("bids") ? n.get("bids") : n.path("buys"),
+          n.has("asks") ? n.get("asks") : n.path("sells"));
       books.put(t, b);
       awaitingSnapshots.remove(t);
       stamps.put(t, stamp);
@@ -117,10 +127,12 @@ public final class RawTapeNormalizer {
     out.accept("BOOK", mapper.valueToTree(data));
   }
 
-  private void invalidateToken(String token, BiConsumer<String, JsonNode> out, String reason) {
+  private void invalidateToken(
+      String token, long stamp, BiConsumer<String, JsonNode> out, String reason) {
     books.remove(token);
     if (awaitingSnapshots.add(token))
-      out.accept("GAP", mapper.valueToTree(Map.of("reason", reason, "token", token)));
+      out.accept(
+          "GAP", mapper.valueToTree(Map.of("reason", reason, "token", token, "sourceMs", stamp)));
   }
 
   private void gap(BiConsumer<String, JsonNode> out, String reason) {

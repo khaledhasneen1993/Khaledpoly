@@ -153,4 +153,78 @@ class WebSocketFreshnessTest {
     assertThat(client.getTopOfBook("123")).isPresent();
     assertThat((Boolean) ReflectionTestUtils.invokeMethod(client, "needsResnapshot")).isFalse();
   }
+
+  @Test
+  void rawReplayMatchesStreamingInvalidationAndStaleTradePolicies() throws Exception {
+    var clock = new MutableClock();
+    clock.now = Instant.ofEpochMilli(1800000000000L);
+    long at = clock.millis();
+    var client = client(clock);
+    var mapper = new ObjectMapper();
+    var raw = new com.polybot.hft.paper.RawTapeNormalizer(mapper);
+    var streamed = new java.util.ArrayList<com.fasterxml.jackson.databind.JsonNode>();
+    client.onFrame((kind, frame) -> frame.path("events").forEach(streamed::add));
+    String delta =
+        "{\"event_type\":\"price_change\",\"timestamp\":\""
+            + at
+            + "\",\"price_changes\":[{\"asset_id\":\"123\",\"side\":\"BUY\",\"price\":\".5\",\"size\":\"9\"}]}";
+    var frames =
+        java.util.List.of(
+            delta,
+            book(at, ".5"),
+            book(at, ".4").replace("123", "456"),
+            "{\"event_type\":\"last_trade_price\",\"asset_id\":\"123\",\"timestamp\":\""
+                + (at - 90000)
+                + "\",\"price\":\".5\",\"size\":\"5\",\"side\":\"SELL\"}",
+            delta,
+            book(at - 90000, ".5"),
+            delta,
+            delta.replace("123", "456"),
+            book(at + 1, ".5"),
+            book(at, ".5"),
+            delta.replace(".5", ".6"),
+            delta,
+            book(at, ".5"),
+            "[" + book(at, ".4").replace("123", "789") + "," + book(at, ".7") + "]",
+            delta.replace("123", "789"),
+            "{invalid-json");
+    for (String text : frames) {
+      streamed.clear();
+      var decoded = new java.util.ArrayList<com.fasterxml.jackson.databind.JsonNode>();
+      raw.accept(
+          text,
+          at,
+          (kind, data) -> {
+            var event = mapper.createObjectNode().put("kind", kind);
+            event.set("data", data);
+            decoded.add(event);
+          });
+      ReflectionTestUtils.invokeMethod(client, "handleMessage", text);
+      java.util.function.Function<
+              java.util.List<com.fasterxml.jackson.databind.JsonNode>,
+              com.fasterxml.jackson.databind.JsonNode>
+          canonical =
+              events -> {
+                var result = mapper.createArrayNode();
+                for (var event : events) {
+                  var copy = event.deepCopy();
+                  if (copy.path("kind").asText().equals("GAP")) {
+                    var data = mapper.createObjectNode();
+                    for (String key : java.util.List.of("reason", "token", "sourceMs"))
+                      if (copy.path("data").has(key)) data.set(key, copy.path("data").path(key));
+                    ((com.fasterxml.jackson.databind.node.ObjectNode) copy).set("data", data);
+                  }
+                  result.add(copy);
+                }
+                try {
+                  return mapper.readTree(mapper.writeValueAsString(result));
+                } catch (Exception e) {
+                  throw new IllegalStateException(e);
+                }
+              };
+      assertThat(canonical.apply(decoded))
+          .as("raw/streaming contract for %s", text)
+          .isEqualTo(canonical.apply(streamed));
+    }
+  }
 }

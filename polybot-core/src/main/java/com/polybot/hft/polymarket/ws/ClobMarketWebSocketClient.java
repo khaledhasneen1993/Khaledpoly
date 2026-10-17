@@ -719,7 +719,7 @@ public class ClobMarketWebSocketClient {
       long stamp = Long.parseLong(node.path("timestamp").asText());
       if (stamp < 100000000000L) stamp = Math.multiplyExact(stamp, 1000);
       long age = clock.millis() - stamp;
-      return age >= -1000 && age <= 2000;
+      return age >= 0 && age <= 2000;
     } catch (RuntimeException e) {
       return false;
     }

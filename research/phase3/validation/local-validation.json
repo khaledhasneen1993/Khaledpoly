@@ -2,7 +2,7 @@
   "scope": "PHASE3_SHARED_VIRTUAL_EXECUTION_AND_RESEARCH_TOOLKIT",
   "phase2Reference": "bf9458a6b236522c95ef52f5e43bc184ada275c1",
   "java": {
-    "tests": 117,
+    "tests": 119,
     "failures": 0,
     "errors": 0,
     "skipped": 0
@@ -51,5 +51,18 @@
   "recoveredAccountReplay": "PASS_PRESERVES_CASH_AND_HOLDINGS_REJECTS_CHANGED_CONFIG",
   "simultaneousPartialFillMarkouts": "PASS_DISTINCT_FILL_IDENTITIES_QUANTITY_WEIGHTING_MISSING_SAMPLE_CENSORING",
   "boundedVolatilityTelemetry": "PASS_1250_BOOK_UPDATES_MAX_SCALE_18_JSON_READABLE",
-  "externalInventoryAdmission": "PASS_WORST_CASE_SHARE_CAP_INCLUDING_OUTSTANDING_RESERVATIONS"
+  "externalInventoryAdmission": "PASS_WORST_CASE_SHARE_CAP_INCLUDING_OUTSTANDING_RESERVATIONS",
+  "streamingRawDecoderContract": "PASS_STALE_TRADES_TOKEN_INVALIDATION_FUTURE_SOURCE_MALFORMED_FRAME_ATOMICITY",
+  "recordedPublicExecutionReplayRegression": {
+    "captureCommit": "17ebbc54aadee6eb16501cab5e8c6a908cab6131",
+    "captureRun": 39021614053,
+    "artifact": 12096494914,
+    "inputSha256": "fde173a63624a2eb1f9479b49e40d272faa5014f8bc44ecc543578de7378c33f",
+    "parity": "MATCH_ALL_REPORT_FIELDS_EXCEPT_INPUT_FORMAT_AND_ALL_ACTION_VALUES",
+    "dataGaps": 28,
+    "cash": 500,
+    "netRealizedPnl": 0,
+    "fills": 0,
+    "qualification": "NO_GO_EXECUTION_AUDIT_ONLY"
+  }
 }

@@ -50,10 +50,10 @@ class RawTapeIsolationTest {
     decoder.accept(delta("a", base), base, sink);
     decoder.accept(delta("a", base + 1), base + 1, sink);
     decoder.accept(delta("b", base + 1), base + 1, sink);
-    assertThat(output).containsExactly("BOOK:b", "GAP:a", "BOOK:b");
+    assertThat(output).containsExactly("BOOK:b", "BOOK:b");
     decoder.reset();
     decoder.accept(delta("b", base + 2), base + 2, sink);
-    assertThat(output.getLast()).isEqualTo("GAP:b");
+    assertThat(output).containsExactly("BOOK:b", "BOOK:b");
     decoder.accept(book("b", base + 3), base + 3, sink);
     assertThat(output.getLast()).isEqualTo("BOOK:b");
   }
@@ -65,8 +65,29 @@ class RawTapeIsolationTest {
     java.util.function.BiConsumer<String, JsonNode> sink = (k, n) -> output.add(k);
     decoder.accept(delta("a", base + 1), base + 1, sink);
     decoder.accept(book("a", base), base + 1, sink);
-    assertThat(output).containsExactly("GAP");
+    assertThat(output).isEmpty();
     decoder.accept(book("a", base + 1), base + 1, sink);
-    assertThat(output).containsExactly("GAP", "BOOK");
+    assertThat(output).containsExactly("BOOK");
+  }
+
+  @Test
+  void staleTradeDoesNotInvalidateCurrentDepthAndStaleBookPreservesOtherToken() throws Exception {
+    var decoder = new RawTapeNormalizer(mapper);
+    var output = new ArrayList<String>();
+    java.util.function.BiConsumer<String, JsonNode> sink =
+        (k, n) -> output.add(k + ":" + n.path("token").asText());
+    decoder.accept(book("a", base), base, sink);
+    decoder.accept(book("b", base), base, sink);
+    decoder.accept(
+        "{\"event_type\":\"last_trade_price\",\"asset_id\":\"a\",\"timestamp\":\""
+            + (base - 90000)
+            + "\",\"price\":\".4\",\"size\":\"5\",\"side\":\"SELL\"}",
+        base,
+        sink);
+    decoder.accept(delta("a", base + 1), base + 1, sink);
+    decoder.accept(book("a", base - 90000), base + 2, sink);
+    decoder.accept(delta("a", base + 3), base + 3, sink);
+    decoder.accept(delta("b", base + 3), base + 3, sink);
+    assertThat(output).containsExactly("BOOK:a", "BOOK:b", "BOOK:a", "GAP:", "BOOK:b");
   }
 }
