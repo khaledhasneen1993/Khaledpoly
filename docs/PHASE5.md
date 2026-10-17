@@ -203,3 +203,23 @@ sample**, not only mocked unit tests. The results are uploaded as
 must remain \`NO_GO\`. Missing Bybit data is not filled using Binance.
 This is **not** the prospective seven-day gate, and public prints are
 not genuine maker fills.
+
+
+## Phase-5 to Phase-6 PAPER-only scenario adapter
+
+\`research.phase5.paper_strategy_adapter.event_proposal\` maps an
+explicit Politics/Sports binary **research scenario** to a versioned
+external PAPER candidate envelope only when: the snapshot is causally
+valid, category resolution/scores/news filters abstain appropriately,
+condition IDs and both token IDs match exactly, event close clock
+matches Java market close, fees/slippage/uncertainty are declared,
+and a fresh passive maker quote exists. It emits at most one
+unqualified scenario proposal. The existing Phase-6
+\`ExternalStrategyReview\` then sends it to the original centralized
+risk allocator and Java PAPER executor screening gate.
+
+**Deliberately not routed**: arbitrary CEX directional signals,
+multi-outcome and Negative Risk until there is a provably consistent
+Java atomic group/admission and independent settlement model. An
+unverified forecast is never represented as observed probability
+calibration, real fill evidence, or LIVE permission.
