@@ -1,6 +1,6 @@
 # Phase 3 engineering delivery and qualification status
 
-This branch supplies the PAPER/shadow research implementation below. **Full third-phase acceptance
+This branch supplies the PAPER/shadow research implementation and opt-in virtual-order execution below. **Full third-phase acceptance
 remains incomplete** because market evidence and execution qualification have not been obtained.
 The implementation must not be described as a qualified ML trading system, latency-arbitrage bot,
 verified multi-outcome executor or deployed fund manager. Nothing here enables LIVE.
@@ -10,16 +10,16 @@ verified multi-outcome executor or deployed fund manager. Nothing here enables L
 | Area | Implementation | Operational boundary |
 | --- | --- | --- |
 | Current Polymarket parameters | `ClobMarketParameters` and `ResearchFeed` read `/clob-markets/{condition}` and validate membership, lot/tick, fee curve and acceptance | Unknown fees/unsupported maker fees/risk universe fail closed. No category defaults or signing migration. |
-| Maker research | Inventory maker plus cash/owned-inventory limits | Shadow proposals only; baseline Java PAPER still owns its account. |
+| Maker research | Inventory maker plus cash/owned-inventory limits | Shadow by default; explicit external PAPER mode routes passive quotes through the shared Java matching engine. |
 | Complete-set research | Equal-size atomic proposal groups, volatility/expiry threshold, optional fill-model inference | Unknown volatility raises the screening threshold. Fill/second-leg estimates stay unknown without qualified data; no artificial fills. |
 | Events and oracle risk | Availability-time forecast and explicit resolution-risk join | Hashes bind inputs, not the truth of a forecast. Unknown or disputed risk abstains; no news-to-probability claim. |
 | CEX signals | Public Binance/Bybit spot sampling, payload evidence, source/receipt clocks, deduplication, bounded joins, rate-limit backoff | REST samples are incomplete and do not measure latency arbitrage. CEX price basis is not a Polymarket probability. |
 | Fill/second-leg/adverse selection | Censored labels, market-group temporal purging, logistic baseline, heldout Brier and calibration, inference | No real venue training dataset exists in this delivery. PAPER and venue labels cannot be mixed. All models remain unqualified. |
 | Portfolio research | Atomic edge-ranked cash/group/exposure allocation and historical joint VaR/ES/correlation | Allocation is a deterministic greedy heuristic. Missing joint history yields unknown risk; acquisition cost remains separately reported. |
-| External strategies | Authenticated `/api/research/v1/proposals/screen`, durable idempotent receipts, expiry/generation/lot/tick/cash/inventory checks | Screening never submits an order. 64 KiB request and 10,000-receipt bounds; archive and start an isolated research account when full. |
+| External strategies | Authenticated `/api/research/v1/proposals/screen`, durable idempotent receipts, expiry/generation/lot/tick/cash/inventory checks | Screening never submits an order. Separate opt-in `/proposals/paper` atomically reserves virtual orders in the shared ledger; durable order IDs prevent duplicate execution. Bodies are capped at 64 KiB. Screening receipts are bounded at 10,000. |
 | Multiple accounts | Distinct endpoint/state-directory registry, observation/session binding, read/research roles and indicative fund NAV | Registry does not create accounts or transfer capital. Each executor needs an independently configured durable ledger and token. Unknown/stale prices produce unknown NAV. |
-| Politics/sports | Public tag/keyset discovery preserves CLOB/position IDs and reports partial universes; category-independent binary proposal contracts | Baseline execution discovery remains crypto intervals. Discovered broader markets require an evidenced adapter before execution. |
-| Multi-outcome/negative risk | Explicit complete-universe basket and NO-conversion scenarios; augmented/incomplete universe refusal | Actual venue conversion, settlement and execution are not implemented or verified. |
+| Politics/sports | Public tag/keyset discovery preserves CLOB/position IDs and reports partial universes; category-independent binary proposal contracts | External PAPER mode optionally discovers politics/sports through canonical Gamma event metadata, validates V2 token/fee/risk identity and subscribes to public CLOB books. Partial discovery is explicit; no strategy profitability is established. |
+| Multi-outcome/negative risk | Explicit basket/conversion scenarios plus atomic virtual terminal settlement for complete standard negative-risk groups | 2–16 known binary members, verified terminal evidence and exactly one YES winner required. Augmented, incomplete or fractional groups defer. No chain conversion or venue settlement is implemented. |
 | Collateral/gas | pUSD/Polygon identity-evidence validation and batch gas-cost scenarios | Evidence is not a chain check. No approvals, wrapping, native-USDC substitution or broadcast. |
 | Performance | Reproducible in-process validation/proposal benchmark with p50/p95/p99 | Does not measure network/venue latency. Rust/gRPC migration remains unjustified without a measured production bottleneck. |
 | Operations | CLI commands, causal shadow tape/replay, source-installable SDK, CI and bounded public integration capture | Integration smoke does not replace seven complete heldout days or qualify strategies. |
@@ -69,7 +69,7 @@ python3 -m research.phase3 basket research/output/basket-scenario.json --output 
 
 The sample holdout timestamp above is an example, not a registered experiment. Use a prospectively
 frozen cutoff and untouched evaluation dataset. The trainer does not certify preregistration.
-SDK version 0.2.0 is source-installable and has no runtime dependencies beyond Python 3.10+.
+SDK version 0.3.0 is source-installable and has no runtime dependencies beyond Python 3.10+.
 The wheel excludes compiled caches; CI also installs it in an isolated environment and runs the HTTP snapshot contract through its console entry point.
 
 For event research, use `--strategy event-probability --features your-append-only-features.jsonl`.
@@ -117,14 +117,90 @@ the HTTP screen does not claim to infer correlations. SDK `PaperClient` remains 
 The shared executor token is still privileged; read/research registry roles are local orchestration
 permissions, not independently scoped server credentials. Do not give that token to untrusted code.
 
+## Opt-in shared PAPER execution
+
+The default research launcher preserves shadow behavior. Use a **separate durable account** for
+external strategies; switching an existing session between baseline and external modes is refused.
+The new launcher supplies isolated default state/recording directories. It requires a clean commit,
+a fresh verified Maven build and the same strong `POLYBOT_EXECUTOR_TOKEN` environment variable.
+Do not run two processes against one account path.
+
+```bash
+# Optional broader discovery, bounded to canonical politics/sports events:
+export PAPER_PHASE3_DISCOVERY_TAGS=politics,sports
+./scripts/start-phase3-paper.sh
+# Another terminal, with the same token:
+python3 -m research.phase3 execute-paper --url http://127.0.0.1:8080 \
+  --strategy inventory-mm-shadow --seconds 60 --output research/output/paper-execution-001
+python3 -m research.phase3 reconcile-paper research/output/paper-execution-001 \
+  --url http://127.0.0.1:8080 --output research/output/reconciliation-001.json
+python3 -m research.phase3 build-labels research/data/phase3-paper/RUN_ID/events.jsonl \
+  --output research/output/paper-labels-001
+```
+
+`PaperClient` remains GET-only. `PaperExecutionClient` adds only the fixed internal PAPER routes.
+Snapshot `paperExecutionEnabled=true` advertises virtual execution; `executionEnabled=false` and
+`liveAllowed=false` still prohibit venue execution. Baseline automatic entry is disabled in this mode;
+matching, account reservations, merge fees, expiry, markouts, exits and risk controls use the existing
+engine. An accepted proposal is not a fill or a profitability estimate.
+
+`POST /api/research/v1/proposals/paper` uses the same proposal schema as screening. A registered
+observation must be no more than 250 ms old, and every leg is revalidated against current books,
+metadata, ownership and risk limits. A refresh cannot extend the original observation's lifetime.
+Every leg reserves in one durable ledger commit before any order is activated. Owned sells cannot
+finance unfilled buys. Duplicate token/side legs and self-crossing prices fail. The engine retains its
+activation/cancellation latency, conservative queue model and trade-print matching. Orders request
+automatic cancellation after 5 seconds; cancellation latency still applies. Missing/stale books or a
+disconnect trigger existing cancellation/risk handling rather than assumed fills.
+
+The client writes and fsyncs the exact request and SHA-256 **before** POST. A lost response retries
+the identical ID and payload; `reconcile-paper` recovers unknown outcomes from that durable outbox.
+Accepted IDs are bound to payload hashes in durable ledger order history, surviving restarts and
+fills/cancellations. Different content under that ID rejects. On restart, unknown queue positions are
+cancelled and holdings/cash persist. Restart does not reconstruct an unknowable venue queue.
+
+Public recordings include issued observations, external intents, accepted group membership, causal
+order features and measured 1/5/30-second markouts. `build-labels` requires a clean journal and
+censors gaps, early cancellation and missing horizons; it never derives fills from price touches.
+Queue-ahead is a configured displayed-depth proxy, not observed venue FIFO rank. Missing features
+remain unavailable. Second-leg completion requires every explicit group member to fill. Training
+purges temporally and across connected markets sharing an atomic intent; insufficient labels produce
+no trained model. PAPER labels remain distinct from venue evidence.
+
+For reproducible execution audits:
+
+```bash
+java -Dloader.main=com.polybot.hft.executor.replay.ClosedLoopMain \
+  -cp executor-service/target/executor-service-0.0.1-SNAPSHOT.jar \
+  org.springframework.boot.loader.launch.PropertiesLauncher \
+  research/data/phase3-paper/RUN_ID/events.jsonl research/output/execution-replay-001 \
+  research/phase2/research-config.json --external-paper
+# Use a different output directory and add --raw for raw-WebSocket parity.
+```
+
+The audit restores the journal's captured initial **virtual** account/checkpoint, including prior
+holdings after recovery. It replays recorded external intents rather than rerunning Python decisions;
+`strategyIndependentDataset=false`, a starting-account hash and `NO_GO` make that boundary explicit.
+A changed configuration over a recovered account is rejected. Independent strategy qualification
+still requires a new prospective experiment. CI compares complete raw/normalized reports and action
+audits, not only final cash.
+
+For standard negative-risk groups, per-market terminal evidence is retained until the complete
+canonical event can be verified. `settle-paper-group EVENT_ID` asks the executor to fetch official
+Gamma metadata; it never accepts caller-supplied payout vectors. Payouts, membership proof and all
+holdings redeem in one idempotent ledger operation with one configured redemption cost. Incomplete,
+changed, augmented or ambiguous universes defer. This is terminal PAPER accounting, not a Polygon
+transaction, token conversion, approval, capital transfer or LIVE deployment.
+
 ## What prevents full acceptance
 
 1. Seven independently recorded complete heldout days and registered resolved/fill samples are still
    absent. Existing `research/phase2/acceptance.json` is unchanged; all new code needs a new freeze.
 2. Venue-calibrated fill/second-leg/markout labels, untouched evaluation and a demonstrated net edge
    are absent. No model is promoted and no reward income is assumed.
-3. Broader market discovery and actual multi-outcome settlement/execution require verified adapters
-   and replay evidence. Scenario arithmetic is deliberately not an executable venue integration.
+3. Broader-market PAPER adapters and virtual group settlement have accounting/contract tests;
+   sustained public execution/fill coverage is still required. Chain conversion and venue settlement
+   remain outside this implementation; PAPER receipts cannot qualify them.
 4. Production multi-account/fund administration, chain-verified collateral operations and LIVE remain
    outside the authorized PAPER-only system. Observation isolation does not certify those operations.
 

@@ -19,8 +19,8 @@ public final class ClosedLoopMain {
         freezePath = args[++i];
       }
     for (String s : Arrays.copyOfRange(args, 3, args.length))
-      if (!Set.of("--stress", "--raw", "--freeze").contains(s) && !s.equals(freezePath))
-        throw new IllegalArgumentException("Unknown option " + s);
+      if (!Set.of("--stress", "--raw", "--freeze", "--external-paper").contains(s)
+          && !s.equals(freezePath)) throw new IllegalArgumentException("Unknown option " + s);
     var mapper = new ObjectMapper().findAndRegisterModules();
     ResearchConfig cfg = mapper.readValue(Files.readString(Path.of(args[2])), ResearchConfig.class);
     if (Arrays.asList(args).contains("--stress")) cfg = cfg.stress();
@@ -31,7 +31,18 @@ public final class ClosedLoopMain {
             new BigDecimal("250"),
             new BigDecimal("25"),
             new BigDecimal("50"));
-    if (freezePath == null)
+    if (Arrays.asList(args).contains("--external-paper")) {
+      if (freezePath != null)
+        throw new IllegalArgumentException(
+            "External intent replay cannot qualify a frozen independent experiment");
+      ClosedLoopReplay.runExternal(
+          Path.of(args[0]),
+          Path.of(args[1]),
+          cfg,
+          limits,
+          mapper,
+          Arrays.asList(args).contains("--raw"));
+    } else if (freezePath == null)
       ClosedLoopReplay.run(
           Path.of(args[0]),
           Path.of(args[1]),

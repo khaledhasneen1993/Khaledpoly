@@ -47,6 +47,32 @@ public class ResearchProposalController {
     }
   }
 
+  @PostMapping("/paper")
+  public ResponseEntity<JsonNode> paper(@RequestBody JsonNode proposal) {
+    try {
+      var receipt = simulator.submitPaperProposal(proposal);
+      return ResponseEntity.status(
+              receipt.path("status").asText().equals("PAPER_REJECTED") ? 409 : 200)
+          .cacheControl(CacheControl.noStore())
+          .body(receipt);
+    } catch (IllegalStateException e) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+    }
+  }
+
+  @PostMapping("/settle-paper-group")
+  public ResponseEntity<JsonNode> settleGroup(@RequestBody JsonNode request) {
+    try {
+      return ResponseEntity.ok()
+          .cacheControl(CacheControl.noStore())
+          .body(simulator.settlePaperGroup(request.path("eventId").asText()));
+    } catch (IllegalArgumentException e) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+    } catch (IllegalStateException e) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+    }
+  }
+
   @PreDestroy
   void close() {
     inbox.close();

@@ -8,6 +8,16 @@ import java.util.*;
  * Markouts use the first fresh book observed AFTER each horizon; missing observations stay missing.
  */
 public final class PaperMetrics {
+  private final java.util.function.Consumer<Map<String, Object>> observation;
+
+  public PaperMetrics() {
+    this(row -> {});
+  }
+
+  public PaperMetrics(java.util.function.Consumer<Map<String, Object>> observation) {
+    this.observation = observation;
+  }
+
   private record Pending(PaperMatchingEngine.Fill fill, int horizon) {}
 
   private final List<Pending> pending = new ArrayList<>();
@@ -48,6 +58,24 @@ public final class PaperMetrics {
                 .multiply(p.fill.buy() ? BigDecimal.ONE : BigDecimal.ONE.negate());
         totals.merge(p.horizon, edge.multiply(p.fill.size()), BigDecimal::add);
         counts.merge(p.horizon, 1, Integer::sum);
+        observation.accept(
+            Map.of(
+                "id",
+                p.fill.id(),
+                "token",
+                p.fill.token(),
+                "fillAt",
+                p.fill.at(),
+                "horizonMs",
+                p.horizon,
+                "observedMs",
+                at,
+                "sourceMs",
+                n.path("sourceMs").asLong(),
+                "perShare",
+                edge,
+                "quantity",
+                p.fill.size()));
       }
       if (at - due > 2000 || n.path("sourceMs").asLong() >= due) it.remove();
     }

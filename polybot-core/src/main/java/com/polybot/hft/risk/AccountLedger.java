@@ -187,6 +187,29 @@ public final class AccountLedger implements AutoCloseable {
     commit(reserved(first, downId, down, true, downPrice, size));
   }
 
+  public record OrderIntent(
+      String id, String token, boolean buy, BigDecimal price, BigDecimal size) {}
+
+  /**
+   * Every leg validates against the candidate state; exactly one durable commit publishes the
+   * batch.
+   */
+  public synchronized void reserveBatch(List<OrderIntent> intents) {
+    healthy();
+    if (intents.isEmpty() || intents.size() > 16)
+      throw new IllegalArgumentException("Invalid batch size");
+    State candidate = state;
+    var tokens = new HashSet<Map.Entry<String, Boolean>>();
+    for (var intent : intents) {
+      if (!tokens.add(Map.entry(intent.token(), intent.buy())))
+        throw new IllegalArgumentException("Duplicate batch token");
+      candidate =
+          reserved(
+              candidate, intent.id(), intent.token(), intent.buy(), intent.price(), intent.size());
+    }
+    commit(candidate);
+  }
+
   private State reserved(
       State view, String id, String token, boolean buy, BigDecimal price, BigDecimal size) {
     if (view.orders().containsKey(id)) throw new IllegalArgumentException("Duplicate order");
@@ -339,6 +362,27 @@ public final class AccountLedger implements AutoCloseable {
       proceeds = proceeds.add(q.multiply(e.getValue()));
     }
     return settle(operation, quantities, proceeds, cost);
+  }
+
+  /**
+   * A complete set of independently validated terminal binary vectors is redeemed in one commit.
+   */
+  public synchronized boolean redeemBatch(
+      String operation, Map<String, Map<String, BigDecimal>> conditions, BigDecimal cost) {
+    if (conditions.isEmpty() || conditions.size() > 16)
+      throw new IllegalArgumentException("Invalid terminal group size");
+    var payouts = new HashMap<String, BigDecimal>();
+    for (var vector : conditions.values()) {
+      if (vector.size() != 2
+          || vector.values().stream()
+                  .reduce(BigDecimal.ZERO, BigDecimal::add)
+                  .compareTo(BigDecimal.ONE)
+              != 0) throw new IllegalArgumentException("Incomplete binary terminal vector");
+      for (var entry : vector.entrySet())
+        if (payouts.putIfAbsent(entry.getKey(), entry.getValue()) != null)
+          throw new IllegalArgumentException("Shared terminal token");
+    }
+    return redeem(operation, payouts, cost);
   }
 
   private boolean settle(

@@ -19,6 +19,7 @@ class Example:
     label: int
     provenance: str
     fill_delay_ms: object
+    group: object
 
 
 def vector(values):
@@ -48,6 +49,9 @@ def example(row, target='fill', horizon_ms=5000):
         raise ValueError('A cancel wins ties with a fill')
     if paired is not None and (fill is None or paired < fill):
         raise ValueError('Second leg requires an earlier first fill')
+    group = row.get('groupId')
+    if group is not None and (not isinstance(group, str) or not group.strip()):
+        raise ValueError('Invalid intent group identity')
     x = vector(row['features'])
     if target == 'adverse_selection':
         markout = row.get('markout')
@@ -67,7 +71,7 @@ def example(row, target='fill', horizon_ms=5000):
         else:
             label = 0
     return Example(row['orderId'], row['marketId'], start, end, x, label, row['provenance'],
-                   None if fill is None else fill - start)
+                   None if fill is None else fill - start, group)
 
 
 def sigmoid(value):
@@ -89,9 +93,23 @@ def train(rows, holdout_start_ms, target='fill', horizon_ms=5000, min_train=1000
         e = example(row, target, horizon_ms)
         if e is not None:
             examples.append(e)
+    parents, linked = {}, {}
+    def root(market):
+        parents.setdefault(market, market)
+        while parents[market] != market:
+            parents[market] = parents[parents[market]]
+            market = parents[market]
+        return market
+    for e in examples:
+        root(e.market)
+        if e.group is not None:
+            if e.group in linked:
+                parents[root(e.market)] = root(linked[e.group])
+            else:
+                linked[e.group] = e.market
     markets = {}
     for e in examples:
-        markets.setdefault(e.market, []).append(e)
+        markets.setdefault(root(e.market), []).append(e)
     cut = integer(holdout_start_ms)
     training, holdout, purged = [], [], 0
     for group in markets.values():

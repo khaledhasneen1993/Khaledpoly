@@ -11,8 +11,9 @@ No funded execution, signing, wallets or chain transactions are introduced.
 An opt-in `GET /api/research/v1/snapshot` returns a detached snapshot under the same
 `ResearchSession` lock used by the causal PAPER engine. A WebSocket frame increments the input
 sequence once, irrespective of the number of book changes inside it. Session IDs change on restart.
-Reading never advances the strategy clock or changes account state. The existing closed-loop engine
-continues to own the PAPER account; new Python proposals do not enter that engine.
+Reading never advances the strategy clock or changes account state. By default the baseline closed-loop engine owns the PAPER account and Python produces shadow
+proposals. The separate [opt-in PAPER execution mode](PHASE3_COMPLETION.md#opt-in-shared-paper-execution)
+routes external proposals through that same engine using an isolated account; it never sends venue orders.
 
 The snapshot includes cash and reservations, holdings, halt and pending-taker status, verified binary
 market metadata and fee parameters, and depth with separate source and availability timestamps.
@@ -26,7 +27,8 @@ filter. Unavailable closed-loop state returns 503, and successful responses use 
 POST to the snapshot route is unsupported. A separate [proposal screening route](PHASE3_COMPLETION.md#external-proposal-screen) persists shadow receipts without executing orders. The endpoint itself is read-only, but **the executor token is shared with existing
 executor APIs and is not a scoped read-only credential**. Keep it local and only give it to trusted code.
 The SDK allows plaintext HTTP only on loopback, requires HTTPS elsewhere, and refuses credentials in
-URLs, redirects and responses above 8 MiB. It never logs the token or provides submission methods.
+URLs, redirects and responses above 8 MiB. The default `PaperClient` never logs the token or provides submission methods; the explicit
+`PaperExecutionClient` supplies bounded internal virtual-order routes only.
 
 The standard-library Python SDK uses Decimal accounting, rejects duplicate/nonfinite JSON values,
 checks reservation reconciliation and causal clocks, and rejects account/session changes or regressions.
@@ -39,7 +41,8 @@ observation. Existing outstanding orders suppress additional quotes for their to
 halted accounts, missing/stale books and stale metadata prevent proposals. Per-order, acquisition-exposure,
 and group caps are enforced. Unknown holdings still count toward total exposure.
 
-Default limits: 25 USDC per order and group, 100 USDC total acquisition exposure. An optional JSON
+Default research limits: 25 collateral units per order and group, 100 total acquisition exposure.
+Current V2 venue collateral is pUSD; historical USDC identifiers are not a conversion instruction. An optional JSON
 condition-to-group map makes correlated markets share a cap. These are research screening limits,
 not a live portfolio optimizer. Proposals do not report expected net profit, rewards, actual fills or VaR.
 No maker reward or fee exemption is assumed as an earned return.
@@ -75,7 +78,7 @@ Network errors cause abstention; authentication/missing endpoint errors terminat
 and server errors impose a conservative 60-second cooldown. An invalid observation aborts with
 `complete=false`. A run with no valid observations cannot pass replay.
 
-All reports retain `fills=null`, `netPnl=null`, `decision=NO_GO`, `executionEnabled=false` and
+Shadow reports retain `fills=null`, `netPnl=null`, `decision=NO_GO`, `executionEnabled=false` and
 `liveAllowed=false`. An exact match proves deterministic proposal calculation on supplied observations;
 it does not prove execution quality, profitability or the safety of an external venue.
 

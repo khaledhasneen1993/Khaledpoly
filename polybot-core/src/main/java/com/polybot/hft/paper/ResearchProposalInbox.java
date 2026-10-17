@@ -28,6 +28,17 @@ public final class ResearchProposalInbox implements AutoCloseable {
   }
 
   public synchronized JsonNode screen(JsonNode snapshot, JsonNode proposal) {
+    return check(snapshot, proposal, true);
+  }
+
+  /**
+   * Pure screening against current executor reservations, without reserving shadow budget twice.
+   */
+  public synchronized JsonNode validateForPaper(JsonNode snapshot, JsonNode proposal) {
+    return check(snapshot, proposal, false);
+  }
+
+  private JsonNode check(JsonNode snapshot, JsonNode proposal, boolean remember) {
     if (!snapshot.path("mode").asText().equals("PAPER")
         || snapshot.path("liveAllowed").asBoolean(true)
         || snapshot.path("executionEnabled").asBoolean(true)
@@ -49,14 +60,18 @@ public final class ResearchProposalInbox implements AutoCloseable {
         || proposal.path("sequence").asLong() != snapshot.path("sequence").asLong())
       throw new IllegalStateException("Stale proposal generation or wrong account");
     var receipts = state.withObject("/receipts");
-    if (receipts.has(id)) {
+    if (remember && receipts.has(id)) {
       if (!receipts.path(id).path("request").equals(proposal))
         throw new IllegalStateException("Proposal id reused with different content");
       return receipts.path(id).path("response").deepCopy();
     }
-    if (receipts.size() >= 10000)
+    if (remember && receipts.size() >= 10000)
       throw new IllegalStateException("Inbox full; archive before a new research account");
-    var next = state.deepCopy();
+    var next = remember ? state.deepCopy() : mapper.createObjectNode();
+    if (!remember) {
+      next.put("version", 1);
+      next.set("receipts", mapper.createObjectNode());
+    }
     String generation =
         snapshot.path("sessionId").asText() + ":" + snapshot.path("sequence").asLong();
     if (!generation.equals(next.path("generation").asText())) {
@@ -77,9 +92,13 @@ public final class ResearchProposalInbox implements AutoCloseable {
     for (var order : account.path("orders"))
       if (order.path("buy").asBoolean())
         total = total.add(decimal(order, "price").multiply(decimal(order, "remaining")));
+    var batchPrices = new HashMap<String, BigDecimal>();
     long expiry = Long.MAX_VALUE;
     for (var item : proposal.path("legs")) {
       String token = item.path("token").asText(), condition = item.path("condition").asText();
+      if (!item.path("buy").isBoolean())
+        throw new IllegalArgumentException("Boolean side required");
+      String reservationKey = remember ? token : token + ":" + item.path("buy").asBoolean();
       JsonNode market = null;
       for (var m : snapshot.path("markets"))
         if (m.path("condition").asText().equals(condition)) market = m;
@@ -102,15 +121,30 @@ public final class ResearchProposalInbox implements AutoCloseable {
           || book.path("asks").isEmpty()
           || expires <= now
           || expires > Math.min(source + age, market.path("endMs").asLong())
-          || !tokens.add(token))
+          || !tokens.add(reservationKey))
         throw new IllegalStateException("Unavailable market, expiry or duplicate token");
       for (var order : account.path("orders"))
-        if (order.path("token").asText().equals(token) && decimal(order, "remaining").signum() > 0)
+        if (order.path("token").asText().equals(token)
+            && decimal(order, "remaining").signum() > 0
+            && (remember || order.path("buy").asBoolean() == item.path("buy").asBoolean()))
           throw new IllegalStateException("Token already reserved by executor");
       BigDecimal price = decimal(item, "price"),
           size = decimal(item, "size"),
           value = price.multiply(size);
       boolean buy = item.path("buy").asBoolean();
+      for (var o : account.path("orders"))
+        if (o.path("token").asText().equals(token)
+            && o.path("buy").asBoolean() != buy
+            && decimal(o, "remaining").signum() > 0
+            && (buy
+                ? price.compareTo(decimal(o, "price")) >= 0
+                : price.compareTo(decimal(o, "price")) <= 0))
+          throw new IllegalStateException("Self-crossing quote");
+      BigDecimal opposite = batchPrices.get(token + ":" + !buy);
+      if (opposite != null
+          && (buy ? price.compareTo(opposite) >= 0 : price.compareTo(opposite) <= 0))
+        throw new IllegalStateException("Self-crossing batch");
+      batchPrices.put(token + ":" + buy, price);
       if (!item.path("buy").isBoolean()
           || price.signum() <= 0
           || price.compareTo(BigDecimal.ONE) >= 0
@@ -161,8 +195,10 @@ public final class ResearchProposalInbox implements AutoCloseable {
     receipt.set("request", proposal.deepCopy());
     receipt.set("response", canonical(response));
     next.withObject("/receipts").set(id, receipt);
-    file.save(next);
-    state = next;
+    if (remember) {
+      file.save(next);
+      state = next;
+    }
     return canonical(response);
   }
 

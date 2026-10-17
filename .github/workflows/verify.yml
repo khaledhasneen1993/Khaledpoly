@@ -31,6 +31,15 @@ jobs:
         with:
           name: phase3-public-research
           path: research/output/phase3-public/
+      - name: Phase 3 actual virtual-order execution and label smoke
+        if: github.event_name == 'push' && github.ref == 'refs/heads/phase3-research-foundation'
+        timeout-minutes: 5
+        run: python3 research/phase3/public_smoke.py --execute-paper
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push' && github.ref == 'refs/heads/phase3-research-foundation' && always()
+        with:
+          name: phase3-public-execution
+          path: research/output/phase3-public-execution/
       - name: Record public data smoke (PAPER, no account)
         if: github.event_name == 'push' && github.ref == 'refs/heads/phase2-paper-validation'
         timeout-minutes: 25

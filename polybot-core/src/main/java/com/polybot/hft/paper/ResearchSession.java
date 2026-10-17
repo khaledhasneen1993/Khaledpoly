@@ -40,13 +40,16 @@ public final class ResearchSession implements AutoCloseable {
       long sequence,
       Set<String> expired,
       Map<String, ResolutionEvidence> resolutions,
-      ResearchConfig configuration) {}
+      ResearchConfig configuration,
+      boolean externalMode,
+      Map<String, JsonNode> outcomeGroups,
+      Map<String, String> groupProofs) {}
 
   private final AccountLedger ledger;
   private final ResearchConfig cfg;
   private final ObjectMapper mapper;
   private final PaperMatchingEngine matching;
-  private final PaperMetrics markouts = new PaperMetrics();
+  private final PaperMetrics markouts;
   private final ExperimentMetrics metrics = new ExperimentMetrics();
   private final AtomicJsonState checkpoint;
   private final BiConsumer<String, Object> output;
@@ -59,7 +62,14 @@ public final class ResearchSession implements AutoCloseable {
   private final Map<String, Long> quoteAt = new HashMap<>(), lastTakerSource = new HashMap<>();
   private final List<Pending> pending = new ArrayList<>();
   private long now = -1, nextDecision, sequence, inputSequence;
-  private final String sessionId = UUID.randomUUID().toString();
+  private final String sessionId;
+  private final boolean externalMode;
+  private final ResearchProposalInbox externalValidator;
+  private final LinkedHashMap<Long, Long> observations = new LinkedHashMap<>();
+  private final LinkedHashMap<String, JsonNode> externalReplies = new LinkedHashMap<>();
+  private final Map<String, Long> externalCancelAt = new HashMap<>();
+  private final Map<String, JsonNode> outcomeGroups = new TreeMap<>();
+  private final Map<String, String> groupProofs = new TreeMap<>();
   private boolean entryStopped;
   private boolean failed;
   private boolean insideFrame;
@@ -72,10 +82,32 @@ public final class ResearchSession implements AutoCloseable {
       ObjectMapper mapper,
       Path state,
       BiConsumer<String, Object> output) {
+    this(ledger, cfg, mapper, state, output, false, null);
+  }
+
+  public ResearchSession(
+      AccountLedger ledger,
+      ResearchConfig cfg,
+      ObjectMapper mapper,
+      Path state,
+      BiConsumer<String, Object> output,
+      boolean externalMode,
+      String replaySessionId) {
+    this.externalMode = externalMode;
+    this.sessionId = replaySessionId == null ? UUID.randomUUID().toString() : replaySessionId;
+    externalValidator =
+        externalMode
+            ? new ResearchProposalInbox(mapper, Path.of(state + ".external-validator"))
+            : null;
     this.ledger = ledger;
     this.cfg = cfg;
     this.mapper = mapper;
     this.output = output;
+    markouts =
+        new PaperMetrics(
+            row -> {
+              if (externalMode) output.accept("MARKOUT", row);
+            });
     matching =
         new PaperMatchingEngine(
             cfg.activationMs(), cfg.cancelMs(), cfg.maxBookAgeMs(), cfg.queueMultiplier());
@@ -83,9 +115,11 @@ public final class ResearchSession implements AutoCloseable {
     JsonNode saved = checkpoint.load();
     if (saved != null) {
       var s = mapper.convertValue(saved, Checkpoint.class);
-      if (s.version() != 1 || !cfg.equals(s.configuration()))
+      if (s.version() != 1 || !cfg.equals(s.configuration()) || externalMode != s.externalMode())
         throw new IllegalArgumentException("Research configuration changed on existing account");
       markets.putAll(s.markets());
+      if (s.outcomeGroups() != null) outcomeGroups.putAll(s.outcomeGroups());
+      if (s.groupProofs() != null) groupProofs.putAll(s.groupProofs());
       unhedged.putAll(s.unhedged());
       entryStopped = s.entryStopped();
       exitLossUsed = s.exitLossUsed();
@@ -117,24 +151,46 @@ public final class ResearchSession implements AutoCloseable {
       if (holding(m.first()).shares().compareTo(holding(m.second()).shares()) != 0
           && !unhedged.containsKey(m.condition())) unhedged.put(m.condition(), 0L);
     save();
+    if (externalMode)
+      output.accept(
+          "EXTERNAL_CONFIG",
+          Map.of(
+              "sessionId",
+              sessionId,
+              "mode",
+              "PAPER_EXTERNAL",
+              "initialCheckpoint",
+              currentCheckpoint(),
+              "initialAccount",
+              ledger.snapshot()));
   }
 
   private void save() {
-    checkpoint.save(
-        new Checkpoint(
-            1,
-            Map.copyOf(markets),
-            Map.copyOf(unhedged),
-            entryStopped,
-            exitLossUsed,
-            sequence,
-            Set.copyOf(expired),
-            Map.copyOf(resolutions),
-            cfg));
+    checkpoint.save(currentCheckpoint());
+  }
+
+  private Checkpoint currentCheckpoint() {
+    return new Checkpoint(
+        1,
+        Map.copyOf(markets),
+        Map.copyOf(unhedged),
+        entryStopped,
+        exitLossUsed,
+        sequence,
+        Set.copyOf(expired),
+        Map.copyOf(resolutions),
+        cfg,
+        externalMode,
+        Map.copyOf(outcomeGroups),
+        Map.copyOf(groupProofs));
   }
 
   public synchronized List<ResearchMarket> markets() {
     return List.copyOf(markets.values());
+  }
+
+  public synchronized List<JsonNode> outcomeGroups() {
+    return outcomeGroups.values().stream().map(n -> (JsonNode) n.deepCopy()).toList();
   }
 
   public synchronized Set<String> resolved() {
@@ -146,6 +202,15 @@ public final class ResearchSession implements AutoCloseable {
       throw new IllegalStateException("Research session failed; restart/reconciliation required");
     if (at < now) throw new IllegalArgumentException("Causal clock regression");
     now = at;
+    if (kind.equals("EXTERNAL_PROPOSAL")) {
+      if (!externalMode || insideFrame)
+        throw new IllegalArgumentException("External PAPER mode required");
+      apply(matching.accept("TICK", at, mapper.createObjectNode()));
+      processExternal(data);
+      inputSequence++;
+      advanceActions();
+      return;
+    }
     if (!insideFrame) inputSequence++;
     if (kind.equals("FRAME")) {
       if (insideFrame || !data.path("events").isArray())
@@ -168,7 +233,23 @@ public final class ResearchSession implements AutoCloseable {
       if (!data.path("events").isEmpty()) advanceActions();
       return;
     }
-    if (kind.equals("META")) {
+    if (kind.equals("GROUP_META")) {
+      if (!externalMode
+          || !data.path("id").asText().matches("[0-9]{1,24}")
+          || !data.path("negRisk").asBoolean()
+          || data.path("negRiskAugmented").asBoolean(false)
+          || data.path("markets").size() < 2
+          || data.path("markets").size() > 16)
+        throw new IllegalArgumentException("Unsupported outcome group metadata");
+      if (outcomeGroups.size() >= 32 && !outcomeGroups.containsKey(data.path("id").asText()))
+        throw new IllegalStateException("Outcome group bound exceeded");
+      outcomeGroups.put(data.path("id").asText(), data.deepCopy());
+      save();
+    } else if (kind.equals("GROUP_SETTLEMENT")) {
+      if (!externalMode)
+        throw new IllegalArgumentException("External PAPER group settlement required");
+      processGroupSettlement(data);
+    } else if (kind.equals("META")) {
       ResearchMarket m = mapper.convertValue(data, ResearchMarket.class);
       if (m.observedMs() > at) throw new IllegalArgumentException("Future metadata");
       ResearchMarket previous = markets.get(m.condition());
@@ -176,7 +257,8 @@ public final class ResearchSession implements AutoCloseable {
           && (!previous.first().equals(m.first())
               || !previous.second().equals(m.second())
               || previous.startMs() != m.startMs()
-              || previous.endMs() != m.endMs()))
+              || previous.endMs() != m.endMs()
+              || previous.negativeRisk() != m.negativeRisk()))
         throw new IllegalArgumentException("Market identity changed");
       markets.put(m.condition(), m);
       save();
@@ -208,7 +290,8 @@ public final class ResearchSession implements AutoCloseable {
                   m.feeExponent(),
                   m.accepting(),
                   m.observedMs(),
-                  m.evidence()));
+                  m.evidence(),
+                  m.negativeRisk()));
           cancelAll(m);
         }
       save();
@@ -226,7 +309,8 @@ public final class ResearchSession implements AutoCloseable {
         closeToken(m.second());
         BigDecimal quantity = holding(m.first()).shares().add(holding(m.second()).shares());
         BigDecimal cost = quantity.signum() > 0 ? cfg.redemptionCost() : ZERO;
-        ledger.redeem("resolution:" + condition, evidence.payouts(), cost);
+        if (!externalMode || !m.negativeRisk())
+          ledger.redeem("resolution:" + condition, evidence.payouts(), cost);
         resolutions.put(condition, evidence);
         unhedged.remove(condition);
         pending.removeIf(p -> p.condition().equals(condition));
@@ -297,7 +381,8 @@ public final class ResearchSession implements AutoCloseable {
                 m.feeExponent(),
                 false,
                 m.observedMs(),
-                m.evidence()));
+                m.evidence(),
+                m.negativeRisk()));
         cancelAll(m);
         pending.removeIf(p -> p.condition().equals(m.condition()));
         save();
@@ -315,7 +400,33 @@ public final class ResearchSession implements AutoCloseable {
     mark();
     if (now >= nextDecision) {
       nextDecision = now + cfg.decisionMillis();
-      decide();
+      if (!externalMode) decide();
+      else {
+        for (var market : markets.values())
+          if (now < market.endMs()
+              && unhedged.containsKey(market.condition())
+              && now - unhedged.get(market.condition()) >= cfg.unhedgedMs()) {
+            Book a = books.get(market.first()), b = books.get(market.second());
+            if (a != null
+                && b != null
+                && fresh(a)
+                && fresh(b)
+                && !a.bids.isEmpty()
+                && !a.asks.isEmpty()
+                && !b.bids.isEmpty()
+                && !b.asks.isEmpty())
+              reduce(
+                  market,
+                  holding(market.first()).shares().subtract(holding(market.second()).shares()),
+                  a,
+                  b);
+          }
+        for (var e : List.copyOf(externalCancelAt.entrySet()))
+          if (now >= e.getValue()) {
+            cancel(e.getKey());
+            externalCancelAt.remove(e.getKey());
+          }
+      }
     }
   }
 
@@ -728,6 +839,60 @@ public final class ResearchSession implements AutoCloseable {
       BigDecimal q,
       BigDecimal edge,
       String purpose) {
+    if (externalMode) {
+      Book book = books.get(token);
+      BigDecimal volatility = vols.get(token);
+      if (book != null && volatility != null && !book.bids.isEmpty() && !book.asks.isEmpty()) {
+        BigDecimal inventory =
+            holding(m.first())
+                .shares()
+                .subtract(holding(m.second()).shares())
+                .divide(
+                    holding(m.first()).shares().add(holding(m.second()).shares()).max(ONE),
+                    18,
+                    RoundingMode.HALF_EVEN);
+        var features =
+            Map.of(
+                "spread",
+                book.asks.firstKey().subtract(book.bids.lastKey()),
+                "queue_ahead",
+                (buy ? book.bids : book.asks)
+                    .getOrDefault(price, ZERO)
+                    .multiply(cfg.queueMultiplier()),
+                "inventory_imbalance",
+                inventory,
+                "source_age_ms",
+                now - book.source(),
+                "seconds_to_expiry",
+                BigDecimal.valueOf(m.endMs() - now).divide(BigDecimal.valueOf(1000)),
+                "volatility",
+                volatility);
+        output.accept(
+            "ORDER_FEATURES",
+            Map.of(
+                "orderId",
+                id,
+                "marketId",
+                m.condition(),
+                "token",
+                token,
+                "submittedMs",
+                now,
+                "featureObservedMs",
+                now,
+                "provenance",
+                "PAPER_MODEL",
+                "features",
+                features,
+                "quantity",
+                q,
+                "queueFeatureDefinition",
+                "DISPLAYED_DEPTH_AT_SUBMISSION_TIMES_MODEL_MULTIPLIER"));
+      } else
+        output.accept(
+            "FEATURES_UNAVAILABLE",
+            Map.of("orderId", id, "at", now, "reason", "MISSING_CAUSAL_VOLATILITY_OR_DEPTH"));
+    }
     metrics.intent(id, now, m.condition(), edge, purpose);
     apply(
         matching.accept(
@@ -760,6 +925,182 @@ public final class ResearchSession implements AutoCloseable {
             purpose,
             "at",
             now));
+  }
+
+  public synchronized void restoreObservation(JsonNode data) {
+    if (!externalMode
+        || data.path("sequence").asLong() != inputSequence
+        || data.path("generatedMs").asLong() < now)
+      throw new IllegalArgumentException("Observation replay mismatch");
+    observations.putIfAbsent(inputSequence, data.path("generatedMs").asLong());
+    while (observations.size() > 1024) observations.remove(observations.keySet().iterator().next());
+    output.accept("OBSERVATION", data);
+  }
+
+  public synchronized JsonNode externalReply(String id) {
+    if (!externalReplies.containsKey(id)) throw new IllegalStateException("No PAPER response");
+    return externalReplies.get(id).deepCopy();
+  }
+
+  private void processExternal(JsonNode proposal) {
+    String clientId = proposal.path("id").asText();
+    var response = mapper.createObjectNode();
+    response
+        .put("id", clientId)
+        .put("virtualOnly", true)
+        .put("executionEnabled", false)
+        .put("liveAllowed", false);
+    List<AccountLedger.OrderIntent> intents = new ArrayList<>();
+    ResearchMarket[] membership;
+    String prefix, fingerprint;
+    try {
+      if (!clientId.matches("[A-Za-z0-9_.:-]{1,128}"))
+        throw new IllegalArgumentException("Invalid proposal id");
+      prefix = "phase3:" + digest(clientId.getBytes(java.nio.charset.StandardCharsets.UTF_8)) + ":";
+      // Canonical JSON field order makes network retries stable across object key ordering.
+      var canonical = mapper.convertValue(proposal, java.util.TreeMap.class);
+      fingerprint =
+          digest(
+              mapper
+                  .writer()
+                  .with(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS)
+                  .writeValueAsBytes(canonical));
+      List<String> existing =
+          ledger.snapshot().orders().keySet().stream()
+              .filter(id -> id.startsWith(prefix))
+              .sorted()
+              .toList();
+      if (!existing.isEmpty()) {
+        if (existing.size() != proposal.path("legs").size()
+            || existing.stream().anyMatch(id -> !id.startsWith(prefix + fingerprint + ":")))
+          throw new IllegalStateException("Idempotency key conflict");
+        response.put("status", "PAPER_ALREADY_RECORDED");
+        response.set("orders", mapper.valueToTree(existing));
+        rememberExternal(clientId, response);
+        return;
+      }
+      long observedSequence = proposal.path("sequence").asLong(-1);
+      Long issued = observations.get(observedSequence);
+      if (issued == null || now < issued || now - issued > 250)
+        throw new IllegalStateException("Observation expired or never issued");
+      if (!proposal.path("sessionId").asText().equals(sessionId))
+        throw new IllegalStateException("Wrong session");
+      var current = (com.fasterxml.jackson.databind.node.ObjectNode) proposal.deepCopy();
+      current.put("sequence", inputSequence);
+      var snapshot = exportSnapshot(now, false);
+      externalValidator.validateForPaper(snapshot, current);
+      membership = new ResearchMarket[proposal.path("legs").size()];
+      int index = 0;
+      for (var item : proposal.path("legs")) {
+        String token = item.path("token").asText();
+        intents.add(
+            new AccountLedger.OrderIntent(
+                prefix + fingerprint + ":" + index,
+                token,
+                item.path("buy").asBoolean(),
+                PaperMatchingEngine.decimal(item, "price"),
+                PaperMatchingEngine.decimal(item, "size")));
+        membership[index++] = markets.get(item.path("condition").asText());
+      }
+      // Validation failures never publish a partial reservation.
+      ledger.reserveBatch(intents);
+    } catch (Exception e) {
+      if (ledger.persistenceFailed())
+        throw new IllegalStateException("PAPER persistence failed", e);
+      response.put("status", "PAPER_REJECTED").put("reason", String.valueOf(e.getMessage()));
+      rememberExternal(clientId, response);
+      return;
+    }
+    try {
+      int i = 0;
+      for (var intent : intents) {
+        submit(
+            intent.id(),
+            membership[i++],
+            intent.token(),
+            intent.buy(),
+            intent.price(),
+            intent.size(),
+            ZERO,
+            "EXTERNAL_PAPER");
+        externalCancelAt.put(intent.id(), now + 5000);
+      }
+      output.accept(
+          "PROPOSAL_GROUP",
+          Map.of(
+              "groupId",
+              prefix + fingerprint,
+              "at",
+              now,
+              "orders",
+              intents.stream()
+                  .map(intent -> Map.of("id", intent.id(), "quantity", intent.size()))
+                  .toList()));
+      response.put("status", "PAPER_SUBMITTED");
+      response.set(
+          "orders",
+          mapper.valueToTree(intents.stream().map(AccountLedger.OrderIntent::id).toList()));
+      save();
+      rememberExternal(clientId, response);
+    } catch (RuntimeException e) {
+      intents.forEach(intent -> ledger.cancel(intent.id()));
+      suspend();
+      throw e;
+    }
+  }
+
+  private void processGroupSettlement(JsonNode event) {
+    String id = event.path("id").asText();
+    var receipt = mapper.createObjectNode();
+    receipt
+        .put("id", "settle:" + id)
+        .put("virtualOnly", true)
+        .put("executionEnabled", false)
+        .put("liveAllowed", false);
+    MultiOutcomeSettlement.Verified proof;
+    try {
+      proof = MultiOutcomeSettlement.verify(event, markets, resolutions, mapper);
+      if (groupProofs.containsKey(id) && !groupProofs.get(id).equals(proof.membershipSha256()))
+        throw new IllegalArgumentException("Terminal outcome membership changed");
+    } catch (IllegalArgumentException e) {
+      receipt.put("status", "PAPER_GROUP_DEFERRED").put("reason", e.getMessage());
+      rememberExternal("settle:" + id, receipt);
+      return;
+    }
+    groupProofs.put(id, proof.membershipSha256());
+    save();
+    BigDecimal quantity =
+        proof.payouts().values().stream()
+            .flatMap(m -> m.keySet().stream())
+            .map(t -> holding(t).shares())
+            .reduce(ZERO, BigDecimal::add);
+    boolean changed =
+        ledger.redeemBatch(
+            "group-resolution:" + id,
+            proof.payouts(),
+            quantity.signum() > 0 ? cfg.redemptionCost() : ZERO);
+    receipt
+        .put("status", changed ? "PAPER_GROUP_REDEEMED" : "PAPER_GROUP_ALREADY_REDEEMED")
+        .put("membershipSha256", proof.membershipSha256());
+    outcomeGroups.remove(id);
+    save();
+    rememberExternal("settle:" + id, receipt);
+  }
+
+  private void rememberExternal(String id, JsonNode response) {
+    externalReplies.put(id, response.deepCopy());
+    while (externalReplies.size() > 1024)
+      externalReplies.remove(externalReplies.keySet().iterator().next());
+    output.accept("EXTERNAL_ACK", response);
+  }
+
+  private static String digest(byte[] data) {
+    try {
+      return java.util.HexFormat.of()
+          .formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(data));
+    } catch (java.security.NoSuchAlgorithmException e) {
+      throw new IllegalStateException(e);
+    }
   }
 
   public synchronized void cancel(String id) {
@@ -846,6 +1187,10 @@ public final class ResearchSession implements AutoCloseable {
 
   /** A detached, bounded observation. This method never submits or cancels an order. */
   public synchronized JsonNode researchSnapshot(long generatedAt) {
+    return exportSnapshot(generatedAt, true);
+  }
+
+  private JsonNode exportSnapshot(long generatedAt, boolean issued) {
     if (now < 0 || generatedAt < now) throw new IllegalStateException("No causal observation");
     var state = ledger.snapshot();
     var account = new LinkedHashMap<String, Object>();
@@ -913,6 +1258,13 @@ public final class ResearchSession implements AutoCloseable {
     result.put("schema", 1);
     result.put("mode", "PAPER");
     result.put("researchOnly", true);
+    result.put("paperExecutionEnabled", externalMode);
+    if (externalMode && issued) {
+      observations.putIfAbsent(inputSequence, generatedAt);
+      while (observations.size() > 1024)
+        observations.remove(observations.keySet().iterator().next());
+      output.accept("OBSERVATION", Map.of("sequence", inputSequence, "generatedMs", generatedAt));
+    }
     result.put("executionEnabled", false);
     result.put("liveAllowed", false);
     result.put("sessionId", sessionId);
@@ -922,6 +1274,16 @@ public final class ResearchSession implements AutoCloseable {
     result.put("maxBookAgeMs", cfg.maxBookAgeMs());
     result.put("metadataMaxAgeMs", cfg.metadataMaxAgeMs());
     result.put("account", account);
+    if (externalMode)
+      result.put(
+          "paperStatistics",
+          Map.of(
+              "matching",
+              markouts.snapshot(generatedAt),
+              "dataGaps",
+              matching.gaps(),
+              "riskBreaches",
+              riskBreaches));
     result.put("markets", relevant.stream().limit(256).toList());
     result.put("books", depth);
     result.put("truncated", relevant.size() > 256 || books.size() > 512);
@@ -968,5 +1330,6 @@ public final class ResearchSession implements AutoCloseable {
   public synchronized void close() {
     save();
     checkpoint.close();
+    if (externalValidator != null) externalValidator.close();
   }
 }

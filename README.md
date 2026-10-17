@@ -2,6 +2,10 @@
 
 Phase-one reliability development: PAPER-only, durable account/order state, current API contracts and regression tests. Fills are disabled by default; this release makes no profitability claim. See [phase-one implementation and rollout limits](docs/PHASE1.md).
 
+Phase-three research adds an installable Python SDK, causal replay/labels, external strategy screening,
+and opt-in virtual execution through the shared PAPER engine. See [scope, commands and acceptance gaps](docs/PHASE3_COMPLETION.md).
+Market qualification remains **NO_GO**; passing software checks does not establish net profitability.
+
 Open-source Polymarket trading infrastructure and strategy reverse-engineering toolkit.
 
 Polybot is a multi-service system for:

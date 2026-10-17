@@ -50,6 +50,15 @@ public class ResearchFeed {
     }
   }
 
+  @Value("${paper.phase3.execution.enabled:false}")
+  private boolean externalPaper;
+
+  @Value("${paper.phase3.discovery.tags:}")
+  private String broaderTags = "";
+
+  private final Map<String, JsonNode> outcomeGroups =
+      new java.util.concurrent.ConcurrentHashMap<>();
+
   private volatile long retryAfter;
   private long failures;
 
@@ -64,6 +73,39 @@ public class ResearchFeed {
     this.clock = clock;
     this.journal = journal;
     this.ws = ws;
+  }
+
+  public synchronized <T> T readConsistently(java.util.function.Supplier<T> reader) {
+    return reader.get();
+  }
+
+  /** External PAPER input shares the same receive-order lock as market frames. */
+  public synchronized void publishPaperProposal(JsonNode proposal) {
+    if (stopping) throw new IllegalStateException("Research feed unavailable");
+    emit("EXTERNAL_PROPOSAL", proposal.deepCopy());
+  }
+
+  public void retireOutcomeGroup(String id) {
+    outcomeGroups.remove(id);
+  }
+
+  public void recoverGroups(List<JsonNode> groups) {
+    groups.forEach(g -> outcomeGroups.put(g.path("id").asText(), g.deepCopy()));
+  }
+
+  public void publishPaperGroupSettlement(String id) {
+    if (!id.matches("[0-9]{1,24}") || stopping || clock.millis() < retryAfter)
+      throw new IllegalArgumentException("Invalid group or public API backoff");
+    try {
+      JsonNode event = get("https://gamma-api.polymarket.com/events/" + id);
+      if (!event.path("id").asText().equals(id))
+        throw new IllegalArgumentException("Event identity mismatch");
+      emit("GROUP_SETTLEMENT", event);
+    } catch (RuntimeException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new IllegalStateException("Cannot read terminal event", e);
+    }
   }
 
   public record Input(String kind, long at, JsonNode data) {}
@@ -90,7 +132,13 @@ public class ResearchFeed {
       journal.record(
           "DATASET_CONFIG",
           null,
-          Map.of("schema", 1, "format", "normalized-public-v2", "strategyIndependent", true));
+          Map.of(
+              "schema",
+              1,
+              "format",
+              "normalized-public-v2",
+              "strategyIndependent",
+              !externalPaper));
       ws.onFrame(this::emit);
     }
   }
@@ -148,6 +196,15 @@ public class ResearchFeed {
           }
       }
       for (String slug : slugs) discover(slug);
+      if (externalPaper && !broaderTags.isBlank()) discoverBroader();
+      if (externalPaper)
+        for (var entry : List.copyOf(outcomeGroups.entrySet())) {
+          JsonNode event = get("https://gamma-api.polymarket.com/events/" + entry.getKey());
+          if (!event.path("id").asText().equals(entry.getKey()))
+            throw new IllegalArgumentException("Event identity mismatch");
+          emit("GROUP_META", event);
+          if (event.path("closed").asBoolean()) emit("GROUP_SETTLEMENT", event);
+        }
       var active = new TreeSet<String>();
       for (var m : markets.values())
         if (!resolved.contains(m.condition())
@@ -190,6 +247,65 @@ public class ResearchFeed {
     }
   }
 
+  private void discoverBroader() throws Exception {
+    for (String tag : broaderTags.split(",")) {
+      tag = tag.trim();
+      if (!Set.of("politics", "sports").contains(tag))
+        throw new IllegalArgumentException("Unsupported discovery tag");
+      JsonNode resolved = get("https://gamma-api.polymarket.com/tags/slug/" + tag);
+      if (!resolved.path("slug").asText().equals(tag)
+          || !resolved.path("id").asText().matches("[0-9]+"))
+        throw new IllegalArgumentException("Tag identity mismatch");
+      JsonNode page =
+          get(
+              "https://gamma-api.polymarket.com/events/keyset?closed=false&limit=3&tag_id="
+                  + resolved.path("id").asText());
+      if (!page.path("events").isArray() || page.path("events").size() > 3)
+        throw new IllegalArgumentException("Discovery page bound");
+      for (var listed : page.path("events")) {
+        String eventId = listed.path("id").asText();
+        if (!eventId.matches("[0-9]{1,24}")) throw new IllegalArgumentException("Missing event id");
+        JsonNode event = get("https://gamma-api.polymarket.com/events/" + eventId);
+        if (!event.path("id").asText().equals(eventId))
+          throw new IllegalArgumentException("Event detail identity mismatch");
+        if (!event.path("markets").isArray()
+            || event.path("markets").size() > 16
+            || event.path("negRiskAugmented").asBoolean(false)) continue;
+        if (event.path("negRisk").asBoolean() && event.path("markets").size() >= 2) {
+          String id = event.path("id").asText();
+          if (!id.matches("[0-9]{1,24}"))
+            throw new IllegalArgumentException("Event identity missing");
+          if (outcomeGroups.size() >= 32 && !outcomeGroups.containsKey(id)) continue;
+          outcomeGroups.put(id, event.deepCopy());
+          emit("GROUP_META", event);
+        }
+        for (var row : event.path("markets")) {
+          try {
+            metadata(row);
+          } catch (PublicApiFailure e) {
+            if (e.status != 404) throw e;
+            emit(
+                "MARKET_UNAVAILABLE",
+                mapper.valueToTree(
+                    Map.of(
+                        "condition",
+                        row.path("conditionId").asText(),
+                        "url",
+                        e.url,
+                        "status",
+                        404)));
+          } catch (IllegalArgumentException | java.time.DateTimeException e) {
+            emit(
+                "MARKET_UNAVAILABLE",
+                mapper.valueToTree(
+                    Map.of(
+                        "condition", row.path("conditionId").asText(), "reason", e.getMessage())));
+          }
+        }
+      }
+    }
+  }
+
   private void discover(String slug) throws Exception {
     String condition =
         markets.values().stream()
@@ -217,7 +333,16 @@ public class ResearchFeed {
   private void metadata(JsonNode row) throws Exception {
     if (!row.path("active").asBoolean(false)
         || row.path("closed").asBoolean(true)
-        || row.path("negRisk").asBoolean(false)) return;
+        || (row.path("negRisk").asBoolean(false) && !externalPaper)) return;
+    boolean negativeRisk = row.path("negRisk").asBoolean(false);
+    if (negativeRisk) {
+      JsonNode labels = row.path("outcomes");
+      if (labels.isTextual()) labels = mapper.readTree(labels.asText());
+      if (labels.size() != 2
+          || !labels.get(0).asText().equalsIgnoreCase("Yes")
+          || !labels.get(1).asText().equalsIgnoreCase("No"))
+        throw new IllegalArgumentException("Unknown negative-risk outcome slots");
+    }
     JsonNode idSource = row;
     // Gamma's unversioned legacy read schema is recognizable without selecting a signing protocol.
     if (!row.hasNonNull("version")
@@ -235,17 +360,20 @@ public class ResearchFeed {
     if (end <= clock.millis()) return; // Expired discovery rows need no tradable CLOB book.
     int duration = slug.contains("updown-5m-") ? 300 : slug.contains("updown-15m-") ? 900 : 3600;
     long start = end - duration * 1000L;
+    if (externalPaper && !slug.contains("updown-") && !slug.contains("up-or-down-"))
+      start = Instant.parse(row.path("startDate").asText()).toEpochMilli();
     JsonNode book = get("https://clob.polymarket.com/book?token_id=" + ids.get(0));
-    if (!book.path("market").asText().equals(condition) || book.path("neg_risk").asBoolean())
+    if (!book.path("market").asText().equals(condition)
+        || book.path("neg_risk").asBoolean() != negativeRisk)
       throw new IllegalArgumentException("Book identity/risk mismatch");
     JsonNode otherBook = get("https://clob.polymarket.com/book?token_id=" + ids.get(1));
     if (!book.path("asset_id").asText().equals(ids.get(0))
         || !otherBook.path("asset_id").asText().equals(ids.get(1))
         || !otherBook.path("market").asText().equals(condition)
-        || otherBook.path("neg_risk").asBoolean())
+        || otherBook.path("neg_risk").asBoolean() != negativeRisk)
       throw new IllegalArgumentException("Binary outcome membership mismatch");
     JsonNode fee = get("https://clob.polymarket.com/clob-markets/" + condition);
-    var parameters = ClobMarketParameters.parse(fee, condition, Set.copyOf(ids));
+    var parameters = ClobMarketParameters.parse(fee, condition, Set.copyOf(ids), negativeRisk);
     BigDecimal rate = parameters.fees().rate();
     int exponent = parameters.fees().exponent();
     String evidence = "https://gamma-api.polymarket.com/markets?slug=" + slug;
@@ -266,7 +394,8 @@ public class ResearchFeed {
             exponent,
             row.path("acceptingOrders").asBoolean(false) && parameters.accepting(),
             clock.millis(),
-            evidence);
+            evidence,
+            negativeRisk);
     journal.record("METADATA_EVIDENCE", null, Map.of("market", row, "book", book, "fee", fee));
     markets.put(condition, m);
     emit("META", mapper.valueToTree(m));

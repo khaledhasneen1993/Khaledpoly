@@ -10,6 +10,11 @@ public record ClobMarketParameters(
     BigDecimal tick, BigDecimal minimum, FeeModel fees, boolean accepting) {
   public static ClobMarketParameters parse(
       JsonNode n, String condition, Set<String> expectedTokens) {
+    return parse(n, condition, expectedTokens, false);
+  }
+
+  public static ClobMarketParameters parse(
+      JsonNode n, String condition, Set<String> expectedTokens, boolean negativeRisk) {
     String actual = n.hasNonNull("c") ? n.path("c").asText() : n.path("condition_id").asText();
     if ((!actual.isEmpty() && !actual.equals(condition)) || !n.path("t").isArray())
       throw new IllegalArgumentException("V2 condition identity mismatch");
@@ -19,7 +24,7 @@ public record ClobMarketParameters(
           || token.path("t").asText().isBlank()
           || !tokens.add(token.path("t").asText()))
         throw new IllegalArgumentException("Invalid V2 token membership");
-    if (!tokens.equals(expectedTokens) || n.path("nr").asBoolean(false))
+    if (!tokens.equals(expectedTokens) || n.path("nr").asBoolean(false) != negativeRisk)
       throw new IllegalArgumentException("Unsupported V2 token/risk universe");
     BigDecimal tick = decimal(n, "mts"), minimum = decimal(n, "mos");
     if (tick.signum() <= 0 || tick.compareTo(BigDecimal.ONE) >= 0 || minimum.signum() <= 0)
@@ -28,7 +33,11 @@ public record ClobMarketParameters(
     FeeModel fees;
     if (fd.isObject()) {
       BigDecimal exponent = decimal(fd, "e");
-      fees = new FeeModel(decimal(fd, "r"), exponent.intValueExact());
+      try {
+        fees = new FeeModel(decimal(fd, "r"), exponent.intValueExact());
+      } catch (ArithmeticException e) {
+        throw new IllegalArgumentException("Nonintegral fee exponent", e);
+      }
       if (fees.rate().signum() > 0 && (!fd.path("to").isBoolean() || !fd.path("to").asBoolean()))
         throw new IllegalArgumentException("Unsupported maker fee schedule");
     } else if (n.hasNonNull("tbf")

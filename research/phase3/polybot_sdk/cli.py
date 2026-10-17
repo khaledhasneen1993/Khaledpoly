@@ -7,7 +7,7 @@ from .runtime import shadow_run, replay_shadow
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Read-only PAPER research. No order submission.')
+    parser = argparse.ArgumentParser(description='PAPER research and opt-in virtual execution. No venue order submission.')
     commands = parser.add_subparsers(dest='command', required=True)
     inspect = commands.add_parser('inspect')
     inspect.add_argument('snapshot')
@@ -21,6 +21,23 @@ def main():
     shadow.add_argument('--strategy', choices=('inventory-mm-shadow', 'event-probability', 'complete-set'), default='inventory-mm-shadow')
     shadow.add_argument('--fill-model', help='Research-only model artifact, embedded in the run manifest')
     shadow.add_argument('--features', help='Append-only feature JSONL with source and availability times')
+    execute = commands.add_parser('execute-paper')
+    execute.add_argument('--url', default='http://127.0.0.1:8080')
+    execute.add_argument('--seconds', type=float, default=60)
+    execute.add_argument('--interval', type=float, default=1)
+    execute.add_argument('--strategy', choices=('inventory-mm-shadow', 'event-probability', 'complete-set'), default='inventory-mm-shadow')
+    execute.add_argument('--features')
+    execute.add_argument('--output', required=True)
+    reconcile = commands.add_parser('reconcile-paper')
+    reconcile.add_argument('directory')
+    reconcile.add_argument('--url', default='http://127.0.0.1:8080')
+    reconcile.add_argument('--output', required=True)
+    settlement = commands.add_parser('settle-paper-group')
+    settlement.add_argument('event_id')
+    settlement.add_argument('--url', default='http://127.0.0.1:8080')
+    labels = commands.add_parser('build-labels')
+    labels.add_argument('tape')
+    labels.add_argument('--output', required=True)
     discovery = commands.add_parser('discover')
     discovery.add_argument('--category', choices=('politics', 'sports'), required=True)
     discovery.add_argument('--limit', type=int, default=20)
@@ -63,6 +80,19 @@ def main():
         token = os.environ.get('POLYBOT_EXECUTOR_TOKEN', '')
         groups = decode(Path(args.groups).read_text()) if args.groups else None
         result = shadow_run(PaperClient(args.url, token), args.output, args.seconds, args.interval, groups, args.strategy, args.features, decode(Path(args.fill_model).read_text()) if args.fill_model else None)
+    elif args.command == 'execute-paper':
+        from .execution import execute_paper, PaperExecutionClient
+        result = execute_paper(PaperExecutionClient(args.url, os.environ.get('POLYBOT_EXECUTOR_TOKEN', '')),
+                               args.output, args.seconds, args.interval, args.strategy, args.features)
+    elif args.command == 'reconcile-paper':
+        from .execution import reconcile_paper, PaperExecutionClient
+        result = reconcile_paper(PaperExecutionClient(args.url, os.environ.get('POLYBOT_EXECUTOR_TOKEN', '')), args.directory, args.output)
+    elif args.command == 'settle-paper-group':
+        from .execution import PaperExecutionClient
+        result = PaperExecutionClient(args.url, os.environ.get('POLYBOT_EXECUTOR_TOKEN', '')).settle_group(args.event_id)
+    elif args.command == 'build-labels':
+        from .labels import build_labels
+        result = build_labels(args.tape, args.output)
     elif args.command == 'discover':
         from .discovery import UniverseDiscovery
         from .runtime import private_write

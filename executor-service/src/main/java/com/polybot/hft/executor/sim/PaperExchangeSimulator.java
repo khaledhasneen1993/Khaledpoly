@@ -96,6 +96,9 @@ public class PaperExchangeSimulator {
   @org.springframework.beans.factory.annotation.Value("${paper.closed-loop.enabled:false}")
   private boolean closedLoop;
 
+  @org.springframework.beans.factory.annotation.Value("${paper.phase3.execution.enabled:false}")
+  private boolean externalPaperExecution;
+
   @org.springframework.beans.factory.annotation.Value("${paper.closed-loop.config:}")
   private String researchConfigPath;
 
@@ -237,6 +240,8 @@ public class PaperExchangeSimulator {
       log.info("paper-exchange simulator disabled");
       return;
     }
+    if (externalPaperExecution && !closedLoop)
+      throw new IllegalStateException("External PAPER requires coordinated account mode");
     if (hft.mode() != HftProperties.TradingMode.PAPER)
       throw new IllegalStateException("Simulator requires PAPER mode");
     if (mergeCost.signum() < 0 || portfolioBudget.signum() <= 0)
@@ -285,13 +290,23 @@ public class PaperExchangeSimulator {
               java.nio.file.Path.of(statePath + ".research"),
               (kind, data) -> {
                 journal.record("SESSION_" + kind, null, data);
+                if (kind.equals("EXTERNAL_ACK")) {
+                  JsonNode n = objectMapper.valueToTree(data);
+                  if (java.util.Set.of("PAPER_GROUP_REDEEMED", "PAPER_GROUP_ALREADY_REDEEMED")
+                      .contains(n.path("status").asText()))
+                    researchFeed.retireOutcomeGroup(
+                        n.path("id").asText().substring("settle:".length()));
+                }
                 if (kind.equals("ALERT")) {
                   var n = objectMapper.valueToTree(data);
                   alertOutbox.add(
                       n.path("key").asText(), n.path("message").asText(), clock.millis());
                 }
-              });
+              },
+              externalPaperExecution,
+              null);
       researchFeed.recover(researchSession.markets());
+      researchFeed.recoverGroups(researchSession.outcomeGroups());
       researchFeed.listen(
           input -> {
             synchronized (this) {
@@ -390,10 +405,45 @@ public class PaperExchangeSimulator {
         queueMultiplier);
   }
 
-  public synchronized JsonNode researchSnapshot() {
-    if (!enabled() || researchSession == null || researchStopping || recoveryBlocked)
-      throw new IllegalStateException("Closed-loop PAPER unavailable");
-    return researchSession.researchSnapshot(clock.millis());
+  public JsonNode researchSnapshot() {
+    return researchFeed.readConsistently(
+        () -> {
+          synchronized (this) {
+            if (!enabled() || researchSession == null || researchStopping || recoveryBlocked)
+              throw new IllegalStateException("Closed-loop PAPER unavailable");
+            return researchSession.researchSnapshot(clock.millis());
+          }
+        });
+  }
+
+  public JsonNode submitPaperProposal(JsonNode proposal) {
+    if (hft.risk().killSwitch()) throw new IllegalStateException("Kill switch active");
+    if (!externalPaperExecution
+        || !closedLoop
+        || !enabled()
+        || hft.mode() != HftProperties.TradingMode.PAPER)
+      throw new IllegalStateException("External PAPER execution is disabled");
+    return researchFeed.readConsistently(
+        () -> {
+          researchFeed.publishPaperProposal(proposal);
+          synchronized (this) {
+            if (researchStopping || recoveryBlocked)
+              throw new IllegalStateException("PAPER session unavailable");
+            return researchSession.externalReply(proposal.path("id").asText());
+          }
+        });
+  }
+
+  public JsonNode settlePaperGroup(String id) {
+    if (!externalPaperExecution
+        || !closedLoop
+        || !enabled()
+        || hft.mode() != HftProperties.TradingMode.PAPER)
+      throw new IllegalStateException("External PAPER mode required");
+    researchFeed.publishPaperGroupSettlement(id);
+    synchronized (this) {
+      return researchSession.externalReply("settle:" + id);
+    }
   }
 
   public boolean enabled() {

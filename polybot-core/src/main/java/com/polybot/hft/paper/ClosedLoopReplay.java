@@ -33,6 +33,34 @@ public final class ClosedLoopReplay {
       long windowEnd,
       String freezeSha)
       throws Exception {
+    return runInternal(
+        tape, out, config, limits, mapper, raw, windowStart, windowEnd, freezeSha, false);
+  }
+
+  public static Map<String, Object> runExternal(
+      Path tape,
+      Path out,
+      ResearchConfig config,
+      AccountLedger.Limits limits,
+      ObjectMapper mapper,
+      boolean raw)
+      throws Exception {
+    return runInternal(
+        tape, out, config, limits, mapper, raw, Long.MIN_VALUE, Long.MAX_VALUE, "", true);
+  }
+
+  private static Map<String, Object> runInternal(
+      Path tape,
+      Path out,
+      ResearchConfig config,
+      AccountLedger.Limits limits,
+      ObjectMapper mapper,
+      boolean raw,
+      long windowStart,
+      long windowEnd,
+      String freezeSha,
+      boolean external)
+      throws Exception {
     if (windowStart >= windowEnd) throw new IllegalArgumentException("Empty heldout window");
     if (Files.exists(out)) throw new IllegalArgumentException("Replay output must not exist");
     Files.createDirectories(out);
@@ -50,6 +78,46 @@ public final class ClosedLoopReplay {
     var marketDays = new TreeSet<String>();
     var initialMetadata = new TreeMap<String, JsonNode>();
     boolean started = false;
+    String externalSession = null;
+    JsonNode initialExternalAccount = null, initialExternalCheckpoint = null;
+    if (external) {
+      try (var reader = Files.newBufferedReader(tape)) {
+        for (int i = 0; i < 256; i++) {
+          String line = reader.readLine();
+          if (line == null) break;
+          var row = mapper.readTree(line);
+          if (row.path("kind").asText().equals("SESSION_EXTERNAL_CONFIG")) {
+            externalSession = row.path("data").path("sessionId").asText();
+            initialExternalAccount = row.path("data").path("initialAccount");
+            initialExternalCheckpoint = row.path("data").path("initialCheckpoint");
+            clock.at = atFrom(row);
+            break;
+          }
+        }
+      }
+      if (externalSession == null || externalSession.isBlank())
+        throw new IllegalArgumentException("Missing external PAPER session declaration");
+      if (!initialExternalAccount.isObject() || !initialExternalCheckpoint.isObject())
+        throw new IllegalArgumentException(
+            "External audit requires its durable starting account/checkpoint");
+      var seed = initialExternalCheckpoint.deepCopy();
+      var recordedConfiguration =
+          mapper.treeToValue(seed.path("configuration"), ResearchConfig.class);
+      if (!config.equals(recordedConfiguration)) {
+        if (!initialExternalAccount.path("orders").isEmpty()
+            || !initialExternalAccount.path("holdings").isEmpty()
+            || !seed.path("markets").isEmpty()
+            || !seed.path("resolutions").isEmpty()
+            || initialExternalAccount.path("cash").decimalValue().compareTo(config.initialCash())
+                != 0)
+          throw new IllegalArgumentException(
+              "Cannot change execution config over a recovered account");
+        ((com.fasterxml.jackson.databind.node.ObjectNode) seed)
+            .set("configuration", mapper.valueToTree(config));
+      }
+      mapper.writeValue(out.resolve("ledger.json").toFile(), initialExternalAccount);
+      mapper.writeValue(out.resolve("session.json").toFile(), seed);
+    }
     try (var ledger =
             new AccountLedger(
                 out.resolve("ledger.json"), mapper, config.initialCash(), limits, clock);
@@ -59,8 +127,9 @@ public final class ClosedLoopReplay {
                 config,
                 mapper,
                 out.resolve("session.json"),
-                (kind, data) ->
-                    audit.add(Map.of("kind", kind, "at", clock.millis(), "data", data)));
+                (kind, data) -> audit.add(Map.of("kind", kind, "at", clock.millis(), "data", data)),
+                external,
+                externalSession);
         var reader = Files.newBufferedReader(tape)) {
       String line;
       while ((line = reader.readLine()) != null) {
@@ -122,7 +191,9 @@ public final class ClosedLoopReplay {
             if (meta.path("endMs").asLong() > windowStart) session.accept("META", at, meta);
         }
         clock.at = at;
-        if (raw && kind.equals("RAW_MARKET")) {
+        if (external && kind.equals("SESSION_OBSERVATION")) {
+          session.restoreObservation(data);
+        } else if (raw && kind.equals("RAW_MARKET")) {
           normalizer.accept(
               data.path("text").asText(), at, (type, n) -> session.accept(type, at, n));
         } else if (kind.startsWith("RESEARCH_")) {
@@ -191,11 +262,21 @@ public final class ClosedLoopReplay {
       result.put("windowStartMs", windowStart);
       result.put("windowEndMs", windowEnd);
       result.put("freezeSha256", freezeSha);
-      result.put("replayMode", "closed-loop");
+      result.put("replayMode", external ? "external-paper-inputs" : "closed-loop");
       result.put("maxInputGapMs", maxInputGap);
       result.put("maxSourceLagMs", maxLag);
       result.put("inputFormat", raw ? "raw-market" : "normalized-public-v1");
-      result.put("strategyIndependentDataset", declared);
+      result.put("strategyIndependentDataset", declared && !external);
+      result.put("externalPaperInputs", external);
+      if (external) {
+        result.put("startingCash", initialExternalAccount.path("cash"));
+        result.put("startingRealizedPnl", initialExternalAccount.path("realized"));
+        result.put(
+            "startingAccountSha256", sha256(mapper.writeValueAsBytes(initialExternalAccount)));
+        result.put(
+            "startingStateSource",
+            "RECORDED_VIRTUAL_ACCOUNT_EXECUTION_AUDIT_NOT_INDEPENDENT_BACKTEST");
+      }
       result.put("recordingClosedCleanly", clean);
       result.put("revision", revision);
       result.put(
@@ -211,7 +292,10 @@ public final class ClosedLoopReplay {
       result.put("decision", "NO_GO");
       result.put(
           "reason",
-          "Evaluate frozen heldout baseline and stress reports against acceptance criteria");
+          external
+              ? "External intent replay tests execution consistency, not independent strategy"
+                  + " qualification"
+              : "Evaluate frozen heldout baseline and stress reports against acceptance criteria");
       Files.writeString(
           out.resolve("audit.jsonl"),
           String.join(
@@ -232,6 +316,12 @@ public final class ClosedLoopReplay {
           mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
       return result;
     }
+  }
+
+  private static long atFrom(JsonNode row) {
+    if (!row.path("arrivalMs").isIntegralNumber() || row.path("arrivalMs").asLong() < 0)
+      throw new IllegalArgumentException("Invalid startup clock");
+    return row.path("arrivalMs").asLong();
   }
 
   public static String sha256(Path path) throws Exception {

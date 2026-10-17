@@ -28,7 +28,9 @@ public class ExecutorAccessFilter extends OncePerRequestFilter {
         return;
       }
     }
-    if (req.getRequestURI().equals("/api/research/v1/proposals/screen")
+    if ((req.getRequestURI().equals("/api/research/v1/proposals/screen")
+            || req.getRequestURI().equals("/api/research/v1/proposals/paper")
+            || req.getRequestURI().equals("/api/research/v1/proposals/settle-paper-group"))
         && req.getMethod().equals("POST")) {
       byte[] body = req.getInputStream().readNBytes(65537);
       if (body.length > 65536) {
