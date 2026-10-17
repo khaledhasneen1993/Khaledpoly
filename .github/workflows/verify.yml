@@ -19,6 +19,20 @@ jobs:
       - run: python3 -m unittest discover -s research/phase4/tests -v
       - run: python3 -m research.phase4.audit --help
       - run: python3 -m research.phase4.recorder --help
+      - name: Phase 4 sampled Polymarket event and book evidence (never qualification)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/phase4-data-reliability'
+        timeout-minutes: 3
+        run: |
+          mkdir -p research/output
+          python3 -m research.phase4.market_evidence --category politics --limit 1 --max-books 2 --output research/output/politics-evidence.json
+          python3 -m research.phase4.market_evidence --category sports --limit 1 --max-books 2 --output research/output/sports-evidence.json
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push' && github.ref == 'refs/heads/phase4-data-reliability' && always()
+        with:
+          name: phase4-polymarket-market-evidence
+          path: |
+            research/output/politics-evidence.json
+            research/output/sports-evidence.json
       - name: Phase 4 public source reachability (never qualification)
         if: github.event_name == 'push' && github.ref == 'refs/heads/phase4-data-reliability'
         timeout-minutes: 2

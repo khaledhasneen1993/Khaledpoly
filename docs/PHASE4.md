@@ -183,3 +183,25 @@ A precise, auditable summary is checked in at
 GitHub run/artifact is the primary evidence; the checked-in file does not
 override it. Bybit access from the intended long-running host is still
 unverified; the CI runner returning 403 cannot be called a successful source.
+
+
+## Change 9: Polymarket category/event identity and sampled CLOB evidence
+
+The bounded \`research.phase4.market_evidence\` tool reads only PUBLIC
+Gamma category tags, bounded event pages and per-event detail, plus an
+optional single V1 book and CLOB market-info snapshot. Every retained
+binary market must expose a valid condition ID, market identity and
+exactly two version-appropriate outcome IDs. V1 CLOB token IDs and V2
+position IDs must **never** be treated as equivalent. Invalid/duplicated
+markets remain explicit missing evidence, not tradable candidates.
+Network and unexpected API schemas become structured errors.
+
+    python3 -m research.phase4.market_evidence --category sports --limit 2 \
+      --max-books 2 --output research/output/phase4-sports-001.json
+
+A market-info hash is not validation of fee schedules; a V1 sampled book
+is not continuous depth; V2 books are marked adapter-unverified pending
+explicit protocol validation. A multi-market event is NOT assumed a complete
+negative-risk settlement universe. Neither tag/category nor one-shot
+snapshots prove canonical terminal payouts. All output remains \`NO_GO\`,
+independent of public endpoint reachability or green tests.
