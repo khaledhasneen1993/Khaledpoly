@@ -47,7 +47,9 @@ def shadow_run(client, directory, seconds=60, interval=1, groups=None, strategy=
     try:
         with open(path / 'observations.jsonl', 'x', encoding='utf-8') as tape:
             os.chmod(path / 'observations.jsonl', 0o600)
-            while time.monotonic() < deadline:
+            first_cycle = True
+            while first_cycle or time.monotonic() < deadline:
+                first_cycle = False
                 delay = interval
                 if tail is not None:
                     tail.update(store)  # Local evidence failures are fatal, never network retries.

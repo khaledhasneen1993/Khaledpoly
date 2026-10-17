@@ -251,3 +251,13 @@ lists to 64 markets while exposing the exact number of uninspected rows.
 Truncated multi-market/negative-risk events remain explicitly unqualified.
 Schema errors include bounded diagnostic messages to distinguish malformed
 data from an oversized but valid event.
+
+
+## Change 13: deterministic first observation for short shadow windows
+
+A CI regression on an older phase-3 test exposed a one-shot duration
+race: initialization overhead could consume a 0.01 second shadow
+window before the first snapshot. The PAPER shadow loop now guarantees
+one attempted observation for every positive duration without extending
+the requested end time. No additional venue order logic, fill assumptions
+or LIVE permissions change. A micro-duration regression test guards it.
