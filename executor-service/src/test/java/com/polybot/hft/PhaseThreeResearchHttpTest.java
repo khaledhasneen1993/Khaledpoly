@@ -174,6 +174,34 @@ class PhaseThreeResearchHttpTest {
             new HttpEntity<>(proposal, headers),
             JsonNode.class);
     assertThat(repeated.getBody()).isEqualTo(screened.getBody());
+    // A lost POST response must be recoverable read-only even when the
+    // PAPER executor advances its causal sequence. No duplicate budget
+    // reservation, account state change, or new proposal ID is needed.
+    var receiptUrl = "/api/research/v1/proposals/screen-receipts/http-contract";
+    assertThat(
+            client.exchange(receiptUrl, HttpMethod.GET,
+                            new HttpEntity<>(new HttpHeaders()), JsonNode.class)
+                .getStatusCode().value())
+        .isEqualTo(401);
+    var savedReceipt = client.exchange(
+        receiptUrl, HttpMethod.GET, new HttpEntity<>(headers), JsonNode.class);
+    assertThat(savedReceipt.getStatusCode().value()).isEqualTo(200);
+    assertThat(savedReceipt.getBody()).isEqualTo(screened.getBody());
+    assertThat(savedReceipt.getHeaders().getCacheControl()).isEqualTo("no-store");
+    emit("FRAME", Map.of("events", events), at + 253);
+    var newerSnapshot = get(headers).getBody();
+    assertThat(newerSnapshot.path("sequence").asLong())
+        .isGreaterThan(current.path("sequence").asLong());
+    var recovered = client.exchange(
+        receiptUrl, HttpMethod.GET, new HttpEntity<>(headers), JsonNode.class);
+    assertThat(recovered.getStatusCode().value()).isEqualTo(200);
+    assertThat(recovered.getBody()).isEqualTo(screened.getBody());
+    assertThat(get(headers).getBody().path("account")).isEqualTo(current.path("account"));
+    assertThat(
+            client.exchange("/api/research/v1/proposals/screen-receipts/no-such-id",
+                            HttpMethod.GET,new HttpEntity<>(headers),JsonNode.class)
+                .getStatusCode().value())
+        .isEqualTo(404);
     proposal.put("sequence", 1);
     assertThat(
             client
