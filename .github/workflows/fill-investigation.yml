@@ -1,0 +1,119 @@
+name: PAPER fill diagnosis and independent capture
+on:
+  push:
+    branches: [paper-fill-investigation]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-fill-investigation
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Verify Java and Python contracts
+        run: |
+          mvn --batch-mode --no-transfer-progress verify
+          for phase in 2 3 4 5 6; do python3 -m unittest discover -s research/phase${phase}/tests -q; done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tested-executor
+          path: executor-service/target/executor-service-0.6.0.jar
+          retention-days: 3
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fill-diagnosis-tests
+          path: '**/target/surefire-reports/'
+          retention-days: 3
+  historical:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/download-artifact@v4
+        with:
+          name: tested-executor
+          path: executor-service/target
+      - uses: actions/download-artifact@v4
+        with:
+          name: two-hour-paper-39048983750
+          run-id: 39048983750
+          github-token: ${{ github.token }}
+          path: original-archive
+      - name: Preserve original logical tape
+        run: python3 -u -m research.phase6.prepare_recorded_replay prepare --archive original-archive/two-hour-paper-evidence.tar.gz --output recorded-input
+      - name: Diagnose actual matcher decisions on full original tape
+        timeout-minutes: 18
+        run: >-
+          java -Xmx2g -Dloader.main=com.polybot.hft.executor.replay.ClosedLoopMain
+          -cp executor-service/target/executor-service-0.6.0.jar
+          org.springframework.boot.loader.launch.PropertiesLauncher
+          recorded-input/events.jsonl.gz research/output/matching-diagnosis
+          research/phase2/research-config.json --raw
+      - name: Summarize causal execution evidence
+        run: >-
+          python3 -m research.phase6.diagnose_execution
+          research/output/matching-diagnosis/report.json
+          research/output/matching-diagnosis/diagnosis.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: historical-fill-diagnosis
+          retention-days: 7
+          path: |
+            research/output/matching-diagnosis/report.json
+            research/output/matching-diagnosis/audit.jsonl
+            research/output/matching-diagnosis/diagnosis.json
+            recorded-input/provenance.json
+  fresh-paper:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 140
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/download-artifact@v4
+        with:
+          name: tested-executor
+          path: executor-service/target
+      - name: Independent public PAPER observation for two hours
+        timeout-minutes: 125
+        run: python3 -u -m research.phase6.timed_paper --seconds 7200 --output research/output/fresh-paper
+      - name: Summarize current-market execution evidence
+        run: >-
+          python3 -m research.phase6.diagnose_execution
+          research/output/fresh-paper/final-metrics.json
+          research/output/fresh-paper/diagnosis.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fresh-paper-small-reports
+          retention-days: 7
+          path: |
+            research/output/fresh-paper/*.json
+            research/output/fresh-paper/metrics.jsonl
+            research/output/fresh-paper/executor.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fresh-paper-compressed-tape
+          retention-days: 7
+          compression-level: 0
+          path: research/output/fresh-paper/ingestor/

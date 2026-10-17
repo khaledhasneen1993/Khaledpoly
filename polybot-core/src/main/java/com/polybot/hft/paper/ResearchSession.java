@@ -740,6 +740,13 @@ public final class ResearchSession implements AutoCloseable {
         vols.getOrDefault(m.first(), ZERO).max(vols.getOrDefault(m.second(), ZERO)),
         (m.endMs()-now)/1000, depth, cfg.activationMs(), ZERO);
     if (!validPrices || edge.multiply(quantity).subtract(cfg.mergeCost()).compareTo(required.multiply(quantity)) < 0) {
+      output.accept("RESTING_RISK_CHECK", Map.of(
+          "at", now, "condition", m.condition(), "orderIds", ids,
+          "quantity", quantity, "reservedGrossEdge", edge,
+          "reservedNetEdge", edge.subtract(cfg.mergeCost().divide(quantity, 18, RoundingMode.UP)),
+          "requiredEdge", required, "depth", depth,
+          "volatility", vols.getOrDefault(m.first(), ZERO).max(vols.getOrDefault(m.second(), ZERO)),
+          "validPrices", validPrices));
       cancelAll(m, validPrices ? "RESTING_NET_EDGE" : "RESTING_PRICE_INVALID");
       metrics.decision(validPrices ? "RESTING_NET_EDGE" : "RESTING_PRICE_INVALID", edge);
       return;
@@ -1462,6 +1469,7 @@ public final class ResearchSession implements AutoCloseable {
 
   public synchronized Map<String, Object> report() {
     var r = new LinkedHashMap<String, Object>(metrics.report());
+    r.put("makerExecutionDiagnostics", matching.diagnostics());
     r.putAll(markouts.snapshot(Math.max(now, 0)));
     var active = new ArrayList<Map<String, Object>>();
     for (var m : markets.values()) {

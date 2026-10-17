@@ -30,10 +30,15 @@ public final class PaperMatchingEngine {
     BigDecimal price, remaining, ahead;
     long activation, cancel = Long.MAX_VALUE;
     String cancelReason = "CLIENT_CANCEL";
+    final Map<String, Long> observations = new TreeMap<>();
+    BigDecimal initialAhead, matchedVolume = BigDecimal.ZERO;
+    long submitted, activated = -1, ended = -1;
+    String terminalReason = "OPEN";
   }
 
   private final Map<String, Book> books = new HashMap<>();
   private final LinkedHashMap<String, Order> orders = new LinkedHashMap<>();
+  private final LinkedHashMap<String, Order> diagnosticOrders = new LinkedHashMap<>();
   private final Set<String> tradeIds = new HashSet<>(), orderIds = new HashSet<>();
   private final long latency, cancelLatency, maxAge;
   private final LatencyProfile activationProfile, cancellationProfile;
@@ -74,6 +79,34 @@ public final class PaperMatchingEngine {
     return duplicates;
   }
 
+  /** Measurement only: describes the same conservative matcher, never changes eligibility. */
+  public synchronized List<Map<String, Object>> diagnostics() {
+    var rows = new ArrayList<Map<String, Object>>();
+    for (var o : diagnosticOrders.values()) {
+      var row = new LinkedHashMap<String, Object>();
+      row.put("id", o.id); row.put("token", o.token); row.put("buy", o.buy);
+      row.put("price", o.price); row.put("submittedMs", o.submitted);
+      row.put("activationDueMs", o.activation); row.put("activatedMs", o.activated < 0 ? null : o.activated);
+      row.put("terminalMs", o.ended < 0 ? null : o.ended); row.put("terminalReason", o.terminalReason);
+      row.put("initialQueueAhead", o.initialAhead); row.put("remainingQueueAhead", o.ahead);
+      row.put("eligiblePrintVolume", o.matchedVolume); row.put("remainingShares", o.remaining);
+      row.put("activeMs", o.activated < 0 ? 0 : Math.max(0, (o.ended < 0 ? now : o.ended) - o.activated));
+      row.put("printObservations", Map.copyOf(o.observations)); rows.add(row);
+    }
+    return rows;
+  }
+
+  private void removeTerminals(Map<String, String> terminal, Map<String, String> reasons) {
+    for (String id : terminal.keySet()) {
+      Order o = orders.remove(id);
+      if (o != null) { o.ended = now; o.terminalReason = reasons.get(id); }
+    }
+  }
+
+  private static void observe(Order o, String reason) {
+    o.observations.merge(reason, 1L, Long::sum);
+  }
+
   public synchronized Update accept(String kind, long at, JsonNode n) {
     if (at < now) throw new IllegalArgumentException("Arrival clock moved backwards");
     now = at;
@@ -82,7 +115,7 @@ public final class PaperMatchingEngine {
     var reasons = new LinkedHashMap<String, String>();
     if (kind.equals("GAP")) {
       invalidate(terminal, reasons, DataGap.tokens(n), "DATA_GAP:" + n.path("reason").asText("unknown"));
-      terminal.keySet().forEach(orders::remove);
+      removeTerminals(terminal, reasons);
       return new Update(List.of(), Collections.unmodifiableMap(new LinkedHashMap<>(terminal)), Map.copyOf(reasons));
     }
     var staleTokens = new HashSet<String>();
@@ -98,7 +131,7 @@ public final class PaperMatchingEngine {
     orders.values().stream()
         .filter(o -> staleTokens.contains(o.token))
         .forEach(o -> { terminal.put(o.id, "CANCELED"); reasons.put(o.id, "STALE_BOOK"); });
-    terminal.keySet().forEach(orders::remove);
+    removeTerminals(terminal, reasons);
     // Due cancels win ties. Activation uses only the book known BEFORE this event.
     for (var o : orders.values()) {
       if (o.cancel <= at) {
@@ -133,9 +166,11 @@ public final class PaperMatchingEngine {
               && prior.price.compareTo(o.price) == 0) o.ahead = o.ahead.add(prior.remaining);
         }
         o.active = true;
+        o.initialAhead = o.ahead;
+        o.activated = at;
       }
     }
-    terminal.keySet().forEach(orders::remove);
+    removeTerminals(terminal, reasons);
     switch (kind) {
       case "BOOK" -> {
         String token = required(n, "token");
@@ -169,7 +204,9 @@ public final class PaperMatchingEngine {
             || !orderIds.add(o.id))
           throw new IllegalArgumentException("Invalid or duplicate order");
         o.activation = Math.addExact(at, activationProfile.delay("activate", o.id));
+        o.submitted = at;
         orders.put(o.id, o);
+        diagnosticOrders.put(o.id, o);
       }
       case "CANCEL" -> {
         Order o = orders.get(required(n, "id"));
@@ -194,10 +231,27 @@ public final class PaperMatchingEngine {
           throw new IllegalStateException("Rotate tape at one million trades");
         if (!tradeIds.add(id)) {
           duplicates++;
+          for (var o : orders.values()) if (o.token.equals(token)) observe(o, "DUPLICATE_PRINT");
           break;
         }
         long source = n.path("sourceMs").asLong(-1);
         Book b = books.get(token);
+        for (var o : orders.values()) {
+          if (!o.token.equals(token)) continue;
+          String reason = source < 0 || source > at || at - source > maxAge ? "INVALID_OR_STALE_PRINT"
+              : b == null || at - b.source > maxAge ? "BOOK_UNAVAILABLE"
+              : source < b.source ? "PRINT_BEFORE_CURRENT_BOOK"
+              : !o.active ? "ORDER_NOT_ACTIVE"
+              : o.buy == side.equals("BUY") ? "WRONG_AGGRESSOR"
+              : o.price.compareTo(price) != 0 ? "DIFFERENT_PRICE"
+              : source <= o.activation ? "PRINT_NOT_AFTER_ACTIVATION"
+              : "ELIGIBLE_PRINT";
+          observe(o, reason);
+          if (reason.equals("ELIGIBLE_PRINT")) {
+            o.matchedVolume = o.matchedVolume.add(volume);
+            if (volume.compareTo(o.ahead) <= 0) observe(o, "QUEUE_NOT_EXHAUSTED");
+          }
+        }
         if (source < 0
             || source > at
             || at - source > maxAge
@@ -230,7 +284,7 @@ public final class PaperMatchingEngine {
       case "TICK" -> {}
       default -> throw new IllegalArgumentException("Unknown matching event: " + kind);
     }
-    terminal.keySet().forEach(orders::remove);
+    removeTerminals(terminal, reasons);
     return new Update(
         List.copyOf(fills), Collections.unmodifiableMap(new LinkedHashMap<>(terminal)), Map.copyOf(reasons));
   }
