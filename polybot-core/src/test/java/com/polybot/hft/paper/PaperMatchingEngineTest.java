@@ -76,6 +76,19 @@ class PaperMatchingEngineTest {
   }
 
   @Test
+  void injectedLatencyActuallyDelaysActivationAndRetainsPrintRequirement() throws Exception {
+    engine = new PaperMatchingEngine(100, 100, 2000, new BigDecimal("2"), 500, 42);
+    long due = 1000 + new LatencyProfile(100, 500, 42).delay("activate", "a");
+    book(1000, "0");
+    order("a", "BUY", "0.4");
+    assertThat(trade(due - 1, "early-jitter", "SELL", "0.4", "100").fills()).isEmpty();
+    assertThat(engine.accept("TICK", due, n("{}")).fills()).isEmpty();
+    assertThat(trade(due + 1, "after-jitter", "SELL", "0.4", "2").fills())
+        .singleElement()
+        .satisfies(f -> assertThat(f.size()).isEqualByComparingTo("2"));
+  }
+
+  @Test
   void touchesAndWrongSideNeverFill() throws Exception {
     book(1000, "0");
     order("a", "BUY", "0.4");

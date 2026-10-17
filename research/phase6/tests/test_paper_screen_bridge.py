@@ -199,5 +199,13 @@ class JavaScreenHTTPContractTest(unittest.TestCase):
         self.assertEqual([r.method for r in requests],['GET'])
 
 
+    def test_get_clock_change_does_not_invalidate_unchanged_screen_generation(self):
+        from copy import deepcopy
+        obs=fixture(); client=FakeClient(deepcopy(obs)); client.obs['generatedMs']=BASE+1
+        with tempfile.TemporaryDirectory() as d:
+            r=DurablePaperScreen(client).run(Path(d)/'out',obs,envelope(),at_ms=BASE+1)
+            self.assertEqual(r['confirmedScreenReceipts'],1)
+            self.assertEqual(client.posts,1)
+
 if __name__=='__main__':
     unittest.main()

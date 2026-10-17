@@ -14,6 +14,12 @@ from research.phase3.polybot_sdk.model import dumps
 from research.phase3.polybot_sdk.runtime import private_write
 
 REQUIRED = (
+    'research/phase5/portfolio_admission.py', 'research/phase5/book_impact.py',
+    'research/phase5/tests/test_quality_upgrade.py',
+    'research/phase6/minimal_runtime.py', 'research/phase6/tests/test_minimal_runtime.py',
+    'scripts/run-paper-minimal.sh', 'docs/PAPER_QUALITY_UPGRADE.md',
+    'polybot-core/src/main/java/com/polybot/hft/paper/LatencyProfile.java',
+    'polybot-core/src/test/java/com/polybot/hft/paper/AdaptivePaperPolicyTest.java',
     'research/phase4/recorder.py', 'research/phase4/audit.py',
     'research/phase4/capture_supervisor.py', 'research/phase4/tests/test_capture_supervisor.py',
     'research/phase4/final_gate.py',

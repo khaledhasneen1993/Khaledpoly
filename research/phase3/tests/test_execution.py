@@ -85,6 +85,9 @@ class ExecutionAndLabelsTest(unittest.TestCase):
             rows = [decode(line) for line in (output / 'labels.jsonl').read_text().splitlines()]
             self.assertTrue(all(row['featureObservedMs'] <= row['submittedMs'] <= row['fillMs'] for row in rows))
             self.assertTrue(all(D(row['markout']) == D('.09') for row in rows))
+            self.assertTrue(all(D(row['featuresV2']['order_size']) == 5 for row in rows))
+            self.assertTrue(all(-1 <= D(row['featuresV2']['book_imbalance']) <= 1 for row in rows))
+            self.assertIsNone(train(rows, BASE + 100000,feature_schema='v2')['model'])
             self.assertIsNone(train(rows, BASE + 100000)['model'])
 
     def test_simultaneous_partial_fills_weight_markouts_without_colliding(self):

@@ -215,6 +215,20 @@ class AdvancedStrategyTest(unittest.TestCase):
 
 
 class LearningTest(unittest.TestCase):
+    def test_v2_size_depth_imbalance_contract_trains_and_infers(self):
+        data = [label(i, 'train'+str(i), 1000, i%2) for i in range(40)]
+        data += [label('test'+str(i), 'test'+str(i), 200000, i%2) for i in range(40)]
+        for row in data:
+            row['featuresV2'] = dict(row['features'], order_size='5', order_depth_ratio='.05', book_imbalance='0')
+        artifact = train(data,100000,min_train=20,min_holdout=20,min_class=5,feature_schema='v2')
+        self.assertEqual(len(artifact['model']['weights']),9)
+        self.assertFalse(predict(artifact,data[0]['featuresV2'])['qualified'])
+        with self.assertRaises(ValueError): predict(artifact,data[0]['features'])
+        store=FeatureStore();store.add(observation(venue='polymarket',kind='volatility',value='.01'))
+        proposals=candidates(validate(fixture(),BASE),store,'complete-set',fill_model=artifact)
+        self.assertIsNotNone(proposals[0]['fillProbability'])
+        self.assertFalse(proposals[0]['fillModelQualified'])
+
     def test_early_cancel_censored_and_future_features_rejected(self):
         row = label('1', 'm', 1000, False)
         row['cancelMs'] = 2000

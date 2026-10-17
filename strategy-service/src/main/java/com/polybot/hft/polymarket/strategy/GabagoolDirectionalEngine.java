@@ -249,7 +249,10 @@ public class GabagoolDirectionalEngine {
         volatilityByMarket.merge(
             market.slug(),
             movement,
-            (a, b) -> a.multiply(new BigDecimal("0.9")).add(b.multiply(new BigDecimal("0.1"))));
+            (a, b) ->
+                a.multiply(new BigDecimal("0.9"))
+                    .add(b.multiply(new BigDecimal("0.1")))
+                    .setScale(18, java.math.RoundingMode.HALF_EVEN));
     BigDecimal required =
         com.polybot.hft.paper.PairPolicy.requiredEdge(
             BigDecimal.valueOf(cfg.completeSetMinEdge()),

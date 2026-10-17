@@ -24,6 +24,21 @@ def digest(data):
     return hashlib.sha256(dumps(data).encode('utf-8')).hexdigest()
 
 
+def guard_admission_snapshot(original, current, requests, *, exact_sequence):
+    """Bind account state and original quote lifetime, not the GET response clock."""
+    if (current['sessionId'] != original['sessionId']
+            or current['account']['id'] != original['account']['id']
+            or digest(current['account']) != digest(original['account'])
+            or integer(current['sequence']) < integer(original['sequence'])
+            or exact_sequence and integer(current['sequence']) != integer(original['sequence'])):
+        raise ValueError('Executor snapshot changed before PAPER admission')
+    now = integer(current['generatedMs'])
+    if not integer(original['generatedMs']) <= now <= integer(original['generatedMs']) + 250:
+        raise ValueError('Original PAPER observation expired')
+    if any(integer(leg['expiresMs']) <= now for req in requests for leg in req['legs']):
+        raise ValueError('Original PAPER quote expired')
+
+
 def _sync_folder(folder):
     fd = os.open(str(folder), os.O_RDONLY)
     try:
@@ -144,8 +159,7 @@ class DurablePaperScreen:
                         # Every first submission is bound to the exact remote
                         # account snapshot. Re-check after previous screens.
                         current=validate(self.client.snapshot(now_ms=at_ms),at_ms)
-                        if digest(current)!=manifest['snapshotSha256']:
-                            raise ValueError('Executor snapshot changed before PAPER screening')
+                        guard_admission_snapshot(snap,current,[proposal],exact_sequence=True)
                         answer=self.client.screen_identical(proposal)
                     else:
                         answer=self.client.saved_receipt(proposal)

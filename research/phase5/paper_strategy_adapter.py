@@ -44,6 +44,8 @@ def event_proposal(snapshot, event, *, at_ms=None, minimum_edge='0.015',
     if len(matches)!=1:
         return reject('NO_EXACT_JAVA_CONDITION')
     market=matches[0]
+    if market.get('negativeRisk') is True:
+        return reject('NEGATIVE_RISK_BINARY_JAVA_ADMISSION_UNSUPPORTED')
     if integer(market['endMs'])!=integer(event['closeMs']):
         return reject('INCONSISTENT_RESOLUTION_TIME')
     ids={x['id'] for x in event['outcomes']}
@@ -53,11 +55,6 @@ def event_proposal(snapshot, event, *, at_ms=None, minimum_edge='0.015',
     # Politics/Sports outcome without a verified explicit prediction model.
     rows=[]
     for scenario in conditional['scenarioEdges']:
-        if not scenario['scenarioPositive']:
-            continue
-        edge=number(scenario['scenarioNetEdgePerShareUsd'])
-        if edge<min_edge:
-            continue
         token=scenario['outcomeId']
         book=snap['books'].get(token)
         if not market['accepting'] or book is None or book['depthTruncated']:
@@ -69,6 +66,11 @@ def event_proposal(snapshot, event, *, at_ms=None, minimum_edge='0.015',
         tick=number(market['tick'])
         price=number(book['bids'][0]['price'])+tick
         if price>=number(book['asks'][0]['price']) or not 0<price<1:
+            continue
+        edge=(number(scenario['assumedProbability'])-price
+              -price*(number(event['assumedFeeBps'])+number(event['assumedSlippageBps']))/10000
+              -Decimal('.02'))
+        if edge<min_edge:
             continue
         expiry=min(now+250,integer(book['sourceMs'])+integer(snap['maxBookAgeMs']),
                    integer(market['endMs']))

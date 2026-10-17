@@ -100,3 +100,5 @@ all still required for any market qualification.
 
 MIT license — [LICENSE](LICENSE). No profitability warranty or
 authorization for real-money trading.
+
+PAPER quality upgrade: [implementation, minimal runtime and evidence limits](docs/PAPER_QUALITY_UPGRADE.md).

@@ -46,7 +46,20 @@ public class PaperAlertDispatcher {
           URI uri = URI.create(slack);
           if (!uri.getScheme().equals("https") || !uri.getHost().equals("hooks.slack.com"))
             throw new IllegalArgumentException("Invalid Slack endpoint");
-          success &= send(uri, Map.of("text", "Polybot PAPER: " + alert.message()), false);
+          success &=
+              send(
+                  uri,
+                  Map.of(
+                      "text",
+                      "Polybot PAPER ["
+                          + (alert.key().startsWith("unhedged:") || alert.key().equals("risk-halt")
+                              ? "CRITICAL"
+                              : "WARNING")
+                          + "] "
+                          + alert.key()
+                          + ": "
+                          + alert.message()),
+                  false);
         }
         if (!telegram.isBlank()) {
           if (chat.isBlank() || !telegram.matches("[0-9]+:[A-Za-z0-9_-]+"))
@@ -54,7 +67,18 @@ public class PaperAlertDispatcher {
           success &=
               send(
                   URI.create("https://api.telegram.org/bot" + telegram + "/sendMessage"),
-                  Map.of("chat_id", chat, "text", "Polybot PAPER: " + alert.message()),
+                  Map.of(
+                      "chat_id",
+                      chat,
+                      "text",
+                      "Polybot PAPER ["
+                          + (alert.key().startsWith("unhedged:") || alert.key().equals("risk-halt")
+                              ? "CRITICAL"
+                              : "WARNING")
+                          + "] "
+                          + alert.key()
+                          + ": "
+                          + alert.message()),
                   true);
         }
       } catch (Exception e) {

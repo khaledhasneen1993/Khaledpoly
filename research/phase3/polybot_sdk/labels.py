@@ -100,6 +100,9 @@ def build_labels(tape, directory):
         group = membership.get(identity)
         completion = paired.get(group)
         row = {k: feature[k] for k in ('orderId', 'marketId', 'submittedMs', 'featureObservedMs', 'provenance', 'features')}
+        if 'featuresV2' in feature:
+            row['featuresV2']=feature['featuresV2']
+            example(dict(row,labelEndMs=end),feature_schema='v2')
         row.update(labelEndMs=end, fillMs=first, cancelMs=cancellations.get(identity),
                    secondLegMs=completion if completion is not None and completion <= end else None)
         if group is not None:

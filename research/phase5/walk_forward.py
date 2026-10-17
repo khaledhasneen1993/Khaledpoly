@@ -10,7 +10,7 @@ from pathlib import Path
 
 from research.phase3.polybot_sdk.model import integer, dumps, decode
 from research.phase3.polybot_sdk.runtime import private_write
-from research.phase5.offline_benchmark import normalized_trades, summarize, amount
+from research.phase5.offline_benchmark import normalized_trades, summarize, amount, market_components
 
 MAX_FOLDS=32
 
@@ -42,6 +42,7 @@ def evaluate_folds(records, folds, stress_multiplier=2, min_test_groups=30):
     if not 1<=factor<=10:
         raise ValueError('Invalid cost stress multiplier')
     graph=connected_groups(rows)
+    components=market_components(rows)
     strat_ids=sorted(set(r['strategyId'] for r in rows))
     results=[]
     previous_end=None
@@ -73,8 +74,8 @@ def evaluate_folds(records, folds, stress_multiplier=2, min_test_groups=30):
             test_sets.append(ids)
             comparisons[strategy]={'training':summarize(tr,factor),
                 'outOfSample':summarize(ho,factor),
-                'outOfSampleMarketGroups':len(ids),
-                'sufficientHeldoutGroups':len(ids)>=min_test_groups,
+                'outOfSampleMarketGroups':len({components[x['marketId']] for x in ho}),
+                'sufficientHeldoutGroups':len({components[x['marketId']] for x in ho})>=min_test_groups,
                 'qualified':False}
         results.append({'fold':idx,'trainBeforeMs':train_end,
                         'testStartMs':test_begin,'testEndMs':test_end,

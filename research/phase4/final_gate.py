@@ -50,6 +50,37 @@ def journal_stats(path):
             'rawMarketRecords': market_records, 'journalRows': entries}
 
 
+def window_health(path, start, end):
+    """Count source faults only in the prospective common window; audit full tape separately."""
+    from collections import Counter
+    excluded = Counter()
+    first = last = None
+    largest = errors = outside_errors = 0
+    with Path(path).open('rb') as stream:
+        while raw := stream.readline(8*1024*1024+1):
+            if len(raw)>8*1024*1024 or not raw.endswith(b'\n'):
+                raise ValueError('Invalid window audit row')
+            row=decode(raw); stamp=integer(row['arrivalMs'])
+            inside=start<=stamp<=end
+            kind=row.get('kind'); data=row.get('data',{})
+            if kind=='RAW_MARKET' and inside:
+                if first is None: first=stamp
+                else: largest=max(largest,stamp-last)
+                last=stamp
+            if kind=='RESEARCH_FEED_ERROR':
+                if inside: errors+=1
+                else: outside_errors+=1
+            events=([{'kind':'GAP','data':data}] if kind=='RESEARCH_GAP'
+                    else data.get('events',[]) if kind=='RESEARCH_FRAME' else [])
+            if not inside:
+                for event in events:
+                    if event['kind']=='GAP': excluded[event['data'].get('reason','unknown')]+=1
+    if first is not None: largest=max(largest,first-start,end-last)
+    else: largest=max(0,end-start)
+    return {'excludedGaps':excluded,'windowErrors':errors,'outsideErrors':outside_errors,
+            'rawRecordsPresent':first is not None,'largestGapMs':largest}
+
+
 def tape_bounds(path):
     stats = journal_stats(path)
     return stats['firstMs'], stats['lastMs']
@@ -77,22 +108,30 @@ def evaluate(cex_dirs, polymarket_tapes, days=7, max_gap_ms=300000):
                      'rawFrames': report['events'].get('RAW_MARKET', 0),
                      'books': report['normalizedEvents'].get('BOOK', 0)})
     clob.sort(key=lambda x: x['startMs'])
+    common_start = max(cex['startedAtMs'], clob[0]['startMs'])
+    common_end = min(cex['endedAtMs'], clob[-1]['endMs'])
+    first_midnight = ((common_start + DAY_MS - 1) // DAY_MS) * DAY_MS
+    window_end = min(common_end,first_midnight+days*DAY_MS)
     issues = list(cex['issues'])
     for i, tape in enumerate(clob):
+        health=window_health(tape['path'],max(first_midnight,tape['startMs']),
+                             min(window_end,tape['endMs']))
+        scoped_gaps={k:max(0,v-health['excludedGaps'].get(k,0)) for k,v in tape['gaps'].items()}
         if not tape['complete']:
             issues.append('POLYMARKET_INCOMPLETE_TAPE')
-        if tape['errors'] or tape['gaps']:
+        if (health['windowErrors'] or tape['errors'] and not health['outsideErrors']
+                or any(scoped_gaps.values())):
             issues.append('POLYMARKET_SOURCE_GAPS_OR_ERRORS')
         if tape['format'] != 'recorded-frame-v1' or tape['rawFrames'] < 1 or tape['books'] < 1:
             issues.append('POLYMARKET_FRAME_DEPTH_EVIDENCE_MISSING')
         if tape['rawMarketRecords'] < 1:
             issues.append('POLYMARKET_NO_RAW_MARKET_RECORDS')
-        elif tape['largestRawMarketGapMs'] > max_gap_ms:
+        elif health['largestGapMs'] > max_gap_ms:
             issues.append('POLYMARKET_SILENT_MARKET_GAP')
         if i:
             if tape['startMs'] < clob[i-1]['endMs']:
                 issues.append('POLYMARKET_OVERLAPPING_RUNS')
-            if tape['startMs'] - clob[i-1]['endMs'] > max_gap_ms:
+            if min(tape['startMs'],window_end) - max(clob[i-1]['endMs'],first_midnight) > max_gap_ms:
                 issues.append('POLYMARKET_INTER_RUN_GAP')
     common_start = max(cex['startedAtMs'], clob[0]['startMs'])
     common_end = min(cex['endedAtMs'], clob[-1]['endMs'])

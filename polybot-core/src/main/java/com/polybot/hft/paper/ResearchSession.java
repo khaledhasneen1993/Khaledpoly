@@ -70,6 +70,8 @@ public final class ResearchSession implements AutoCloseable {
   private final Map<String, Long> externalCancelAt = new HashMap<>();
   private final Map<String, JsonNode> outcomeGroups = new TreeMap<>();
   private final Map<String, String> groupProofs = new TreeMap<>();
+  private final Map<String, Long> riskAlertAt = new HashMap<>();
+  private boolean haltAlerted;
   private boolean entryStopped;
   private boolean failed;
   private boolean insideFrame;
@@ -110,7 +112,12 @@ public final class ResearchSession implements AutoCloseable {
             });
     matching =
         new PaperMatchingEngine(
-            cfg.activationMs(), cfg.cancelMs(), cfg.maxBookAgeMs(), cfg.queueMultiplier());
+            cfg.activationMs(),
+            cfg.cancelMs(),
+            cfg.maxBookAgeMs(),
+            cfg.queueMultiplier(),
+            cfg.latencyJitterMs(),
+            cfg.latencySeed());
     checkpoint = new AtomicJsonState(state, mapper);
     JsonNode saved = checkpoint.load();
     if (saved != null) {
@@ -325,7 +332,18 @@ public final class ResearchSession implements AutoCloseable {
                 m -> (m.first().equals(token) || m.second().equals(token)) && at >= m.endMs()))
           kind = "TICK";
       }
+      long gapsBefore = matching.gaps();
       apply(matching.accept(kind, at, data));
+      if (matching.gaps() > gapsBefore && !kind.equals("GAP"))
+        output.accept(
+            "ALERT",
+            Map.of(
+                "key",
+                "stale-depth",
+                "at",
+                now,
+                "message",
+                "Stale depth invalidated resting orders; fresh snapshots required"));
       if (kind.equals("BOOK")) {
         long source = data.path("sourceMs").asLong(-1);
         String token = data.path("token").asText();
@@ -494,6 +512,18 @@ public final class ResearchSession implements AutoCloseable {
       ledger.mark(marks);
       if (ledger.snapshot().halted()) {
         entryStopped = true;
+        if (!haltAlerted) {
+          haltAlerted = true;
+          output.accept(
+              "ALERT",
+              Map.of(
+                  "key",
+                  "risk-halt",
+                  "at",
+                  now,
+                  "message",
+                  "Account risk stop; new entries blocked and orders canceled"));
+        }
         cancelAll(null);
         save();
       }
@@ -520,6 +550,7 @@ public final class ResearchSession implements AutoCloseable {
       BigDecimal q = holding(m.first()).shares().subtract(holding(m.second()).shares()).abs();
       if (q.signum() == 0) {
         changed |= unhedged.remove(m.condition()) != null;
+        riskAlertAt.remove(m.condition());
         continue;
       }
       if (!unhedged.containsKey(m.condition())) {
@@ -533,15 +564,18 @@ public final class ResearchSession implements AutoCloseable {
           changed = true;
           if (q.compareTo(cfg.maxUnhedged()) > 0) riskBreaches++;
         }
-        output.accept(
-            "ALERT",
-            Map.of(
-                "key",
-                "unhedged:" + m.condition(),
-                "at",
-                now,
-                "message",
-                "Unhedged inventory requires bounded risk reduction"));
+        if (now - riskAlertAt.getOrDefault(m.condition(), -60000L) >= 60000) {
+          riskAlertAt.put(m.condition(), now);
+          output.accept(
+              "ALERT",
+              Map.of(
+                  "key",
+                  "unhedged:" + m.condition(),
+                  "at",
+                  now,
+                  "message",
+                  "Unhedged inventory requires bounded risk reduction"));
+        }
       }
     }
     if (changed) save();
@@ -663,7 +697,12 @@ public final class ResearchSession implements AutoCloseable {
   private void reduce(ResearchMarket m, BigDecimal imbalance, Book a, Book b) {
     long age = now - unhedged.getOrDefault(m.condition(), now);
     boolean overdue = age >= cfg.unhedgedMs() || imbalance.abs().compareTo(cfg.maxUnhedged()) >= 0;
-    if (age < 5000 && !overdue) {
+    long waitMs =
+        PairPolicy.secondLegWaitMs(
+            m.endMs() - now,
+            cfg.unhedgedMs(),
+            vols.getOrDefault(m.first(), ZERO).max(vols.getOrDefault(m.second(), ZERO)));
+    if (age < waitMs && !overdue) {
       metrics.decision("WAIT_SECOND_LEG", null);
       return;
     }
@@ -728,7 +767,9 @@ public final class ResearchSession implements AutoCloseable {
             buy,
             quantity,
             limit,
-            now + cfg.activationMs(),
+            now
+                + new LatencyProfile(cfg.activationMs(), cfg.latencyJitterMs(), cfg.latencySeed())
+                    .delay("taker", m.condition() + ":" + token + ":" + now),
             overdue ? "RISK_REDUCTION" : "POSITIVE_EDGE_COMPLETION",
             choice.completeValue()));
     metrics.decision("TAKER_PENDING", null);
@@ -869,6 +910,17 @@ public final class ResearchSession implements AutoCloseable {
                 BigDecimal.valueOf(m.endMs() - now).divide(BigDecimal.valueOf(1000)),
                 "volatility",
                 volatility);
+        var featuresV2 = new TreeMap<String, Object>(features);
+        BigDecimal bidDepth = book.bids.lastEntry().getValue(),
+            askDepth = book.asks.firstEntry().getValue();
+        BigDecimal localDepth = buy ? bidDepth : askDepth;
+        featuresV2.put("order_size", q);
+        featuresV2.put(
+            "order_depth_ratio",
+            q.divide(localDepth.max(new BigDecimal("0.000000001")), 18, RoundingMode.HALF_EVEN));
+        featuresV2.put(
+            "book_imbalance",
+            bidDepth.subtract(askDepth).divide(bidDepth.add(askDepth), 18, RoundingMode.HALF_EVEN));
         output.accept(
             "ORDER_FEATURES",
             Map.of(
@@ -886,6 +938,8 @@ public final class ResearchSession implements AutoCloseable {
                 "PAPER_MODEL",
                 "features",
                 features,
+                "featuresV2",
+                featuresV2,
                 "quantity",
                 q,
                 "queueFeatureDefinition",
@@ -1298,6 +1352,15 @@ public final class ResearchSession implements AutoCloseable {
     result.put("sequence", inputSequence);
     result.put("inputMs", now);
     result.put("generatedMs", generatedAt);
+    result.put(
+        "matchingAssumptions",
+        Map.of(
+            "queueMultiplier",
+            cfg.queueMultiplier(),
+            "activationMs",
+            cfg.activationMs(),
+            "cancelMs",
+            cfg.cancelMs()));
     result.put("maxBookAgeMs", cfg.maxBookAgeMs());
     result.put("metadataMaxAgeMs", cfg.metadataMaxAgeMs());
     result.put("account", account);
@@ -1327,6 +1390,23 @@ public final class ResearchSession implements AutoCloseable {
   public synchronized Map<String, Object> report() {
     var r = new LinkedHashMap<String, Object>(metrics.report());
     r.putAll(markouts.snapshot(Math.max(now, 0)));
+    var active = new ArrayList<Map<String, Object>>();
+    for (var m : markets.values()) {
+      if (now >= m.endMs() || resolutions.containsKey(m.condition())) continue;
+      var row = new LinkedHashMap<String, Object>();
+      Book a = books.get(m.first()), b = books.get(m.second());
+      row.put("condition", m.condition());
+      row.put("remainingMs", m.endMs() - now);
+      row.put("accepting", m.accepting());
+      row.put("freshBooks", fresh(a) && fresh(b));
+      row.put(
+          "oldestBookAgeMs",
+          a == null || b == null ? null : now - Math.min(a.source(), b.source()));
+      row.put(
+          "inventoryImbalance", holding(m.first()).shares().subtract(holding(m.second()).shares()));
+      active.add(row);
+    }
+    r.put("activeMarkets", active);
     r.put("cash", ledger.snapshot().cash());
     r.put("availableCash", ledger.availableCash());
     r.put("netRealizedPnl", ledger.snapshot().realized());

@@ -209,5 +209,20 @@ class VirtualPaperIntegrationTest(unittest.TestCase):
                     out,obs,envelope(),enable_virtual=True,at_ms=BASE)
             self.assertEqual(list(out.glob('receipt-*.json')),[])
 
+    def test_get_response_clock_may_advance_without_blocking_original_intent(self):
+        from copy import deepcopy
+        obs=observation(); client=FakeLedgerClient(obs)
+        client.obs=deepcopy(obs); client.obs['generatedMs']=BASE+1
+        client.obs['sequence']=2; client.obs['inputMs']=BASE+1
+        with tempfile.TemporaryDirectory() as d:
+            r=DurableVirtualPaperOrders(client).run(Path(d)/'out',obs,envelope(),enable_virtual=True,at_ms=BASE+1)
+            self.assertEqual(r['receiptCounts']['PAPER_SUBMITTED'],1)
+            self.assertEqual(next(iter(client.ledger.values()))['sequence'],1)
+        client=FakeLedgerClient(obs); client.obs=deepcopy(obs); client.obs['generatedMs']=BASE+251
+        with tempfile.TemporaryDirectory() as d:
+            with self.assertRaisesRegex(ValueError,'expired'):
+                DurableVirtualPaperOrders(client).run(Path(d)/'out',obs,envelope(),enable_virtual=True,at_ms=BASE+251)
+            self.assertEqual(client.calls,0)
+
 if __name__=='__main__':
     unittest.main()

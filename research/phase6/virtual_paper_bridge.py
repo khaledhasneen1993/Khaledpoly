@@ -15,7 +15,7 @@ from research.phase3.polybot_sdk.execution import PaperExecutionClient
 from research.phase3.polybot_sdk.model import decode, dumps, integer, validate
 from research.phase3.polybot_sdk.runtime import private_write
 from research.phase6.external_strategy import ExternalStrategyReview
-from research.phase6.paper_screen_bridge import digest, _sync_folder
+from research.phase6.paper_screen_bridge import digest, _sync_folder, guard_admission_snapshot
 
 
 def validate_virtual_receipt(data, request):
@@ -98,8 +98,8 @@ class DurableVirtualPaperOrders:
                         # A restart on a different account/session may never
                         # resubmit a previous external strategy proposal.
                         raise ValueError('Changed PAPER account/session during retry')
-                    if first and digest(remote)!=manifest['snapshotSha256']:
-                        raise ValueError('PAPER snapshot changed before first virtual admission')
+                    if first:
+                        guard_admission_snapshot(snap,remote,[req],exact_sequence=False)
                     # The request was fsynced before this call; retries are
                     # IDENTICAL and the Java Ledger.reserveBatch is the
                     # only authority that may mutate virtual balances.

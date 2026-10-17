@@ -20,9 +20,53 @@ public record ResearchConfig(
     BigDecimal maxExitLoss,
     BigDecimal feeMultiplier,
     long decisionMillis,
-    long metadataMaxAgeMs) {
+    long metadataMaxAgeMs,
+    long latencyJitterMs,
+    long latencySeed) {
+  public ResearchConfig(
+      int schema,
+      BigDecimal initialCash,
+      BigDecimal orderShares,
+      BigDecimal minimumEdge,
+      BigDecimal portfolioBudget,
+      long activationMs,
+      long cancelMs,
+      long maxBookAgeMs,
+      BigDecimal queueMultiplier,
+      BigDecimal mergeCost,
+      BigDecimal redemptionCost,
+      long unhedgedMs,
+      BigDecimal maxUnhedged,
+      BigDecimal maxExitLoss,
+      BigDecimal feeMultiplier,
+      long decisionMillis,
+      long metadataMaxAgeMs) {
+    this(
+        schema,
+        initialCash,
+        orderShares,
+        minimumEdge,
+        portfolioBudget,
+        activationMs,
+        cancelMs,
+        maxBookAgeMs,
+        queueMultiplier,
+        mergeCost,
+        redemptionCost,
+        unhedgedMs,
+        maxUnhedged,
+        maxExitLoss,
+        feeMultiplier,
+        decisionMillis,
+        metadataMaxAgeMs,
+        0,
+        0);
+  }
+
   public ResearchConfig {
-    if (schema != 1
+    if (latencyJitterMs < 0
+        || latencyJitterMs > 60000
+        || schema != 1
         || initialCash.signum() <= 0
         || orderShares.signum() <= 0
         || minimumEdge.signum() < 0
@@ -66,7 +110,9 @@ public record ResearchConfig(
         maxExitLoss,
         b("2"),
         decisionMillis,
-        metadataMaxAgeMs);
+        metadataMaxAgeMs,
+        Math.max(latencyJitterMs, 500),
+        latencySeed);
   }
 
   private static BigDecimal b(String s) {
