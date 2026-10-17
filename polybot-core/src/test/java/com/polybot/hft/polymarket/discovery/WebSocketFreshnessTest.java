@@ -46,6 +46,21 @@ class WebSocketFreshnessTest {
         + "\",\"size\":\"10\"}],\"asks\":[{\"price\":\"0.6\",\"size\":\"10\"}]}";
   }
 
+  /** Change only the token field, never a timestamp containing the same digits. */
+  String withAsset(String message, String assetId) {
+    return message.replace("\\\"asset_id\\\":\\\"123\\\"",
+        "\\\"asset_id\\\":\\\"" + assetId + "\\\"");
+  }
+
+  @Test
+  void assetReplacementCannotRewriteTimestampContainingTokenDigits() {
+    long withRepeatedDigits = 1800000123456L;
+    String renamed = withAsset(book(withRepeatedDigits, "0.4"), "456");
+    assertThat(renamed).contains("\\\"timestamp\\\":\\\"" + withRepeatedDigits + "\\\"");
+    assertThat(renamed).contains("\\\"asset_id\\\":\\\"456\\\"");
+    assertThat(renamed).doesNotContain("\\\"asset_id\\\":\\\"123\\\"");
+  }
+
   @Test
   void oneFrameDeliversBothBooksAfterCachesHaveCompletedAndLegacyListenersRemainSupported() {
     var clock = new MutableClock();
@@ -66,7 +81,7 @@ class WebSocketFreshnessTest {
         "["
             + book(clock.millis(), "0.5")
             + ","
-            + book(clock.millis(), "0.4").replace("123", "456")
+            + withAsset(book(clock.millis(), "0.4"), "456")
             + "]");
     assertThat(frames).hasSize(1);
     assertThat(frames.getFirst().path("events")).hasSize(2);
@@ -172,21 +187,21 @@ class WebSocketFreshnessTest {
         java.util.List.of(
             delta,
             book(at, ".5"),
-            book(at, ".4").replace("123", "456"),
+            withAsset(book(at, ".4"), "456"),
             "{\"event_type\":\"last_trade_price\",\"asset_id\":\"123\",\"timestamp\":\""
                 + (at - 90000)
                 + "\",\"price\":\".5\",\"size\":\"5\",\"side\":\"SELL\"}",
             delta,
             book(at - 90000, ".5"),
             delta,
-            delta.replace("123", "456"),
+            withAsset(delta, "456"),
             book(at + 1, ".5"),
             book(at, ".5"),
             delta.replace(".5", ".6"),
             delta,
             book(at, ".5"),
-            "[" + book(at, ".4").replace("123", "789") + "," + book(at, ".7") + "]",
-            delta.replace("123", "789"),
+            "[" + withAsset(book(at, ".4"), "789") + "," + book(at, ".7") + "]",
+            withAsset(delta, "789"),
             "{invalid-json");
     for (String text : frames) {
       streamed.clear();
