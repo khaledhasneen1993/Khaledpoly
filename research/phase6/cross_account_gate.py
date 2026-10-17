@@ -4,6 +4,9 @@ No funds can be transferred, reserved, submitted or signed by this adapter.
 The Java AccountLedger remains the only durable reservation authority.
 """
 from decimal import Decimal
+import hashlib
+
+from research.phase3.polybot_sdk.model import dumps
 
 from research.phase3.polybot_sdk.model import number, integer
 
@@ -68,7 +71,9 @@ class CrossAccountPaperGate:
         # Explicit fail closed: no permission to send even virtual orders.
         return {'schema':1,'scope':'READ_ONLY_CROSS_ACCOUNT_PAPER_RISK_GATE',
                 'accounts':{k:{'worstCaseAcquisitionExposureUsd':str(v),
-                                'capUsd':str(self.account_caps[k])}
+                                'capUsd':str(self.account_caps[k]),
+                                'snapshotSha256':hashlib.sha256(dumps(
+                                    self.registry._latest[k]).encode('utf-8')).hexdigest()}
                             for k,v in sorted(account_exposure.items())},
                 'combinedExposureUsd':str(total),
                 'settlementGroupExposureUsd':{k:str(v) for k,v in sorted(settlement_exposure.items())},

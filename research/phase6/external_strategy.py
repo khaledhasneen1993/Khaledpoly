@@ -60,11 +60,21 @@ class ExternalStrategyReview:
                 if type(leg['buy']) is not bool:
                     raise ValueError('Ambiguous virtual order side')
         if account_gate is not None:
-            if (not isinstance(account_gate,dict) or account_gate.get('scope')!='READ_ONLY_CROSS_ACCOUNT_PAPER_RISK_GATE'
-                    or account_gate.get('mayStudyPaperProposals') is not True
-                    or account_gate.get('mayReserveOrSubmit') is not False
-                    or account_gate.get('liveAllowed') is not False):
-                raise PermissionError('Cross-account study gate failed')
+            # Caller-provided JSON can be forged. Accept only the trusted
+            # registry-backed object; recompute live/stale permissions and
+            # bind its exact validated snapshot hash to this proposal.
+            from research.phase6.cross_account_gate import CrossAccountPaperGate
+            if not isinstance(account_gate,CrossAccountPaperGate):
+                raise PermissionError('Cross-account risk evidence must come from live registry')
+            import time
+            decision_now=(int(time.time()*1000) if at_ms is None else integer(at_ms))
+            report=account_gate.inspect(decision_now)
+            local_digest=hashlib.sha256(dumps(snap).encode('utf-8')).hexdigest()
+            scoped=[entry for entry in report['accounts'].values()
+                    if entry.get('snapshotSha256')==local_digest]
+            if (not report['mayStudyPaperProposals'] or report['mayReserveOrSubmit']
+                    or report['liveAllowed'] or len(scoped)!=1):
+                raise PermissionError('Cross-account snapshot/permission mismatch')
         key=snap['sessionId'],snap['account']['id'],strategy,integer(snap['sequence'])
         source_hash=hashlib.sha256(dumps(envelope).encode()).hexdigest()
         snapshot_hash=hashlib.sha256(dumps(snap).encode()).hexdigest()

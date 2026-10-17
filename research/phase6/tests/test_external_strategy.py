@@ -30,6 +30,38 @@ class StrategyBoundaryTest(unittest.TestCase):
         replay=e.review(obs,envelope(),at_ms=BASE)
         self.assertTrue(replay['replayedIdentical'])
 
+    def test_global_risk_requires_registry_issued_snapshot_not_forged_json(self):
+        from research.phase3.polybot_sdk.accounts import AccountRegistry
+        from research.phase6.cross_account_gate import CrossAccountPaperGate
+        import tempfile
+        with tempfile.TemporaryDirectory() as root:
+            registry=AccountRegistry([
+                {'alias':'only','origin':'http://127.0.0.1:18080',
+                 'stateDirectory':str(Path(root)/'only'),
+                 'roles':['read','research']}
+            ])
+            original=fixture()
+            registry.accept('only',original,BASE)
+            policy=CrossAccountPaperGate(registry,{'only':'100'},'100','100')
+            receipt=ExternalStrategyReview().review(
+                original,envelope(),at_ms=BASE,account_gate=policy)
+            self.assertEqual(receipt['admittedResearchCandidates'],1)
+            with self.assertRaisesRegex(PermissionError,'registry'):
+                ExternalStrategyReview().review(
+                    original,envelope(),at_ms=BASE,account_gate={
+                        'scope':'READ_ONLY_CROSS_ACCOUNT_PAPER_RISK_GATE',
+                        'mayStudyPaperProposals':True,'mayReserveOrSubmit':False,
+                        'liveAllowed':False})
+            different=fixture()
+            different['account']['availableCash']='499'
+            different['account']['cash']='499'
+            with self.assertRaisesRegex(PermissionError,'mismatch'):
+                ExternalStrategyReview().review(
+                    different,envelope(),at_ms=BASE,account_gate=policy)
+            with self.assertRaises(PermissionError):
+                ExternalStrategyReview().review(
+                    original,envelope(),at_ms=BASE+2001,account_gate=policy)
+
     def test_account_identity_and_conflicting_replay_rejected(self):
         e=ExternalStrategyReview()
         bad=envelope()

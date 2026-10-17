@@ -195,3 +195,20 @@ The Python tests also check a **single atomic two-leg virtual intent**
 and the exclusive process lock on its durable outbox. Independent
 virtual intents sharing one stale snapshot are rejected before any
 remote PAPER request. These tests do not create actual venue fills.
+
+
+## Registry-bound global risk integration hardening
+
+A Phase-6 \`ExternalStrategyReview\` caller can no longer supply a
+dict containing forged \`mayStudyPaperProposals=true\` flags. It must
+provide an in-process \`CrossAccountPaperGate\` instance backed by
+the accepted, isolated \`AccountRegistry\`. Each review **recalculates**
+fresh/stale account balances, permissions, per-account/global and
+correlated-group caps, and matches the exact SHA-256 of the candidate
+PAPER snapshot to exactly one registry-held snapshot.
+
+This is a risk/admission *defense in depth* in addition to Java's
+single-writer ledger limits. If no independent registry gate has
+been configured, the existing single-account Java risk allocator
+remains authoritative. External untrusted JSON cannot directly
+assert global permission. Neither path enables LIVE.
