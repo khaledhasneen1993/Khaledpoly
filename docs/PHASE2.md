@@ -2,7 +2,7 @@
 
 The shared closed-loop PAPER strategy, causal ingestor replay, inventory exits, verified public
 resolution ingestion, execution reporting, alert outbox/adapters, and frozen heldout evaluator are
-implemented. **Empirical acceptance is still NO_GO; phase 3 has not started.**
+implemented. **Empirical acceptance is still NO_GO; phase 3 shadow engineering has started ([scope](PHASE3.md)); empirical promotion remains blocked.**
 
 See [PHASE2_COMPLETION.md](PHASE2_COMPLETION.md) for current behavior, operating commands, limits,
 provenance rules and the remaining data requirement. [PHASE2_VALIDATION.md](PHASE2_VALIDATION.md)
@@ -34,4 +34,4 @@ a new future freeze before a later experiment, without tuning on heldout results
 No historical trades or synthetic accounting fixtures are substituted for the required seven complete
 UTC days, 100 resolved traded markets, 100 maker fills and the other preregistered checks. The short
 public-data smoke is diagnostic only. A passing build or a positive synthetic arithmetic example
-cannot unlock phase 3 or LIVE.
+cannot qualify a strategy for deployment or unlock LIVE.

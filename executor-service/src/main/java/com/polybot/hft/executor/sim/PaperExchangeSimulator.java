@@ -390,6 +390,12 @@ public class PaperExchangeSimulator {
         queueMultiplier);
   }
 
+  public synchronized JsonNode researchSnapshot() {
+    if (!enabled() || researchSession == null || researchStopping || recoveryBlocked)
+      throw new IllegalStateException("Closed-loop PAPER unavailable");
+    return researchSession.researchSnapshot(clock.millis());
+  }
+
   public boolean enabled() {
     return Boolean.TRUE.equals(sim.enabled());
   }

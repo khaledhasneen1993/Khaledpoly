@@ -56,6 +56,9 @@ class ClosedLoopHttpTest {
 
   @Test
   void actualExecutorRunsSharedStrategyAndProtectsAccountFromLegacyOrderPath() {
+    assertThat(
+            client.getForEntity("/api/research/v1/snapshot", String.class).getStatusCode().value())
+        .isEqualTo(404);
     long at = 1800000000000L;
     var m =
         new ResearchMarket(

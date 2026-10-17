@@ -1,0 +1,15 @@
+{
+  "scope": "PHASE3_DELIVERY1_SHADOW_FOUNDATION",
+  "phase2Reference": "bf9458a6b236522c95ef52f5e43bc184ada275c1",
+  "java": {"tests": 100, "failures": 0, "errors": 0, "skipped": 0},
+  "phase2Python": {"tests": 8, "failures": 0},
+  "phase3Python": {"tests": 15, "failures": 0},
+  "javaToPythonHttpContract": "PASS",
+  "shadowReplay": "PASS_SYNTHETIC_INPUT",
+  "venueProfitability": null,
+  "venueFillModelTrained": false,
+  "fullPhase3Complete": false,
+  "decision": "NO_GO",
+  "executionEnabled": false,
+  "liveAllowed": false
+}

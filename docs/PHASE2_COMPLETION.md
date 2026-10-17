@@ -3,7 +3,7 @@
 # Phase 2: remaining implementation and evidence gates
 
 The previously listed implementation gaps are now implemented on `phase2-paper-validation`.
-**The empirical gate remains NO_GO. Phase 3 is not approved or started.** A successful build is not
+**The empirical gate remains NO_GO. The user has authorized phase 3 shadow engineering ([scope](PHASE3.md)); strategy qualification remains pending.** A successful build is not
 proof of profitable fills; seven complete independent UTC days and the registered sample are still
 required. No criteria have been weakened. No live funds, keys, signing or chain broadcasting are used.
 

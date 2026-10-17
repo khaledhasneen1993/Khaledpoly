@@ -58,7 +58,8 @@ public final class ResearchSession implements AutoCloseable {
   private final Map<String, BigDecimal> mids = new HashMap<>(), vols = new HashMap<>();
   private final Map<String, Long> quoteAt = new HashMap<>(), lastTakerSource = new HashMap<>();
   private final List<Pending> pending = new ArrayList<>();
-  private long now = -1, nextDecision, sequence;
+  private long now = -1, nextDecision, sequence, inputSequence;
+  private final String sessionId = UUID.randomUUID().toString();
   private boolean entryStopped;
   private boolean failed;
   private boolean insideFrame;
@@ -145,6 +146,7 @@ public final class ResearchSession implements AutoCloseable {
       throw new IllegalStateException("Research session failed; restart/reconciliation required");
     if (at < now) throw new IllegalArgumentException("Causal clock regression");
     now = at;
+    if (!insideFrame) inputSequence++;
     if (kind.equals("FRAME")) {
       if (insideFrame || !data.path("events").isArray())
         throw new IllegalArgumentException("Invalid or nested research frame");
@@ -840,6 +842,81 @@ public final class ResearchSession implements AutoCloseable {
       if (size.signum() > 0) map.put(PaperMatchingEngine.decimal(r, "price"), size);
     }
     return map;
+  }
+
+  /** A detached, bounded observation. This method never submits or cancels an order. */
+  public synchronized JsonNode researchSnapshot(long generatedAt) {
+    if (now < 0 || generatedAt < now) throw new IllegalStateException("No causal observation");
+    var state = ledger.snapshot();
+    var account = new LinkedHashMap<String, Object>();
+    account.put("id", "paper-default");
+    account.put("cash", state.cash());
+    account.put("availableCash", ledger.availableCash());
+    account.put("realizedPnl", state.realized());
+    account.put("fees", state.fees());
+    account.put("halted", failed || entryStopped || state.halted());
+    account.put("pendingTakers", pending.size());
+    account.put("holdings", state.holdings());
+    account.put("orders", state.orders());
+    var relevant =
+        markets.values().stream()
+            .filter(
+                m ->
+                    m.endMs() > generatedAt
+                        || holding(m.first()).shares().signum() > 0
+                        || holding(m.second()).shares().signum() > 0
+                        || state.orders().values().stream()
+                            .anyMatch(
+                                o ->
+                                    o.remaining().signum() > 0
+                                        && (o.token().equals(m.first())
+                                            || o.token().equals(m.second()))))
+            .toList();
+    var depth = new TreeMap<String, Object>();
+    books.entrySet().stream()
+        .sorted(Map.Entry.comparingByKey())
+        .limit(512)
+        .forEach(
+            e -> {
+              var b = e.getValue();
+              depth.put(
+                  e.getKey(),
+                  Map.of(
+                      "sourceMs",
+                      b.source(),
+                      "receivedMs",
+                      b.received(),
+                      "bids",
+                      researchLevels(b.bids().descendingMap()),
+                      "asks",
+                      researchLevels(b.asks()),
+                      "depthTruncated",
+                      b.bids().size() > 50 || b.asks().size() > 50));
+            });
+    var result = new LinkedHashMap<String, Object>();
+    result.put("schema", 1);
+    result.put("mode", "PAPER");
+    result.put("researchOnly", true);
+    result.put("executionEnabled", false);
+    result.put("liveAllowed", false);
+    result.put("sessionId", sessionId);
+    result.put("sequence", inputSequence);
+    result.put("inputMs", now);
+    result.put("generatedMs", generatedAt);
+    result.put("maxBookAgeMs", cfg.maxBookAgeMs());
+    result.put("metadataMaxAgeMs", cfg.metadataMaxAgeMs());
+    result.put("account", account);
+    result.put("markets", relevant.stream().limit(256).toList());
+    result.put("books", depth);
+    result.put("truncated", relevant.size() > 256 || books.size() > 512);
+    return mapper.valueToTree(result);
+  }
+
+  private List<Map<String, BigDecimal>> researchLevels(NavigableMap<BigDecimal, BigDecimal> side) {
+    return side.entrySet().stream()
+        .limit(50)
+        .map(e -> Map.of("price", e.getKey(), "size", e.getValue()))
+        .toList();
   }
 
   public synchronized Map<String, Object> report() {
