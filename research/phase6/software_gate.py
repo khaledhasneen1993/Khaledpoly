@@ -15,6 +15,7 @@ from research.phase3.polybot_sdk.runtime import private_write
 
 REQUIRED = (
     'research/phase4/recorder.py', 'research/phase4/audit.py',
+    'research/phase4/capture_supervisor.py', 'research/phase4/tests/test_capture_supervisor.py',
     'research/phase4/final_gate.py',
     'research/phase5/cex_signals.py', 'research/phase5/cex_forward.py',
     'research/phase5/event_rules.py', 'research/phase5/paper_strategy_adapter.py',
