@@ -183,6 +183,18 @@ class AdvancedStrategyTest(unittest.TestCase):
             self.assertEqual(len(row['featureEvidence']), 2)
             self.assertTrue(row['allocation']['admitted'])
 
+    def test_missing_local_evidence_aborts_instead_of_becoming_network_error(self):
+        class Client:
+            def snapshot(self):
+                return validate(fixture(), BASE)
+        with tempfile.TemporaryDirectory() as directory:
+            run = Path(directory) / 'run'
+            with self.assertRaises(FileNotFoundError):
+                shadow_run(Client(), run, seconds=.01, feature_path=Path(directory) / 'missing.jsonl')
+            report = decode((run / 'report.json').read_text())
+            self.assertFalse(report['complete'])
+            self.assertEqual(report['networkErrors'], 0)
+
     def test_model_artifact_and_float_predictions_round_trip_exactly(self):
         data = [label(i, 'train' + str(i), 1000, i % 2) for i in range(40)]
         data += [label('test' + str(i), 'test' + str(i), 200000, i % 2) for i in range(40)]

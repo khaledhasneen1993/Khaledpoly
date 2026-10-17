@@ -49,10 +49,20 @@ def shadow_run(client, directory, seconds=60, interval=1, groups=None, strategy=
             os.chmod(path / 'observations.jsonl', 0o600)
             while time.monotonic() < deadline:
                 delay = interval
+                if tail is not None:
+                    tail.update(store)  # Local evidence failures are fatal, never network retries.
+                snapshot = None
                 try:
-                    if tail is not None:
-                        tail.update(store)
                     snapshot = client.snapshot()
+                except HTTPError as exc:
+                    errors += 1
+                    if exc.code in (401, 403, 404) or (400 <= exc.code < 500 and exc.code != 429):
+                        raise
+                    from .collector import retry_delay
+                    delay = max(interval, 60, retry_delay(exc.headers.get('Retry-After')))
+                except (URLError, TimeoutError, OSError):
+                    errors += 1
+                if snapshot is not None:
                     current = (snapshot['sessionId'], snapshot['account']['id'])
                     sequence = int(snapshot['sequence'])
                     if identity and (current != identity or sequence < previous):
@@ -67,13 +77,6 @@ def shadow_run(client, directory, seconds=60, interval=1, groups=None, strategy=
                         digest.update(encoded)
                         count += 1
                     identity, previous = current, sequence
-                except HTTPError as exc:
-                    errors += 1
-                    if exc.code in (401, 403, 404) or (400 <= exc.code < 500 and exc.code != 429):
-                        raise
-                    delay = max(interval, 60)  # Conservative cooldown for throttling/server errors.
-                except (URLError, TimeoutError, OSError):
-                    errors += 1
                 remaining = deadline - time.monotonic()
                 if remaining > 0:
                     time.sleep(min(delay, remaining))

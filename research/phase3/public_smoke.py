@@ -48,7 +48,12 @@ def main():
             with (output / 'signals.log').open('x') as signal_log:
                 signal_process = subprocess.Popen([sys.executable, '-m', 'research.phase3', 'collect-signals',
                     '--seconds', '30', '--output', str(output / 'signals')], cwd=ROOT, stdout=signal_log, stderr=subprocess.STDOUT)
-                report = shadow_run(client, output / 'shadow', seconds=45, interval=1)
+                feature_path = output / 'signals/features.jsonl'
+                feature_deadline = time.monotonic() + 5
+                while not feature_path.exists() and signal_process.poll() is None and time.monotonic() < feature_deadline:
+                    time.sleep(.1)
+                report = shadow_run(client, output / 'shadow', seconds=45, interval=1,
+                                    feature_path=feature_path if feature_path.exists() else None)
                 signal_status = signal_process.wait(timeout=30)
             parity = replay_shadow(output / 'shadow', output / 'replay.json')
             latest = client.snapshot()

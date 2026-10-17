@@ -12,7 +12,7 @@
     "failures": 0
   },
   "phase3Python": {
-    "tests": 38,
+    "tests": 39,
     "failures": 0
   },
   "javaToPythonHttpContract": "PASS",
