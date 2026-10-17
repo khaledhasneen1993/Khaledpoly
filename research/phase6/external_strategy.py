@@ -76,12 +76,27 @@ class ExternalStrategyReview:
             return dict(existing, replayedIdentical=True)
         allocation=allocate(snap,candidates,per_order=self.risk_limits[0],
                             per_group=self.risk_limits[1],gross_limit=self.risk_limits[2])
+        # Only candidates admitted by the existing allocator may reach the
+        # durable Java PAPER *screen* endpoint. IDs bind the entire account
+        # identity and generation, never an untrusted strategy-provided ID
+        # alone; the server's durable inbox remains the final authority.
+        approved=[]
+        for candidate in allocation['admitted']:
+            identity={'sessionId':snap['sessionId'],'accountId':snap['account']['id'],
+                      'sequence':integer(snap['sequence']), 'strategy':strategy,
+                      'candidateId':candidate['id']}
+            request_id='ext-'+hashlib.sha256(dumps(identity).encode()).hexdigest()[:40]
+            approved.append({'id':request_id,'strategy':strategy,
+                             'sessionId':snap['sessionId'],'accountId':snap['account']['id'],
+                             'sequence':integer(snap['sequence']),
+                             'legs':candidate['legs']})
         # Track idempotency for successful and rejected proposals alike.
         output={'schema':1,'scope':'EXTERNAL_PAPER_STRATEGY_REVIEW',
                 'strategyId':strategy,'accountId':snap['account']['id'],
                 'snapshotSequence':snap['sequence'],
                 'envelopeSha256':source_hash,'snapshotSha256':snapshot_hash,
                 'admittedResearchCandidates':len(allocation['admitted']),
+                'approvedPaperScreenRequests':approved,
                 'rejections':allocation['rejected'],
                 'replayedIdentical':False,
                 'venueOrdersSubmitted':0,'accountBalancesModified':False,
