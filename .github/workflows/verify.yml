@@ -17,6 +17,8 @@ jobs:
       - run: python3 -m unittest discover -s research/phase2/tests -v
       - run: python3 -m unittest discover -s research/phase3/tests -v
       - run: python3 -m unittest discover -s research/phase4/tests -v
+      - run: python3 -m unittest discover -s research/phase5/tests -v
+      - run: python3 -m research.phase5.offline_benchmark --help
       - run: python3 -m research.phase4.audit --help
       - run: python3 -m research.phase4.recorder --help
       - run: python3 -m research.phase4.final_gate --help
