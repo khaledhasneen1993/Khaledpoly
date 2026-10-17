@@ -123,3 +123,34 @@ exact archived snapshot and outbox performs **GET-only** reconciliation,
 including when the original snapshot is now stale. Starting a fresh
 outbox from a stale snapshot remains forbidden. The token and
 execution permissions are never expanded to an exchange/wallet.
+
+
+## Explicit, separate VIRTUAL PAPER execution adapter
+
+\`research.phase6.virtual_paper_bridge\` is **NOT** the passive screening
+bridge. It is the next stage and must be activated explicitly by
+\`--enable-virtual-paper-only\`, with
+\`snapshot.paperExecutionEnabled == true\` from the Java executor
+and its separate \`paper.external-execution\` guard in PAPER mode.
+It uses the existing \`PaperExecutionClient.retry_identical\` and
+\`ResearchSession\`/Java \`AccountLedger.reserveBatch\` for **virtual**
+reservations, rather than creating a second Python cash ledger.
+No exchange APIs, signing, wallets, LIVE orders, or fund transfers.
+
+Exactly one immutable request with deterministic ID and an fsynced
+local journal is recorded before each virtual POST. After a lost
+response, the adapter replays **identical** bytes/ID, and the Java
+ledger is responsible for \`PAPER_ALREADY_RECORDED\` deduplication.
+It does not treat a lost reply as success. A different
+session/account or changed strategy fingerprint is blocked.
+
+    python3 -m research.phase6.virtual_paper_bridge \
+      --origin http://127.0.0.1:8080 \
+      --snapshot ./recent-paper-snapshot.json \
+      --envelope ./external-strategy-envelope.json \
+      --outbox ./output/explicit-virtual-paper-001 \
+      --enable-virtual-paper-only
+
+Never activate in the absence of confirmed PAPER executor mode. All
+settlement/fill labels remain hypothetical and actual user trading
+permissions remain disabled.
