@@ -40,3 +40,26 @@ research. This API has no submit, sign, reserve or transfer method.
 
 **All stage-6 engineering is provisional. No account, settlement,
 risk model, or strategy may trade real money from this branch.**
+
+
+## Version 1 restricted external-strategy interface
+
+\`research.phase6.external_strategy.ExternalStrategyReview\` accepts a
+strict, versioned JSON envelope bound to one validated PAPER
+\`sessionId/accountId/snapshotSequence/generatedMs\`. A proposed
+\`edge\` is an unverified model claim, not an edge declaration that
+can bypass the existing \`polybot_sdk.advanced.allocate\` central
+paper risk/cash/inventory restrictions.
+
+The external strategy **does not execute code** inside this process;
+there is no dynamic import, network call, secret field, private key,
+wallet or transfer mechanism. Undeclared fields, malformed order legs,
+cross-account identities, unsafe/taker prices and conflicting identical
+snapshot retries are rejected. Exactly identical retries produce an
+idempotent read-only research receipt. Even admitted candidates do not
+enter the Java ledger or trigger PAPER orders automatically, much less
+real-money orders.
+
+Further integration requires explicit PAPER executor acceptance,
+durable idempotent receipt accounting, sandboxed third-party
+code execution and independent interface security validation.
