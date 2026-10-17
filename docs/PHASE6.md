@@ -154,3 +154,16 @@ session/account or changed strategy fingerprint is blocked.
 Never activate in the absence of confirmed PAPER executor mode. All
 settlement/fill labels remain hypothetical and actual user trading
 permissions remain disabled.
+
+
+## Change: one atomic virtual proposal group per executor snapshot
+
+The explicit virtual PAPER adapter rejects more than one independent
+admitted proposal group for a frozen account/sequence, **before**
+creating the outbox or calling Java. A single group may still contain
+multiple validated buy/sell legs reserved together by the Java
+\`AccountLedger.reserveBatch\`. Sending a second separate group from
+the same stale cash/holdings snapshot is forbidden: collect a fresh
+\`ResearchSnapshot\`, re-evaluate the centralized budget, and use a new
+generation/outbox. This deliberately trades throughput for correct,
+atomic account reservation and prevents cross-strategy overspend.

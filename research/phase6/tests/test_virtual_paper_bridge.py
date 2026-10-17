@@ -139,6 +139,24 @@ class VirtualPaperIntegrationTest(unittest.TestCase):
             self.assertEqual(client.calls,1)
             self.assertEqual(len(client.ledger),1)
 
+    def test_multiple_independent_intents_require_new_causal_snapshot(self):
+        obs=observation()
+        client=FakeLedgerClient(obs)
+        proposed=envelope()
+        proposed['proposals'].append({
+            'id':'b','edge':'.03',
+            'legs':[{'condition':'market','token':'b','buy':True,
+                     'price':'.41','size':'5','expiresMs':BASE+250}]
+        })
+        with tempfile.TemporaryDirectory() as d:
+            target=Path(d)/'out'
+            with self.assertRaisesRegex(ValueError,'one atomic virtual PAPER'):
+                DurableVirtualPaperOrders(client).run(
+                    target,obs,proposed,enable_virtual=True,at_ms=BASE)
+            self.assertFalse(target.exists())
+            self.assertEqual(client.calls,0)
+            self.assertEqual(len(client.ledger),0)
+
     def test_malformed_server_receipt_is_never_recorded_as_success(self):
         obs=observation()
         class Malicious(FakeLedgerClient):

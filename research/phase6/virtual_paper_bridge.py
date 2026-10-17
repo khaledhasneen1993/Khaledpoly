@@ -48,6 +48,12 @@ class DurableVirtualPaperOrders:
         requests=reviewed['approvedPaperScreenRequests']
         if len(requests)!=reviewed['admittedResearchCandidates'] or len(requests)>32:
             raise ValueError('Unsafe external allocation count')
+        # Every successfully submitted group can consume PAPER cash and
+        # advance the executor sequence. A second independent group from the
+        # same snapshot would bypass a fresh central risk/ledger validation.
+        # A multi-leg *single* group remains atomic in the Java ledger.
+        if len(requests)>1:
+            raise ValueError('Only one atomic virtual PAPER intent per snapshot; refresh executor state before the next group')
         manifest={'schema':1,'mode':'EXPLICIT_VIRTUAL_PAPER_EXECUTION',
                   'sessionId':snap['sessionId'],'accountId':snap['account']['id'],
                   'snapshotSha256':digest(snap),'envelopeSha256':digest(envelope),
