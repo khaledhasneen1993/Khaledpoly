@@ -48,17 +48,16 @@ class WebSocketFreshnessTest {
 
   /** Change only the token field, never a timestamp containing the same digits. */
   String withAsset(String message, String assetId) {
-    return message.replace("\\\"asset_id\\\":\\\"123\\\"",
-        "\\\"asset_id\\\":\\\"" + assetId + "\\\"");
+    return message.replace("\"asset_id\":\"123\"", "\"asset_id\":\"" + assetId + "\"");
   }
 
   @Test
   void assetReplacementCannotRewriteTimestampContainingTokenDigits() {
     long withRepeatedDigits = 1800000123456L;
     String renamed = withAsset(book(withRepeatedDigits, "0.4"), "456");
-    assertThat(renamed).contains("\\\"timestamp\\\":\\\"" + withRepeatedDigits + "\\\"");
-    assertThat(renamed).contains("\\\"asset_id\\\":\\\"456\\\"");
-    assertThat(renamed).doesNotContain("\\\"asset_id\\\":\\\"123\\\"");
+    assertThat(renamed).contains("\"timestamp\":\"" + withRepeatedDigits + "\"");
+    assertThat(renamed).contains("\"asset_id\":\"456\"");
+    assertThat(renamed).doesNotContain("\"asset_id\":\"123\"");
   }
 
   @Test
