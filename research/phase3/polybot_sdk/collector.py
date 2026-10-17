@@ -59,25 +59,47 @@ class TradeWatermark:
         if len(ordered) != len(observations):
             raise ValueError('Trade identity/observation count mismatch')
         fresh, duplicates, older = [], 0, 0
+        next_source = self.source_ms
+        next_ids = set(self.ids_at_timestamp)
         for record, observation in zip(ordered, observations):
             source_ms = integer(record[clock])
             trade_id = str(record[identity])
             if source_ms != observation.source_ms or not trade_id:
                 raise ValueError('Trade identity/observation mismatch')
-            if source_ms < self.source_ms:
+            if source_ms < next_source:
                 older += 1
                 continue
-            if source_ms > self.source_ms:
-                self.source_ms = source_ms
-                self.ids_at_timestamp.clear()
-            if trade_id in self.ids_at_timestamp:
+            if source_ms > next_source:
+                next_source = source_ms
+                next_ids.clear()
+            if trade_id in next_ids:
                 duplicates += 1
                 continue
-            if len(self.ids_at_timestamp) >= self.max_ids_at_timestamp:
+            if len(next_ids) >= self.max_ids_at_timestamp:
                 raise ValueError('Trade ID watermark bound exceeded')
-            self.ids_at_timestamp.add(trade_id)
+            next_ids.add(trade_id)
             fresh.append(observation)
+        # A malformed or oversized batch must never partially advance the watermark.
+        self.source_ms, self.ids_at_timestamp = next_source, next_ids
         return fresh, duplicates, older
+
+    def snapshot(self):
+        return {'sourceMs': self.source_ms, 'idsAtTimestamp': sorted(self.ids_at_timestamp)}
+
+    @classmethod
+    def restore(cls, value):
+        if not isinstance(value, dict) or set(value) != {'sourceMs', 'idsAtTimestamp'}:
+            raise ValueError('Invalid watermark checkpoint')
+        source = integer(value['sourceMs'])
+        ids = value['idsAtTimestamp']
+        if (source < -1 or not isinstance(ids, list) or len(ids) > 16384
+                or any(not isinstance(v, str) or not v or len(v) > 160 for v in ids)
+                or len(ids) != len(set(ids))
+                or (source == -1 and ids)):
+            raise ValueError('Invalid watermark identity/state')
+        result = cls()
+        result.source_ms, result.ids_at_timestamp = source, set(ids)
+        return result
 
 
 class PublicCollector:
@@ -139,16 +161,28 @@ def _sha256_file(path):
     return digest.hexdigest()
 
 
-def collect(directory, seconds=60, interval=5, symbol='BTCUSDT'):
+def collect(directory, seconds=60, interval=5, symbol='BTCUSDT', initial_watermarks=None, source_revision=None):
     if not math.isfinite(seconds) or not 0 < seconds <= 86400 or not math.isfinite(interval) or not 1 <= interval <= 60:
         raise ValueError('Invalid public collector duration/interval')
+    if initial_watermarks is None:
+        initial_watermarks = {v: TradeWatermark().snapshot() for v in ('binance-spot', 'bybit-spot')}
+    if not isinstance(initial_watermarks, dict) or set(initial_watermarks) != {'binance-spot', 'bybit-spot'}:
+        raise ValueError('Missing venue watermark checkpoint')
+    restored = {venue: TradeWatermark.restore(state)
+                for venue, state in initial_watermarks.items()}
+    if source_revision is not None and (not isinstance(source_revision, str)
+                                        or not re.fullmatch('[0-9a-f]{40}', source_revision)):
+        raise ValueError('Invalid pinned source commit')
     started_ms, started_mono = int(time.time() * 1000), time.monotonic()
     path = Path(directory)
     path.mkdir(parents=True, mode=0o700, exist_ok=False)
-    private_write(path / 'manifest.json', {'schema': 2, 'mode': 'PUBLIC_RECORD_ONLY', 'symbol': symbol,
+    private_write(path / 'manifest.json', {'schema': 3, 'mode': 'PUBLIC_RECORD_ONLY', 'symbol': symbol,
                   'seconds': str(seconds), 'interval': str(interval), 'startedAtMs': started_ms,
+                  'sourceRevision': source_revision, 'initialWatermarks': initial_watermarks,
                   'coverage': 'SAMPLED', 'liveAllowed': False})
     collectors = [PublicCollector(v, symbol) for v in ('binance-spot', 'bybit-spot')]
+    for client in collectors:
+        client._watermark = restored[client.venue]
     deadline, rows, errors, complete = started_mono + seconds, 0, 0, False
     per_venue = {v: {'sampledPolls': 0, 'backoffPolls': 0, 'errorPolls': 0,
                      'featureRows': 0, 'duplicateTrades': 0, 'olderTrades': 0,
@@ -189,7 +223,9 @@ def collect(directory, seconds=60, interval=5, symbol='BTCUSDT'):
         ended_ms = int(time.time() * 1000)
         hashes = {name: _sha256_file(path / name) if (path / name).is_file() else None
                   for name in ('public.jsonl', 'features.jsonl')}
+        final_watermarks = {client.venue: client._watermark.snapshot() for client in collectors}
         report = {'complete': complete, 'featureRows': rows, 'errors': errors, 'coverage': 'SAMPLED',
+                  'finalWatermarks': final_watermarks,
                   'startedAtMs': started_ms, 'endedAtMs': ended_ms,
                   'elapsedMonotonicMs': int((time.monotonic() - started_mono) * 1000),
                   'fileSha256': hashes, 'perVenue': per_venue, 'completeTradeTape': False,

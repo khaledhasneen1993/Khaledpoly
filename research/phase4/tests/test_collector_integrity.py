@@ -76,6 +76,27 @@ class CollectorIntegrityTest(unittest.TestCase):
         self.assertEqual([len(rows1), len(rows2)], [2, 2])
         self.assertEqual(c._watermark.source_ms, BASE-2)
 
+    def test_watermark_recovery_same_millisecond_and_atomic_failure(self):
+        from research.phase3.polybot_sdk.collector import TradeWatermark
+        current = TradeWatermark(max_ids_at_timestamp=1)
+        initial = [binance(1, BASE - 2)]
+        current.accept('binance-spot', initial,
+                       normalize_trades('binance-spot', 'BTCUSDT', initial, BASE))
+        checkpoint = current.snapshot()
+        restored = TradeWatermark.restore(checkpoint)
+        second = [binance(1, BASE - 2), binance(2, BASE - 2)]
+        with self.assertRaisesRegex(ValueError, 'bound exceeded'):
+            current.accept('binance-spot', second,
+                           normalize_trades('binance-spot', 'BTCUSDT', second, BASE))
+        self.assertEqual(checkpoint, current.snapshot())
+        newer = [binance(1, BASE - 2), binance(2, BASE - 1)]
+        rows, dupe, _ = restored.accept('binance-spot', newer,
+                                       normalize_trades('binance-spot', 'BTCUSDT', newer, BASE))
+        self.assertEqual((len(rows), dupe), (1, 1))
+        self.assertEqual(restored.source_ms, BASE - 1)
+        with self.assertRaises(ValueError):
+            TradeWatermark.restore({'sourceMs': -1, 'idsAtTimestamp': ['x']})
+
     def test_fail_closed_on_invalid_trade_and_watermark_bound(self):
         c = PublicCollector('binance-spot')
         c._opener = Opener([binance(1, BASE-2), binance(1, BASE-2)])

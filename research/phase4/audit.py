@@ -26,7 +26,7 @@ def inspect_session(directory):
     root = Path(directory)
     manifest = _read_json(root / 'manifest.json')
     report = _read_json(root / 'report.json')
-    if (manifest.get('schema') != 2 or manifest.get('mode') != 'PUBLIC_RECORD_ONLY'
+    if (manifest.get('schema') not in (2, 3) or manifest.get('mode') != 'PUBLIC_RECORD_ONLY'
             or manifest.get('liveAllowed') is not False or not isinstance(manifest.get('symbol'), str)
             or manifest.get('coverage') != 'SAMPLED'
             or report.get('complete') is not True or report.get('coverage') != 'SAMPLED'
@@ -41,6 +41,15 @@ def inspect_session(directory):
     if abs((end - start) - elapsed) > 30000:
         raise ValueError('Capture wall/monotonic clock drift exceeds 30 seconds')
 
+    initial_state, final_state = None, None
+    if manifest['schema'] == 3:
+        from research.phase3.polybot_sdk.collector import TradeWatermark
+        initial_state, final_state = {}, {}
+        for venue in VENUES:
+            initial_state[venue] = TradeWatermark.restore(manifest['initialWatermarks'][venue]).snapshot()
+            final_state[venue] = TradeWatermark.restore(report['finalWatermarks'][venue]).snapshot()
+        if not isinstance(manifest.get('sourceRevision'), (str, type(None))):
+            raise ValueError('Invalid capture revision')
     for name in ('public.jsonl', 'features.jsonl'):
         expected = report['fileSha256'][name]
         if not isinstance(expected, str) or len(expected) != 64 or _sha256_file(root / name) != expected:
@@ -127,6 +136,8 @@ def inspect_session(directory):
     if feature_count != sum(counts[v]['featureRows'] for v in VENUES):
         raise ValueError('Source feature total mismatch')
     return {'directory': str(root), 'startedAtMs': start, 'endedAtMs': end,
+            'initialWatermarks': initial_state, 'finalWatermarks': final_state,
+            'sourceRevision': manifest.get('sourceRevision'),
             'intervalSeconds': manifest['interval'], 'symbol': manifest['symbol'],
             'perVenue': {v: {'sampledPolls': counts[v]['sampledPolls'],
                               'backoffPolls': counts[v]['backoffPolls'],
@@ -152,6 +163,14 @@ def audit_capture(directories, min_days=7, max_poll_gap_ms=300000):
     for i, item in enumerate(sessions):
         if item['symbol'] != sessions[0]['symbol']:
             issues.append('MIXED_MARKET_SYMBOLS')
+        if item['initialWatermarks'] is None or item['finalWatermarks'] is None:
+            issues.append('UNVERIFIED_WATERMARK_CONTINUITY')
+        if i and (item['initialWatermarks'] != sessions[i-1]['finalWatermarks']):
+            issues.append('WATERMARK_DISCONTINUITY')
+        if item['sourceRevision'] is None:
+            issues.append('UNPINNED_SOURCE_REVISION')
+        elif i and item['sourceRevision'] != sessions[0]['sourceRevision']:
+            issues.append('SOURCE_REVISION_CHANGED')
         if i and item['startedAtMs'] < sessions[i-1]['endedAtMs']:
             issues.append('OVERLAPPING_SESSIONS')
         elif i and item['startedAtMs'] - sessions[i-1]['endedAtMs'] > max_poll_gap_ms:

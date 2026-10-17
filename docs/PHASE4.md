@@ -86,3 +86,13 @@ The self-contained file hashes are consistency checks, **not cryptographic
 authentication** if someone can edit both the report and the tape. Store
 immutable artifacts or external digest attestations before claiming a
 tamper-proof dataset.
+
+## Change 4: checkpointable, atomic venue trade-watermarks
+
+PUBLIC REST responses can share an exchange millisecond with distinct trades.
+Watermark updates are now all-or-nothing; a malformed or bounded-overflow
+response cannot leave a partially advanced state. Every schema-3 segment
+includes initial and final per-venue trade-ID checkpoints. The audit rejects
+gaps between checkpoints, mixed revisions, and legacy segments without
+checkpoint evidence. Checkpoints preserve de-duplication across restarts,
+but cannot reconstruct trades that were never returned by the REST source.

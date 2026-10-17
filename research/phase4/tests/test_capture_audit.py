@@ -84,6 +84,12 @@ class CaptureAuditTest(unittest.TestCase):
             self.assertIn('bybit-spot:TERMINAL_SUCCESS_GAP', report['issues'])
             self.assertFalse(report['continuousSamplingWindow'])
 
+    def test_legacy_segments_cannot_claim_watermark_continuity(self):
+        with tempfile.TemporaryDirectory() as folder:
+            first = make_session(Path(folder) / 'one')
+            report = audit_capture([first], min_days=1)
+            self.assertIn('UNVERIFIED_WATERMARK_CONTINUITY', report['issues'])
+
     def test_duplicate_session_input_fails(self):
         with tempfile.TemporaryDirectory() as folder:
             session = make_session(Path(folder) / 'first')
