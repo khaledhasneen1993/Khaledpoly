@@ -30,7 +30,7 @@ public final class ReplayRunner {
     boolean stopped = false, fillsEnabled = false;
     var warnings = new ArrayList<String>();
     var clock = new ReplayClock();
-    try (var lines = Files.newBufferedReader(tape)) {
+    try (var lines = TapeIO.reader(tape)) {
       String line;
       while ((line = lines.readLine()) != null) {
         if (line.isBlank()) throw new IllegalArgumentException("Blank tape row");

@@ -661,22 +661,26 @@ public class ClobMarketWebSocketClient {
 
     String eventType = node.path("event_type").asText("");
     if ((eventType.equals("book") || eventType.equals("price_change")) && !sourceFresh(node)) {
-      String asset = node.path("asset_id").asText(null);
-      if (asset != null) {
-        invalidatedAssets.add(asset);
-        topOfBookByAssetId.remove(asset);
-        depthByAssetId.remove(asset);
-      } else {
-        invalidateAllBooks();
-      }
       long stamp = node.path("timestamp").asLong(-1);
       if (stamp > 0 && stamp < 100000000000L) stamp *= 1000;
+      var tokens = com.polybot.hft.paper.DataGap.messageTokens(node);
+      // An older observation cannot invalidate a newer accepted snapshot.
+      tokens.removeIf(token -> stampForComparison(node) >= 0
+          && stampForComparison(node) < lastSourceByAsset.getOrDefault(token, -1L));
+      if (!com.polybot.hft.paper.DataGap.messageTokens(node).isEmpty() && tokens.isEmpty()) return;
+      if (tokens.isEmpty()) invalidateAllBooks();
+      else for (String token : tokens) {
+        invalidatedAssets.add(token);
+        topOfBookByAssetId.remove(token);
+        depthByAssetId.remove(token);
+      }
       long observedMs = frameDecodeMs >= 0 ? frameDecodeMs : clock.millis();
       tape(
           "GAP",
           Map.of(
               "reason",
               "stale_source",
+              "tokens", tokens,
               "sourceMs",
               stamp,
               "callbackReceivedMs",
@@ -723,6 +727,11 @@ public class ClobMarketWebSocketClient {
     if (previous != null && stamp < previous) return false;
     lastSourceByAsset.put(asset, stamp);
     return true;
+  }
+
+  private long stampForComparison(JsonNode node) {
+    long stamp = node.path("timestamp").asLong(-1);
+    return stamp > 0 && stamp < 100000000000L ? stamp * 1000 : stamp;
   }
 
   private boolean sourceFresh(JsonNode node) {

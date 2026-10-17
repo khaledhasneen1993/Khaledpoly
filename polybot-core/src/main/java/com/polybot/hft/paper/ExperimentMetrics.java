@@ -10,6 +10,7 @@ public final class ExperimentMetrics {
   private final Set<String> filledOrders = new HashSet<>();
   private final Map<String, Intent> intents = new HashMap<>();
   private final Map<String, Long> firstFill = new HashMap<>();
+  private final Map<String, Long> terminalReasons = new TreeMap<>(), terminalStatuses = new TreeMap<>();
   private final Map<String, Long> reasons = new TreeMap<>();
   private final List<Map<String, Object>> executions = new ArrayList<>(),
       completions = new ArrayList<>();
@@ -51,6 +52,11 @@ public final class ExperimentMetrics {
     e.put("expectedEdge", i == null ? null : i.edge);
     e.put("decisionToFillMs", i == null ? null : f.at() - i.at);
     executions.add(e);
+  }
+
+  public void terminal(String status, String reason) {
+    terminalStatuses.merge(status, 1L, Long::sum);
+    terminalReasons.merge(reason, 1L, Long::sum);
   }
 
   public void merge(String condition, long at, BigDecimal quantity, BigDecimal realized) {
@@ -108,6 +114,8 @@ public final class ExperimentMetrics {
     r.put(
         "decisionToFillP95Ms",
         latencies.isEmpty() ? null : latencies.get((int) Math.ceil(latencies.size() * .95) - 1));
+    r.put("orderTerminalReasons", Map.copyOf(terminalReasons));
+    r.put("orderTerminalStatuses", Map.copyOf(terminalStatuses));
     r.put("decisions", decisions);
     r.put("decisionReasons", Map.copyOf(reasons));
     r.put("edgeDistribution", Map.copyOf(edgeBuckets));

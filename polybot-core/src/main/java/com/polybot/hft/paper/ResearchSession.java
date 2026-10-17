@@ -70,6 +70,7 @@ public final class ResearchSession implements AutoCloseable {
   private final Map<String, Long> externalCancelAt = new HashMap<>();
   private final Map<String, JsonNode> outcomeGroups = new TreeMap<>();
   private final Map<String, String> groupProofs = new TreeMap<>();
+  private final Set<String> cancelRequested = new HashSet<>();
   private final Map<String, Long> riskAlertAt = new HashMap<>();
   private boolean haltAlerted;
   private boolean entryStopped;
@@ -299,7 +300,7 @@ public final class ResearchSession implements AutoCloseable {
                   m.observedMs(),
                   m.evidence(),
                   m.negativeRisk()));
-          cancelAll(m);
+          cancelAll(m, "TICK_SIZE_CHANGED");
         }
       save();
     } else if (kind.equals("RESOLUTION")) {
@@ -332,6 +333,7 @@ public final class ResearchSession implements AutoCloseable {
                 m -> (m.first().equals(token) || m.second().equals(token)) && at >= m.endMs()))
           kind = "TICK";
       }
+      if (kind.equals("GAP")) data = scopedGap(data);
       long gapsBefore = matching.gaps();
       apply(matching.accept(kind, at, data));
       if (matching.gaps() > gapsBefore && !kind.equals("GAP"))
@@ -371,8 +373,12 @@ public final class ResearchSession implements AutoCloseable {
         }
       }
       if (kind.equals("GAP")) {
-        books.clear();
-        pending.clear();
+        Set<String> affected = DataGap.tokens(data);
+        if (affected.isEmpty()) { books.clear(); pending.clear(); }
+        else {
+          books.keySet().removeAll(affected);
+          pending.removeIf(p -> affected.contains(p.token()));
+        }
         output.accept(
             "ALERT",
             Map.of(
@@ -381,7 +387,7 @@ public final class ResearchSession implements AutoCloseable {
                 "at",
                 now,
                 "message",
-                "Depth invalidated; resting orders canceled"));
+                "Affected depth invalidated; affected resting orders canceled"));
       }
     } else if (kind.equals("MARKET_UNAVAILABLE")) {
       // Disable only the affected known market; never refresh its metadata freshness clock.
@@ -403,7 +409,7 @@ public final class ResearchSession implements AutoCloseable {
                 m.observedMs(),
                 m.evidence(),
                 m.negativeRisk()));
-        cancelAll(m);
+        cancelAll(m, "MARKET_UNAVAILABLE");
         pending.removeIf(p -> p.condition().equals(m.condition()));
         save();
       }
@@ -473,12 +479,25 @@ public final class ResearchSession implements AutoCloseable {
         .forEach(
             (id, status) -> {
               if (!status.equals("FILLED")) ledger.cancel(id);
-              output.accept("ORDER_TERMINAL", Map.of("id", id, "status", status, "at", now));
+              cancelRequested.remove(id);
+              metrics.terminal(status, update.reasons().getOrDefault(id, "UNSPECIFIED_LEGACY_TERMINAL"));
+              output.accept("ORDER_TERMINAL", Map.of("id", id, "status", status, "at", now,
+                  "reason", update.reasons().getOrDefault(id, "UNSPECIFIED_LEGACY_TERMINAL")));
             });
+    for (var terminal : update.terminal().entrySet()) {
+      if (!terminal.getValue().equals("REJECTED")) continue;
+      var rejected = ledger.snapshot().orders().get(terminal.getKey());
+      if (rejected == null) continue;
+      for (var market : markets.values())
+        if (market.first().equals(rejected.token()) || market.second().equals(rejected.token()))
+          for (String peer : open(market))
+            if (ledger.snapshot().orders().get(peer).buy())
+              cancel(peer, "PEER_REJECTED:" + terminal.getKey());
+    }
   }
 
   private void closeToken(String token) {
-    apply(matching.accept("CLOSE", now, node(Map.of("token", token))));
+    apply(matching.accept("CLOSE", now, node(Map.of("token", token, "reason", "MARKET_CLOSED_OR_RESOLVED"))));
     books.remove(token);
     pending.removeIf(p -> p.token.equals(token));
   }
@@ -524,7 +543,7 @@ public final class ResearchSession implements AutoCloseable {
                   "message",
                   "Account risk stop; new entries blocked and orders canceled"));
         }
-        cancelAll(null);
+        cancelAll(null, "ACCOUNT_RISK_HALT");
         save();
       }
     }
@@ -604,7 +623,7 @@ public final class ResearchSession implements AutoCloseable {
                       ? "EMPTY_DEPTH"
                       : now - m.observedMs() > cfg.metadataMaxAgeMs() ? "METADATA_STALE" : null;
       if (unavailable != null) {
-        cancelAll(m);
+        cancelAll(m, unavailable);
         metrics.decision(unavailable, null);
         continue;
       }
@@ -614,13 +633,18 @@ public final class ResearchSession implements AutoCloseable {
         continue;
       }
       if (entryStopped || ledger.snapshot().halted()) {
-        cancelAll(m);
+        cancelAll(m, "ENTRY_SUSPENDED");
         metrics.decision("ENTRY_SUSPENDED", null);
         continue;
       }
       if (a.source <= lastTakerSource.getOrDefault(m.first(), -1L)
           || b.source <= lastTakerSource.getOrDefault(m.second(), -1L)) {
         metrics.decision("WAIT_NEW_DEPTH", null);
+        continue;
+      }
+      List<String> resting = open(m);
+      if (!resting.isEmpty()) {
+        maintainResting(m, a, b, resting);
         continue;
       }
       BigDecimal ap = bid(a, m.tick()),
@@ -634,7 +658,7 @@ public final class ResearchSession implements AutoCloseable {
           || bp.compareTo(m.tick()) < 0
           || ap.compareTo(ONE.subtract(m.tick())) > 0
           || bp.compareTo(ONE.subtract(m.tick())) > 0) {
-        cancelAll(m);
+        cancelAll(m, "PRICE_BOUND_OR_STALE_TICK");
         metrics.decision("PRICE_BOUND_OR_STALE_TICK", null);
         continue;
       }
@@ -642,7 +666,7 @@ public final class ResearchSession implements AutoCloseable {
           required =
               PairPolicy.requiredEdge(
                   cfg.minimumEdge(),
-                  vols.getOrDefault(m.first(), ZERO),
+                  vols.getOrDefault(m.first(), ZERO).max(vols.getOrDefault(m.second(), ZERO)),
                   (m.endMs() - now) / 1000,
                   depth,
                   cfg.activationMs(),
@@ -651,25 +675,10 @@ public final class ResearchSession implements AutoCloseable {
       boolean insufficientEdge =
           edge.multiply(q).subtract(cfg.mergeCost()).compareTo(required.multiply(q)) < 0;
       if (small || insufficientEdge) {
-        cancelAll(m);
+        cancelAll(m, small ? "ENTRY_MIN_SIZE" : "ENTRY_NET_EDGE");
         metrics.decision(
             small && insufficientEdge ? "MIN_SIZE_AND_NET_EDGE" : small ? "MIN_SIZE" : "NET_EDGE",
             edge);
-        continue;
-      }
-      List<String> open = open(m);
-      if (!open.isEmpty()) {
-        boolean same =
-            open.size() == 2
-                && open.stream()
-                    .allMatch(
-                        id -> {
-                          var o = ledger.snapshot().orders().get(id);
-                          return o.buy()
-                              && o.price().compareTo(o.token().equals(m.first()) ? ap : bp) == 0;
-                        });
-        if (!same && now - quoteAt.getOrDefault(m.condition(), now) >= 2000) cancelAll(m);
-        metrics.decision("RESTING", edge);
         continue;
       }
       BigDecimal value = ap.add(bp).multiply(q);
@@ -694,6 +703,63 @@ public final class ResearchSession implements AutoCloseable {
     }
   }
 
+  private JsonNode scopedGap(JsonNode data) {
+    Set<String> tokens = DataGap.tokens(data);
+    if (tokens.isEmpty()) return data;
+    var affected = new TreeSet<String>(tokens);
+    for (var market : markets.values())
+      if (tokens.contains(market.first()) || tokens.contains(market.second())) {
+        affected.add(market.first()); affected.add(market.second());
+      }
+    var scoped = (com.fasterxml.jackson.databind.node.ObjectNode) data.deepCopy();
+    scoped.set("tokens", mapper.valueToTree(affected));
+    return scoped;
+  }
+
+  private void maintainResting(ResearchMarket m, Book a, Book b, List<String> ids) {
+    if (ids.stream().anyMatch(cancelRequested::contains)) {
+      metrics.decision("WAIT_CANCEL_ACK", null);
+      return;
+    }
+    var orders = ids.stream().map(id -> ledger.snapshot().orders().get(id)).toList();
+    var first = orders.stream().filter(o -> o.token().equals(m.first())).findFirst().orElse(null);
+    var second = orders.stream().filter(o -> o.token().equals(m.second())).findFirst().orElse(null);
+    if (orders.size() != 2 || first == null || second == null || !first.buy() || !second.buy()
+        || first.remaining().compareTo(second.remaining()) != 0) {
+      cancelAll(m, "RESTING_INCOMPLETE_PAIR");
+      metrics.decision("RESTING_INCOMPLETE_PAIR", null);
+      return;
+    }
+    BigDecimal quantity = first.remaining(), edge = ONE.subtract(first.price()).subtract(second.price());
+    boolean validPrices = first.price().remainder(m.tick()).signum() == 0
+        && second.price().remainder(m.tick()).signum() == 0
+        && first.price().compareTo(a.asks.firstKey()) < 0
+        && second.price().compareTo(b.asks.firstKey()) < 0;
+    BigDecimal depth = a.bids.lastEntry().getValue().min(b.bids.lastEntry().getValue());
+    BigDecimal required = PairPolicy.requiredEdge(cfg.minimumEdge(),
+        vols.getOrDefault(m.first(), ZERO).max(vols.getOrDefault(m.second(), ZERO)),
+        (m.endMs()-now)/1000, depth, cfg.activationMs(), ZERO);
+    if (!validPrices || edge.multiply(quantity).subtract(cfg.mergeCost()).compareTo(required.multiply(quantity)) < 0) {
+      cancelAll(m, validPrices ? "RESTING_NET_EDGE" : "RESTING_PRICE_INVALID");
+      metrics.decision(validPrices ? "RESTING_NET_EDGE" : "RESTING_PRICE_INVALID", edge);
+      return;
+    }
+    BigDecimal ap = bid(a, m.tick()), bp = bid(b, m.tick());
+    BigDecimal replacementEdge = ONE.subtract(ap).subtract(bp);
+    BigDecimal replacementSize = cfg.orderShares().min(depth.multiply(new BigDecimal("0.1"))).setScale(2, RoundingMode.DOWN);
+    boolean competitiveImprovement = first.price().compareTo(a.bids.lastKey()) < 0
+        || second.price().compareTo(b.bids.lastKey()) < 0;
+    boolean replacementValid = ap.signum() > 0 && bp.signum() > 0
+        && ap.compareTo(a.asks.firstKey()) < 0 && bp.compareTo(b.asks.firstKey()) < 0
+        && replacementSize.compareTo(m.minSize()) >= 0
+        && replacementEdge.multiply(replacementSize).subtract(cfg.mergeCost())
+            .compareTo(required.multiply(replacementSize)) >= 0;
+    if (competitiveImprovement && replacementValid && now - quoteAt.getOrDefault(m.condition(), now) >= 2000) {
+      cancelAll(m, "REPRICE_VALIDATED_PAIR");
+      metrics.decision("REPRICE_VALIDATED_PAIR", edge);
+    } else metrics.decision("RESTING", edge);
+  }
+
   private void reduce(ResearchMarket m, BigDecimal imbalance, Book a, Book b) {
     long age = now - unhedged.getOrDefault(m.condition(), now);
     boolean overdue = age >= cfg.unhedgedMs() || imbalance.abs().compareTo(cfg.maxUnhedged()) >= 0;
@@ -713,7 +779,7 @@ public final class ResearchSession implements AutoCloseable {
         metrics.decision("RESTING_REDUCTION", null);
         return;
       }
-      cancelAll(m);
+      cancelAll(m, "CANCEL_BEFORE_RISK_EXIT");
       metrics.decision("CANCEL_BEFORE_EXIT", null);
       return;
     }
@@ -1185,11 +1251,18 @@ public final class ResearchSession implements AutoCloseable {
   }
 
   public synchronized void cancel(String id) {
-    apply(matching.accept("CANCEL", now, node(Map.of("id", id))));
+    cancel(id, "CLIENT_CANCEL");
   }
 
-  private void cancelAll(ResearchMarket m) {
-    for (String id : open(m)) cancel(id);
+  private void cancel(String id, String reason) {
+    var order = ledger.snapshot().orders().get(id);
+    if (order == null || order.remaining().signum() <= 0 || !cancelRequested.add(id)) return;
+    output.accept("CANCEL_REQUEST", Map.of("id", id, "reason", reason, "at", now));
+    apply(matching.accept("CANCEL", now, node(Map.of("id", id, "reason", reason))));
+  }
+
+  private void cancelAll(ResearchMarket market, String reason) {
+    for (String id : open(market)) cancel(id, reason);
   }
 
   private List<String> open(ResearchMarket m) {

@@ -25,17 +25,25 @@ public class PaperJournal implements AutoCloseable {
   static final long COMMIT_MILLIS = 25;
   static final int COMMIT_BYTES = 256 * 1024;
   private BufferedOutputStream output;
+  private java.util.zip.GZIPOutputStream compressor;
+  private long storedBytes;
   private ScheduledExecutorService flusher;
   private long pendingBytes, lastCommitNanos = System.nanoTime(), commits, writtenBytes;
   private long maxCommitMicros, maxAppendMicros;
   private boolean failed, closed;
 
+  public PaperJournal(ObjectMapper mapper, Clock clock, String directory, String service, String revision) {
+    this(mapper, clock, directory, service, revision, false);
+  }
+
+  @org.springframework.beans.factory.annotation.Autowired
   public PaperJournal(
       ObjectMapper mapper,
       Clock clock,
       @Value("${paper.record.directory:}") String directory,
       @Value("${spring.application.name:app}") String service,
-      @Value("${paper.record.revision:unrecorded}") String revision) {
+      @Value("${paper.record.revision:unrecorded}") String revision,
+      @Value("${paper.record.compress:false}") boolean compressed) {
     this.mapper = mapper;
     this.clock = clock;
     if (directory.isBlank()) return;
@@ -55,6 +63,7 @@ public class PaperJournal implements AutoCloseable {
                   Map.of(
                       "schema",
                       1,
+                      "compression", compressed ? "gzip" : "none",
                       "durability",
                       Map.of(
                           "policy",
@@ -80,8 +89,13 @@ public class PaperJournal implements AutoCloseable {
           StandardOpenOption.CREATE_NEW);
       file =
           FileChannel.open(
-              run.resolve("events.jsonl"), StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
-      output = new BufferedOutputStream(Channels.newOutputStream(file), COMMIT_BYTES);
+              run.resolve(compressed ? "events.jsonl.gz" : "events.jsonl"), StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+      OutputStream sink = Channels.newOutputStream(file);
+      if (compressed) {
+        compressor = new java.util.zip.GZIPOutputStream(sink, 64 * 1024, true);
+        sink = compressor;
+      }
+      output = new BufferedOutputStream(sink, COMMIT_BYTES);
       flusher =
           Executors.newSingleThreadScheduledExecutor(
               r -> {
@@ -136,6 +150,7 @@ public class PaperJournal implements AutoCloseable {
     long started = System.nanoTime();
     output.flush();
     file.force(false);
+    storedBytes = file.position();
     pendingBytes = 0;
     lastCommitNanos = System.nanoTime();
     commits++;
@@ -158,6 +173,7 @@ public class PaperJournal implements AutoCloseable {
         seq,
         "writtenBytes",
         writtenBytes,
+        "storedBytes", storedBytes,
         "pendingBytes",
         pendingBytes,
         "commits",
@@ -179,6 +195,11 @@ public class PaperJournal implements AutoCloseable {
         if (failed) throw new IOException("Paper tape failed; no clean RUN_END");
         record("RUN_END", null, Map.of("complete", true));
         commit();
+        if (compressor != null) {
+          compressor.finish();
+          file.force(false);
+          storedBytes = file.position();
+        }
       }
     } catch (IOException e) {
       failed = true;

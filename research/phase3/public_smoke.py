@@ -10,6 +10,7 @@ from urllib.error import HTTPError, URLError
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from research.phase3.polybot_sdk.client import PaperClient
+from research.phase3.polybot_sdk.tapes import recorded_tapes
 from research.phase3.polybot_sdk.model import dumps, decode
 from research.phase3.polybot_sdk.runtime import private_write, shadow_run, replay_shadow
 
@@ -39,6 +40,7 @@ def main():
             '--executor.account.state-path=' + str(output / 'state/account.json'),
             '--paper.record.directory=' + str(output / 'ingestor'),
             '--paper.record.revision=' + environment.get('GITHUB_SHA', 'local-uncommitted')]
+    if '--compressed-tape' in sys.argv[1:]: args.append('--paper.record.compress=true')
     if execution_mode:
         args.extend(['--paper.phase3.execution.enabled=true', '--paper.phase3.discovery.tags=politics,sports'])
     signal_process, server = None, None
@@ -102,7 +104,7 @@ def main():
         if execution_mode:
             server.terminate()
             server.wait(timeout=15)
-            tapes = list((output / 'ingestor').glob('*/events.jsonl'))
+            tapes = recorded_tapes(output / 'ingestor')
             if len(tapes) != 1:
                 raise ValueError('Expected exactly one virtual executor tape')
             from research.phase3.polybot_sdk.labels import build_labels
