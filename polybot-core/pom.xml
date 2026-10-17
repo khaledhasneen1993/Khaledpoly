@@ -6,13 +6,13 @@
     <parent>
         <groupId>com.polybot</groupId>
         <artifactId>polybot</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.6.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>polybot-core</artifactId>
     <name>polybot-core</name>
-    <description>Shared Polymarket SDK (CLOB/Gamma/WS/Auth)</description>
+    <description>Shared public Polymarket market data, PAPER accounts and validation core</description>
 
     <dependencies>
         <dependency><groupId>com.fasterxml.jackson.datatype</groupId><artifactId>jackson-datatype-jsr310</artifactId></dependency>

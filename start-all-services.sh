@@ -21,7 +21,7 @@ for service in "${services[@]}"; do
   fi
 done
 build_required=false
-for service in "${services[@]}"; do [[ -f "$service/target/$service-0.0.1-SNAPSHOT.jar" ]] || build_required=true; done
+for service in "${services[@]}"; do [[ -f "$service/target/$service-0.6.0.jar" ]] || build_required=true; done
 if [[ "$build_required" == true ]]; then
   command -v mvn >/dev/null || { echo "Build first with Maven: mvn verify"; exit 1; }
   mvn --batch-mode --no-transfer-progress verify
@@ -34,7 +34,7 @@ trap cleanup_failure ERR
 for service in "${services[@]}"; do
   extra=()
   [[ "$light" == true ]] && extra+=(--hft.events.enabled=false)
-  java -Dpolybot.orderState="$PWD/state/strategy-orders.json" -jar "$service/target/$service-0.0.1-SNAPSHOT.jar"     --spring.profiles.active=develop "${extra[@]}" > "logs/$service.log" 2>&1 &
+  java -Dpolybot.orderState="$PWD/state/strategy-orders.json" -jar "$service/target/$service-0.6.0.jar"     --spring.profiles.active=develop "${extra[@]}" > "logs/$service.log" 2>&1 &
   pid=$!; started+=("$pid"); printf '%s\n' "$pid" > "logs/$service.pid"
   case "$service" in executor-service) port=8080;; strategy-service) port=8081;; ingestor-service) port=8083;; analytics-service) port=8082;; esac
   ready=false

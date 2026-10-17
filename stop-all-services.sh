@@ -7,7 +7,7 @@ for service in strategy-service executor-service ingestor-service analytics-serv
   if kill -0 "$pid" 2>/dev/null; then
     [[ -r "/proc/$pid/cmdline" ]] || { echo "Cannot verify process $pid"; exit 1; }
     command_line=$(tr '\0' ' ' < "/proc/$pid/cmdline")
-    [[ "$command_line" == *"$service-0.0.1-SNAPSHOT.jar"* ]] || { echo "PID no longer belongs to $service"; exit 1; }
+    [[ "$command_line" == *"$service-0.6.0.jar"* ]] || { echo "PID no longer belongs to $service"; exit 1; }
     kill -TERM "$pid"
     for ((attempt=0;attempt<15;attempt++)); do kill -0 "$pid" 2>/dev/null || break; sleep 1; done
     if kill -0 "$pid" 2>/dev/null; then echo "$service has not stopped; keeping its PID file"; exit 1; fi

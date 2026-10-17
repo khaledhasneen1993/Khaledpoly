@@ -86,7 +86,7 @@ def main():
     # Workflow runs this last; local calls cannot impersonate build proof.
     ci=(os.environ.get('GITHUB_ACTIONS')=='true' and
         os.environ.get('CI')=='true' and
-        os.environ.get('GITHUB_WORKFLOW')=='Polybot verification')
+        os.environ.get('GITHUB_WORKFLOW')=='Khaledpoly PAPER verification')
     result=inventory(p.root,expected_revision=os.environ.get('GITHUB_SHA'),
                      ci_context=ci)
     private_write(p.output,result)

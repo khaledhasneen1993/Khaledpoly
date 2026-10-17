@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Exercise the FULL strategy on each captured public dataset; never promote a short smoke."""
 import json,pathlib,subprocess,sys
-root=pathlib.Path(sys.argv[1]);jar='executor-service/target/executor-service-0.0.1-SNAPSHOT.jar'
+root=pathlib.Path(sys.argv[1]);jar='executor-service/target/executor-service-0.6.0.jar'
 for tape in root.glob('*/events.jsonl'):
  reports={}
  for mode,flags in [('baseline',[]),('stress',['--stress']),('raw-baseline',['--raw'])]:

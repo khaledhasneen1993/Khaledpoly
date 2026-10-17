@@ -7,7 +7,7 @@ command -v timeout >/dev/null || { echo 'The timeout utility is required.' >&2; 
 mvn --batch-mode --no-transfer-progress verify
 revision="$(git rev-parse HEAD)"
 status=0
-timeout --signal=TERM --kill-after=20 "${PAPER_RECORD_SECONDS:-3600}" java -jar executor-service/target/executor-service-0.0.1-SNAPSHOT.jar \
+timeout --signal=TERM --kill-after=20 "${PAPER_RECORD_SECONDS:-3600}" java -jar executor-service/target/executor-service-0.6.0.jar \
  --server.port="${PAPER_RECORD_PORT:-18080}" --spring.application.name=paper-ingestor --hft.mode=PAPER --hft.events.enabled=false \
  --executor.sim.enabled=false --hft.strategy.gabagool.enabled=false --hft.polymarket.market-ws-enabled=true \
  --paper.market-data.enabled=true --paper.universe.five-minute="${PAPER_FIVE_MINUTE:-false}" \

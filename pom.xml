@@ -12,11 +12,11 @@
 
     <groupId>com.polybot</groupId>
     <artifactId>polybot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.6.0</version>
     <packaging>pom</packaging>
 
-    <name>polybot</name>
-    <description>Polybot (multi-module)</description>
+    <name>Khaledpoly</name>
+    <description>Khaledpoly v0.6.0: PAPER-only Polymarket research and verified virtual execution</description>
 
     <modules>
         <module>polybot-core</module>

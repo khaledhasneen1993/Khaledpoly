@@ -6,13 +6,13 @@
     <parent>
         <groupId>com.polybot</groupId>
         <artifactId>polybot</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.6.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>strategy-service</artifactId>
     <name>strategy-service</name>
-    <description>Strategy runner (market WS + strategies; sends orders to executor)</description>
+    <description>Research strategy service and Polymarket public-market strategy diagnostics</description>
 
     <dependencies>
         <dependency>

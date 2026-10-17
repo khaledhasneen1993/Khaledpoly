@@ -1,189 +1,102 @@
-# Khaledpoly / Polybot
+# Khaledpoly — PAPER Research Candidate v0.6.0
 
-Phase-one reliability development: PAPER-only, durable account/order state, current API contracts and regression tests. Fills are disabled by default; this release makes no profitability claim. See [phase-one implementation and rollout limits](docs/PHASE1.md).
+**Status: ENGINEERING VERIFIED / MARKET QUALIFICATION NO_GO / LIVE DISABLED.**
+Khaledpoly is a Polymarket research and virtual-execution system. The current
+release candidate uses **PAPER-only** accounts and read-only public exchange
+data. Successful CI and short public-data integration tests do **not** prove
+profitability, real maker fills, execution quality or permission for funded
+orders. The seven full UTC-day prospective market capture has **not run**.
 
-Phase-three research adds an installable Python SDK, causal replay/labels, external strategy screening,
-and opt-in virtual execution through the shared PAPER engine. See [scope, commands and acceptance gaps](docs/PHASE3_COMPLETION.md).
-Market qualification remains **NO_GO**; passing software checks does not establish net profitability.
+## The one maintained version
 
-Open-source Polymarket trading infrastructure and strategy reverse-engineering toolkit.
+| Component | Version / source of truth |
+| --- | --- |
+| Khaledpoly Java / Maven modules | **0.6.0**, root `pom.xml` |
+| Installable Python research extensions | **0.6.0**, root `pyproject.toml` |
+| Canonical repository branch | `main` after promotion of the verified candidate |
+| Build and acceptance checks | One workflow: `.github/workflows/verify.yml` |
+| Runtime operation | **PAPER only**; real-money gate `NO_GO` |
 
-Polybot is a multi-service system for:
-- automated execution (paper and live modes)
-- strategy runtime and market making
-- market/user trade ingestion into ClickHouse
-- quantitative analysis and replication scoring
+The original internal Java package identifiers (`com.polybot`) and artifact
+names remain unchanged for compatibility; they do **not** designate additional
+application versions. Historical research documents and fixtures remain for
+reproducibility, rather than representing separate supported releases.
 
-![Strategy Analysis Dashboard](docs/showcase_readme.png)
+## What's included
 
-## Future Work: AWARE Fund
+- Java 21 public Polymarket market discovery, WebSocket market-book capture,
+  durable PAPER account ledger, atomic virtual reservations, settlement/replay
+  research, idempotent receipt reconciliation, and bounded strategy screening.
+- Versioned declarative Python SDK; Politics/Sports scenario hypotheses and
+  CEX research signals. Missing source verification or ambiguous multi-outcome
+  membership blocks trading hypotheses rather than inventing an edge.
+- Independent Binance/Bybit public-data recorder, Polymarket CLOB recorder,
+  replay and prospective capture supervisor.
+- Offline fill and second-leg **PAPER_MODEL** diagnostics, joint-scenario
+  portfolio research, portfolio/fee stress and purged walk-forward reports.
+- Tests for concurrent reservations, duplicate fills, cash/inventory/fee
+  conservation, restart recovery, strategy permissions and read-only data
+  provenance.
 
-Polybot is the execution and market-data foundation for **AWARE**, the next product layer (trader intelligence, PSI indices, fund mirroring, API/UI).
+## Build and verify
 
-- Polybot repo: https://github.com/ent0n29/polybot
-- AWARE repo: https://github.com/ent0n29/aware
-
-## What You Get
-
-- Java 21 microservices for execution, strategy, ingestion, analytics
-- ClickHouse + Redpanda event pipeline
-- Monitoring stack (Grafana, Prometheus, Alertmanager)
-- Research toolkit in `research/` for snapshots, deep analysis, and replication metrics
-
-## Quick Start (Recommended)
-
-### Prerequisites
-
-- Amazon Corretto 21 (recommended) or any Java 21+
-- Maven 3.8+
-- Docker Engine/Desktop with Compose plugin
-- Python 3.11+ (for research scripts)
-
-### 1. Clone
+Prerequisites: **Java 21, Maven, Python 3.10+**. Docker is optional for
+analytics; do not configure wallets or real exchange credentials.
 
 ```bash
 git clone https://github.com/khaledhasneen1993/Khaledpoly.git
 cd Khaledpoly
+mvn --batch-mode --no-transfer-progress verify
+python3 -m unittest discover -s research/phase2/tests -v
+python3 -m unittest discover -s research/phase3/tests -v
+python3 -m unittest discover -s research/phase4/tests -v
+python3 -m unittest discover -s research/phase5/tests -v
+python3 -m unittest discover -s research/phase6/tests -v
+python3 -m pip install --no-deps .
+khaledpoly-paper-sdk --help
 ```
 
-### 2. Optional Environment Setup
+The executor jar is `executor-service/target/executor-service-0.6.0.jar`.
+Do not run the publicly networked PAPER smoke without reviewing source
+availability and choosing a throwaway test environment. Its output is
+**research data**, not trade performance. GitHub Actions runs this smoke
+only on repository workflow pushes.
+
+## PAPER research / replay commands
 
 ```bash
-cp .env.example .env
-set -a; source .env; set +a
+python3 -m research.phase6.sdk --help
+python3 -m research.phase6.paper_screen_bridge --help
+python3 -m research.phase6.virtual_paper_bridge --help
+python3 -m research.phase5.cex_signals --help
+python3 -m research.phase5.walk_forward --help
+python3 -m research.phase4.final_gate --help
 ```
 
-Note: Spring Boot does not auto-load `.env`; export variables in your shell when needed.
+The virtual PAPER order bridge requires its own explicit
+`--enable-virtual-paper-only` flag and a valid PAPER executor snapshot.
+No untrusted external Python module is imported or run inside the bot.
+Java's `AccountLedger` stays the only authoritative virtual cash ledger.
 
-### 3. Start Everything
+The existing ancillary analytics/ingestor/monitoring modules are optional
+engineering components, **not** additional supported product versions.
 
-```bash
-./start-all-services.sh
-```
+## Next external validation (NOT completed)
 
-The launcher starts a lightweight PAPER executor and strategy with the `develop` profile. Set `POLYBOT_LIGHT=false` for analytics infrastructure; see docs/PHASE1.md.
+Run the public-source supervisor on a **durable always-on external host**
+only after verifying public market access, time sync and disk capacity.
+See [capture instructions](docs/CAPTURE_SUPERVISOR.md) and the strict
+[release/market evidence distinction](docs/SOFTWARE_RELEASE_GATE.md).
+Seven consecutive complete UTC days, genuine venue fill/queue evidence,
+independent Polymarket terminal resolution and a frozen holdout study are
+all still required for any market qualification.
 
-### 4. Verify
+## Documentation and license
 
-```bash
-curl http://localhost:8080/actuator/health
-curl http://localhost:8081/actuator/health
-curl http://localhost:8082/actuator/health
-curl http://localhost:8083/actuator/health
-curl http://localhost:8084/actuator/health
-curl http://localhost:8123 --data "SELECT 1"
-```
+[Current verification gate](docs/SOFTWARE_RELEASE_GATE.md) ·
+[Phase-6 engineering detail](docs/PHASE6.md) ·
+[Research sources](research/README.md) ·
+[Contributor requirements](CONTRIBUTING.md).
 
-### 5. Stop
-
-```bash
-./stop-all-services.sh
-```
-
-## Operator Commands
-
-### Build and Test
-
-```bash
-mvn clean package -DskipTests
-mvn test
-```
-
-### Tail Logs
-
-```bash
-tail -f logs/executor-service.log
-tail -f logs/strategy-service.log
-tail -f logs/analytics-service.log
-tail -f logs/ingestor-service.log
-tail -f logs/infrastructure-orchestrator-service.log
-```
-
-### Manual Startup (Alternative)
-
-```bash
-mvn clean package -DskipTests
-
-java -jar infrastructure-orchestrator-service/target/infrastructure-orchestrator-service-0.0.1-SNAPSHOT.jar --spring.profiles.active=develop
-java -jar executor-service/target/executor-service-0.0.1-SNAPSHOT.jar --spring.profiles.active=develop
-java -jar strategy-service/target/strategy-service-0.0.1-SNAPSHOT.jar --spring.profiles.active=develop
-java -jar ingestor-service/target/ingestor-service-0.0.1-SNAPSHOT.jar --spring.profiles.active=develop
-java -jar analytics-service/target/analytics-service-0.0.1-SNAPSHOT.jar --spring.profiles.active=develop
-```
-
-## Services and Ports
-
-| Service | Port | Purpose | Example Endpoint |
-|---|---:|---|---|
-| executor-service | 8080 | order execution, paper sim, settlement endpoints | `/api/polymarket/health` |
-| strategy-service | 8081 | strategy runtime and status | `/api/strategy/status` |
-| analytics-service | 8082 | analytics APIs on ClickHouse data | `/api/analytics/status` |
-| ingestor-service | 8083 | market/user-trade ingestion pipelines | `/actuator/health` |
-| infrastructure-orchestrator-service | 8084 | lifecycle of analytics + monitoring stacks | `/api/infrastructure/status` |
-| ClickHouse HTTP | 8123 | analytics SQL access | `SELECT 1` |
-| Redpanda Kafka | 9092 | event streaming | Kafka bootstrap |
-| Grafana | 3000 | dashboards | UI |
-| Prometheus | 9090 | metrics scraping | UI |
-| Alertmanager | 9093 | alert routing | UI |
-
-## Configuration Essentials
-
-Key variables are documented in `.env.example`.
-
-Most relevant:
-- `POLYMARKET_TARGET_USER` for strategy research workflows
-- Legacy live credentials are not needed for this PAPER release; LIVE startup is locked pending rollout verification
-- `KAFKA_BOOTSTRAP_SERVERS`, `ANALYTICS_DB_URL`, `CLICKHOUSE_*` for data pipeline
-- `GRAFANA_ADMIN_PASSWORD`, `SLACK_WEBHOOK_URL` for ops/alerts
-
-Default mode in develop profile is paper trading (`hft.mode: PAPER`).
-
-## Included Strategy
-
-Polybot includes a complete-set arbitrage strategy for Polymarket Up/Down binaries.
-
-See `docs/EXAMPLE_STRATEGY_SPEC.md` for implementation details.
-
-## Research Workflow
-
-The `research/` directory contains scripts for:
-- snapshot extraction and reporting
-- replication and similarity scoring
-- backtesting and calibration
-- execution quality analysis
-
-Start with `research/README.md`.
-
-## Repo Layout
-
-```text
-polybot/
-├── polybot-core/
-├── executor-service/
-├── strategy-service/
-├── ingestor-service/
-├── analytics-service/
-├── infrastructure-orchestrator-service/
-├── research/
-├── monitoring/
-├── start-all-services.sh
-└── stop-all-services.sh
-```
-
-## Contributing
-
-See `CONTRIBUTING.md` for setup, style, testing, and PR process.
-
-## Disclaimer
-
-This software is for educational and research purposes only.
-
-Trading prediction markets carries financial risk. Always validate with paper mode before any live capital.
-
-## License
-
-MIT. See `LICENSE`.
-
-## Phase 2 research
-
-Phase 2 now includes shared closed-loop PAPER/replay, inventory exits, terminal-resolution ingestion and a frozen heldout evaluator. See [operation and evidence gates](docs/PHASE2_COMPLETION.md). Empirical acceptance is still NO_GO; phase 3 now includes an opt-in research API, Python SDK, public CEX signals, model/portfolio research and replayable shadow proposals ([delivery matrix and boundaries](docs/PHASE3_COMPLETION.md)). This does not promote a strategy or satisfy the empirical gate. Conservative maker fills replace the old random heuristic. LIVE remains locked; synthetic replay results do not demonstrate profitability.
+MIT license — [LICENSE](LICENSE). No profitability warranty or
+authorization for real-money trading.

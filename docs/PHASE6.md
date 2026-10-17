@@ -1,54 +1,37 @@
-# Phase 6 — central risk and account integration (engineering started)
+# Khaledpoly v0.6.0 — PAPER engineering candidate
 
-This stage begins on top of the Phase-5 PAPER-only research branch. It
-does not merge previous draft PRs, create wallets, handle credentials,
-transfer funds, or enable funded orders.
+This document records the tested Phase-6 central risk and Java PAPER
+integration. The canonical supported release is **0.6.0**, installed and
+built from the project root. The canonical repository branch is `main`
+after promotion of the verified branch. Historical phase documents remain
+only as technical/reproducibility records. This release has **NO_GO**
+market qualification and **LIVE is not authorized**.
 
-## Initial multi-account risk integration
+## Delivered software
 
-\`research.phase6.cross_account_gate.CrossAccountPaperGate\` reuses the
-existing proven \`AccountRegistry\` and existing Java \`AccountLedger\`
-as the sole durable account-reservation authority. It **never**
-creates a second money ledger or writes into the Java state.
+- Central Java durable PAPER ledger and atomic multi-leg virtual reservations.
+- Versioned declarative strategy SDK with strict account/session/sequence binding.
+- Registry-bound multi-account and correlated group exposure vetoes.
+- Fsynced PAPER-only screening and virtual-order outboxes with replay-safe IDs.
+- Immutable source/receipt audits, full Java/Python regression verification.
+- One GitHub Actions workflow, one Maven/Python version (0.6.0), and one
+  short-lived CI evidence bundle.
+- Offline portfolio, cost, Polygon scenario and strategy research modules.
 
-The gate inspects all *previously accepted* research snapshots,
-requiring complete account presence, matching permission/policy
-aliases and fresh independent valuation. It aggregates worst-case
-book basis and pending BUY reservations across accounts into
-per-account, global and correlated-settlement exposure. It
-denies proposal study when any account is missing or stale, a
-permission is absent, or limits are exceeded. Ambiguous held tokens
-are conservatively grouped as unknown and block admission.
+## Not completed by software checks
 
-A successful screening result may *only* inform further PAPER
-research. This API has no submit, sign, reserve or transfer method.
-
-## Pending Phase 6
-
-- Integrate strategy proposals with the existing central Java risk
-  engine and transactional PAPER reservation path.
-- Build a versioned restricted external Python strategy protocol,
-  repeatable dry runs and untrusted-provider fail-closed tests.
-- Benchmark read/poll/replay latency before changing transports;
-  no unmeasured gRPC/Rust/C++ work.
-- Add Polygon cost/settlement what-if accounting; chain execution
-  remains disabled pending separate permissions/security validation.
-- Stress test crash, restart, idempotency, per-account session
-  reconciliation, simultaneous proposal groups and fee accounting.
-- Complete staged CI and final go/no-go gate, then run the
-  previously deferred external seven-day source capture.
-
-**All stage-6 engineering is provisional. No account, settlement,
-risk model, or strategy may trade real money from this branch.**
-
+The prospective seven complete UTC days of CLOB/CEX tape, genuine exchange
+fill/queue and second-leg data, independent oracle settlement and frozen
+held-out performance evidence have **not** been accepted. Do not claim
+profitability or enable funded trading. See `docs/SOFTWARE_RELEASE_GATE.md`.
 
 ## Version 1 restricted external-strategy interface
 
-\`research.phase6.external_strategy.ExternalStrategyReview\` accepts a
+`research.phase6.external_strategy.ExternalStrategyReview` accepts a
 strict, versioned JSON envelope bound to one validated PAPER
-\`sessionId/accountId/snapshotSequence/generatedMs\`. A proposed
-\`edge\` is an unverified model claim, not an edge declaration that
-can bypass the existing \`polybot_sdk.advanced.allocate\` central
+`sessionId/accountId/snapshotSequence/generatedMs`. A proposed
+`edge` is an unverified model claim, not an edge declaration that
+can bypass the existing `polybot_sdk.advanced.allocate` central
 paper risk/cash/inventory restrictions.
 
 The external strategy **does not execute code** inside this process;
@@ -67,8 +50,8 @@ code execution and independent interface security validation.
 
 ## Polygon batch cost vs settlement-delay scenarios
 
-\`research.phase6.polygon_costs.compare_batching\` builds on the
-Phase-3 \`gas_scenario\` concept. It compares explicit fixed gas
+`research.phase6.polygon_costs.compare_batching` builds on the
+Phase-3 `gas_scenario` concept. It compares explicit fixed gas
 overhead, per-item gas, native USD, and operator-supplied batch waits
 against waiting/settlement exposure costs, without requiring RPC,
 wallet keys, signatures, fund transfers or on-chain operations.
@@ -82,19 +65,19 @@ NO_GO.
 
 ## Durable Java PAPER SCREEN integration (not order submission)
 
-The new \`research.phase6.paper_screen_bridge\` connects the versioned
+The new `research.phase6.paper_screen_bridge` connects the versioned
 restricted strategy envelope to the **existing Java
-\`ResearchProposalInbox\`** via \`/api/research/v1/proposals/screen\`
+`ResearchProposalInbox`** via `/api/research/v1/proposals/screen`
 only. The executor's original Java account ledger remains the sole
 durable reservation authority; this endpoint *screens research
-candidates*, it never calls \`/paper\`, \`/settle-paper-group\` or any
+candidates*, it never calls `/paper`, `/settle-paper-group` or any
 venue order routing. Every strategy candidate ID is deterministically
-derived from \`(session, account, sequence, strategy, candidate)\` and
+derived from `(session, account, sequence, strategy, candidate)` and
 its exact JSON is persisted and fsynced **before** HTTP.
 
 On lost HTTP responses the bridge refuses to invent a new ID or
 automatically resubmit any POST. Restart queries only the new
-authenticated \`GET /api/research/v1/proposals/screen-receipts/{id}\`
+authenticated `GET /api/research/v1/proposals/screen-receipts/{id}`
 endpoint, which reads the Java inbox's persisted screening receipt
 after sequence advancement, restricted to the same PAPER session and
 account. A 404 remains explicitly UNKNOWN and needs reconciliation
@@ -118,7 +101,7 @@ recent validated snapshot.
       --envelope ./external-strategy-envelope.json \
       --outbox ./output/phase6-screen-001
 
-First run may POST ONLY to Java \`/screen\`; restarting with that
+First run may POST ONLY to Java `/screen`; restarting with that
 exact archived snapshot and outbox performs **GET-only** reconciliation,
 including when the original snapshot is now stale. Starting a fresh
 outbox from a stale snapshot remains forbidden. The token and
@@ -127,20 +110,20 @@ execution permissions are never expanded to an exchange/wallet.
 
 ## Explicit, separate VIRTUAL PAPER execution adapter
 
-\`research.phase6.virtual_paper_bridge\` is **NOT** the passive screening
+`research.phase6.virtual_paper_bridge` is **NOT** the passive screening
 bridge. It is the next stage and must be activated explicitly by
-\`--enable-virtual-paper-only\`, with
-\`snapshot.paperExecutionEnabled == true\` from the Java executor
-and its separate \`paper.external-execution\` guard in PAPER mode.
-It uses the existing \`PaperExecutionClient.retry_identical\` and
-\`ResearchSession\`/Java \`AccountLedger.reserveBatch\` for **virtual**
+`--enable-virtual-paper-only`, with
+`snapshot.paperExecutionEnabled == true` from the Java executor
+and its separate `paper.external-execution` guard in PAPER mode.
+It uses the existing `PaperExecutionClient.retry_identical` and
+`ResearchSession`/Java `AccountLedger.reserveBatch` for **virtual**
 reservations, rather than creating a second Python cash ledger.
 No exchange APIs, signing, wallets, LIVE orders, or fund transfers.
 
 Exactly one immutable request with deterministic ID and an fsynced
 local journal is recorded before each virtual POST. After a lost
 response, the adapter replays **identical** bytes/ID, and the Java
-ledger is responsible for \`PAPER_ALREADY_RECORDED\` deduplication.
+ledger is responsible for `PAPER_ALREADY_RECORDED` deduplication.
 It does not treat a lost reply as success. A different
 session/account or changed strategy fingerprint is blocked.
 
@@ -162,9 +145,9 @@ The explicit virtual PAPER adapter rejects more than one independent
 admitted proposal group for a frozen account/sequence, **before**
 creating the outbox or calling Java. A single group may still contain
 multiple validated buy/sell legs reserved together by the Java
-\`AccountLedger.reserveBatch\`. Sending a second separate group from
+`AccountLedger.reserveBatch`. Sending a second separate group from
 the same stale cash/holdings snapshot is forbidden: collect a fresh
-\`ResearchSnapshot\`, re-evaluate the centralized budget, and use a new
+`ResearchSnapshot`, re-evaluate the centralized budget, and use a new
 generation/outbox. This deliberately trades throughput for correct,
 atomic account reservation and prevents cross-strategy overspend.
 
@@ -172,7 +155,7 @@ atomic account reservation and prevents cross-strategy overspend.
 ## Java ledger concurrency, reconciliation and measured latency baseline
 
 JUnit regression tests now exercise the original durable Java
-\`AccountLedger\`, not a substituted Python cash ledger:
+`AccountLedger`, not a substituted Python cash ledger:
 
 - 32 simultaneous two-leg reservation attempts share a gross-risk cap;
   only complete atomic batches may succeed. The surviving reservations
@@ -186,7 +169,7 @@ JUnit regression tests now exercise the original durable Java
 - A separate 12-roundtrip baseline measures reserve/fill/reopen P50
   and P95 monotonic-clock microsecond latency of the real persisted
   state writer. The output starts with
-  \`PHASE6_PAPER_LEDGER_BASELINE\` in CI test logs. The runner and
+  `PHASE6_PAPER_LEDGER_BASELINE` in CI test logs. The runner and
   filesystem change between jobs, so this **is not** a production
   latency guarantee or a hard SLO. No gRPC/Rust/C++ redesign is justified
   until end-to-end network/strategy/execution timing is measured.
@@ -199,10 +182,10 @@ remote PAPER request. These tests do not create actual venue fills.
 
 ## Registry-bound global risk integration hardening
 
-A Phase-6 \`ExternalStrategyReview\` caller can no longer supply a
-dict containing forged \`mayStudyPaperProposals=true\` flags. It must
-provide an in-process \`CrossAccountPaperGate\` instance backed by
-the accepted, isolated \`AccountRegistry\`. Each review **recalculates**
+A Phase-6 `ExternalStrategyReview` caller can no longer supply a
+dict containing forged `mayStudyPaperProposals=true` flags. It must
+provide an in-process `CrossAccountPaperGate` instance backed by
+the accepted, isolated `AccountRegistry`. Each review **recalculates**
 fresh/stale account balances, permissions, per-account/global and
 correlated-group caps, and matches the exact SHA-256 of the candidate
 PAPER snapshot to exactly one registry-held snapshot.
@@ -216,7 +199,7 @@ assert global permission. Neither path enables LIVE.
 
 ## Stage-6 real-public CI smoke evidence reconciliation
 
-\`research.phase6.public_smoke_gate\` runs on **phase-six branch pushes**
+`research.phase6.public_smoke_gate` runs on **phase-six branch pushes**
 after the bounded read-only Polymarket/CEX and *separate* virtual PAPER
 smokes, Phase-5 source-isolated CEX signals, and forward-public-print
 labels. It strictly reads their own independent JSON artifacts, verifies
@@ -225,7 +208,7 @@ replay/action-audit parity, candidate qualification flags and exact
 SHA-256 file digests. A missing, forged or swapped report fails CI.
 Partial public source access (including Bybit 403) remains possible
 and is recorded as a qualification blocker rather than fabricated.
-All good artifacts still say \`NO_GO\` and \`liveAllowed=false\`.
+All good artifacts still say `NO_GO` and `liveAllowed=false`.
 
 The software-only release inventory runs **after** this reconciliation.
 Neither a positive synthetic backtest nor passing CI can replace the

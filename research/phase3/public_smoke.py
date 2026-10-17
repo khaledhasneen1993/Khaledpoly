@@ -30,7 +30,7 @@ def main():
     output.mkdir(parents=True, mode=0o700, exist_ok=False)
     environment = {k: v for k, v in os.environ.items() if not k.startswith('POLYMARKET_')}
     environment['POLYBOT_EXECUTOR_TOKEN'] = secrets.token_urlsafe(32)
-    args = ['java', '-jar', str(ROOT / 'executor-service/target/executor-service-0.0.1-SNAPSHOT.jar'),
+    args = ['java', '-jar', str(ROOT / 'executor-service/target/executor-service-0.6.0.jar'),
             '--server.port=18083', '--server.address=127.0.0.1', '--hft.mode=PAPER', '--hft.events.enabled=false',
             '--executor.sim.enabled=true', '--paper.closed-loop.enabled=true', '--paper.phase3.enabled=true',
             '--paper.market-data.enabled=true', '--hft.polymarket.market-ws-enabled=true',
@@ -111,7 +111,7 @@ def main():
             for mode, flags in (('normalized', []), ('raw', ['--raw'])):
                 replay_dir = output / ('execution-replay-' + mode)
                 subprocess.run(['java', '-Dloader.main=com.polybot.hft.executor.replay.ClosedLoopMain',
-                    '-cp', str(ROOT / 'executor-service/target/executor-service-0.0.1-SNAPSHOT.jar'),
+                    '-cp', str(ROOT / 'executor-service/target/executor-service-0.6.0.jar'),
                     'org.springframework.boot.loader.launch.PropertiesLauncher', str(tapes[0]), str(replay_dir),
                     str(ROOT / 'research/phase2/research-config.json'), '--external-paper', *flags], check=True)
                 reports[mode] = decode((replay_dir / 'report.json').read_text())

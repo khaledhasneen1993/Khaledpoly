@@ -1,7 +1,7 @@
-# Phase 4–6 software acceptance versus market qualification
+# Khaledpoly v0.6.0 — single PAPER software acceptance gate
 
 The *engineering* gate checks the files listed in
-\`research.phase6.software_gate.REQUIRED\` and their SHA-256 hashes.
+`research.phase6.software_gate.REQUIRED` and their SHA-256 hashes.
 The CI workflow runs the gate **after** its Maven Java, Python
 unit/integration, installed SDK, offline replay, and required CLI
 tests pass. A software **review candidate** means that the configured
@@ -9,8 +9,10 @@ workflow reached its last validation step on a specific Git revision;
 it does not imply that static file presence independently verifies
 security, performance, or production readiness.
 
-The CI output artifact \`phase6-software-evidence\` contains
-\`research/output/phase6-software-check.json\`. Each report records
+The one CI workflow uploads a short-lived artifact bundle named
+`khaledpoly-paper-0.6.0-evidence`, containing both the software manifest
+`research/output/phase6-software-check.json` and the independent public
+PAPER artifact reconciliation result. Each report records
 the exact revision/hash inventory and explicit **NO_GO** status.
 Run locally with:
 
@@ -18,9 +20,9 @@ Run locally with:
     python3 -m research.phase6.software_gate \
       --root . --output research/output/phase6-software-check.json
 
-Outside verified CI, \`softwareReviewCandidate=false\` even with
+Outside verified CI, `softwareReviewCandidate=false` even with
 all files present. The gate is intentionally one-way: no
-\`liveAllowed=true\` path, no automated main merge and no funded or
+`liveAllowed=true` path, no automated main merge and no funded or
 on-chain execution.
 
 ## External acceptance still required
