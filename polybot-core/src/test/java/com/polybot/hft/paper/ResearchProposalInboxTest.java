@@ -57,6 +57,33 @@ class ResearchProposalInboxTest {
   }
 
   @Test
+  void recoveryReadsDurableReceiptAfterSequenceChangeWithoutRescreening() throws Exception {
+    var first = snapshot();
+    var request = proposal();
+    JsonNode receipt;
+    try (var inbox = new ResearchProposalInbox(mapper, dir.resolve("recovery.json"))) {
+      receipt = inbox.screen(first, request);
+      var newer = first.deepCopy();
+      newer.put("sequence", 2);
+      assertThat(inbox.recordedScreenReceipt(newer, "one")).contains(receipt);
+      assertThat(inbox.recordedScreenReceipt(newer, "unknown")).isEmpty();
+      assertThat(first).isEqualTo(snapshot());
+    }
+    try (var restored = new ResearchProposalInbox(mapper, dir.resolve("recovery.json"))) {
+      var newer = first.deepCopy();
+      newer.put("sequence", 3);
+      assertThat(restored.recordedScreenReceipt(newer, "one")).contains(receipt);
+      ((ObjectNode) newer.path("account")).put("id", "other");
+      assertThatThrownBy(() -> restored.recordedScreenReceipt(newer, "one"))
+          .isInstanceOf(IllegalStateException.class);
+      ((ObjectNode) newer.path("account")).put("id", "a");
+      newer.put("sessionId", "another-session");
+      assertThatThrownBy(() -> restored.recordedScreenReceipt(newer, "one"))
+          .isInstanceOf(IllegalStateException.class);
+    }
+  }
+
+  @Test
   void invalidShortStaleAndAtomicBudgetFailClosed() throws Exception {
     try (var inbox = new ResearchProposalInbox(mapper, dir.resolve("inbox.json"))) {
       var snapshot = snapshot();

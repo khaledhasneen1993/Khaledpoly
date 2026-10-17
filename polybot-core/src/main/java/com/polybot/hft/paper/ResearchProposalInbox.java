@@ -38,6 +38,39 @@ public final class ResearchProposalInbox implements AutoCloseable {
     return check(snapshot, proposal, false);
   }
 
+  /**
+   * Read a previously durable SCREEN receipt without rescreening or
+   * reserving funds. A lost HTTP response can be recovered after the
+   * executor's snapshot sequence advances. Never expose another account's
+   * or session's saved proposal to the current caller.
+   */
+  public synchronized Optional<JsonNode> recordedScreenReceipt(
+      JsonNode snapshot, String id) {
+    if (snapshot == null
+        || !"PAPER".equals(snapshot.path("mode").asText())
+        || snapshot.path("liveAllowed").asBoolean(true)
+        || snapshot.path("executionEnabled").asBoolean(true)
+        || snapshot.path("truncated").asBoolean(true))
+      throw new IllegalStateException("PAPER snapshot required");
+    if (id == null || !id.matches("[A-Za-z0-9_.:-]{1,128}"))
+      throw new IllegalArgumentException("Invalid receipt identity");
+    JsonNode receipt = state.path("receipts").path(id);
+    if (receipt.isMissingNode()) return Optional.empty();
+    JsonNode request = receipt.path("request");
+    if (!request.path("sessionId").equals(snapshot.path("sessionId"))
+        || !request.path("accountId").equals(snapshot.path("account").path("id"))
+        || snapshot.path("account").path("halted").asBoolean(true))
+      throw new IllegalStateException("Account, session or account risk state changed");
+    JsonNode response = receipt.path("response");
+    if (!response.isObject()
+        || !id.equals(response.path("id").asText())
+        || !"SCREENED_SHADOW_ONLY".equals(response.path("status").asText())
+        || response.path("liveAllowed").asBoolean(true)
+        || response.path("executionEnabled").asBoolean(true))
+      throw new IllegalStateException("Invalid durable research receipt");
+    return Optional.of(response.deepCopy());
+  }
+
   private JsonNode check(JsonNode snapshot, JsonNode proposal, boolean remember) {
     if (!snapshot.path("mode").asText().equals("PAPER")
         || snapshot.path("liveAllowed").asBoolean(true)

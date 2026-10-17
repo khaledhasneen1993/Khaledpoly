@@ -47,6 +47,25 @@ public class ResearchProposalController {
     }
   }
 
+  @GetMapping("/screen-receipts/{id}")
+  public ResponseEntity<JsonNode> savedScreenReceipt(@PathVariable String id) {
+    JsonNode snapshot;
+    try {
+      snapshot = simulator.researchSnapshot();
+    } catch (IllegalStateException e) {
+      throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "PAPER unavailable");
+    }
+    try {
+      return inbox.recordedScreenReceipt(snapshot, id)
+          .map(receipt -> ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(receipt))
+          .orElseGet(() -> ResponseEntity.notFound().cacheControl(CacheControl.noStore()).build());
+    } catch (IllegalArgumentException e) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+    } catch (IllegalStateException e) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+    }
+  }
+
   @PostMapping("/paper")
   public ResponseEntity<JsonNode> paper(@RequestBody JsonNode proposal) {
     try {
