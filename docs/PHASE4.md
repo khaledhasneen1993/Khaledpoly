@@ -238,3 +238,16 @@ with first/last and inter-session freshness gaps. An unchanged/absent
 clock cannot satisfy a continuous capture, even if network polling succeeds.
 This is still only sampled CEX evidence; it is not complete exchange
 trades, observed FIFO, or venue order-fill data.
+
+
+## Change 12: measured large-event and unavailable-book handling
+
+The first actual public market-evidence artifact (GitHub Actions
+\`39026116887\`, artifact \`12098641463\`) contained two V1 Politics
+book requests returning HTTP 404. They are now labelled as unavailable
+books, not valid empty depth or fills. The sampled Sports event originally
+failed schema validation; the parser now bounds inspection of large event
+lists to 64 markets while exposing the exact number of uninspected rows.
+Truncated multi-market/negative-risk events remain explicitly unqualified.
+Schema errors include bounded diagnostic messages to distinguish malformed
+data from an oversized but valid event.

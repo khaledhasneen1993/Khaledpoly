@@ -51,12 +51,15 @@ def _identity(market):
 
 def validate_event(event, expected_id):
     if (not isinstance(event, dict) or not _positive_id(event.get('id'))
-            or event['id'] != expected_id or not isinstance(event.get('markets'), list)
-            or len(event['markets']) > 64):
-        raise ValueError('Invalid event identity or market bound')
+            or event['id'] != expected_id or not isinstance(event.get('markets'), list)):
+        raise ValueError('Invalid event identity or markets schema')
+    # Very large sports events are common. Inspect bounded members; report
+    # truncation explicitly rather than discarding the entire event or
+    # silently pretending its full negative-risk universe was checked.
+    maximum = 64
     seen_ids, seen_conditions, seen_outcomes = set(), set(), set()
     records, failures = [], []
-    for i, row in enumerate(event['markets']):
+    for i, row in enumerate(event['markets'][:maximum]):
         try:
             record = _identity(row)
             if (record['marketId'] in seen_ids or record['condition'] in seen_conditions
@@ -70,6 +73,9 @@ def validate_event(event, expected_id):
             failures.append({'index': i, 'reason': str(exc)})
     # Never infer full negative-risk membership or terminal payouts from an event page.
     return {'eventId': expected_id, 'totalMarketRows': len(event['markets']),
+            'inspectedMarketRows': min(len(event['markets']), maximum),
+            'uninspectedMarketRows': max(0, len(event['markets']) - maximum),
+            'marketListTruncated': len(event['markets']) > maximum,
             'verifiedBinaryMarkets': records, 'invalidMarketRows': failures,
             'multiMarketEvent': len(event['markets']) > 1,
             'negativeRiskFlagReported': event.get('negRisk') is True,
@@ -172,9 +178,15 @@ def collect_event_evidence(category, limit=2, max_books=2):
                                        'status':'SAMPLED_NOT_CONTINUOUS'}
                 except (ValueError, KeyError, TypeError, OSError) as exc:
                     market['books'] = _error(exc)
+                    if market['books'].get('httpStatus') == 404:
+                        market['books']['status'] = 'BOOK_NOT_AVAILABLE_404'
+                    elif isinstance(exc, (ValueError, KeyError, TypeError)):
+                        market['books']['reason'] = str(exc)[:180]
             evidence['events'].append(record)
         except (ValueError, KeyError, TypeError, OSError) as exc:
-            evidence['errors'].append({'stage':'event_detail', 'eventId':event_id, **_error(exc)})
+            evidence['errors'].append({'stage':'event_detail', 'eventId':event_id,
+                                       'reason':str(exc)[:180] if isinstance(exc,(ValueError, KeyError, TypeError)) else None,
+                                       **_error(exc)})
     evidence['verifiedMarkets'] = sum(len(e['verifiedBinaryMarkets']) for e in evidence['events'])
     evidence['invalidMarkets'] = sum(len(e['invalidMarketRows']) for e in evidence['events'])
     evidence['observedEvents'] = len(evidence['events'])

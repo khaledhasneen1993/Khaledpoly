@@ -44,6 +44,16 @@ class MarketEvidenceTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             e.validate_event(event,'11')
 
+    def test_large_sports_event_bounded_without_false_completion(self):
+        rows=[market('v1','0x'+format(i,'064x'),str(i)) for i in range(1,84)]
+        event={'id':'123','markets':rows,'negRisk':True}
+        result=e.validate_event(event,'123')
+        self.assertEqual(result['totalMarketRows'],83)
+        self.assertEqual(result['inspectedMarketRows'],64)
+        self.assertEqual(result['uninspectedMarketRows'],19)
+        self.assertTrue(result['marketListTruncated'])
+        self.assertFalse(result['negativeRiskUniverseComplete'])
+
     def test_book_truncation_and_identity(self):
         book={'asset_id':'11','bids':[{'price':'.4','size':'1'}],
               'asks':[{'price':'.6','size':'1'}]}
