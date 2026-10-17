@@ -127,3 +127,14 @@ jobs:
         with:
           name: test-reports
           path: '**/target/surefire-reports/'
+
+      - name: Final Phase 6 PAPER engineering-only gate
+        if: github.event_name == 'push' && github.ref == 'refs/heads/phase6-paper-integration'
+        run: |
+          mkdir -p research/output
+          python3 -m research.phase6.software_gate --root . --output research/output/phase6-software-check.json
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push' && github.ref == 'refs/heads/phase6-paper-integration' && always()
+        with:
+          name: phase6-software-evidence
+          path: research/output/phase6-software-check.json
