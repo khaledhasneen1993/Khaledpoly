@@ -223,3 +223,22 @@ multi-outcome and Negative Risk until there is a provably consistent
 Java atomic group/admission and independent settlement model. An
 unverified forecast is never represented as observed probability
 calibration, real fill evidence, or LIVE permission.
+
+
+## Exact bounded portfolio scenario selection
+
+\`research.phase5.portfolio_optimizer.optimize\` performs exact
+bounded subset enumeration (up to 12 PAPER candidates, 128 *joint*
+scenario labels, and a fixed maximum number of holdings) under
+explicit cash, existing correlated group exposure, per-group caps
+and worst-case joint scenario loss. It avoids taking the highest
+individual expected edge first when that would violate correlated
+risk or exclude a better complete portfolio.
+
+All input \`expectedNetPnlUsd\` and scenario joint PnLs are
+**unverified assumptions**, not calibrated outcome forecasts,
+Polygon conversion rights or price-executable quotes. The software
+reports the exact optimum for its declared scenarios only,
+\`strategyQualified=false\`, \`decision=NO_GO\`, and does not
+submit any PAPER or LIVE order. The Java ledger must still
+separately enforce all actual virtual PAPER reservation limits.
