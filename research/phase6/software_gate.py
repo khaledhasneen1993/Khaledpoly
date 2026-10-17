@@ -22,6 +22,7 @@ REQUIRED = (
     'research/phase5/fill_research.py', 'research/phase5/portfolio_risk.py',
     'research/phase5/portfolio_optimizer.py', 'research/phase5/tests/test_portfolio_optimizer.py',
     'research/phase5/walk_forward.py',
+    'research/phase6/public_smoke_gate.py', 'research/phase6/tests/test_public_smoke_gate.py',
     'research/phase6/sdk.py', 'research/phase6/external_strategy.py',
     'research/phase6/cross_account_gate.py',
     'research/phase6/paper_screen_bridge.py',

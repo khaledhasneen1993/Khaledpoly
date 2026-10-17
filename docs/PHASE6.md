@@ -212,3 +212,21 @@ single-writer ledger limits. If no independent registry gate has
 been configured, the existing single-account Java risk allocator
 remains authoritative. External untrusted JSON cannot directly
 assert global permission. Neither path enables LIVE.
+
+
+## Stage-6 real-public CI smoke evidence reconciliation
+
+\`research.phase6.public_smoke_gate\` runs on **phase-six branch pushes**
+after the bounded read-only Polymarket/CEX and *separate* virtual PAPER
+smokes, Phase-5 source-isolated CEX signals, and forward-public-print
+labels. It strictly reads their own independent JSON artifacts, verifies
+PAPER-vs-read-only mode separation, Phase-4 tape integrity checks,
+replay/action-audit parity, candidate qualification flags and exact
+SHA-256 file digests. A missing, forged or swapped report fails CI.
+Partial public source access (including Bybit 403) remains possible
+and is recorded as a qualification blocker rather than fabricated.
+All good artifacts still say \`NO_GO\` and \`liveAllowed=false\`.
+
+The software-only release inventory runs **after** this reconciliation.
+Neither a positive synthetic backtest nor passing CI can replace the
+prospective seven-full-UTC-day and genuine terminal/venue-label evidence.
