@@ -18,6 +18,7 @@ jobs:
       - run: python3 -m unittest discover -s research/phase3/tests -v
       - run: python3 -m unittest discover -s research/phase4/tests -v
       - run: python3 -m research.phase4.audit --help
+      - run: python3 -m research.phase4.recorder --help
       - run: python3 -m research.phase3 inspect executor-service/target/phase3-snapshot.json --replay-clock
       - name: Verify installed Python research SDK
         run: |

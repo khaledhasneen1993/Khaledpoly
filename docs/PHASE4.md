@@ -96,3 +96,33 @@ includes initial and final per-venue trade-ID checkpoints. The audit rejects
 gaps between checkpoints, mixed revisions, and legacy segments without
 checkpoint evidence. Checkpoints preserve de-duplication across restarts,
 but cannot reconstruct trades that were never returned by the REST source.
+
+
+## Change 5: restartable long-running PUBLIC capture
+
+A Linux host with a **clean committed** checkout may use:
+
+    python3 -m research.phase4.recorder --root research/output/phase4-btc \
+      --days 7 --segment-seconds 900 --interval 5
+
+This command is foreground work on the operator's host. ChatGPT/GitHub CI
+does **not** run it for seven days. A shorter operator check can supply
+\`--max-new-segments 1\`, which deliberately remains NO_GO.
+
+The recorder freezes its symbol, source Git commit, segment length, polling
+interval and seven-day target in a single plan. It uses an exclusive OS file
+lock; creates sealed numbered segments; validates each segment before using
+the terminal per-venue ID checkpoint as the next starting checkpoint;
+refuses silently changed parameters, corrupted complete segments or
+uncommitted code. The \`latest-audit.json\` is a replaceable status summary;
+raw segment files and manifests never get overwritten.
+
+An interrupted segment remains in place by default and **blocks** restart.
+An operator can explicitly retry using \`--quarantine-incomplete\`, preserving
+that directory under \`interrupted/\` and recording recovery evidence in
+\`recovery.jsonl\`. This *never* erases a data gap or qualifies seven days.
+
+Source REST polling still cannot claim every venue trade or an actual FIFO
+queue position. Even seven days of uninterrupted REST samples is not the
+full Phase-4 market-data acceptance; CLOB, settlement and venue-label
+validation remain separate.
