@@ -199,13 +199,17 @@ def audit_capture(directories, min_days=7, max_poll_gap_ms=300000):
                     if stats['firstSuccessfulSampleMs'] - prev['lastSuccessfulSampleMs'] > max_poll_gap_ms:
                         issues.append(venue + ':INTER_SESSION_SUCCESS_GAP')
     wall_span = sessions[-1]['endedAtMs'] - sessions[0]['startedAtMs']
-    if wall_span < min_days * DAY_MS:
+    # A rolling 7*24h interval is NOT seven complete UTC calendar days.
+    first_full_utc_ms = ((sessions[0]['startedAtMs'] + DAY_MS - 1) // DAY_MS) * DAY_MS
+    full_utc_days = max(0, (sessions[-1]['endedAtMs'] - first_full_utc_ms) // DAY_MS)
+    if wall_span < min_days * DAY_MS or full_utc_days < min_days:
         issues.append('INSUFFICIENT_CAPTURE_DAYS')
     issues = sorted(set(issues))
     return {'schema': 1, 'scope': 'PHASE4_PUBLIC_REST_SAMPLING_AUDIT',
             'sessions': len(sessions), 'symbol': sessions[0]['symbol'],
             'startedAtMs': sessions[0]['startedAtMs'], 'endedAtMs': sessions[-1]['endedAtMs'],
-            'wallSpanDays': round(wall_span / DAY_MS, 4), 'requiredDays': min_days,
+            'wallSpanDays': round(wall_span / DAY_MS, 4), 'fullUtcDays': full_utc_days,
+            'firstFullUtcDayMs': first_full_utc_ms, 'requiredDays': min_days,
             'issues': issues, 'continuousSamplingWindow': not issues,
             'completeTradeTape': False, 'venueFillEvidence': False,
             'strategyQualified': False, 'phase4Complete': False,

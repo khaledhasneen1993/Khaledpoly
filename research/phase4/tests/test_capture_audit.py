@@ -90,6 +90,16 @@ class CaptureAuditTest(unittest.TestCase):
             report = audit_capture([first], min_days=1)
             self.assertIn('UNVERIFIED_WATERMARK_CONTINUITY', report['issues'])
 
+    def test_partial_utc_days_do_not_count_as_complete_calendar_days(self):
+        with tempfile.TemporaryDirectory() as folder:
+            # More than 24 rolling hours, but less than one whole UTC day.
+            day = (START // 86400000) * 86400000
+            session = make_session(Path(folder) / 'one',
+                                   start=day + 1000, duration=86400000 + 2000)
+            report = audit_capture([session], min_days=1)
+            self.assertEqual(report['fullUtcDays'], 0)
+            self.assertIn('INSUFFICIENT_CAPTURE_DAYS', report['issues'])
+
     def test_duplicate_session_input_fails(self):
         with tempfile.TemporaryDirectory() as folder:
             session = make_session(Path(folder) / 'first')

@@ -134,7 +134,8 @@ def run_capture(directory, *, symbol='BTCUSDT', days=7, segment_seconds=900,
             current = completed[-1][1]['finalWatermarks']
 
         new_segments = 0
-        deadline = int(plan['startedAtMs']) + days * DAY_MS
+        first_full_utc_ms = ((int(plan['startedAtMs']) + DAY_MS - 1) // DAY_MS) * DAY_MS
+        deadline = first_full_utc_ms + days * DAY_MS
         while int(time.time() * 1000) < deadline:
             if max_new_segments is not None and new_segments >= max_new_segments:
                 break

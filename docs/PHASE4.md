@@ -141,3 +141,14 @@ as a per-source result. Results are uploaded as a GitHub Actions artifact:
 The probe never uses accounts, wallets, secret tokens, signing, funded
 orders or a live position. The probe reports no fills, complete market
 universe or continuous coverage, even if every endpoint responds.
+
+
+## Change 7: complete UTC-day acceptance
+
+The recorder now targets **seven complete UTC calendar days**, not just
+seven rolling 24-hour periods that can include partial first/last days.
+It starts sampling immediately, but the qualification clock begins at
+the next UTC midnight (or the current midnight if exactly aligned).
+The audit independently reports \`firstFullUtcDayMs\`, \`fullUtcDays\`
+and blocks an insufficient day count. Continued restarts and failures
+still preserve NO_GO.
