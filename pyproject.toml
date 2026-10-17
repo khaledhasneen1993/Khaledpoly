@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "khaledpoly-paper-research-extensions"
+version = "0.6.0"
+description = "PAPER-only Polymarket event and CEX research extension SDK"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+khaledpoly-paper-sdk = "research.phase6.sdk:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+namespaces = true
+include = [
+    "research", "research.phase3", "research.phase3.polybot_sdk",
+    "research.phase3.polybot_sdk.*", "research.phase4", "research.phase4.*",
+    "research.phase5", "research.phase5.*", "research.phase6", "research.phase6.*"
+]
+exclude = ["research.*.tests", "research.*.tests.*"]
+
+[tool.setuptools.exclude-package-data]
+"*" = ["__pycache__/*", "*.pyc", "*.pyo"]

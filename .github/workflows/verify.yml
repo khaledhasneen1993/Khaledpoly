@@ -19,6 +19,12 @@ jobs:
       - run: python3 -m unittest discover -s research/phase4/tests -v
       - run: python3 -m unittest discover -s research/phase5/tests -v
       - run: python3 -m unittest discover -s research/phase6/tests -v
+      - name: Verify separately installed Phase 5 and 6 PAPER SDK
+        run: |
+          python3 -m venv "$RUNNER_TEMP/phase6-sdk"
+          "$RUNNER_TEMP/phase6-sdk/bin/pip" install --disable-pip-version-check --no-deps .
+          "$RUNNER_TEMP/phase6-sdk/bin/khaledpoly-paper-sdk" --help
+          "$RUNNER_TEMP/phase6-sdk/bin/python" -c "from research.phase5.paper_strategy_adapter import event_proposal; from research.phase6.virtual_paper_bridge import DurableVirtualPaperOrders; from research.phase6.sdk import preview; print('PAPER_ONLY_EXTENSION_SDK_IMPORTED')"
       - run: python3 -m research.phase6.paper_screen_bridge --help
       - run: python3 -m research.phase6.virtual_paper_bridge --help
       - run: python3 -m research.phase5.offline_benchmark --help
