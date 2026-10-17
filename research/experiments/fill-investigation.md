@@ -38,3 +38,38 @@ baseline and stress PnL, and all other existing safety/data gates.
 Hourly follow-up is enabled in this conversation. Check current jobs before
 starting any new run, and persist resulting diagnosis and next action here.
 Do not declare profitability from a green build, a two-hour sample or zero loss.
+
+## Historical result — reviewed 2026-10-18 00:40 Asia/Amman
+
+Run 39067539123, historical job 117498492412, artifact 12113893739 succeeded.
+All 141 Java and 200 Python tests passed before starting the two experiments.
+Preserved evidence: `fill-investigation-20261018/` (full report, diagnosis,
+logical tape provenance, cancellation risk checks and file checksums).
+
+- 44 submitted / 38 activated / zero fills; cash $500 and realized PnL $0.
+- 25 orders saw no same-token print while outstanding. One order had eligible
+  prints: sim-research-17, two prints totaling 60 shares, versus initial queue
+  ahead 141.78 and remaining queue 81.78. Displayed depth before the 2x
+  multiplier was 70.89, also above the 60 eligible shares. This arithmetic is
+  not a counterfactual replay or a justification to change the queue model.
+- 62,094 aggregate active order-ms across all legs. Per-order classifications:
+  21 wrong aggressor, 20 not active yet, 2 earlier than current book, 2 different
+  price, 2 eligible prints. The 2 queue-not-exhausted annotations are a subset
+  of eligible prints, not extra prints. These counts are not unique trades.
+- 11 pair cancellations (22 legs) had valid prices but own net edge below the
+  contemporaneous threshold as top depth thinned. Five pairs (10 legs) had
+  invalid prices. Six post-only rejections caused six peer cancellations.
+- Full replay source logical SHA remains
+  330b3d65eff84abdcead2b84337d17bc52e84c4d022b32e8b9808a26e00873ce.
+  Compressed file hashes can differ because gzip headers differ; use logical
+  SHA for source identity. No new fill or profit has been demonstrated.
+
+The fresh public PAPER job 117498492549 was still running at this review,
+started 2026-10-17 23:39:38 Asia/Amman, expected to finish around 01:40
+on October 18 plus inspection/upload time. Do not rerun or modify it.
+Next action: read `fresh-paper-small-reports` and compare its eligibility and
+cancellation evidence with this historical result BEFORE behavioral changes.
+No current evidence supports loosening fills, stale-data limits or risk gates.
+Select a pricing/market-selection hypothesis only after both reports are read.
+This documentation checkpoint changes no code and skips CI to avoid a second
+simultaneous two-hour capture.

@@ -1,0 +1,39 @@
+{
+  "scope": "MEASURED_CONSERVATIVE_MATCHER_NOT_VENUE_EXECUTION",
+  "orders": 44,
+  "activatedOrders": 38,
+  "ordersWithoutSameTokenPrint": 25,
+  "ordersWithEligiblePrint": 1,
+  "ordersWithEligibleVolumeNotExceedingInitialQueue": 1,
+  "totalActiveOrderMs": 62094,
+  "terminalReasons": {
+    "RESTING_NET_EDGE": 22,
+    "POST_ONLY_WOULD_CROSS": 6,
+    "PEER_REJECTED:sim-research-7": 1,
+    "PEER_REJECTED:sim-research-10": 1,
+    "RESTING_PRICE_INVALID": 10,
+    "PEER_REJECTED:sim-research-20": 1,
+    "PEER_REJECTED:sim-research-31": 1,
+    "PEER_REJECTED:sim-research-39": 1,
+    "PEER_REJECTED:sim-research-42": 1
+  },
+  "printObservations": {
+    "WRONG_AGGRESSOR": 21,
+    "ORDER_NOT_ACTIVE": 20,
+    "PRINT_BEFORE_CURRENT_BOOK": 2,
+    "QUEUE_NOT_EXHAUSTED": 2,
+    "ELIGIBLE_PRINT": 2,
+    "DIFFERENT_PRICE": 2
+  },
+  "printCountsArePerOrder": true,
+  "submittedOrders": 44,
+  "fills": 0,
+  "cash": 500.0,
+  "netRealizedPnl": 0.0,
+  "riskBreaches": 0,
+  "maxDrawdown": 0,
+  "strategyRevision": "64a395b49459a2594438ea166f8ef92a7e6af1bb",
+  "inputSha256": "abb1a351a61a31c190ddbfd92e08091b5429503da6cf7f8c9bc936c72bf3e99d",
+  "decision": "NO_GO",
+  "liveAllowed": false
+}
