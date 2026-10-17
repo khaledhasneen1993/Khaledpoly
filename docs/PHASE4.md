@@ -227,3 +227,14 @@ evidence, a verified complete negative-risk universe, independent resolution
 oracle truth, or strategy profitability. These separate acceptance
 requirements remain explicit, and neither LIVE nor a funded account is
 enabled.
+
+
+## Change 11: trade-clock freshness as an independent data gate
+
+HTTP 200 success, or a series of identical REST trade lists, is **not**
+proof of fresh observations. The auditor now checks progression of each
+venue's highest source trade timestamp independently from poll heartbeats,
+with first/last and inter-session freshness gaps. An unchanged/absent
+clock cannot satisfy a continuous capture, even if network polling succeeds.
+This is still only sampled CEX evidence; it is not complete exchange
+trades, observed FIFO, or venue order-fill data.

@@ -69,6 +69,10 @@ def inspect_session(directory):
     first_success = {v: None for v in VENUES}
     large_gap_ms = {v: 0 for v in VENUES}
     large_success_gap_ms = {v: 0 for v in VENUES}
+    last_source_ms = {v: -1 for v in VENUES}
+    first_trade_progress = {v: None for v in VENUES}
+    last_trade_progress = {v: None for v in VENUES}
+    max_trade_progress_gap = {v: 0 for v in VENUES}
     public_count = 0
     with (root / 'public.jsonl').open(encoding='utf-8') as stream:
         for raw in stream:
@@ -106,6 +110,19 @@ def inspect_session(directory):
                 for key in ('uniqueTrades', 'duplicateTrades', 'olderTrades'):
                     if integer(row.get(key, -1)) < 0:
                         raise ValueError('Invalid sample event metrics')
+                last_trade = integer(row.get('lastSourceMs', -1))
+                if last_trade < -1 or last_trade > stamp + 1000:
+                    raise ValueError('Invalid venue source trade clock')
+                if last_trade < last_source_ms[venue]:
+                    raise ValueError('Venue trade clock regressed')
+                if last_trade > last_source_ms[venue]:
+                    if last_trade_progress[venue] is None:
+                        first_trade_progress[venue] = stamp
+                    else:
+                        max_trade_progress_gap[venue] = max(
+                            max_trade_progress_gap[venue], stamp-last_trade_progress[venue])
+                    last_trade_progress[venue] = stamp
+                    last_source_ms[venue] = last_trade
                 counts[venue]['featureRows'] += integer(row['uniqueTrades'])
                 counts[venue]['duplicateTrades'] += integer(row['duplicateTrades'])
                 counts[venue]['olderTrades'] += integer(row['olderTrades'])
@@ -155,6 +172,9 @@ def inspect_session(directory):
                               'firstPollMs': first[v], 'lastPollMs': latest[v],
                               'firstSuccessfulSampleMs': first_success[v],
                               'lastSuccessfulSampleMs': last_success[v],
+                              'firstTradeProgressMs': first_trade_progress[v],
+                              'lastTradeProgressMs': last_trade_progress[v],
+                              'largestTradeProgressGapMs': max_trade_progress_gap[v],
                               'largestSuccessfulSampleGapMs': large_success_gap_ms[v],
                               'largestInternalPollGapMs': large_gap_ms[v]} for v in VENUES}}
 
@@ -200,6 +220,15 @@ def audit_capture(directories, min_days=7, max_poll_gap_ms=300000):
                     issues.append(venue + ':TERMINAL_SUCCESS_GAP')
                 if stats['largestSuccessfulSampleGapMs'] > max_poll_gap_ms:
                     issues.append(venue + ':SUCCESS_SAMPLING_GAP')
+            if stats['firstTradeProgressMs'] is None:
+                issues.append(venue + ':NO_FRESH_TRADE_CLOCK_EVIDENCE')
+            else:
+                if stats['firstTradeProgressMs'] - item['startedAtMs'] > max_poll_gap_ms:
+                    issues.append(venue + ':INITIAL_TRADE_PROGRESS_GAP')
+                if item['endedAtMs'] - stats['lastTradeProgressMs'] > max_poll_gap_ms:
+                    issues.append(venue + ':TERMINAL_TRADE_PROGRESS_GAP')
+                if stats['largestTradeProgressGapMs'] > max_poll_gap_ms:
+                    issues.append(venue + ':STALE_TRADE_CLOCK_GAP')
             if stats['sourceAccessBlocked']:
                 issues.append(venue + ':SOURCE_ACCESS_BLOCKED')
             if i:
@@ -207,6 +236,9 @@ def audit_capture(directories, min_days=7, max_poll_gap_ms=300000):
                 gap = stats['firstPollMs'] - prev['lastPollMs']
                 if gap > max_poll_gap_ms:
                     issues.append(venue + ':INTER_SESSION_POLL_GAP')
+                if stats['firstTradeProgressMs'] is not None and prev['lastTradeProgressMs'] is not None:
+                    if stats['firstTradeProgressMs'] - prev['lastTradeProgressMs'] > max_poll_gap_ms:
+                        issues.append(venue + ':INTER_SESSION_STALE_TRADE_CLOCK')
                 if stats['firstSuccessfulSampleMs'] is not None and prev['lastSuccessfulSampleMs'] is not None:
                     if stats['firstSuccessfulSampleMs'] - prev['lastSuccessfulSampleMs'] > max_poll_gap_ms:
                         issues.append(venue + ':INTER_SESSION_SUCCESS_GAP')

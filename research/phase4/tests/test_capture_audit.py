@@ -100,6 +100,14 @@ class CaptureAuditTest(unittest.TestCase):
             self.assertEqual(report['fullUtcDays'], 0)
             self.assertIn('INSUFFICIENT_CAPTURE_DAYS', report['issues'])
 
+    def test_successful_http_polls_without_new_trades_are_not_fresh_coverage(self):
+        with tempfile.TemporaryDirectory() as folder:
+            session = make_session(Path(folder) / 'first')
+            report = audit_capture([session])
+            self.assertIn('binance-spot:NO_FRESH_TRADE_CLOCK_EVIDENCE', report['issues'])
+            self.assertIn('bybit-spot:NO_FRESH_TRADE_CLOCK_EVIDENCE', report['issues'])
+            self.assertFalse(report['continuousSamplingWindow'])
+
     def test_duplicate_session_input_fails(self):
         with tempfile.TemporaryDirectory() as folder:
             session = make_session(Path(folder) / 'first')
