@@ -98,3 +98,26 @@ NEVER silently turned into a nonfill. Models remain unqualified even
 if a small PAPER holdout yields an attractive fit; a string claiming
 \`VENUE_EXECUTION\` is not independently authenticated venue evidence.
 No synthetic FIFO or fill labels are generated.
+
+
+## Politics, Sports, news, multi-outcome and Negative Risk scenarios
+
+\`research.phase5.event_rules\` is a research-only **independent
+scenario screener**, not a predictor or executable strategy. It
+requires explicit causal market/forecast availability, a complete
+probability simplex, explicit bounded fee/slippage assumptions and
+category-specific safeguards. Politics abstains when rules are
+missing or an oracle/dispute state is unknown; Sports uses separate
+pregame/score-freshness and final-status rules. News must identify
+the same event and have nonfuture publication and receipt clocks.
+For multi-outcome and Negative Risk, incomplete membership abstains.
+
+    python3 -m research.phase5.event_rules \
+      research/data/event-forecast.json --decision-ms 1800000000000 \
+      --output research/output/phase5-event-screen.json
+
+Any positive "scenario edge" is an arithmetic *what-if* from
+unverified input probabilities, not measured realized PnL or a market
+mispricing finding. This module does not call Polymarket, dispatch
+orders, or authenticate the oracle, fees, groups, match score or news.
+A flag supplied by a data feed is not an independent truth check.
