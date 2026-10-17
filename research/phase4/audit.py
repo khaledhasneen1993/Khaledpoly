@@ -49,7 +49,10 @@ def inspect_session(directory):
     counts = {v: Counter() for v in VENUES}
     latest = {v: None for v in VENUES}
     first = {v: None for v in VENUES}
+    last_success = {v: None for v in VENUES}
+    first_success = {v: None for v in VENUES}
     large_gap_ms = {v: 0 for v in VENUES}
+    large_success_gap_ms = {v: 0 for v in VENUES}
     public_count = 0
     with (root / 'public.jsonl').open(encoding='utf-8') as stream:
         for raw in stream:
@@ -72,6 +75,12 @@ def inspect_session(directory):
             public_count += 1
             if status == 'SAMPLED_PUBLIC_TRADES':
                 counts[venue]['sampledPolls'] += 1
+                if last_success[venue] is None:
+                    first_success[venue] = stamp
+                else:
+                    large_success_gap_ms[venue] = max(
+                        large_success_gap_ms[venue], stamp - last_success[venue])
+                last_success[venue] = stamp
                 if row.get('coverage') != 'SAMPLED_NOT_COMPLETE_TRADE_TAPE':
                     raise ValueError('Public sample misidentified as complete tape')
                 # Recheck payload fingerprint, separately from file-level integrity.
@@ -125,6 +134,9 @@ def inspect_session(directory):
                               'featureRows': counts[v]['featureRows'],
                               'sourceAccessBlocked': bool(counts[v]['sourceAccessBlocked']),
                               'firstPollMs': first[v], 'lastPollMs': latest[v],
+                              'firstSuccessfulSampleMs': first_success[v],
+                              'lastSuccessfulSampleMs': last_success[v],
+                              'largestSuccessfulSampleGapMs': large_success_gap_ms[v],
                               'largestInternalPollGapMs': large_gap_ms[v]} for v in VENUES}}
 
 
@@ -138,6 +150,8 @@ def audit_capture(directories, min_days=7, max_poll_gap_ms=300000):
     sessions = sorted((inspect_session(p) for p in paths), key=lambda r: r['startedAtMs'])
     issues = []
     for i, item in enumerate(sessions):
+        if item['symbol'] != sessions[0]['symbol']:
+            issues.append('MIXED_MARKET_SYMBOLS')
         if i and item['startedAtMs'] < sessions[i-1]['endedAtMs']:
             issues.append('OVERLAPPING_SESSIONS')
         elif i and item['startedAtMs'] - sessions[i-1]['endedAtMs'] > max_poll_gap_ms:
@@ -148,6 +162,13 @@ def audit_capture(directories, min_days=7, max_poll_gap_ms=300000):
                 issues.append(venue + ':LONG_POLL_GAP')
             if stats['sampledPolls'] == 0:
                 issues.append(venue + ':NO_SUCCESSFUL_SAMPLES')
+            else:
+                if stats['firstSuccessfulSampleMs'] - item['startedAtMs'] > max_poll_gap_ms:
+                    issues.append(venue + ':INITIAL_SUCCESS_GAP')
+                if item['endedAtMs'] - stats['lastSuccessfulSampleMs'] > max_poll_gap_ms:
+                    issues.append(venue + ':TERMINAL_SUCCESS_GAP')
+                if stats['largestSuccessfulSampleGapMs'] > max_poll_gap_ms:
+                    issues.append(venue + ':SUCCESS_SAMPLING_GAP')
             if stats['sourceAccessBlocked']:
                 issues.append(venue + ':SOURCE_ACCESS_BLOCKED')
             if i:
@@ -155,6 +176,9 @@ def audit_capture(directories, min_days=7, max_poll_gap_ms=300000):
                 gap = stats['firstPollMs'] - prev['lastPollMs']
                 if gap > max_poll_gap_ms:
                     issues.append(venue + ':INTER_SESSION_POLL_GAP')
+                if stats['firstSuccessfulSampleMs'] is not None and prev['lastSuccessfulSampleMs'] is not None:
+                    if stats['firstSuccessfulSampleMs'] - prev['lastSuccessfulSampleMs'] > max_poll_gap_ms:
+                        issues.append(venue + ':INTER_SESSION_SUCCESS_GAP')
     wall_span = sessions[-1]['endedAtMs'] - sessions[0]['startedAtMs']
     if wall_span < min_days * DAY_MS:
         issues.append('INSUFFICIENT_CAPTURE_DAYS')

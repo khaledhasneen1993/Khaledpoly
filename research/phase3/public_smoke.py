@@ -84,9 +84,12 @@ def main():
                     row = decode(line)
                     venue_counts[row['venue']] += 1
             signal_report = decode((output / 'signals/report.json').read_text())
+            from research.phase4.audit import inspect_session
+            inspect_session(output / 'signals')  # Validate actual public tape hashes, clocks and per-venue metrics.
             result = {'scope': 'PUBLIC_INTEGRATION_SMOKE_NOT_QUALIFICATION', 'snapshots': report['snapshots'],
                       'markets': len(latest['markets']), 'freshBooks': fresh_books,
-                      'signalCollectorExit': signal_status, 'signalRowsByVenue': venue_counts, 'signalErrors': signal_report['errors'], 'replayStatus': parity['status'],
+                      'signalCollectorExit': signal_status, 'signalRowsByVenue': venue_counts, 'signalErrors': signal_report['errors'],
+                      'phase4CaptureIntegrity': 'PASS', 'replayStatus': parity['status'],
                       'decision': 'NO_GO', 'liveAllowed': False, 'paperExecutionMode': execution_mode,
                       'newStrategiesExecuted': execution_mode and execution_report['receipts'].get('PAPER_SUBMITTED', 0) > 0,
                       'observedPaperAccount': latest['account'] if execution_mode else None,

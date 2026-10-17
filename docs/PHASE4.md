@@ -68,3 +68,21 @@ The seven-day criterion is a *continuous public sampling window* only; even
 a clean result is not a complete exchange tape, does not prove fill quality,
 and must never unlock models or LIVE. The capture must run on an always-on
 host; a GitHub Actions job or this chat does not keep a seven-day process alive.
+
+
+## Change 3: successful-sample freshness is a separate gate
+
+A service can keep polling during a 403/backoff period without obtaining
+usable market data. The archive auditor checks first/last successful samples,
+their largest internal and inter-session gaps, and the end-of-session tail,
+not just the heartbeat of the polling loop. Different market symbols may not
+be mixed into a single qualification window.
+
+The phase-four branch now runs the existing external PUBLIC PAPER/spot
+integration smoke in CI and verifies its source archive against the session
+integrity audit. It still cannot claim seven-day evidence from a short CI run.
+
+The self-contained file hashes are consistency checks, **not cryptographic
+authentication** if someone can edit both the report and the tape. Store
+immutable artifacts or external digest attestations before claiming a
+tamper-proof dataset.

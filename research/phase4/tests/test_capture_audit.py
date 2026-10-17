@@ -75,6 +75,15 @@ class CaptureAuditTest(unittest.TestCase):
             result = audit_capture([session], min_days=1)
             self.assertIn('bybit-spot:SOURCE_ACCESS_BLOCKED', result['issues'])
 
+
+    def test_successful_sampling_gap_is_not_hidden_by_healthy_polls(self):
+        with tempfile.TemporaryDirectory() as folder:
+            session = make_session(Path(folder) / 'first', duration=86400000)
+            report = audit_capture([session], min_days=1)
+            self.assertIn('binance-spot:TERMINAL_SUCCESS_GAP', report['issues'])
+            self.assertIn('bybit-spot:TERMINAL_SUCCESS_GAP', report['issues'])
+            self.assertFalse(report['continuousSamplingWindow'])
+
     def test_duplicate_session_input_fails(self):
         with tempfile.TemporaryDirectory() as folder:
             session = make_session(Path(folder) / 'first')
