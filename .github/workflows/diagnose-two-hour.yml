@@ -1,0 +1,37 @@
+name: Diagnose recorded PAPER order cancellations
+on:
+  push:
+    branches: [paper-order-cancel-diagnosis]
+    paths: ['.github/workflows/diagnose-two-hour.yml']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: two-hour-paper-small-reports
+          run-id: 39058688247
+          github-token: ${{ github.token }}
+          path: reports
+      - uses: actions/download-artifact@v4
+        with:
+          name: two-hour-paper-39048983750
+          run-id: 39048983750
+          github-token: ${{ github.token }}
+          path: original
+      - name: Stream original journal and attribute each recorded terminal
+        run: >-
+          python3 -u -m research.phase6.order_cancel_audit
+          --archive original/two-hour-paper-evidence.tar.gz
+          --ledger reports/final-ledger.json
+          --output diagnosis/order-cancel-audit.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: paper-order-cancel-diagnosis
+          path: diagnosis/
+          retention-days: 3
