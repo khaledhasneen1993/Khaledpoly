@@ -145,3 +145,26 @@ it **does not** model on-chain liquidation, negative-risk conversion,
 oracle challenge/appeal, counterparties or missing tails. Real venue and
 resolution evidence are unavailable, so results never qualify risk or
 real execution.
+
+
+## Forward-price research labels for venue-isolated signals
+
+\`research.phase5.cex_forward\` evaluates the **future observed public
+exchange print**, not a maker/taker order fill. Momentum and aggressive
+flow are evaluated separately with a fixed price-label horizon and a
+bounded receipt delay. At most one outstanding signal per strategy and
+venue is evaluated at a time. HTTP gaps, future prices missing inside
+the label window and unfinished observations are *censored*, never
+turned into losing trades.
+
+    python3 -m research.phase5.cex_forward \
+      research/output/phase4-btc/segments/segment-000001/public.jsonl \
+      --horizon-ms 1000 --max-label-delay-ms 2000 \
+      --fee-bps 5 --slippage-bps 5 --min-labeled 100 \
+      --output research/output/phase5-cex-forward.json
+
+Reports hypothetical directional spot-price outcomes after **assumed**
+round-trip costs. Prints are not executable quotes and do not support
+claims about Polymarket fills, maker queue priority or net profits.
+Binance and Bybit labels never substitute for each other. The absence
+of seven-day prospective evidence still prevents strategy qualification.
