@@ -3,6 +3,8 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+import fcntl
+import os
 
 ROOT=Path(__file__).resolve().parents[3]
 sys.path.insert(0,str(ROOT))
@@ -156,6 +158,41 @@ class VirtualPaperIntegrationTest(unittest.TestCase):
             self.assertFalse(target.exists())
             self.assertEqual(client.calls,0)
             self.assertEqual(len(client.ledger),0)
+
+    def test_single_atomic_intent_may_contain_two_legs_but_posts_once(self):
+        obs=observation()
+        client=FakeLedgerClient(obs)
+        proposal=envelope()
+        proposal['proposals'][0]['legs'].append({
+            'condition':'market','token':'b','buy':True,
+            'price':'.41','size':'5','expiresMs':BASE+250
+        })
+        with tempfile.TemporaryDirectory() as d:
+            result=DurableVirtualPaperOrders(client).run(
+                Path(d)/'out',obs,proposal,enable_virtual=True,at_ms=BASE)
+            self.assertEqual(result['receiptCounts']['PAPER_SUBMITTED'],1)
+            self.assertEqual(client.calls,1)
+            self.assertEqual(len(client.ledger),1)
+            self.assertEqual(len(next(iter(client.ledger.values()))['legs']),2)
+            self.assertFalse(result['realOrdersEnabled'])
+
+    def test_second_process_cannot_open_same_unfinished_outbox(self):
+        obs=observation()
+        client=FakeLedgerClient(obs)
+        with tempfile.TemporaryDirectory() as d:
+            out=Path(d)/'out'
+            out.mkdir()
+            fd=os.open(str(out/'.lock'),os.O_RDWR|os.O_CREAT,0o600)
+            try:
+                fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+                with self.assertRaises(BlockingIOError):
+                    DurableVirtualPaperOrders(client).run(
+                        out,obs,envelope(),enable_virtual=True,at_ms=BASE)
+                self.assertFalse((out/'manifest.json').exists())
+                self.assertEqual(client.calls,0)
+            finally:
+                fcntl.flock(fd,fcntl.LOCK_UN)
+                os.close(fd)
 
     def test_malformed_server_receipt_is_never_recorded_as_success(self):
         obs=observation()
