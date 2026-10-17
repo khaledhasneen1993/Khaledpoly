@@ -4,6 +4,7 @@ import hashlib
 from pathlib import Path
 from .model import decode, dumps, integer, number
 from .learning import example
+from .tapes import open_tape, stored_sha256
 from .runtime import private_write
 
 
@@ -14,7 +15,7 @@ def build_labels(tape, directory):
     markout_identities = set()
     previous, sequence, run, ended, last, gaps, unavailable = -1, 0, None, False, -1, [], 0
     checksum = hashlib.sha256()
-    with tape.open('rb') as stream:
+    with open_tape(tape,'rb') as stream:
         for raw in iter(lambda: stream.readline(8 * 1024 * 1024 + 1), b''):
             if len(raw) > 8 * 1024 * 1024 or not raw.endswith(b'\n'):
                 raise ValueError('Incomplete/oversized label tape row')
@@ -131,7 +132,8 @@ def build_labels(tape, directory):
         output.flush()
         os.fsync(output.fileno())
     report = {'provenance': 'PAPER_MODEL', 'ordersWithFeatures': len(rows), 'ordersWithoutFeatures': unavailable,
-              'sourceTapeSha256': checksum.hexdigest(), 'recordingComplete': ended, 'dataGaps': len(gaps),
+              'sourceTapeSha256':stored_sha256(tape) if tape.suffix=='.gz' else checksum.hexdigest(),
+              'logicalTapeSha256':checksum.hexdigest(), 'recordingComplete': ended, 'dataGaps': len(gaps),
               'fillLabels': sum(example(row) is not None for row in rows),
               'secondLegLabels': sum(example(row, 'second_leg') is not None for row in rows),
               'markoutLabels': sum(example(row, 'adverse_selection') is not None for row in rows),

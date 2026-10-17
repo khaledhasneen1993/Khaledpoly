@@ -13,7 +13,11 @@ public final class PaperMatchingEngine {
   public record Fill(
       String id, String token, boolean buy, BigDecimal price, BigDecimal size, long at) {}
 
-  public record Update(List<Fill> fills, Map<String, String> terminal) {}
+  public record Update(List<Fill> fills, Map<String, String> terminal, Map<String, String> reasons) {
+    public Update(List<Fill> fills, Map<String, String> terminal) {
+      this(fills, terminal, Map.of());
+    }
+  }
 
   private record Book(
       NavigableMap<BigDecimal, BigDecimal> bids,
@@ -25,6 +29,7 @@ public final class PaperMatchingEngine {
     boolean buy, active;
     BigDecimal price, remaining, ahead;
     long activation, cancel = Long.MAX_VALUE;
+    String cancelReason = "CLIENT_CANCEL";
   }
 
   private final Map<String, Book> books = new HashMap<>();
@@ -74,10 +79,11 @@ public final class PaperMatchingEngine {
     now = at;
     var fills = new ArrayList<Fill>();
     var terminal = new LinkedHashMap<String, String>();
+    var reasons = new LinkedHashMap<String, String>();
     if (kind.equals("GAP")) {
-      invalidate(terminal);
-      orders.clear();
-      return new Update(List.of(), Collections.unmodifiableMap(new LinkedHashMap<>(terminal)));
+      invalidate(terminal, reasons, DataGap.tokens(n), "DATA_GAP:" + n.path("reason").asText("unknown"));
+      terminal.keySet().forEach(orders::remove);
+      return new Update(List.of(), Collections.unmodifiableMap(new LinkedHashMap<>(terminal)), Map.copyOf(reasons));
     }
     var staleTokens = new HashSet<String>();
     for (var o : orders.values())
@@ -91,24 +97,27 @@ public final class PaperMatchingEngine {
     }
     orders.values().stream()
         .filter(o -> staleTokens.contains(o.token))
-        .forEach(o -> terminal.put(o.id, "CANCELED"));
+        .forEach(o -> { terminal.put(o.id, "CANCELED"); reasons.put(o.id, "STALE_BOOK"); });
     terminal.keySet().forEach(orders::remove);
     // Due cancels win ties. Activation uses only the book known BEFORE this event.
     for (var o : orders.values()) {
       if (o.cancel <= at) {
         terminal.put(o.id, "CANCELED");
+        reasons.put(o.id, o.cancelReason);
         continue;
       }
       if (!o.active && o.activation <= at) {
         Book b = books.get(o.token);
         if (b == null || at - b.source > maxAge || b.bids.isEmpty() || b.asks.isEmpty()) {
           terminal.put(o.id, "REJECTED");
+          reasons.put(o.id, "ACTIVATION_BOOK_UNAVAILABLE");
           continue;
         }
         if (o.buy
             ? o.price.compareTo(b.asks.firstKey()) >= 0
             : o.price.compareTo(b.bids.lastKey()) <= 0) {
           terminal.put(o.id, "REJECTED");
+          reasons.put(o.id, "POST_ONLY_WOULD_CROSS");
           continue;
         }
         o.ahead =
@@ -135,7 +144,7 @@ public final class PaperMatchingEngine {
             || source > at
             || at - source > maxAge
             || (books.containsKey(token) && source < books.get(token).source)) {
-          invalidate(terminal);
+          invalidate(terminal, reasons, Set.of(token), "INVALID_OR_REGRESSED_BOOK");
           break;
         }
         var bids = levels(n.path("bids"));
@@ -164,9 +173,13 @@ public final class PaperMatchingEngine {
       }
       case "CANCEL" -> {
         Order o = orders.get(required(n, "id"));
-        if (o != null)
-          o.cancel =
-              Math.min(o.cancel, Math.addExact(at, cancellationProfile.delay("cancel", o.id)));
+        if (o != null) {
+          long due = Math.addExact(at, cancellationProfile.delay("cancel", o.id));
+          if (due < o.cancel) {
+            o.cancel = due;
+            o.cancelReason = n.path("reason").asText("CLIENT_CANCEL");
+          }
+        }
       }
       case "TRADE" -> {
         String token = required(n, "token"),
@@ -202,7 +215,7 @@ public final class PaperMatchingEngine {
           if (executable.signum() > 0) {
             o.remaining = o.remaining.subtract(executable);
             fills.add(new Fill(o.id, o.token, o.buy, o.price, executable, at));
-            if (o.remaining.signum() == 0) terminal.put(o.id, "FILLED");
+            if (o.remaining.signum() == 0) { terminal.put(o.id, "FILLED"); reasons.put(o.id, "PRINT_FILLED"); }
           }
         }
       }
@@ -211,21 +224,26 @@ public final class PaperMatchingEngine {
         books.remove(token);
         orders.values().stream()
             .filter(o -> o.token.equals(token))
-            .forEach(o -> terminal.put(o.id, "CANCELED"));
+            .forEach(o -> { terminal.put(o.id, "CANCELED"); reasons.put(o.id, n.path("reason").asText("TOKEN_CLOSED")); });
       }
-      case "GAP" -> invalidate(terminal);
+      case "GAP" -> invalidate(terminal, reasons, DataGap.tokens(n), "DATA_GAP:" + n.path("reason").asText("unknown"));
       case "TICK" -> {}
       default -> throw new IllegalArgumentException("Unknown matching event: " + kind);
     }
     terminal.keySet().forEach(orders::remove);
     return new Update(
-        List.copyOf(fills), Collections.unmodifiableMap(new LinkedHashMap<>(terminal)));
+        List.copyOf(fills), Collections.unmodifiableMap(new LinkedHashMap<>(terminal)), Map.copyOf(reasons));
   }
 
-  private void invalidate(Map<String, String> terminal) {
+  private void invalidate(Map<String, String> terminal, Map<String, String> reasons, Set<String> tokens, String reason) {
     gaps++;
-    books.clear();
-    orders.keySet().forEach(id -> terminal.put(id, "CANCELED"));
+    if (tokens.isEmpty()) books.clear();
+    else books.keySet().removeAll(tokens);
+    for (var order : orders.values())
+      if (tokens.isEmpty() || tokens.contains(order.token)) {
+        terminal.put(order.id, "CANCELED");
+        reasons.put(order.id, reason);
+      }
   }
 
   private static NavigableMap<BigDecimal, BigDecimal> levels(JsonNode n) {

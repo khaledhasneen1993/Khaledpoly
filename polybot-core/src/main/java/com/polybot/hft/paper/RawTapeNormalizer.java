@@ -49,10 +49,13 @@ public final class RawTapeNormalizer {
     // The streaming adapter drops stale historical trade notifications without invalidating depth.
     if (type.equals("last_trade_price") && !fresh) return;
     if ((type.equals("book") || type.equals("price_change")) && !fresh) {
-      String token = n.path("asset_id").asText(null);
-      if (token != null) books.remove(token);
-      else books.clear();
-      out.accept("GAP", mapper.valueToTree(Map.of("reason", "stale_source", "sourceMs", stamp)));
+      var tokens = DataGap.messageTokens(n);
+      long observedStamp = stamp;
+      tokens.removeIf(token -> observedStamp >= 0 && observedStamp < stamps.getOrDefault(token, -1L));
+      if (!DataGap.messageTokens(n).isEmpty() && tokens.isEmpty()) return;
+      if (tokens.isEmpty()) books.clear();
+      else books.keySet().removeAll(tokens);
+      out.accept("GAP", mapper.valueToTree(Map.of("reason", "stale_source", "sourceMs", stamp, "tokens", tokens)));
       return;
     }
     if (type.equals("price_change")) {

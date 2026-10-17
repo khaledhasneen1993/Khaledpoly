@@ -14,6 +14,22 @@ class PaperJournalTest {
   final ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
 
   @Test
+  void compressedTapePreservesLogicalRecordsAndHasFinalGzipTrailer() throws Exception {
+    try (var journal=new PaperJournal(mapper,Clock.fixed(Instant.ofEpochMilli(1000),ZoneOffset.UTC),dir.toString(),"compressed","abc",true)) {
+      for (int i=0;i<100;i++) journal.record("TICK",null,Map.of("payload","same payload ".repeat(100)));
+    }
+    Path path;
+    try (var files=Files.walk(dir)) { path=files.filter(p->p.toString().endsWith("events.jsonl.gz")).findFirst().orElseThrow(); }
+    try (var reader=TapeIO.reader(path)) {
+      var rows=reader.lines().toList();
+      assertThat(rows).hasSize(101);
+      assertThat(mapper.readTree(rows.getLast()).path("kind").asText()).isEqualTo("RUN_END");
+      for (int i=0;i<rows.size();i++) assertThat(mapper.readTree(rows.get(i)).path("seq").asLong()).isEqualTo(i+1);
+      assertThat(Files.size(path)).isLessThan(rows.stream().mapToLong(String::length).sum());
+    }
+  }
+
+  @Test
   void recordsReceiveOrderSourceClockAndCleanEnd() throws Exception {
     try (var j =
         new PaperJournal(

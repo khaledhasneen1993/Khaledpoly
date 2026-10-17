@@ -71,7 +71,7 @@ class RawTapeIsolationTest {
   }
 
   @Test
-  void staleTradeDoesNotInvalidateCurrentDepthAndStaleBookPreservesOtherToken() throws Exception {
+  void staleTradeAndSupersededBookPreserveBothCurrentTokens() throws Exception {
     var decoder = new RawTapeNormalizer(mapper);
     var output = new ArrayList<String>();
     java.util.function.BiConsumer<String, JsonNode> sink =
@@ -88,6 +88,26 @@ class RawTapeIsolationTest {
     decoder.accept(book("a", base - 90000), base + 2, sink);
     decoder.accept(delta("a", base + 3), base + 3, sink);
     decoder.accept(delta("b", base + 3), base + 3, sink);
-    assertThat(output).containsExactly("BOOK:a", "BOOK:b", "BOOK:a", "GAP:", "BOOK:b");
+    assertThat(output).containsExactly("BOOK:a", "BOOK:b", "BOOK:a", "BOOK:a", "BOOK:b");
   }
+  @Test
+  void advancingStaleDeltaInvalidatesItsOwnTokenUntilFullSnapshot() throws Exception {
+    var decoder=new RawTapeNormalizer(mapper);
+    var output=new ArrayList<String>();var gaps=new ArrayList<JsonNode>();
+    java.util.function.BiConsumer<String,JsonNode> sink=(kind,data)->{
+      output.add(kind+":"+data.path("token").asText());
+      if(kind.equals("GAP"))gaps.add(data);
+    };
+    decoder.accept(book("a",base),base,sink);
+    decoder.accept(book("b",base+3000),base+3000,sink);
+    decoder.accept(delta("a",base+1),base+3000,sink);
+    decoder.accept(delta("a",base+3001),base+3001,sink);
+    decoder.accept(delta("b",base+3001),base+3001,sink);
+    assertThat(gaps).hasSize(1);
+    assertThat(DataGap.tokens(gaps.getFirst())).containsExactly("a");
+    assertThat(output).containsExactly("BOOK:a","BOOK:b","GAP:","BOOK:b");
+    decoder.accept(book("a",base+3002),base+3002,sink);
+    assertThat(output.getLast()).isEqualTo("BOOK:a");
+  }
+
 }

@@ -81,7 +81,7 @@ public final class ClosedLoopReplay {
     String externalSession = null;
     JsonNode initialExternalAccount = null, initialExternalCheckpoint = null;
     if (external) {
-      try (var reader = Files.newBufferedReader(tape)) {
+      try (var reader = TapeIO.reader(tape)) {
         for (int i = 0; i < 256; i++) {
           String line = reader.readLine();
           if (line == null) break;
@@ -130,7 +130,7 @@ public final class ClosedLoopReplay {
                 (kind, data) -> audit.add(Map.of("kind", kind, "at", clock.millis(), "data", data)),
                 external,
                 externalSession);
-        var reader = Files.newBufferedReader(tape)) {
+        var reader = TapeIO.reader(tape)) {
       String line;
       while ((line = reader.readLine()) != null) {
         JsonNode row = mapper.readTree(line);

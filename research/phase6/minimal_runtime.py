@@ -17,7 +17,7 @@ def command(root, state, port):
     return ['java','-jar',str(jar),'--server.address=127.0.0.1','--server.port='+str(port),
         '--hft.mode=PAPER','--hft.events.enabled=false','--hft.strategy.gabagool.enabled=false',
         '--executor.sim.enabled=true','--paper.closed-loop.enabled=true','--paper.phase3.enabled=true',
-        '--paper.market-data.enabled=true','--hft.polymarket.market-ws-enabled=true',
+        '--paper.record.compress=true','--paper.market-data.enabled=true','--hft.polymarket.market-ws-enabled=true',
         '--executor.account.state-path='+str(state/'account.json'),
         '--paper.closed-loop.config='+str(root/'research/phase2/research-config.json'),
         '--paper.record.directory='+str(root/'research/data/minimal'),

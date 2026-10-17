@@ -180,6 +180,14 @@ class AtomicFrameTest {
             "decisionClock")) assertThat(b.get(key)).as(key).isEqualTo(a.get(key));
     assertThat(Files.readAllLines(dir.resolve("raw/audit.jsonl")))
         .isEqualTo(Files.readAllLines(dir.resolve("normal/audit.jsonl")));
+    var compressed = dir.resolve("events.jsonl.gz");
+    try (var zipped = new java.util.zip.GZIPOutputStream(Files.newOutputStream(compressed))) {
+      zipped.write(text.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));
+    }
+    var zippedReport = ClosedLoopReplay.run(compressed,dir.resolve("gzip"),ResearchConfig.defaults(),h.limits,m,true);
+    assertThat(zippedReport.get("executions")).isEqualTo(b.get("executions"));
+    assertThat(zippedReport.get("cash")).isEqualTo(b.get("cash"));
+    assertThat(Files.readAllLines(dir.resolve("gzip/audit.jsonl"))).isEqualTo(Files.readAllLines(dir.resolve("raw/audit.jsonl")));
     // Crossing a holdout boundary preserves the raw/frame binding and excludes pre-window actions.
     ClosedLoopReplay.run(
         tape,

@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Exercise the FULL strategy on each captured public dataset; never promote a short smoke."""
 import json,pathlib,subprocess,sys
+sys.path.insert(0,str(pathlib.Path(__file__).resolve().parents[2]))
+from research.phase3.polybot_sdk.tapes import recorded_tapes
 root=pathlib.Path(sys.argv[1]);jar='executor-service/target/executor-service-0.6.0.jar'
-for tape in root.glob('*/events.jsonl'):
+for tape in recorded_tapes(root):
  reports={}
  for mode,flags in [('baseline',[]),('stress',['--stress']),('raw-baseline',['--raw'])]:
   out=tape.parent/('replay-'+mode)

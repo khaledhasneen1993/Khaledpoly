@@ -5,6 +5,8 @@ import collections
 import json
 import pathlib
 import sys
+sys.path.insert(0,str(pathlib.Path(__file__).resolve().parents[2]))
+from research.phase3.polybot_sdk.tapes import open_tape, recorded_tapes
 
 BUCKETS = [-1000, -1, 0, 1, 5, 10, 25, 50, 100, 250, 500, 1000, 1500, 2000, 3000, 5000, 10000]
 
@@ -64,7 +66,7 @@ def inspect(tape):
                 stale_stages[stage] += 1
         elif kind == 'BOOK':
             normalization.add(at - data['sourceMs'])
-    with pathlib.Path(tape).open() as stream:
+    with open_tape(tape, 'rt') as stream:
         for line in stream:
             row = json.loads(line)
             expected += 1
@@ -156,7 +158,7 @@ def inspect(tape):
 
 def main():
     root = pathlib.Path(sys.argv[1])
-    summary = [inspect(tape) for tape in root.glob('*/events.jsonl')]
+    summary = [inspect(tape) for tape in recorded_tapes(root)]
     if not summary:
         raise ValueError('No recording files produced')
     (root / 'collection-summary.json').write_text(json.dumps(summary, indent=2))

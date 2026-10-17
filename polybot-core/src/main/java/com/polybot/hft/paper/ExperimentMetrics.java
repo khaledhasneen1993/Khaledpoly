@@ -10,6 +10,7 @@ public final class ExperimentMetrics {
   private final Set<String> filledOrders = new HashSet<>();
   private final Map<String, Intent> intents = new HashMap<>();
   private final Map<String, Long> firstFill = new HashMap<>();
+  private final Map<String, Long> terminalReasons = new TreeMap<>(), terminalStatuses = new TreeMap<>();
   private final Map<String, Long> reasons = new TreeMap<>();
   private final List<Map<String, Object>> executions = new ArrayList<>(),
       completions = new ArrayList<>();
@@ -53,6 +54,12 @@ public final class ExperimentMetrics {
     executions.add(e);
   }
 
+  public void terminal(String status, String reason) {
+    terminalStatuses.merge(status, 1L, Long::sum);
+    if (reason.startsWith("PEER_REJECTED:")) reason = "PEER_REJECTED";
+    terminalReasons.merge(reason, 1L, Long::sum);
+  }
+
   public void merge(String condition, long at, BigDecimal quantity, BigDecimal realized) {
     paired = paired.add(quantity.multiply(BigDecimal.valueOf(2)));
     Long first = firstFill.remove(condition);
@@ -66,7 +73,10 @@ public final class ExperimentMetrics {
   }
 
   public void equity(BigDecimal value, boolean fresh) {
-    if (!fresh) missingMarks++;
+    if (!fresh) {
+      missingMarks++;
+      return;
+    }
     peak = peak.max(value);
     drawdown = drawdown.max(peak.subtract(value));
   }
@@ -108,6 +118,8 @@ public final class ExperimentMetrics {
     r.put(
         "decisionToFillP95Ms",
         latencies.isEmpty() ? null : latencies.get((int) Math.ceil(latencies.size() * .95) - 1));
+    r.put("orderTerminalReasons", Map.copyOf(terminalReasons));
+    r.put("orderTerminalStatuses", Map.copyOf(terminalStatuses));
     r.put("decisions", decisions);
     r.put("decisionReasons", Map.copyOf(reasons));
     r.put("edgeDistribution", Map.copyOf(edgeBuckets));

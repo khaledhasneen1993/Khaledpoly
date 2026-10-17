@@ -9,6 +9,7 @@ from pathlib import Path
 from research.phase3.polybot_sdk.model import decode, dumps, integer
 from research.phase3.polybot_sdk.runtime import private_write
 from research.phase4.audit import audit_capture, DAY_MS
+from research.phase3.polybot_sdk.tapes import open_tape
 
 
 def journal_stats(path):
@@ -22,7 +23,7 @@ def journal_stats(path):
         raise ValueError('Empty or missing Polymarket journal')
     first, last, first_market, last_market, max_market_gap = None, None, None, None, 0
     entries, market_records = 0, 0
-    with path.open('rb') as stream:
+    with open_tape(path,'rb') as stream:
         while raw := stream.readline(8 * 1024 * 1024 + 1):
             if len(raw) > 8 * 1024 * 1024 or not raw.endswith(b'\n'):
                 raise ValueError('Unterminated/oversized Polymarket journal row')
@@ -56,7 +57,7 @@ def window_health(path, start, end):
     excluded = Counter()
     first = last = None
     largest = errors = outside_errors = 0
-    with Path(path).open('rb') as stream:
+    with open_tape(path,'rb') as stream:
         while raw := stream.readline(8*1024*1024+1):
             if len(raw)>8*1024*1024 or not raw.endswith(b'\n'):
                 raise ValueError('Invalid window audit row')

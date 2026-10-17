@@ -105,12 +105,43 @@ class WebSocketFreshnessTest {
   }
 
   @Test
-  void staleSourceInvalidatesTradableBook() {
+  void olderStaleSourceCannotInvalidateNewerTradableBook() {
     var clock = new MutableClock();
     var client = client(clock);
     ReflectionTestUtils.invokeMethod(client, "handleMessage", book(clock.millis(), "0.5"));
     ReflectionTestUtils.invokeMethod(client, "handleMessage", book(clock.millis() - 10000, "0.4"));
+    assertThat(client.getTopOfBook("123").orElseThrow().bestBid()).isEqualByComparingTo("0.5");
+  }
+
+  @Test
+  void delayedAdvancingDeltaInvalidatesOnlyItsNestedTokenAndMatchesRawReplay() throws Exception {
+    var clock=new MutableClock();
+    var client=client(clock);
+    var mapper=new ObjectMapper();
+    var normalizer=new com.polybot.hft.paper.RawTapeNormalizer(mapper);
+    var liveGaps=new java.util.ArrayList<com.fasterxml.jackson.databind.JsonNode>();
+    var replayGaps=new java.util.ArrayList<com.fasterxml.jackson.databind.JsonNode>();
+    client.onTape((kind,data)->{if(kind.equals("GAP"))liveGaps.add(data);});
+    long base=clock.millis();
+    String first=book(base,"0.4"), second=withAsset(book(base,"0.4"),"456");
+    for (String message : java.util.List.of(first,second)) {
+      ReflectionTestUtils.invokeMethod(client,"handleMessage",message);
+      normalizer.accept(message,base,(k,d)->{});
+    }
+    clock.now=clock.now.plusSeconds(3);
+    second=withAsset(book(clock.millis(),"0.4"),"456");
+    ReflectionTestUtils.invokeMethod(client,"handleMessage",second);
+    normalizer.accept(second,clock.millis(),(k,d)->{});
+    String delayed="{\"event_type\":\"price_change\",\"timestamp\":\""+(base+1)+"\",\"price_changes\":[{\"asset_id\":\"123\",\"side\":\"BUY\",\"price\":\"0.4\",\"size\":\"20\"}]}";
+    ReflectionTestUtils.invokeMethod(client,"handleMessage",delayed);
+    normalizer.accept(delayed,clock.millis(),(k,d)->{if(k.equals("GAP"))replayGaps.add(d);});
     assertThat(client.getTopOfBook("123")).isEmpty();
+    assertThat(client.getTopOfBook("456")).isPresent();
+    assertThat(liveGaps).hasSize(1);assertThat(replayGaps).hasSize(1);
+    assertThat(com.polybot.hft.paper.DataGap.tokens(liveGaps.getFirst())).containsExactly("123");
+    assertThat(com.polybot.hft.paper.DataGap.tokens(replayGaps.getFirst())).containsExactly("123");
+    ReflectionTestUtils.invokeMethod(client,"handleMessage",book(clock.millis(),"0.4"));
+    assertThat(client.getTopOfBook("123")).isPresent();
   }
 
   @Test
