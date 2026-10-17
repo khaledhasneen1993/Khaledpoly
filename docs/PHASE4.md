@@ -272,3 +272,14 @@ constant bounded workload). This covers the observed 89-market event
 without permitting an unbounded event, while still surfacing skipped
 rows if an even larger event appears. It does not certify market-group
 completeness, collateral conversion or settled oracle outcomes.
+
+
+## Change 15: Polymarket raw market silence audit
+
+The final gate now scans each recorded Polymarket CLOB journal with bounded
+memory, checks nonregressing receipt timestamps and detects silent gaps between
+actual `RAW_MARKET` events, including missing source observations at the
+start or end of the tape. A heartbeat or a clean `RUN_END` is **not** proof
+that market books were available during the intervening interval. A complete
+seven-day UTC clock range can still fail on a hidden source-data outage.
+This is synthetic-regression-testable now, before any seven-day capture.

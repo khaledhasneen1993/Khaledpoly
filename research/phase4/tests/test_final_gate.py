@@ -22,7 +22,13 @@ def clob_report(gaps=None):
             'normalizedEvents':{'BOOK':2}}
 
 def tape(path,start,end):
-    path.write_text(dumps({'arrivalMs':start})+'\n'+dumps({'arrivalMs':end})+'\n')
+    # Simulate bounded market observations throughout the full time span.
+    with path.open('w') as out:
+        cursor = start
+        while cursor < end:
+            out.write(dumps({'arrivalMs':cursor,'kind':'RAW_MARKET'})+'\n')
+            cursor += 300000
+        out.write(dumps({'arrivalMs':end,'kind':'RUN_END'})+'\n')
     return path
 
 class AcceptanceTest(unittest.TestCase):
@@ -65,6 +71,29 @@ class AcceptanceTest(unittest.TestCase):
             self.assertIn('POLYMARKET_SOURCE_GAPS_OR_ERRORS',result['issues'])
             self.assertIn('bybit-spot:SOURCE_ACCESS_BLOCKED',result['issues'])
             self.assertFalse(result['publicCaptureGatePassed'])
+
+    def test_hidden_silent_market_gap_is_rejected_even_when_tape_is_closed(self):
+        with tempfile.TemporaryDirectory() as d:
+            midnight=(START//DAY)*DAY
+            path=Path(d)/'events.jsonl'
+            path.write_text(
+                dumps({'arrivalMs':midnight,'kind':'RAW_MARKET'})+'\n'+
+                dumps({'arrivalMs':midnight+4*DAY,'kind':'RUN_END'})+'\n'+
+                dumps({'arrivalMs':midnight+8*DAY,'kind':'RAW_MARKET'})+'\n'
+            )
+            with patch('research.phase4.final_gate.audit_capture',
+                       return_value=cex(midnight,midnight+8*DAY)):
+                with patch('research.phase2.inspect_recording.inspect',return_value=clob_report()):
+                    result=final_gate.evaluate(['c'],[path],days=7)
+            self.assertIn('POLYMARKET_SILENT_MARKET_GAP',result['issues'])
+            self.assertFalse(result['publicCaptureGatePassed'])
+
+    def test_unterminated_raw_market_row_is_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            path=Path(d)/'events.jsonl'
+            path.write_text(dumps({'arrivalMs':START,'kind':'RAW_MARKET'}))
+            with self.assertRaisesRegex(ValueError,'Unterminated'):
+                final_gate.journal_stats(path)
 
     def test_reject_empty_and_truncated_journals(self):
         with tempfile.TemporaryDirectory() as d:

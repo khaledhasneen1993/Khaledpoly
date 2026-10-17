@@ -11,27 +11,48 @@ from research.phase3.polybot_sdk.runtime import private_write
 from research.phase4.audit import audit_capture, DAY_MS
 
 
-def tape_bounds(path):
+def journal_stats(path):
+    """Stream recorded CLOB tape; reject hidden gaps even when the ends match.
+
+    Uses constant memory, checks the *actual* source RAW_MARKET event arrival
+    clock, and does not equate heartbeat or RUN_END with market data freshness.
+    """
     path = Path(path)
     if not path.is_file() or path.stat().st_size < 2:
         raise ValueError('Empty or missing Polymarket journal')
+    first, last, first_market, last_market, max_market_gap = None, None, None, None, 0
+    entries, market_records = 0, 0
     with path.open('rb') as stream:
-        first = stream.readline(65537)
-        if not first.endswith(b'\n') or len(first) > 65536:
-            raise ValueError('Invalid first journal boundary')
-        stream.seek(max(0, path.stat().st_size - 65536))
-        lines = [line for line in stream.read().split(b'\n') if line]
-    if not lines:
-        raise ValueError('Missing last journal record')
-    last = lines[-1]
-    if len(last) > 65536:
-        raise ValueError('Unbounded last journal record')
-    a, b = decode(first), decode(last)
-    start, end = integer(a['arrivalMs']), integer(b['arrivalMs'])
-    if start <= 0 or end < start:
-        raise ValueError('Invalid Polymarket journal timestamps')
-    return start, end
+        while raw := stream.readline(8 * 1024 * 1024 + 1):
+            if len(raw) > 8 * 1024 * 1024 or not raw.endswith(b'\n'):
+                raise ValueError('Unterminated/oversized Polymarket journal row')
+            item = decode(raw)
+            stamp = integer(item['arrivalMs'])
+            if stamp <= 0 or (last is not None and stamp < last):
+                raise ValueError('Polymarket receive clock regressed or invalid')
+            if first is None:
+                first = stamp
+            last, entries = stamp, entries + 1
+            if item.get('kind') == 'RAW_MARKET':
+                if first_market is None:
+                    first_market = stamp
+                else:
+                    max_market_gap = max(max_market_gap, stamp - last_market)
+                last_market = stamp
+                market_records += 1
+    if first is None:
+        raise ValueError('Empty Polymarket journal')
+    if first_market is not None:
+        max_market_gap = max(max_market_gap, first_market - first,
+                             last - last_market)
+    return {'firstMs': first, 'lastMs': last, 'firstRawMarketMs': first_market,
+            'lastRawMarketMs': last_market, 'largestRawMarketGapMs': max_market_gap,
+            'rawMarketRecords': market_records, 'journalRows': entries}
 
+
+def tape_bounds(path):
+    stats = journal_stats(path)
+    return stats['firstMs'], stats['lastMs']
 
 def evaluate(cex_dirs, polymarket_tapes, days=7, max_gap_ms=300000):
     if type(days) is not int or not 1 <= days <= 365:
@@ -45,8 +66,11 @@ def evaluate(cex_dirs, polymarket_tapes, days=7, max_gap_ms=300000):
     for raw_path in polymarket_tapes:
         path = Path(raw_path).resolve()
         report = inspect(path)
-        first, last = tape_bounds(path)
+        tape_health = journal_stats(path)
+        first, last = tape_health['firstMs'], tape_health['lastMs']
         clob.append({'path': str(path), 'startMs': first, 'endMs': last,
+                     'rawMarketRecords': tape_health['rawMarketRecords'],
+                     'largestRawMarketGapMs': tape_health['largestRawMarketGapMs'],
                      'complete': report['recordingClosedCleanly'],
                      'gaps': report['gapReasons'], 'errors': report['errors'],
                      'format': report['frameAtomicity'],
@@ -61,6 +85,10 @@ def evaluate(cex_dirs, polymarket_tapes, days=7, max_gap_ms=300000):
             issues.append('POLYMARKET_SOURCE_GAPS_OR_ERRORS')
         if tape['format'] != 'recorded-frame-v1' or tape['rawFrames'] < 1 or tape['books'] < 1:
             issues.append('POLYMARKET_FRAME_DEPTH_EVIDENCE_MISSING')
+        if tape['rawMarketRecords'] < 1:
+            issues.append('POLYMARKET_NO_RAW_MARKET_RECORDS')
+        elif tape['largestRawMarketGapMs'] > max_gap_ms:
+            issues.append('POLYMARKET_SILENT_MARKET_GAP')
         if i:
             if tape['startMs'] < clob[i-1]['endMs']:
                 issues.append('POLYMARKET_OVERLAPPING_RUNS')
@@ -76,6 +104,8 @@ def evaluate(cex_dirs, polymarket_tapes, days=7, max_gap_ms=300000):
     return {'schema':1, 'scope':'PHASE4_INDEPENDENT_PUBLIC_CAPTURE_GATE',
             'cexSessions':cex['sessions'], 'polymarketTapes':len(clob),
             'commonFullUtcDays':full_overlap_days,
+            'largestClobRawMarketGapMs':max(
+                (t['largestRawMarketGapMs'] for t in clob), default=None),
             'requiredDays':days, 'issues':issues,
             'publicCaptureGatePassed':not issues,
             'marketUniverseAndSettlementEvidenceVerified':False,
