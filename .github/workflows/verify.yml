@@ -16,6 +16,7 @@ jobs:
       - run: mvn --batch-mode --no-transfer-progress verify
       - run: python3 -m unittest discover -s research/phase2/tests -v
       - run: python3 -m unittest discover -s research/phase3/tests -v
+      - run: python3 -m unittest discover -s research/phase4/tests -v
       - run: python3 -m research.phase3 inspect executor-service/target/phase3-snapshot.json --replay-clock
       - name: Verify installed Python research SDK
         run: |
