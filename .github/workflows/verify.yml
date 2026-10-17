@@ -19,6 +19,7 @@ jobs:
       - run: python3 -m unittest discover -s research/phase4/tests -v
       - run: python3 -m research.phase4.audit --help
       - run: python3 -m research.phase4.recorder --help
+      - run: python3 -m research.phase4.final_gate --help
       - name: Phase 4 sampled Polymarket event and book evidence (never qualification)
         if: github.event_name == 'push' && github.ref == 'refs/heads/phase4-data-reliability'
         timeout-minutes: 3

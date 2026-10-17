@@ -205,3 +205,25 @@ explicit protocol validation. A multi-market event is NOT assumed a complete
 negative-risk settlement universe. Neither tag/category nor one-shot
 snapshots prove canonical terminal payouts. All output remains \`NO_GO\`,
 independent of public endpoint reachability or green tests.
+
+
+## Change 10: independent CEX/CLOB joint acceptance gate
+
+The \`research.phase4.final_gate\` command re-inspects original sealed CEX
+segments and Polymarket raw/normalized CLOB journal tapes, requiring closed
+frame-atomic recordings, actual book observations, zero unexplained data
+gaps or feed errors, and **at least seven overlapping full UTC days**.
+Disjoint seven-day runs can never satisfy this shared gate.
+
+    python3 -m research.phase4.final_gate \
+      --cex research/output/CEX/segments/segment-* \
+      --polymarket research/data/paper/*/events.jsonl \
+      --days 7 --output research/output/phase4-final-gate.json
+
+The tool does not trust self-asserted success in \`latest-audit.json\`;
+it re-reads the underlying event tapes. Passing public data continuity,
+if achieved on an always-on host, remains **not** venue FIFO execution
+evidence, a verified complete negative-risk universe, independent resolution
+oracle truth, or strategy profitability. These separate acceptance
+requirements remain explicit, and neither LIVE nor a funded account is
+enabled.
