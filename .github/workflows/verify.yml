@@ -24,6 +24,7 @@ jobs:
       - run: python3 -m research.phase5.event_rules --help
       - run: python3 -m research.phase5.portfolio_risk --help
       - run: python3 -m research.phase5.cex_forward --help
+      - run: python3 -m research.phase5.walk_forward --help
       - run: python3 -m research.phase4.audit --help
       - run: python3 -m research.phase4.recorder --help
       - run: python3 -m research.phase4.final_gate --help

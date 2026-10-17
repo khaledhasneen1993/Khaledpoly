@@ -168,3 +168,25 @@ round-trip costs. Prints are not executable quotes and do not support
 claims about Polymarket fills, maker queue priority or net profits.
 Binance and Bybit labels never substitute for each other. The absence
 of seven-day prospective evidence still prevents strategy qualification.
+
+
+## Embargoed cross-strategy walk-forward folds
+
+\`research.phase5.walk_forward\` accepts a fixed list of
+\`trainBeforeMs\`, \`testStartMs\`, \`testEndMs\` windows. Every fold
+must have positive embargo, increasing nonoverlapping tests, and
+purging of all market/settlement-group linked observations crossing
+training/embargo/test boundaries **across strategy IDs**.
+
+    python3 -m research.phase5.walk_forward \
+      research/data/offline-trades.jsonl \
+      --folds research/data/frozen-fold-calendar.json \
+      --min-test-groups 30 --stress-multiplier 2 \
+      --output research/output/phase5-walk-forward.json
+
+Per strategy and fold the analyzer reports independently observed
+group counts and explicitly declared hypothetical net cost/PnL
+metrics. It will not select a winner based on one fold or declare
+profitability: the source, fold calendar and experiment parameters
+still require independent *prior* registration and real venue-label
+verification.
