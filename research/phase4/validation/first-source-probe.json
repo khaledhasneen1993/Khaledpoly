@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "scope": "PHASE4_ONE_TIME_REACHABILITY_EVIDENCE_NOT_QUALIFICATION",
+  "sourceCommit": "9f54e5c4ce2143bce9e92a039d93f98f7c1bebb3",
+  "workflowRun": 39024931161,
+  "workflowUrl": "https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39024931161",
+  "workflowArtifactId": 12098162398,
+  "observedAtMs": 1792232894051,
+  "sources": {
+    "binance-spot": {
+      "status": "SAMPLED_PUBLIC_TRADES",
+      "rows": 100
+    },
+    "bybit-spot": {
+      "status": "HTTP_BACKOFF",
+      "httpStatus": 403,
+      "blocked": true,
+      "rows": 0
+    },
+    "polymarket-clob-time": {
+      "status": "AVAILABLE"
+    },
+    "gamma-politics": {
+      "status": "AVAILABLE",
+      "eventsInBoundedPage": 3,
+      "partialUniverse": true
+    },
+    "gamma-sports": {
+      "status": "AVAILABLE",
+      "eventsInBoundedPage": 3,
+      "partialUniverse": true
+    }
+  },
+  "reachableSources": 4,
+  "expectedSources": 5,
+  "allSourcesReachable": false,
+  "coverage": "ONE_TIME_SAMPLE_ONLY",
+  "independentSevenFullUtcDays": false,
+  "venueFillEvidence": false,
+  "completeTradeTape": false,
+  "decision": "NO_GO",
+  "liveAllowed": false
+}

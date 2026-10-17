@@ -163,3 +163,23 @@ trade watermarks. The independent audit rejects missing/changed cross-segment
 retry states. This avoids hammering a blocked venue after every process
 restart. Source access remains an operational limitation, not proof of
 complete coverage.
+
+
+## First source probe — measured access, not strategy results
+
+A real GitHub Actions runner checked five publicly accessible source paths.
+[Workflow 39024931161](https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39024931161),
+artifact \`12098162398\`, commit \`9f54e5c4\`:
+
+- Binance spot: sampled 100 public trades in a single REST response.
+- Bybit spot: HTTP 403 (zero observations).
+- Polymarket CLOB time: available.
+- Gamma Politics: first bounded page available (three events).
+- Gamma Sports: first bounded page available (three events).
+
+The four reachable checks are **not** market coverage or venue fill evidence.
+A precise, auditable summary is checked in at
+\`research/phase4/validation/first-source-probe.json\`. The underlying
+GitHub run/artifact is the primary evidence; the checked-in file does not
+override it. Bybit access from the intended long-running host is still
+unverified; the CI runner returning 403 cannot be called a successful source.
