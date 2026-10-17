@@ -56,7 +56,7 @@ def validate_event(event, expected_id):
     # Very large sports events are common. Inspect bounded members; report
     # truncation explicitly rather than discarding the entire event or
     # silently pretending its full negative-risk universe was checked.
-    maximum = 64
+    maximum = 256
     seen_ids, seen_conditions, seen_outcomes = set(), set(), set()
     records, failures = [], []
     for i, row in enumerate(event['markets'][:maximum]):

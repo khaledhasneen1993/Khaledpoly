@@ -261,3 +261,14 @@ window before the first snapshot. The PAPER shadow loop now guarantees
 one attempted observation for every positive duration without extending
 the requested end time. No additional venue order logic, fill assumptions
 or LIVE permissions change. A micro-duration regression test guards it.
+
+
+## Change 14: bounded 256-market event identity envelope
+
+The second public evidence capture showed the sampled Sports event had
+89 distinct markets, with 64 identity-validated and 25 explicitly skipped.
+The bounded identity validation ceiling is now **256** (no more than a
+constant bounded workload). This covers the observed 89-market event
+without permitting an unbounded event, while still surfacing skipped
+rows if an even larger event appears. It does not certify market-group
+completeness, collateral conversion or settled oracle outcomes.

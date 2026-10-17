@@ -45,12 +45,12 @@ class MarketEvidenceTest(unittest.TestCase):
             e.validate_event(event,'11')
 
     def test_large_sports_event_bounded_without_false_completion(self):
-        rows=[market('v1','0x'+format(i,'064x'),str(i)) for i in range(1,84)]
+        rows=[market('v1','0x'+format(i,'064x'),str(i)) for i in range(1,284)]
         event={'id':'123','markets':rows,'negRisk':True}
         result=e.validate_event(event,'123')
-        self.assertEqual(result['totalMarketRows'],83)
-        self.assertEqual(result['inspectedMarketRows'],64)
-        self.assertEqual(result['uninspectedMarketRows'],19)
+        self.assertEqual(result['totalMarketRows'],283)
+        self.assertEqual(result['inspectedMarketRows'],256)
+        self.assertEqual(result['uninspectedMarketRows'],27)
         self.assertTrue(result['marketListTruncated'])
         self.assertFalse(result['negativeRiskUniverseComplete'])
 
