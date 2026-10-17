@@ -5,6 +5,7 @@
 <h1>Polybot · حساب PAPER</h1><p>أموال وعمليات افتراضية. أرقام المحاكاة لا تثبت ربحية التداول الحقيقي. المكافآت المفترضة = صفر.</p>
 <p><small>أعداد التعبئة والـ markout لجلسة التشغيل الحالية؛ أرصدة الحساب والربح المحقق متراكمة عبر الجلسات.</small></p>
 <label for="token">رمز الوصول إلى المنفّذ (إذا كان مفعّلاً)</label><input id="token" type="password" autocomplete="off" placeholder="X-Polybot-Token"><button id="start">بدء المتابعة</button> <button id="stop">إيقاف</button><p id="status" role="status">لم يتم الاتصال بعد.</p><div id="cards" class="cards"></div>
+<section><h2>الأسواق النشطة</h2><table><thead><tr><th>السوق</th><th>الوقت المتبقي ms</th><th>دفاتر حديثة</th><th>عمر الدفتر ms</th><th>اختلال المخزون</th></tr></thead><tbody id="markets"></tbody></table></section>
 <section><h2>المخزون والتكلفة</h2><table><thead><tr><th>الأصل</th><th>الكمية</th><th>التكلفة</th></tr></thead><tbody id="holdings"></tbody></table></section>
 <section><h2>الحجوزات المفتوحة</h2><table><thead><tr><th>الأمر</th><th>الجانب</th><th>السعر</th><th>المتبقّي</th><th>الحالة</th></tr></thead><tbody id="orders"></tbody></table></section>
 <section><h2>Markout بعد التنفيذ</h2><p>قيمة حركة السعر × الكمية عند أول دفتر صالح حول الأفق. القيم الغائبة تعني عدم وجود عينة صالحة.</p><table><thead><tr><th>الأفق</th><th>المجموع الافتراضي</th><th>العينات</th></tr></thead><tbody id="markouts"></tbody></table></section>
@@ -20,8 +21,10 @@ function card(title,value){const div=document.createElement('div');div.className
 async function refresh(){controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),5000);try{
  const headers={};if($('token').value)headers['X-Polybot-Token']=$('token').value;
  const [m,l]=await Promise.all(['/api/polymarket/paper-metrics','/api/polymarket/paper-ledger'].map(async path=>{const r=await fetch(path,{headers,signal:controller.signal,cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);return r.json()}));
- for(const id of ['cards','holdings','orders','markouts','reasons','pairs','fills','edges'])$(id).replaceChildren();
+ for(const id of ['cards','holdings','orders','markouts','reasons','pairs','fills','edges','markets'])$(id).replaceChildren();
  card('النقد',l.cash);card('النقد المتاح',m.availableCash);card('الربح المحقق بعد التكلفة',m.netRealizedPnl);card('الرسوم والتسوية',m.feesAndSettlementCosts);card('اكتمال الأزواج بالكمية',m.quantityPairCompletion==null?'—':(Number(m.quantityPairCompletion)*100).toFixed(2)+'%');card('فجوات البيانات',m.dataGaps);card('عدد التعبئات',m.fills);card('مخزون غير مغطّى عند الانتهاء',m.residualExpiryWorstCaseNotional);
+ card('أقصى تراجع للجلسة',m.maxDrawdown);card('نسبة الأوامر المعبّأة',m.orderFillRate==null?'—':(Number(m.orderFillRate)*100).toFixed(2)+'%');card('قرار ← تعبئة P50 ms',m.decisionToFillP50Ms);card('قرار ← تعبئة P95 ms',m.decisionToFillP95Ms);
+ (m.activeMarkets??[]).forEach(v=>row('markets',[v.condition,v.remainingMs,v.freshBooks?'نعم':'لا',v.oldestBookAgeMs,v.inventoryImbalance]));
  Object.entries(l.holdings).filter(([,h])=>Number(h.shares)>0).forEach(([token,h])=>row('holdings',[token,h.shares,h.basis]));
  Object.entries(l.orders).filter(([,o])=>Number(o.remaining)>0).forEach(([id,o])=>row('orders',[id,o.buy?'شراء':'بيع',o.price,o.remaining,o.status]));
  for(const h of [1000,5000,30000])row('markouts',[h/1000+' ثانية',m.markoutPnl?.[h]??'—',m.markoutSamples?.[h]??0]);

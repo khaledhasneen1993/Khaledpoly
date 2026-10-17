@@ -31,12 +31,25 @@ public final class PaperMatchingEngine {
   private final LinkedHashMap<String, Order> orders = new LinkedHashMap<>();
   private final Set<String> tradeIds = new HashSet<>(), orderIds = new HashSet<>();
   private final long latency, cancelLatency, maxAge;
+  private final LatencyProfile activationProfile, cancellationProfile;
   private final BigDecimal queueMultiplier;
   private long now = -1;
   private int gaps, duplicates;
 
   public PaperMatchingEngine(
       long latency, long cancelLatency, long maxAge, BigDecimal queueMultiplier) {
+    this(latency, cancelLatency, maxAge, queueMultiplier, 0, 0);
+  }
+
+  public PaperMatchingEngine(
+      long latency,
+      long cancelLatency,
+      long maxAge,
+      BigDecimal queueMultiplier,
+      long jitterMs,
+      long seed) {
+    activationProfile = new LatencyProfile(latency, jitterMs, seed);
+    cancellationProfile = new LatencyProfile(cancelLatency, jitterMs, seed);
     if (latency < 0
         || cancelLatency < 0
         || maxAge <= 0
@@ -146,12 +159,14 @@ public final class PaperMatchingEngine {
             || o.remaining.signum() <= 0
             || !orderIds.add(o.id))
           throw new IllegalArgumentException("Invalid or duplicate order");
-        o.activation = Math.addExact(at, latency);
+        o.activation = Math.addExact(at, activationProfile.delay("activate", o.id));
         orders.put(o.id, o);
       }
       case "CANCEL" -> {
         Order o = orders.get(required(n, "id"));
-        if (o != null) o.cancel = Math.min(o.cancel, Math.addExact(at, cancelLatency));
+        if (o != null)
+          o.cancel =
+              Math.min(o.cancel, Math.addExact(at, cancellationProfile.delay("cancel", o.id)));
       }
       case "TRADE" -> {
         String token = required(n, "token"),

@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - phase6-paper-integration
+      - paper-quality-upgrade
   workflow_dispatch:
 
 permissions:
@@ -52,6 +53,9 @@ jobs:
           python3 -m research.phase5.walk_forward --help
           python3 -m research.phase6.paper_screen_bridge --help
           python3 -m research.phase6.virtual_paper_bridge --help
+          python3 -m research.phase5.portfolio_admission --help
+          python3 -m research.phase6.minimal_runtime --help
+          bash -n scripts/run-paper-minimal.sh
       - name: Public Polymarket and CEX read-only smoke (NOT qualification)
         timeout-minutes: 4
         run: python3 research/phase3/public_smoke.py

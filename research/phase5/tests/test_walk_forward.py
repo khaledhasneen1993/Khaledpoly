@@ -54,5 +54,15 @@ class WalkForwardTest(unittest.TestCase):
         self.assertFalse(r['prospectiveHoldoutObserved'])
         self.assertEqual(r['decision'],'NO_GO')
 
+    def test_many_linked_markets_count_as_one_independent_component(self):
+        from research.phase5.offline_benchmark import evaluate
+        rows=[trade(str(i),'market-'+str(i),'shared-group',START+4000) for i in range(30)]
+        r=evaluate_folds(rows,FOLDS,min_test_groups=30)['folds'][0]['strategies']['one']
+        self.assertEqual(r['outOfSampleMarketGroups'],1)
+        self.assertFalse(r['sufficientHeldoutGroups'])
+        r=evaluate(rows,START+3000)['strategyResults']['one']
+        self.assertEqual(r['heldoutMarketGroups'],1)
+        self.assertFalse(r['minimumHeldoutGroupsMet'])
+
 if __name__=='__main__':
     unittest.main()

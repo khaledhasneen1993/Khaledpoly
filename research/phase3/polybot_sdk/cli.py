@@ -49,6 +49,7 @@ def main():
     public.add_argument('--output', required=True)
     learning = commands.add_parser('train-model')
     learning.add_argument('labels')
+    learning.add_argument('--feature-schema',choices=('v1','v2'),default='v1')
     learning.add_argument('--target', choices=('fill', 'second_leg', 'adverse_selection'), default='fill')
     learning.add_argument('--holdout-start', required=True, help='Timezone-aware ISO timestamp, fixed before collecting holdout')
     learning.add_argument('--output', required=True)
@@ -109,7 +110,7 @@ def main():
         if cutoff.tzinfo is None:
             raise ValueError('Holdout boundary requires a timezone')
         with open(args.labels) as stream:
-            result = train((decode(row) for row in stream if row.strip()), int(cutoff.timestamp() * 1000), args.target)
+            result = train((decode(row) for row in stream if row.strip()), int(cutoff.timestamp() * 1000), args.target, feature_schema=args.feature_schema)
         private_write(args.output, result)
     elif args.command == 'portfolio-risk':
         from .portfolio import historical_risk

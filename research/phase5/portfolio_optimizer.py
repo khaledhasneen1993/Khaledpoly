@@ -14,7 +14,7 @@ MAX_SCENARIOS=128
 
 def optimize(candidates, *, buying_power_usd, group_cap_usd,
              maximum_joint_loss_usd, max_positions=4,
-             existing_group_exposure=None):
+             existing_group_exposure=None, existing_scenario_pnl=None):
     if (not isinstance(candidates,list) or not 1<=len(candidates)<=MAX_CANDIDATES
             or type(max_positions) is not int or not 1<=max_positions<=MAX_CANDIDATES):
         raise ValueError('Bounded hypothesis universe required')
@@ -75,7 +75,11 @@ def optimize(candidates, *, buying_power_usd, group_cap_usd,
     best_ids=()
     best_loss=Decimal(0)
     best_cash=Decimal(0)
-    initial_cases=tuple(Decimal(0) for _ in scenario_ids)
+    if existing_scenario_pnl is not None and set(existing_scenario_pnl)!=set(scenario_ids):
+        raise ValueError('Existing portfolio needs the same joint scenarios')
+    initial_cases=tuple(number(existing_scenario_pnl[sid]) if existing_scenario_pnl is not None else Decimal(0) for sid in scenario_ids)
+    if max(Decimal(0),-min(initial_cases))>risk_cap:
+        raise ValueError('Existing portfolio already exceeds joint risk cap')
 
     def search(index,chosen,forecast,total_cost,groups,realized):
         nonlocal explored,best_ids,best_value,best_loss,best_cash
@@ -102,6 +106,7 @@ def optimize(candidates, *, buying_power_usd, group_cap_usd,
         updated=tuple(value+item['cases'][sid] for value,sid in zip(realized,scenario_ids))
         search(index+1,chosen+[item['id']],forecast+item['expected'],
                total_cost+item['cost'],next_groups,updated)
+    best_loss=max(Decimal(0),-min(initial_cases))
     search(0,[],Decimal(0),Decimal(0),dict(group_basis),initial_cases)
     return {'schema':1,'scope':'PAPER_SCENARIO_EXACT_SMALL_PORTFOLIO_OPTIMIZER',
             'candidateCount':len(order),'evaluatedLeafSubsets':explored,

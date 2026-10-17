@@ -7,6 +7,7 @@ import java.util.*;
 public final class ExperimentMetrics {
   private record Intent(long at, String condition, BigDecimal edge, String purpose) {}
 
+  private final Set<String> filledOrders = new HashSet<>();
   private final Map<String, Intent> intents = new HashMap<>();
   private final Map<String, Long> firstFill = new HashMap<>();
   private final Map<String, Long> reasons = new TreeMap<>();
@@ -33,6 +34,7 @@ public final class ExperimentMetrics {
 
   public void fill(PaperMatchingEngine.Fill f, BigDecimal fee, String liquidity) {
     Intent i = intents.get(f.id());
+    if (i != null) filledOrders.add(f.id());
     if (f.buy()) bought = bought.add(f.size());
     if (i != null) firstFill.putIfAbsent(i.condition, f.at());
     var e = new LinkedHashMap<String, Object>();
@@ -85,6 +87,27 @@ public final class ExperimentMetrics {
 
   public Map<String, Object> report() {
     var r = new LinkedHashMap<String, Object>();
+    r.put("submittedOrders", intents.size());
+    r.put("filledOrders", filledOrders.size());
+    r.put(
+        "orderFillRate",
+        intents.isEmpty()
+            ? null
+            : BigDecimal.valueOf(filledOrders.size())
+                .divide(BigDecimal.valueOf(intents.size()), 8, RoundingMode.DOWN));
+    var latencies =
+        executions.stream()
+            .map(e -> e.get("decisionToFillMs"))
+            .filter(Objects::nonNull)
+            .map(v -> ((Number) v).longValue())
+            .sorted()
+            .toList();
+    r.put(
+        "decisionToFillP50Ms",
+        latencies.isEmpty() ? null : latencies.get((int) Math.ceil(latencies.size() * .50) - 1));
+    r.put(
+        "decisionToFillP95Ms",
+        latencies.isEmpty() ? null : latencies.get((int) Math.ceil(latencies.size() * .95) - 1));
     r.put("decisions", decisions);
     r.put("decisionReasons", Map.copyOf(reasons));
     r.put("edgeDistribution", Map.copyOf(edgeBuckets));

@@ -66,12 +66,19 @@ def candidates(snapshot, features, strategy, fill_model=None):
                 probabilities = []
                 for item in legs:
                     book = snapshot['books'][item['token']]
-                    holding = snapshot['account']['holdings'].get(item['token'], {})
+                    first = number(snapshot['account']['holdings'].get(market['first'],{}).get('shares',0))
+                    second = number(snapshot['account']['holdings'].get(market['second'],{}).get('shares',0))
+                    bid_depth=number(book['bids'][0]['size']); ask_depth=number(book['asks'][0]['size'])
+                    displayed=next((number(level['size']) for level in book['bids'] if number(level['price'])==number(item['price'])),D(0))
                     values = {'spread': number(book['asks'][0]['price']) - number(book['bids'][0]['price']),
-                              'queue_ahead': number(book['bids'][0]['size']),
-                              'inventory_imbalance': min(D(1), number(holding.get('shares', 0)) / 100),
+                              'queue_ahead': displayed*number(snapshot.get('matchingAssumptions',{}).get('queueMultiplier',2)),
+                              'inventory_imbalance': (first-second)/max(D(1),first+second),
                               'source_age_ms': now - int(book['sourceMs']), 'seconds_to_expiry': remaining,
                               'volatility': vol}
+                    if fill_model.get('featureSchema','v1')=='v2':
+                        values.update(order_size=number(item['size']),
+                            order_depth_ratio=number(item['size'])/max(D('.000000001'),bid_depth),
+                            book_imbalance=(bid_depth-ask_depth)/(bid_depth+ask_depth))
                     probabilities.append(predict(fill_model, values)['probability'])
                 probability = min(probabilities) if all(p is not None for p in probabilities) else None
             if edge >= threshold:

@@ -105,5 +105,20 @@ class AcceptanceTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 final_gate.tape_bounds(f)
 
+    def test_warmup_gap_outside_common_window_does_not_mask_in_window_gap(self):
+        with tempfile.TemporaryDirectory() as d:
+            midnight=(START//DAY)*DAY
+            path=tape(Path(d)/'events.jsonl',midnight-1000,midnight+7*DAY)
+            original=path.read_text().splitlines()
+            gap=dumps({'arrivalMs':midnight-999,'kind':'RESEARCH_GAP','data':{'reason':'reconnect'}})
+            original.insert(1,gap); path.write_text('\n'.join(original)+'\n')
+            with patch('research.phase4.final_gate.audit_capture',return_value=cex(midnight,midnight+7*DAY)):
+                with patch('research.phase2.inspect_recording.inspect',return_value=clob_report({'reconnect':1})):
+                    self.assertTrue(final_gate.evaluate(['c'],[path])['publicCaptureGatePassed'])
+                original.insert(2,dumps({'arrivalMs':midnight+10,'kind':'RESEARCH_GAP','data':{'reason':'reconnect'}}))
+                path.write_text('\n'.join(original)+'\n')
+                with patch('research.phase2.inspect_recording.inspect',return_value=clob_report({'reconnect':2})):
+                    self.assertFalse(final_gate.evaluate(['c'],[path])['publicCaptureGatePassed'])
+
 if __name__=='__main__':
     unittest.main()

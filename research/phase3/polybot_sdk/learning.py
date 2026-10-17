@@ -8,6 +8,15 @@ FEATURES = ('spread', 'queue_ahead', 'inventory_imbalance', 'source_age_ms', 'se
 DOMAINS = ((0, 1), (0, 1e12), (-1, 1), (0, 86400000), (0, 315360000), (0, 1))
 TARGETS = ('fill', 'second_leg', 'adverse_selection')
 
+FEATURES_V2 = FEATURES + ('order_size', 'order_depth_ratio', 'book_imbalance')
+DOMAINS_V2 = DOMAINS + ((0,1e12),(0,1e12),(-1,1))
+
+
+def feature_spec(schema):
+    if schema == 'v1': return FEATURES, DOMAINS
+    if schema == 'v2': return FEATURES_V2, DOMAINS_V2
+    raise ValueError('Unsupported feature schema')
+
 
 @dataclass(frozen=True)
 class Example:
@@ -22,16 +31,17 @@ class Example:
     group: object
 
 
-def vector(values):
-    if set(values) != set(FEATURES):
+def vector(values, feature_schema="v1"):
+    names, domains = feature_spec(feature_schema)
+    if set(values) != set(names):
         raise ValueError('Unknown/missing model feature')
-    result = tuple(float(values[key]) for key in FEATURES)
-    if any(not math.isfinite(v) or not low <= v <= high for v, (low, high) in zip(result, DOMAINS)):
+    result = tuple(float(values[key]) for key in names)
+    if any(not math.isfinite(v) or not low <= v <= high for v, (low, high) in zip(result, domains)):
         raise ValueError('Model feature outside its domain')
     return result
 
 
-def example(row, target='fill', horizon_ms=5000):
+def example(row, target='fill', horizon_ms=5000, feature_schema='v1'):
     if target not in TARGETS or not 1 <= horizon_ms <= 600000:
         raise ValueError('Unknown target or horizon')
     for key in ('orderId', 'marketId'):
@@ -52,7 +62,7 @@ def example(row, target='fill', horizon_ms=5000):
     group = row.get('groupId')
     if group is not None and (not isinstance(group, str) or not group.strip()):
         raise ValueError('Invalid intent group identity')
-    x = vector(row['features'])
+    x = vector(row['featuresV2'] if feature_schema == 'v2' else row['features'], feature_schema)
     if target == 'adverse_selection':
         markout = row.get('markout')
         at = row.get('markoutObservedMs')
@@ -78,7 +88,8 @@ def sigmoid(value):
     return 1 / (1 + math.exp(-max(-40, min(40, value))))
 
 
-def train(rows, holdout_start_ms, target='fill', horizon_ms=5000, min_train=1000, min_holdout=200, min_class=20):
+def train(rows, holdout_start_ms, target='fill', horizon_ms=5000, min_train=1000, min_holdout=200, min_class=20, feature_schema='v1'):
+    names, _ = feature_spec(feature_schema)
     if min(min_train, min_holdout, min_class) < 1:
         raise ValueError('Minimum evidence counts must be positive')
     raw, examples, seen = [], [], set()
@@ -90,7 +101,7 @@ def train(rows, holdout_start_ms, target='fill', horizon_ms=5000, min_train=1000
         if identity in seen:
             raise ValueError('Duplicate order label')
         seen.add(identity)
-        e = example(row, target, horizon_ms)
+        e = example(row, target, horizon_ms, feature_schema)
         if e is not None:
             examples.append(e)
     parents, linked = {}, {}
@@ -120,7 +131,7 @@ def train(rows, holdout_start_ms, target='fill', horizon_ms=5000, min_train=1000
         else:
             purged += len(group)
     result = {'status': 'INSUFFICIENT_EVIDENCE', 'target': target, 'horizonMs': horizon_ms,
-              'features': list(FEATURES), 'trainingRows': len(training), 'holdoutRows': len(holdout),
+              'featureSchema':feature_schema, 'features': list(names), 'trainingRows': len(training), 'holdoutRows': len(holdout),
               'purgedRows': purged, 'censoredRows': len(raw) - len(examples),
               'datasetSha256': hashlib.sha256(dumps(raw).encode()).hexdigest(),
               'holdoutStartMs': cut, 'model': None, 'modelQualified': False, 'preRegistrationVerified': False,
@@ -129,16 +140,16 @@ def train(rows, holdout_start_ms, target='fill', horizon_ms=5000, min_train=1000
     if (len(training) < min_train or len(holdout) < min_holdout or not classes_ok(training)
             or not classes_ok(holdout) or len({e.provenance for e in examples}) != 1):
         return result
-    means = [sum(e.features[j] for e in training) / len(training) for j in range(len(FEATURES))]
-    scales = [(sum((e.features[j] - means[j]) ** 2 for e in training) / len(training)) ** .5 or 1 for j in range(len(FEATURES))]
+    means = [sum(e.features[j] for e in training) / len(training) for j in range(len(names))]
+    scales = [(sum((e.features[j] - means[j]) ** 2 for e in training) / len(training)) ** .5 or 1 for j in range(len(names))]
     standardize = lambda x: [max(-10, min(10, (v - m) / s)) for v, m, s in zip(x, means, scales)]
-    xs, weights, bias = [standardize(e.features) for e in training], [0.] * len(FEATURES), 0.
+    xs, weights, bias = [standardize(e.features) for e in training], [0.] * len(names), 0.
     for _ in range(150):
-        gradients, intercept = [0.] * len(FEATURES), 0.
+        gradients, intercept = [0.] * len(names), 0.
         for x, e in zip(xs, training):
             error = sigmoid(bias + sum(w * v for w, v in zip(weights, x))) - e.label
             intercept += error
-            for j in range(len(FEATURES)):
+            for j in range(len(names)):
                 gradients[j] += error * x[j]
         bias -= .05 * intercept / len(training)
         weights = [w - .05 * (g / len(training) + .001 * w) for w, g in zip(weights, gradients)]
@@ -161,10 +172,12 @@ def train(rows, holdout_start_ms, target='fill', horizon_ms=5000, min_train=1000
 def predict(artifact, values):
     if artifact.get('status') != 'RESEARCH_MODEL_UNQUALIFIED' or not artifact.get('model'):
         return {'probability': None, 'qualified': False, 'executionEnabled': False}
-    if artifact.get('features') != list(FEATURES) or artifact.get('modelQualified') is not False:
+    schema=artifact.get('featureSchema','v1')
+    names,_=feature_spec(schema)
+    if artifact.get('features') != list(names) or artifact.get('modelQualified') is not False:
         raise ValueError('Unsupported model contract')
-    model, x = artifact['model'], vector(values)
-    if any(len(model[k]) != len(FEATURES) for k in ('weights', 'means', 'scales')):
+    model, x = artifact['model'], vector(values,schema)
+    if any(len(model[k]) != len(names) for k in ('weights', 'means', 'scales')):
         raise ValueError('Model dimension mismatch')
     all_values = [float(model['bias'])] + [float(v) for k in ('weights', 'means', 'scales') for v in model[k]]
     if any(not math.isfinite(v) for v in all_values) or any(float(s) <= 0 for s in model['scales']):

@@ -69,6 +69,20 @@ def normalized_trades(records):
     return rows, next(iter(provenance))
 
 
+def market_components(rows):
+    """Shared identity for all transitively linked markets and intent groups."""
+    parent = {}
+    def root(key):
+        parent.setdefault(key,key)
+        while parent[key] != key:
+            parent[key] = parent[parent[key]]
+            key = parent[key]
+        return key
+    for row in rows:
+        parent[root('market:'+row['marketId'])] = root('group:'+row['groupId'])
+    return {row['marketId']:root('market:'+row['marketId']) for row in rows}
+
+
 def split_by_purged_market_group(rows, holdout_ms):
     """Remove every linked market/group component that straddles the cutoff."""
     parent = {}
@@ -131,16 +145,18 @@ def evaluate(records, holdout_start_ms, stress_multiplier=2, minimum_heldout_gro
     strategies = sorted(set(r['strategyId'] for r in rows))
     by_strategy = {}
     group_sets = []
+    components = market_components(rows)
     for strategy in strategies:
         training = [r for r in train if r['strategyId'] == strategy]
         test = [r for r in heldout if r['strategyId'] == strategy]
         distinct_groups = set((r['marketId'], r['groupId']) for r in test)
         group_sets.append(distinct_groups)
+        independent_groups = {components[r['marketId']] for r in test}
         by_strategy[strategy] = {
             'training': summarize(training, factor),
             'heldout': summarize(test, factor),
-            'heldoutMarketGroups':len(distinct_groups),
-            'minimumHeldoutGroupsMet':len(distinct_groups) >= minimum_heldout_groups,
+            'heldoutMarketGroups':len(independent_groups),
+            'minimumHeldoutGroupsMet':len(independent_groups) >= minimum_heldout_groups,
             'qualified':False}
     return {'schema':1, 'scope':'OFFLINE_PHASE5_PURGED_STRATEGY_ACCOUNTING',
             'holdoutStartMs':cut, 'stressMultiplier':str(factor),

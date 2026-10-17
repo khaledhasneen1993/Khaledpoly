@@ -87,5 +87,16 @@ class PaperEventAdapterTest(unittest.TestCase):
         self.assertEqual(output['status'],'ABSTAIN')
         self.assertFalse(output['paperOrdersEnabled'])
 
+    def test_quote_edge_is_recomputed_at_actual_passive_price(self):
+        obs=snapshot(); obs['books']['a']['bids'][0]['price']='.84'; obs['books']['a']['asks'][0]['price']='.90'
+        r=event_proposal(obs,event(),at_ms=BASE)
+        self.assertEqual(r['status'],'ABSTAIN')
+        obs=snapshot(); r=event_proposal(obs,event(),at_ms=BASE)
+        from decimal import Decimal
+        p=r['envelope']['proposals'][0]; price=Decimal(p['legs'][0]['price'])
+        self.assertEqual(Decimal(p['edge']),Decimal('.80')-price-price*Decimal('.002')-Decimal('.02'))
+        obs['markets'][0]['negativeRisk']=True
+        self.assertIn('NEGATIVE_RISK',event_proposal(obs,event(),at_ms=BASE)['reason'])
+
 if __name__=='__main__':
     unittest.main()

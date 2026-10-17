@@ -29,6 +29,17 @@ public final class PairPolicy {
     return base.add(latency).add(expiry).add(thin).add(inventory);
   }
 
+  /** Shorten maker wait near expiry or with high observed price movement; preserve loss caps. */
+  public static long secondLegWaitMs(long remainingMs, long unhedgedMs, BigDecimal volatility) {
+    if (unhedgedMs <= 0 || volatility.signum() < 0)
+      throw new IllegalArgumentException("Invalid second-leg inputs");
+    long budget = Math.max(0, Math.min(5000, Math.min(unhedgedMs / 2, remainingMs / 4)));
+    return BigDecimal.valueOf(budget)
+        .divide(
+            BigDecimal.ONE.add(volatility.multiply(new BigDecimal("100"))), 0, RoundingMode.DOWN)
+        .longValueExact();
+  }
+
   public record HedgeChoice(String action, BigDecimal completeValue, BigDecimal sellValue) {}
 
   public static HedgeChoice hedge(
