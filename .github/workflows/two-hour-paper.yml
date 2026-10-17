@@ -1,0 +1,48 @@
+name: Two-hour PAPER experiment
+
+on:
+  push:
+    branches: [paper-two-hour-experiment]
+    paths:
+      - '.github/workflows/two-hour-paper.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: khaledpoly-two-hour-paper
+  cancel-in-progress: false
+
+jobs:
+  experiment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 140
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Build tested PAPER source once
+        run: mvn --batch-mode --no-transfer-progress -DskipTests package
+      - name: Check bounded experiment supervisor
+        run: python3 -m unittest research.phase6.tests.test_timed_paper -v
+      - name: Run one two-hour virtual PAPER experiment
+        timeout-minutes: 124
+        run: python3 -u -m research.phase6.timed_paper --seconds 7200 --output research/output/two-hour
+      - name: Package experiment evidence even on failure
+        if: always()
+        run: |
+          if [ -d research/output/two-hour ]; then
+            tar -czf "$RUNNER_TEMP/two-hour-paper-evidence.tar.gz" -C research/output two-hour
+          fi
+      - name: Save experiment evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-hour-paper-${{ github.run_id }}
+          path: ${{ runner.temp }}/two-hour-paper-evidence.tar.gz
+          retention-days: 3
+          if-no-files-found: warn
