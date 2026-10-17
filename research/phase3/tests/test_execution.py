@@ -127,6 +127,20 @@ class ExecutionAndLabelsTest(unittest.TestCase):
             labels = [decode(line) for line in (censored / 'labels.jsonl').read_text().splitlines()]
             self.assertNotIn('markout', next(row for row in labels if row['orderId'] == identity))
 
+    def test_independent_jvm_action_audits_ignore_key_order_but_preserve_values(self):
+        from research.phase3.public_smoke import compare_action_audits
+        with tempfile.TemporaryDirectory() as directory:
+            left, right = Path(directory) / 'left.jsonl', Path(directory) / 'right.jsonl'
+            left.write_text('{"kind":"ORDER","data":{"id":"one","quantity":5}}\n')
+            right.write_text('{"data":{"quantity":5,"id":"one"},"kind":"ORDER"}\n')
+            compare_action_audits(left, right)
+            right.write_text('{"data":{"quantity":6,"id":"one"},"kind":"ORDER"}\n')
+            with self.assertRaises(ValueError):
+                compare_action_audits(left, right)
+            right.write_text('')
+            with self.assertRaises(ValueError):
+                compare_action_audits(left, right)
+
     def test_label_builder_refuses_incomplete_recording(self):
         with tempfile.TemporaryDirectory() as directory:
             tape = Path(directory) / 'tape.jsonl'

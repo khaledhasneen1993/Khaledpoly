@@ -14,6 +14,16 @@ from research.phase3.polybot_sdk.model import dumps, decode
 from research.phase3.polybot_sdk.runtime import private_write, shadow_run, replay_shadow
 
 
+def compare_action_audits(first, second):
+    # JSON object property order is unspecified across independently started JVMs.
+    # Compare every action/value in receive order, while retaining bounded streaming reads.
+    from itertools import zip_longest
+    with Path(first).open() as left, Path(second).open() as right:
+        for first_row, second_row in zip_longest(left, right):
+            if first_row is None or second_row is None or decode(first_row) != decode(second_row):
+                raise ValueError('External PAPER action audit mismatch')
+
+
 def main():
     execution_mode = '--execute-paper' in sys.argv[1:]
     output = ROOT / ('research/output/phase3-public-execution' if execution_mode else 'research/output/phase3-public')
@@ -106,8 +116,8 @@ def main():
             raw = {k: v for k, v in reports['raw'].items() if k != 'inputFormat'}
             if normalized != raw:
                 raise ValueError('External PAPER raw/normalized report mismatch')
-            if (output / 'execution-replay-normalized/audit.jsonl').read_bytes() != (output / 'execution-replay-raw/audit.jsonl').read_bytes():
-                raise ValueError('External PAPER action audit mismatch')
+            compare_action_audits(output / 'execution-replay-normalized/audit.jsonl',
+                                  output / 'execution-replay-raw/audit.jsonl')
             result['executionReplayParity'] = 'MATCH_REPORT_AND_ACTION_AUDIT'
             result['executionReplay'] = {k: reports['normalized'][k] for k in
                                         ('cash', 'netRealizedPnl', 'dataGaps', 'decision', 'recordingClosedCleanly')}
