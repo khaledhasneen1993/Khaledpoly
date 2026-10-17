@@ -17,6 +17,11 @@ jobs:
       - run: python3 -m unittest discover -s research/phase2/tests -v
       - run: python3 -m unittest discover -s research/phase3/tests -v
       - run: python3 -m research.phase3 inspect executor-service/target/phase3-snapshot.json --replay-clock
+      - name: Verify installed Python research SDK
+        run: |
+          python3 -m venv "$RUNNER_TEMP/phase3-sdk"
+          "$RUNNER_TEMP/phase3-sdk/bin/pip" install --disable-pip-version-check --no-deps ./research/phase3
+          "$RUNNER_TEMP/phase3-sdk/bin/polybot-research" inspect executor-service/target/phase3-snapshot.json --replay-clock
       - name: Phase 3 public PAPER and CEX integration smoke
         if: github.event_name == 'push' && github.ref == 'refs/heads/phase3-research-foundation'
         timeout-minutes: 4

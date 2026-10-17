@@ -25,5 +25,12 @@
   "liveAllowed": false,
   "qualification": "NO_GO_MISSING_MARKET_EVIDENCE_AND_EXECUTION_ADAPTER_QUALIFICATION",
   "proposalScreen": "PASS_AUTH_DURABILITY_IDEMPOTENCY_ATOMIC_BUDGET_NO_EXECUTION",
-  "currentClobParameters": "V2_PUBLIC_MARKET_INFO_STRICT_PARSE_TESTED"
+  "currentClobParameters": "V2_PUBLIC_MARKET_INFO_STRICT_PARSE_TESTED",
+  "sdkPackage": {
+    "version": "0.2.0",
+    "wheelBuild": "PASS",
+    "installedContract": "PASS",
+    "sourceModules": 16,
+    "compiledCachesPackaged": false
+  }
 }

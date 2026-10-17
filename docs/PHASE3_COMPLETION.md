@@ -69,7 +69,8 @@ python3 -m research.phase3 basket research/output/basket-scenario.json --output 
 
 The sample holdout timestamp above is an example, not a registered experiment. Use a prospectively
 frozen cutoff and untouched evaluation dataset. The trainer does not certify preregistration.
-A source-installable wheel has no runtime dependencies beyond Python 3.10+.
+SDK version 0.2.0 is source-installable and has no runtime dependencies beyond Python 3.10+.
+The wheel excludes compiled caches; CI also installs it in an isolated environment and runs the HTTP snapshot contract through its console entry point.
 
 For event research, use `--strategy event-probability --features your-append-only-features.jsonl`.
 Provide `forecast/CONDITION/first_outcome_probability` and `forecast/CONDITION/resolution_risk` rows
