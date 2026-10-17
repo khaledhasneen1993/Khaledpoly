@@ -190,3 +190,16 @@ metrics. It will not select a winner based on one fold or declare
 profitability: the source, fold calendar and experiment parameters
 still require independent *prior* registration and real venue-label
 verification.
+
+
+## Phase 5 actual public PAPER integration smoke
+
+On phase-five branch pushes, CI now reuses the Phase-3 public PAPER
+capture (which includes a sealed phase-four-compatible
+\`signals/public.jsonl\`) and runs both Phase-5 CEX signal and forward
+price-label research on that **actual retrieved, time-stamped exchange
+sample**, not only mocked unit tests. The results are uploaded as
+\`phase5-public-spot-research\`; short and/or access-blocked samples
+must remain \`NO_GO\`. Missing Bybit data is not filled using Binance.
+This is **not** the prospective seven-day gate, and public prints are
+not genuine maker fills.
