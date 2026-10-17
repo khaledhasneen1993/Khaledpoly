@@ -19,7 +19,9 @@ class MakerQuotePolicyTest {
   }
 
   @Test void oldJsonRetainsLegacyPricingAndExplicitCandidateSurvivesStressAndRoundTrip() throws Exception {
-    assertThat(config(null)).isEqualTo(ResearchConfig.defaults());
+    // Compare both forms through the same JSON transport; BigDecimal record equality includes scale.
+    assertThat(config(null)).isEqualTo(config(1));
+    assertThat(config(null).makerImprovementTicks()).isEqualTo(ResearchConfig.defaults().makerImprovementTicks());
     var candidate = config(0);
     assertThat(candidate.stress().makerImprovementTicks()).isZero();
     assertThat(h.mapper.readValue(h.mapper.writeValueAsString(candidate), ResearchConfig.class)).isEqualTo(candidate);
