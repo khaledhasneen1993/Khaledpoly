@@ -46,3 +46,31 @@ signals, events, Sports, Politics and multi-outcome experiments.
 **External acceptance still deferred:** a stable seven-day host, consistent
 Polymarket/CEX book data, independent terminal settlement, real queue/fill
 labels, and prospective pre-registered holdout. Deferred is not passed.
+
+
+## Source-isolated Binance / Bybit signal ablations
+
+\`research.phase5.cex_signals\` replays **sealed** phase-four public.jsonl
+collector tapes and rejects changed SHA-256 files and mixed venue symbols.
+Per venue and symbol it independently computes two causal diagnostics:
+
+- Price momentum in basis points over a fixed recent trade count.
+- Signed aggressive buy/sell volume imbalance **only when the venue's
+  raw trade response actually reports aggressor direction**. Binance
+  aggregate-trade \`m\` (buyer-is-maker) and Bybit spot \`side\` are
+  parsed under their separate documented identities.
+
+No implied candles, fabricated volume, forced cross-venue arbitrage or
+invented trade outcomes. Duplicate venue trade IDs cannot refresh the
+window. HTTP 403, disconnections, excessive source age, missing side
+or missing observations produce explicit abstentions. CEX price direction
+does not directly predict an unrelated Polymarket market resolution.
+
+    python3 -m research.phase5.cex_signals \
+      research/output/phase4-btc/segments/segment-000001/public.jsonl \
+      --lookback 5 --max-age-ms 2000 \
+      --output research/output/cex-signal-research.json
+
+Only per-venue signal/abstention counts are produced. Without paired
+future labels, a pre-registered holdout and genuine fills, no profitable
+strategy or edge is claimed.
