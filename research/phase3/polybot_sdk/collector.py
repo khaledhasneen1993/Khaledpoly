@@ -102,6 +102,15 @@ class TradeWatermark:
         return result
 
 
+def normalize_poll_state(state):
+    if not isinstance(state, dict) or set(state) != {'notBeforeMs', 'failures'}:
+        raise ValueError('Invalid HTTP source retry checkpoint')
+    not_before, failures = integer(state['notBeforeMs']), integer(state['failures'])
+    if not 0 <= not_before <= 9999999999999999 or not 0 <= failures <= 1000000:
+        raise ValueError('Invalid HTTP source retry values')
+    return {'notBeforeMs': not_before, 'failures': failures}
+
+
 class PublicCollector:
     def __init__(self, venue, symbol='BTCUSDT'):
         if venue not in ('binance-spot', 'bybit-spot') or not re.fullmatch('[A-Z0-9]{3,20}USDT', symbol):
@@ -118,12 +127,9 @@ class PublicCollector:
         return {'notBeforeMs': self.not_before, 'failures': self.failures}
 
     def restore_poll_state(self, state):
-        if not isinstance(state, dict) or set(state) != {'notBeforeMs', 'failures'}:
-            raise ValueError('Invalid HTTP source retry checkpoint')
-        not_before, failures = integer(state['notBeforeMs']), integer(state['failures'])
-        if not 0 <= not_before <= 9999999999999999 or not 0 <= failures <= 1000000:
-            raise ValueError('Invalid HTTP source retry values')
-        self.not_before, self.failures = not_before, failures
+        state = normalize_poll_state(state)
+        self.not_before = state['notBeforeMs']
+        self.failures = state['failures']
 
     def poll(self, now_ms=None):
         now = int(time.time() * 1000) if now_ms is None else now_ms
@@ -201,7 +207,8 @@ def collect(directory, seconds=60, interval=5, symbol='BTCUSDT', initial_waterma
     for client in collectors:
         client._watermark = restored[client.venue]
         # Validate before opening the network; also supported by injectable test collectors.
-        PublicCollector.restore_poll_state(client, initial_poll_states[client.venue])
+        retry = normalize_poll_state(initial_poll_states[client.venue])
+        client.not_before, client.failures = retry['notBeforeMs'], retry['failures']
     deadline, rows, errors, complete = started_mono + seconds, 0, 0, False
     per_venue = {v: {'sampledPolls': 0, 'backoffPolls': 0, 'errorPolls': 0,
                      'featureRows': 0, 'duplicateTrades': 0, 'olderTrades': 0,
@@ -243,7 +250,8 @@ def collect(directory, seconds=60, interval=5, symbol='BTCUSDT', initial_waterma
         hashes = {name: _sha256_file(path / name) if (path / name).is_file() else None
                   for name in ('public.jsonl', 'features.jsonl')}
         final_watermarks = {client.venue: client._watermark.snapshot() for client in collectors}
-        final_poll_states = {client.venue: PublicCollector.poll_state(client) for client in collectors}
+        final_poll_states = {client.venue: normalize_poll_state({
+            'notBeforeMs': client.not_before, 'failures': client.failures}) for client in collectors}
         report = {'complete': complete, 'featureRows': rows, 'errors': errors, 'coverage': 'SAMPLED',
                   'finalWatermarks': final_watermarks, 'finalPollStates': final_poll_states,
                   'startedAtMs': started_ms, 'endedAtMs': ended_ms,

@@ -52,14 +52,11 @@ def inspect_session(directory):
         if not isinstance(manifest.get('sourceRevision'), (str, type(None))):
             raise ValueError('Invalid capture revision')
     if manifest['schema'] == 4:
-        from research.phase3.polybot_sdk.collector import PublicCollector
+        from research.phase3.polybot_sdk.collector import normalize_poll_state
         initial_retry, final_retry = {}, {}
         for venue in VENUES:
-            client = PublicCollector(venue)
-            client.restore_poll_state(manifest['initialPollStates'][venue])
-            initial_retry[venue] = client.poll_state()
-            client.restore_poll_state(report['finalPollStates'][venue])
-            final_retry[venue] = client.poll_state()
+            initial_retry[venue] = normalize_poll_state(manifest['initialPollStates'][venue])
+            final_retry[venue] = normalize_poll_state(report['finalPollStates'][venue])
     for name in ('public.jsonl', 'features.jsonl'):
         expected = report['fileSha256'][name]
         if not isinstance(expected, str) or len(expected) != 64 or _sha256_file(root / name) != expected:
