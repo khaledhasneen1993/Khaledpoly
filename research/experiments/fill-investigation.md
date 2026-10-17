@@ -73,3 +73,55 @@ No current evidence supports loosening fills, stale-data limits or risk gates.
 Select a pricing/market-selection hypothesis only after both reports are read.
 This documentation checkpoint changes no code and skips CI to avoid a second
 simultaneous two-hour capture.
+
+## Fresh result and next predeclared experiment — 2026-10-18
+
+Fresh capture completed normally at 01:39:39 Asia/Amman on October 18,
+7,200.629 seconds, 240 samples, clean journal, no restarts. Run 39067539123
+passed all jobs. Small artifact 12117291307, full compressed tape artifact
+12117311261. Persisted metrics: `fresh-paper-20261018/`.
+
+52 submitted / 45 activated / zero fills / zero eligible prints; $500 cash,
+$0 realized PnL, no holdings or risk breaches. 18 orders had no same-token
+print. Per-order observations: 86 before activation, 158 wrong aggressor,
+13 earlier than current book, 5 different price. Aggregate active duration
+34,600 order-ms. Terminal reasons: invalid-depth gap 16, net edge 16,
+invalid price 10, stale book 2, post-only rejection 5, peer rejection 3.
+Capture has 23,400 normalized gaps, including 22,506 stale-source and 852
+invalid-depth events; 22,247 stale events were already stale at callback.
+These are real data-quality limitations; do not remove the freshness gates.
+
+Both diagnostic tapes have now been read. They are development data from this
+point onward, never a frozen qualification holdout. The existing one-tick
+improvement on each leg spends up to .02 of the pair edge and puts the quote
+at prices where these observations rarely show eligible opposite-side prints.
+This supports testing a less expensive quote, not assuming it will fill.
+
+Predeclared candidate QB0 (one variant only): `makerImprovementTicks=0`, join
+the current best bid on both legs. Baseline remains `1`, including missing
+JSON fields, recovered legacy checkpoints and all existing callers. Existing
+entry/reprice paths use the same price policy. Current PAPER default is still
+baseline; the candidate is enabled only by `research/phase6/quote-candidate.json`.
+Stress must preserve this quote policy while increasing existing execution costs.
+Do not lower the dynamic/base edge threshold, minimum size, queue multiplier,
+latency, fee estimates, freshness requirements, or inventory/loss limits.
+Joining best bid may increase the real modeled queue and adverse selection.
+
+Before viewing candidate performance, freeze this candidate/config and compare
+baseline and QB0 on BOTH full diagnostic tapes with raw replay. Reproduce
+known baseline order counts (44 and 52) and zero fills first. Retain every
+candidate result, including losses. Exploratory screening requires positive
+net realized PnL greater than baseline, at least one completed pair, no residual
+holdings, no risk breach/halt, drawdown <= $50, and expiry residual <= $5.
+This only decides whether another independent PAPER test is worth running;
+it does not replace any criterion in `research/phase2/acceptance.json`.
+If QB0 is not viable, record rejection and inspect its execution/risk diagnostics;
+do not automatically launch another current-market capture or retune blindly.
+
+Workflow `PAPER predeclared best-bid comparison` verifies all regressions before
+two dataset comparison jobs. The prior two-hour capture workflow is now manual
+only so a code push cannot silently start another two-hour run. No fresh
+capture is scheduled as part of this comparison. Next review: inspect both
+`quote-comparison-original` and `quote-comparison-fresh` artifacts and persist
+their results here. Only a promising candidate proceeds to frozen baseline/
+stress validation on independent future recordings; LIVE remains disabled.

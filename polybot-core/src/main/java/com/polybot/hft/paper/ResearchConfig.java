@@ -22,7 +22,19 @@ public record ResearchConfig(
     long decisionMillis,
     long metadataMaxAgeMs,
     long latencyJitterMs,
-    long latencySeed) {
+    long latencySeed,
+    Integer makerImprovementTicks) {
+  /** Preserve source and JSON compatibility: the established strategy improves by one tick. */
+  public ResearchConfig(
+      int schema, BigDecimal initialCash, BigDecimal orderShares, BigDecimal minimumEdge,
+      BigDecimal portfolioBudget, long activationMs, long cancelMs, long maxBookAgeMs,
+      BigDecimal queueMultiplier, BigDecimal mergeCost, BigDecimal redemptionCost,
+      long unhedgedMs, BigDecimal maxUnhedged, BigDecimal maxExitLoss, BigDecimal feeMultiplier,
+      long decisionMillis, long metadataMaxAgeMs, long latencyJitterMs, long latencySeed) {
+    this(schema, initialCash, orderShares, minimumEdge, portfolioBudget, activationMs, cancelMs,
+        maxBookAgeMs, queueMultiplier, mergeCost, redemptionCost, unhedgedMs, maxUnhedged,
+        maxExitLoss, feeMultiplier, decisionMillis, metadataMaxAgeMs, latencyJitterMs, latencySeed, 1);
+  }
   public ResearchConfig(
       int schema,
       BigDecimal initialCash,
@@ -64,7 +76,9 @@ public record ResearchConfig(
   }
 
   public ResearchConfig {
+    if (makerImprovementTicks == null) makerImprovementTicks = 1;
     if (latencyJitterMs < 0
+        || makerImprovementTicks < 0 || makerImprovementTicks > 1
         || latencyJitterMs > 60000
         || schema != 1
         || initialCash.signum() <= 0
@@ -112,7 +126,8 @@ public record ResearchConfig(
         decisionMillis,
         metadataMaxAgeMs,
         Math.max(latencyJitterMs, 500),
-        latencySeed);
+        latencySeed,
+        makerImprovementTicks);
   }
 
   private static BigDecimal b(String s) {

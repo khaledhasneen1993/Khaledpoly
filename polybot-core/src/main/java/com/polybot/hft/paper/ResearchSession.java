@@ -1316,7 +1316,7 @@ public final class ResearchSession implements AutoCloseable {
   private BigDecimal bid(Book b, BigDecimal tick) {
     return b.bids
         .lastKey()
-        .add(tick)
+        .add(tick.multiply(BigDecimal.valueOf(cfg.makerImprovementTicks())))
         .min(b.asks.firstKey().subtract(tick))
         .divide(tick, 0, RoundingMode.FLOOR)
         .multiply(tick);

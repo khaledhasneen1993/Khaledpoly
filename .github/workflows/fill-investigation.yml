@@ -1,7 +1,6 @@
 name: PAPER fill diagnosis and independent capture
 on:
-  push:
-    branches: [paper-fill-investigation]
+  workflow_dispatch:
 permissions:
   contents: read
   actions: read
