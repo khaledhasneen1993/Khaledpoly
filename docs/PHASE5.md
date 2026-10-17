@@ -74,3 +74,27 @@ does not directly predict an unrelated Polymarket market resolution.
 Only per-venue signal/abstention counts are produced. Without paired
 future labels, a pre-registered holdout and genuine fills, no profitable
 strategy or edge is claimed.
+
+
+## Own-order fill, completion, latency and quality diagnostics
+
+\`research.phase5.fill_research\` independently evaluates the three
+existing **censored, blocked/purged** label targets from
+\`polybot_sdk.learning\`: order fill, *unconditional* initial-order-to-
+second-leg group completion, and adverse post-fill markout. The second
+target is explicitly **not** "probability of a second leg conditional on
+a first fill"; those denominators must not be conflated.
+
+    python3 -m research.phase5.fill_research \
+      research/data/own-order-labels.jsonl \
+      --holdout-start-ms 2000000000000 \
+      --min-train 1000 --min-holdout 200 --min-class 20 \
+      --output research/output/phase5-fill-research.json
+
+The module reports every target separately: censored/positive/negative
+counts, observed (not predicted) filled-order P50/P90 latency, Brier
+vs base rate and calibration where sufficient. A censored order is
+NEVER silently turned into a nonfill. Models remain unqualified even
+if a small PAPER holdout yields an attractive fit; a string claiming
+\`VENUE_EXECUTION\` is not independently authenticated venue evidence.
+No synthetic FIFO or fill labels are generated.
