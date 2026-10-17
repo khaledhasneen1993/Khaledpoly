@@ -1,0 +1,48 @@
+name: Review two-hour PAPER evidence
+on:
+  push:
+    branches: [paper-two-hour-evidence-review]
+    paths: ['.github/workflows/review-two-hour.yml']
+permissions:
+  actions: read
+  contents: read
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: two-hour-paper-39048983750
+          run-id: 39048983750
+          github-token: ${{ github.token }}
+          path: original
+      - name: Extract reports only without executing bot code
+        shell: python
+        run: |
+          import tarfile,json
+          from pathlib import Path
+          wanted={'experiment.json','final-metrics.json','final-ledger.json','capture-inspection.json','metrics.jsonl'}
+          output=Path('reports');output.mkdir()
+          found=set()
+          with tarfile.open('original/two-hour-paper-evidence.tar.gz','r|gz') as archive:
+              for member in archive:
+                  name=member.name
+                  if not member.isfile() or not name.startswith('two-hour/'): continue
+                  relative=name[len('two-hour/'):]
+                  if relative not in wanted: continue
+                  if member.size>32*1024*1024: raise ValueError('Oversized report')
+                  data=archive.extractfile(member).read()
+                  (output/relative).write_bytes(data)
+                  found.add(relative)
+          if found!=wanted: raise ValueError('Missing reports: '+str(wanted-found))
+          for name in sorted(wanted-{'metrics.jsonl'}):
+              data=json.loads((output/name).read_text())
+              print('REPORT '+name+' '+json.dumps(data,separators=(',',':')))
+          rows=[json.loads(line) for line in (output/'metrics.jsonl').read_text().splitlines()]
+          print('SAMPLE_SUMMARY '+json.dumps({'samples':len(rows),'anyFills':any(r['metrics'].get('fills',0)>0 for r in rows),'first':rows[0]['observedAtUtc'],'last':rows[-1]['observedAtUtc']}))
+      - uses: actions/upload-artifact@v4
+        with:
+          name: two-hour-paper-small-reports
+          path: reports/
+          retention-days: 3
