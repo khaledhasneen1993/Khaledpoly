@@ -48,6 +48,7 @@ class RecorderTest(unittest.TestCase):
             self.assertEqual(second['sessions'], 2)
             self.assertEqual(second['newSegments'], 1)
             self.assertNotIn('WATERMARK_DISCONTINUITY', second['issues'])
+            self.assertNotIn('RETRY_BACKOFF_DISCONTINUITY', second['issues'])
             self.assertEqual(second['frozenPlan']['sourceRevision'], SHA)
             self.assertFalse(second['qualifiesCompleteMarketTape'])
             self.assertEqual(len(list((path / 'segments').iterdir())), 2)

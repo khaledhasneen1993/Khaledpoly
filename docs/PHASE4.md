@@ -152,3 +152,14 @@ the next UTC midnight (or the current midnight if exactly aligned).
 The audit independently reports \`firstFullUtcDayMs\`, \`fullUtcDays\`
 and blocks an insufficient day count. Continued restarts and failures
 still preserve NO_GO.
+
+
+## Change 8: persist source-specific retry/cooldown state across segments
+
+A 403/429/418 cooldown or network backoff must not reset when a fifteen-minute
+segment is sealed or the recorder restarts. Schema-4 segments therefore
+checkpoint source-specific \`notBeforeMs\` and failure counts in addition to
+trade watermarks. The independent audit rejects missing/changed cross-segment
+retry states. This avoids hammering a blocked venue after every process
+restart. Source access remains an operational limitation, not proof of
+complete coverage.

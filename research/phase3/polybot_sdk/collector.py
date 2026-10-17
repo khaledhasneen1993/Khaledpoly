@@ -114,6 +114,17 @@ class PublicCollector:
         self._url = root
         self._watermark = TradeWatermark()
 
+    def poll_state(self):
+        return {'notBeforeMs': self.not_before, 'failures': self.failures}
+
+    def restore_poll_state(self, state):
+        if not isinstance(state, dict) or set(state) != {'notBeforeMs', 'failures'}:
+            raise ValueError('Invalid HTTP source retry checkpoint')
+        not_before, failures = integer(state['notBeforeMs']), integer(state['failures'])
+        if not 0 <= not_before <= 9999999999999999 or not 0 <= failures <= 1000000:
+            raise ValueError('Invalid HTTP source retry values')
+        self.not_before, self.failures = not_before, failures
+
     def poll(self, now_ms=None):
         now = int(time.time() * 1000) if now_ms is None else now_ms
         if now < self.not_before:
@@ -161,7 +172,7 @@ def _sha256_file(path):
     return digest.hexdigest()
 
 
-def collect(directory, seconds=60, interval=5, symbol='BTCUSDT', initial_watermarks=None, source_revision=None):
+def collect(directory, seconds=60, interval=5, symbol='BTCUSDT', initial_watermarks=None, source_revision=None, initial_poll_states=None):
     if not math.isfinite(seconds) or not 0 < seconds <= 86400 or not math.isfinite(interval) or not 1 <= interval <= 60:
         raise ValueError('Invalid public collector duration/interval')
     if initial_watermarks is None:
@@ -170,19 +181,27 @@ def collect(directory, seconds=60, interval=5, symbol='BTCUSDT', initial_waterma
         raise ValueError('Missing venue watermark checkpoint')
     restored = {venue: TradeWatermark.restore(state)
                 for venue, state in initial_watermarks.items()}
+    if initial_poll_states is None:
+        initial_poll_states = {v: {'notBeforeMs': 0, 'failures': 0}
+                               for v in ('binance-spot', 'bybit-spot')}
+    if not isinstance(initial_poll_states, dict) or set(initial_poll_states) != {'binance-spot', 'bybit-spot'}:
+        raise ValueError('Missing source retry checkpoints')
     if source_revision is not None and (not isinstance(source_revision, str)
                                         or not re.fullmatch('[0-9a-f]{40}', source_revision)):
         raise ValueError('Invalid pinned source commit')
     started_ms, started_mono = int(time.time() * 1000), time.monotonic()
     path = Path(directory)
     path.mkdir(parents=True, mode=0o700, exist_ok=False)
-    private_write(path / 'manifest.json', {'schema': 3, 'mode': 'PUBLIC_RECORD_ONLY', 'symbol': symbol,
+    private_write(path / 'manifest.json', {'schema': 4, 'mode': 'PUBLIC_RECORD_ONLY', 'symbol': symbol,
                   'seconds': str(seconds), 'interval': str(interval), 'startedAtMs': started_ms,
                   'sourceRevision': source_revision, 'initialWatermarks': initial_watermarks,
+                  'initialPollStates': initial_poll_states,
                   'coverage': 'SAMPLED', 'liveAllowed': False})
     collectors = [PublicCollector(v, symbol) for v in ('binance-spot', 'bybit-spot')]
     for client in collectors:
         client._watermark = restored[client.venue]
+        # Validate before opening the network; also supported by injectable test collectors.
+        PublicCollector.restore_poll_state(client, initial_poll_states[client.venue])
     deadline, rows, errors, complete = started_mono + seconds, 0, 0, False
     per_venue = {v: {'sampledPolls': 0, 'backoffPolls': 0, 'errorPolls': 0,
                      'featureRows': 0, 'duplicateTrades': 0, 'olderTrades': 0,
@@ -224,8 +243,9 @@ def collect(directory, seconds=60, interval=5, symbol='BTCUSDT', initial_waterma
         hashes = {name: _sha256_file(path / name) if (path / name).is_file() else None
                   for name in ('public.jsonl', 'features.jsonl')}
         final_watermarks = {client.venue: client._watermark.snapshot() for client in collectors}
+        final_poll_states = {client.venue: PublicCollector.poll_state(client) for client in collectors}
         report = {'complete': complete, 'featureRows': rows, 'errors': errors, 'coverage': 'SAMPLED',
-                  'finalWatermarks': final_watermarks,
+                  'finalWatermarks': final_watermarks, 'finalPollStates': final_poll_states,
                   'startedAtMs': started_ms, 'endedAtMs': ended_ms,
                   'elapsedMonotonicMs': int((time.monotonic() - started_mono) * 1000),
                   'fileSha256': hashes, 'perVenue': per_venue, 'completeTradeTape': False,

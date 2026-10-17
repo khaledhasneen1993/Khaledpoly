@@ -130,8 +130,12 @@ def run_capture(directory, *, symbol='BTCUSDT', days=7, segment_seconds=900,
             completed.append((entry, details))
         if not completed:
             current = {v: TradeWatermark().snapshot() for v in VENUES}
+            current_retry = {v: {'notBeforeMs': 0, 'failures': 0} for v in VENUES}
         else:
             current = completed[-1][1]['finalWatermarks']
+            current_retry = completed[-1][1]['finalPollStates']
+            if current_retry is None:
+                raise ValueError('Cannot resume a legacy segment missing HTTP backoff state')
 
         new_segments = 0
         first_full_utc_ms = ((int(plan['startedAtMs']) + DAY_MS - 1) // DAY_MS) * DAY_MS
@@ -148,12 +152,16 @@ def run_capture(directory, *, symbol='BTCUSDT', days=7, segment_seconds=900,
             if target.exists():
                 raise ValueError('Refusing to overwrite existing segment')
             collect(target, seconds=segment_length, interval=interval, symbol=symbol,
-                    initial_watermarks=current, source_revision=source_revision)
+                    initial_watermarks=current, source_revision=source_revision,
+                    initial_poll_states=current_retry)
             details = inspect_session(target)
             if details['initialWatermarks'] != current:
                 raise ValueError('Watermark recovery mismatch after capture')
+            if details['initialPollStates'] != current_retry:
+                raise ValueError('HTTP source cooldown mismatch after capture')
             completed.append((target, details))
             current = details['finalWatermarks']
+            current_retry = details['finalPollStates']
             next_index += 1
             new_segments += 1
 

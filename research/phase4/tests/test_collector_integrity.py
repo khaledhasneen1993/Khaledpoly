@@ -109,6 +109,18 @@ class CollectorIntegrityTest(unittest.TestCase):
             watermark.accept('binance-spot', payload,
                              normalize_trades('binance-spot', 'BTCUSDT', payload, BASE))
 
+    def test_source_cooldown_survives_restarts(self):
+        from research.phase3.polybot_sdk.collector import PublicCollector
+        c = PublicCollector('bybit-spot')
+        c.restore_poll_state({'notBeforeMs': BASE + 600000, 'failures': 2})
+        self.assertEqual(c.poll(BASE)[0]['status'], 'BACKOFF')
+        resumed = PublicCollector('bybit-spot')
+        resumed.restore_poll_state(c.poll_state())
+        self.assertEqual(resumed.poll(BASE + 599999)[0]['status'], 'BACKOFF')
+        self.assertEqual(resumed.failures, 2)
+        with self.assertRaises(ValueError):
+            resumed.restore_poll_state({'notBeforeMs': -5, 'failures': 2})
+
     def test_access_forbidden_is_visible_and_cooldown_preserved(self):
         c = PublicCollector('bybit-spot')
         c._opener = Opener(HTTPError('url', 403, 'forbidden', {}, BytesIO()))

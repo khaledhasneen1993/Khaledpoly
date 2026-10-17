@@ -26,7 +26,7 @@ def inspect_session(directory):
     root = Path(directory)
     manifest = _read_json(root / 'manifest.json')
     report = _read_json(root / 'report.json')
-    if (manifest.get('schema') not in (2, 3) or manifest.get('mode') != 'PUBLIC_RECORD_ONLY'
+    if (manifest.get('schema') not in (2, 3, 4) or manifest.get('mode') != 'PUBLIC_RECORD_ONLY'
             or manifest.get('liveAllowed') is not False or not isinstance(manifest.get('symbol'), str)
             or manifest.get('coverage') != 'SAMPLED'
             or report.get('complete') is not True or report.get('coverage') != 'SAMPLED'
@@ -42,7 +42,8 @@ def inspect_session(directory):
         raise ValueError('Capture wall/monotonic clock drift exceeds 30 seconds')
 
     initial_state, final_state = None, None
-    if manifest['schema'] == 3:
+    initial_retry, final_retry = None, None
+    if manifest['schema'] in (3, 4):
         from research.phase3.polybot_sdk.collector import TradeWatermark
         initial_state, final_state = {}, {}
         for venue in VENUES:
@@ -50,6 +51,15 @@ def inspect_session(directory):
             final_state[venue] = TradeWatermark.restore(report['finalWatermarks'][venue]).snapshot()
         if not isinstance(manifest.get('sourceRevision'), (str, type(None))):
             raise ValueError('Invalid capture revision')
+    if manifest['schema'] == 4:
+        from research.phase3.polybot_sdk.collector import PublicCollector
+        initial_retry, final_retry = {}, {}
+        for venue in VENUES:
+            client = PublicCollector(venue)
+            client.restore_poll_state(manifest['initialPollStates'][venue])
+            initial_retry[venue] = client.poll_state()
+            client.restore_poll_state(report['finalPollStates'][venue])
+            final_retry[venue] = client.poll_state()
     for name in ('public.jsonl', 'features.jsonl'):
         expected = report['fileSha256'][name]
         if not isinstance(expected, str) or len(expected) != 64 or _sha256_file(root / name) != expected:
@@ -137,6 +147,7 @@ def inspect_session(directory):
         raise ValueError('Source feature total mismatch')
     return {'directory': str(root), 'startedAtMs': start, 'endedAtMs': end,
             'initialWatermarks': initial_state, 'finalWatermarks': final_state,
+            'initialPollStates': initial_retry, 'finalPollStates': final_retry,
             'sourceRevision': manifest.get('sourceRevision'),
             'intervalSeconds': manifest['interval'], 'symbol': manifest['symbol'],
             'perVenue': {v: {'sampledPolls': counts[v]['sampledPolls'],
@@ -165,6 +176,10 @@ def audit_capture(directories, min_days=7, max_poll_gap_ms=300000):
             issues.append('MIXED_MARKET_SYMBOLS')
         if item['initialWatermarks'] is None or item['finalWatermarks'] is None:
             issues.append('UNVERIFIED_WATERMARK_CONTINUITY')
+        if item['initialPollStates'] is None or item['finalPollStates'] is None:
+            issues.append('UNVERIFIED_BACKOFF_CONTINUITY')
+        if i and item['initialPollStates'] != sessions[i-1]['finalPollStates']:
+            issues.append('RETRY_BACKOFF_DISCONTINUITY')
         if i and (item['initialWatermarks'] != sessions[i-1]['finalWatermarks']):
             issues.append('WATERMARK_DISCONTINUITY')
         if item['sourceRevision'] is None:
