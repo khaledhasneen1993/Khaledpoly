@@ -148,5 +148,56 @@ class BridgeTest(unittest.TestCase):
         self.assertEqual(digest(a),digest(fixture()))
 
 
+class JavaScreenHTTPContractTest(unittest.TestCase):
+    def test_client_never_posts_to_virtual_orders_endpoint(self):
+        from io import BytesIO
+        from research.phase6.paper_screen_bridge import PaperScreenClient
+
+        obs=fixture()
+        request=ExternalStrategyReview().review(
+            obs,envelope(),at_ms=BASE)['approvedPaperScreenRequests'][0]
+        reply={'id':request['id'],'status':'SCREENED_SHADOW_ONLY',
+               'sequence':1,'expiresMs':BASE+250,'decision':'NO_GO',
+               'executionEnabled':False,'liveAllowed':False}
+        calls=[]
+        class Response:
+            status=200
+            def __init__(self):
+                self.stream=BytesIO((__import__('json').dumps(reply)).encode())
+            def __enter__(self): return self
+            def __exit__(self,*args): pass
+            def read(self,n): return self.stream.read(n)
+        class Opener:
+            def open(self,request,timeout=None):
+                calls.append((request.method,request.full_url,dict(request.header_items())))
+                return Response()
+        client=PaperScreenClient('http://127.0.0.1:8080',
+                                 'valid-test-token-with-at-least-24-characters')
+        client._opener=Opener()
+        self.assertEqual(client.screen_identical(request),reply)
+        self.assertEqual(client.saved_receipt(request),reply)
+        self.assertEqual([c[0] for c in calls],['POST','GET'])
+        self.assertTrue(calls[0][1].endswith('/proposals/screen'))
+        self.assertIn('/proposals/screen-receipts/',calls[1][1])
+        self.assertTrue(all('/proposals/paper' not in url for _,url,_ in calls))
+        self.assertIn('X-polybot-token',calls[0][2])
+
+    def test_read_only_unknown_receipt_404_does_not_trigger_a_post(self):
+        from urllib.error import HTTPError
+        from research.phase6.paper_screen_bridge import PaperScreenClient
+        requests=[]
+        class Opener:
+            def open(self,request,timeout=None):
+                requests.append(request)
+                raise HTTPError(request.full_url,404,'not found',{},None)
+        client=PaperScreenClient('http://127.0.0.1:8080',
+                                 'valid-test-token-with-at-least-24-characters')
+        client._opener=Opener()
+        proposal=ExternalStrategyReview().review(
+            fixture(),envelope(),at_ms=BASE)['approvedPaperScreenRequests'][0]
+        self.assertIsNone(client.saved_receipt(proposal))
+        self.assertEqual([r.method for r in requests],['GET'])
+
+
 if __name__=='__main__':
     unittest.main()
