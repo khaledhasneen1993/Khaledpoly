@@ -58,7 +58,9 @@ class StrategyBoundaryTest(unittest.TestCase):
             with self.assertRaisesRegex(PermissionError,'mismatch'):
                 ExternalStrategyReview().review(
                     different,envelope(),at_ms=BASE,account_gate=policy)
-            with self.assertRaises(PermissionError):
+            # A stale source may be vetoed by initial strict snapshot
+            # validation before the cross-account registry guard runs.
+            with self.assertRaisesRegex(ValueError,'Stale'):
                 ExternalStrategyReview().review(
                     original,envelope(),at_ms=BASE+2001,account_gate=policy)
 
