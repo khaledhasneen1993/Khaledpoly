@@ -44,6 +44,16 @@ class CexForwardTest(unittest.TestCase):
         self.assertEqual(row['censoredGap'],1)
         self.assertIsNone(row['meanAssumedNetBasisPoints'])
 
+    def test_gap_before_target_censors_and_cannot_be_bridged(self):
+        initial=spot(T,list(range(1,6)),100)
+        gap={'venue':'binance-spot','symbol':'BTCUSDT',
+             'status':'NETWORK_GAP','polledMs':T+600}
+        later=spot(T+1800,list(range(10,15)),110)
+        result=forward_test([initial,gap,later],horizon_ms=1000,max_label_delay_ms=2000)
+        item=result['perVenueStrategy']['binance-spot/BTCUSDT/momentum']
+        self.assertEqual(item['censoredGap'],1)
+        self.assertEqual(item['labeledNonoverlapping'],0)
+
     def test_data_without_causal_future_print_is_censored(self):
         one=spot(T,list(range(1,6)),100)
         two=spot(T+5000,list(range(10,15)),110)

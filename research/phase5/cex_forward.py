@@ -44,11 +44,13 @@ def forward_test(rows, horizon_ms=1000, max_label_delay_ms=2000, fee_bps='5',
             if ticket is None:
                 continue
             target=ticket['atMs']+horizon_ms
+            # Any source outage invalidates the active forecast immediately,
+            # even if it precedes the label horizon; no silent gap bridging.
+            if row.get('status')!='SAMPLED_PUBLIC_TRADES':
+                counters[(key,strategy,'censored_source_gap')]+=1
+                pending.pop((key,strategy))
+                continue
             if now>=target:
-                if row.get('status')!='SAMPLED_PUBLIC_TRADES':
-                    counters[(key,strategy,'censored_source_gap')]+=1
-                    pending.pop((key,strategy))
-                    continue
                 eligible=[x for x in fresh
                           if target<=x['sourceMs']<=target+max_label_delay_ms
                           and x['receivedMs']<=target+max_label_delay_ms]
