@@ -1,5 +1,6 @@
 """Storage compression never changes journal contents, chronology or provenance."""
 import gzip
+import hashlib
 from pathlib import Path
 
 
@@ -13,3 +14,10 @@ def open_tape(path, mode='rb'):
 def recorded_tapes(root):
     root=Path(root)
     return sorted([*root.glob('*/events.jsonl'),*root.glob('*/events.jsonl.gz')])
+
+
+def stored_sha256(path):
+    digest=hashlib.sha256()
+    with Path(path).open('rb') as stream:
+        while chunk:=stream.read(1024*1024):digest.update(chunk)
+    return digest.hexdigest()

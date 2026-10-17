@@ -32,7 +32,9 @@ jobs:
         run: python3 research/phase3/public_smoke.py --compressed-tape
       - name: Verify new compressed capture normalized/raw action parity and stress
         timeout-minutes: 6
-        run: python3 research/phase2/replay_smoke.py research/output/phase3-public/ingestor
+        run: |
+          python3 research/phase2/replay_smoke.py research/output/phase3-public/ingestor
+          python3 -m research.phase2.inspect_recording research/output/phase3-public/ingestor > research/output/compressed-capture-inspection.json
       - uses: actions/download-artifact@v4
         with:
           name: two-hour-paper-small-reports
@@ -72,6 +74,7 @@ jobs:
           retention-days: 3
           path: |
             **/target/surefire-reports/
+            research/output/compressed-capture-inspection.json
             research/output/lifecycle-comparison.json
             research/output/lifecycle-replay/report.json
             research/output/lifecycle-replay/audit.jsonl

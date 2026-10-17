@@ -71,6 +71,17 @@ class ExecutionAndLabelsTest(unittest.TestCase):
             self.assertEqual(result['newIdsCreated'], 0)
             self.assertEqual(recovery.received, rows[0]['proposal'])
 
+    def test_compressed_java_labels_keep_stored_and_logical_provenance(self):
+        import gzip, hashlib
+        tape=ROOT/'executor-service/target/phase3-execution-events.jsonl'
+        with tempfile.TemporaryDirectory() as directory:
+            compressed=Path(directory)/'events.jsonl.gz'
+            with gzip.open(compressed,'wb') as stream:stream.write(tape.read_bytes())
+            result=build_labels(compressed,Path(directory)/'labels')
+            self.assertEqual(result['sourceTapeSha256'],hashlib.sha256(compressed.read_bytes()).hexdigest())
+            self.assertEqual(result['logicalTapeSha256'],hashlib.sha256(tape.read_bytes()).hexdigest())
+            self.assertEqual(result['fillLabels'],2)
+
     def test_java_real_http_execution_builds_causal_labels(self):
         tape = ROOT / 'executor-service/target/phase3-execution-events.jsonl'
         self.assertTrue(tape.exists(), 'Maven HTTP execution/replay test must run first')

@@ -4,7 +4,7 @@ import hashlib
 from pathlib import Path
 from .model import decode, dumps, integer, number
 from .learning import example
-from .tapes import open_tape
+from .tapes import open_tape, stored_sha256
 from .runtime import private_write
 
 
@@ -132,7 +132,8 @@ def build_labels(tape, directory):
         output.flush()
         os.fsync(output.fileno())
     report = {'provenance': 'PAPER_MODEL', 'ordersWithFeatures': len(rows), 'ordersWithoutFeatures': unavailable,
-              'sourceTapeSha256': checksum.hexdigest(), 'recordingComplete': ended, 'dataGaps': len(gaps),
+              'sourceTapeSha256':stored_sha256(tape) if tape.suffix=='.gz' else checksum.hexdigest(),
+              'logicalTapeSha256':checksum.hexdigest(), 'recordingComplete': ended, 'dataGaps': len(gaps),
               'fillLabels': sum(example(row) is not None for row in rows),
               'secondLegLabels': sum(example(row, 'second_leg') is not None for row in rows),
               'markoutLabels': sum(example(row, 'adverse_selection') is not None for row in rows),

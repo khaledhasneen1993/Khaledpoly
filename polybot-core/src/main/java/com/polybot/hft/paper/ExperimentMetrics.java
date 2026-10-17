@@ -56,6 +56,7 @@ public final class ExperimentMetrics {
 
   public void terminal(String status, String reason) {
     terminalStatuses.merge(status, 1L, Long::sum);
+    if (reason.startsWith("PEER_REJECTED:")) reason = "PEER_REJECTED";
     terminalReasons.merge(reason, 1L, Long::sum);
   }
 
