@@ -11,6 +11,8 @@ The original two-hour run (39048983750, revision 7848cfcf8ddf3a321fe1b290efcf99c
 - A known token gap is expanded to its binary market pair, cancels both entry legs, and removes that market's books/pending takers. Unrelated market state is preserved. Unknown scope, socket loss and decoder-wide corruption still invalidate globally. Native full snapshots restore invalid depth; existing reconnect fallback remains available when resnapshot cannot complete.
 - Streaming and raw replay both derive affected token IDs from nested price_changes. A strictly older late message is discarded when a newer source timestamp is already accepted; it does not refresh the book clock. An advancing stale event still invalidates its affected scope. No timestamp is rebased and the two-second source-age cap remains.
 
+Missing portfolio marks increment missingMarkObservations and do not update observed drawdown. Otherwise an unavailable book could falsely turn an unmarked holding into a loss in the dashboard. This does not assert that unknown marks have zero economic risk.
+
 ## Recording transport
 
 `paper.record.compress=true` writes lossless `events.jsonl.gz` with synchronous gzip flush before group fsync and a final verified trailer. The compatibility default is false; the minimal profile enables compression. Journal writtenBytes remains logical uncompressed bytes; storedBytes exposes persisted compressed bytes. This reduces disk footprint without dropping source messages, normalized frames or audit records. It does not claim to reduce logical message volume or remove upstream latency.

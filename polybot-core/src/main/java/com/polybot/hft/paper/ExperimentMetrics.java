@@ -73,7 +73,10 @@ public final class ExperimentMetrics {
   }
 
   public void equity(BigDecimal value, boolean fresh) {
-    if (!fresh) missingMarks++;
+    if (!fresh) {
+      missingMarks++;
+      return;
+    }
     peak = peak.max(value);
     drawdown = drawdown.max(peak.subtract(value));
   }

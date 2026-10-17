@@ -49,4 +49,15 @@ class AdaptivePaperPolicyTest {
     assertThat((BigDecimal) m.report().get("orderFillRate")).isEqualByComparingTo(".5");
     assertThat(m.report().get("decisionToFillP95Ms")).isEqualTo(200L);
   }
+  @Test
+  void incompleteMarksDoNotCreateArtificialDrawdown() {
+    var metrics = new ExperimentMetrics();
+    metrics.equity(new BigDecimal("500"), true);
+    metrics.equity(new BigDecimal("450"), false);
+    assertThat((BigDecimal) metrics.report().get("maxDrawdown")).isEqualByComparingTo("0");
+    assertThat(metrics.report().get("missingMarkObservations")).isEqualTo(1L);
+    metrics.equity(new BigDecimal("499"), true);
+    assertThat((BigDecimal) metrics.report().get("maxDrawdown")).isEqualByComparingTo("1");
+  }
+
 }
