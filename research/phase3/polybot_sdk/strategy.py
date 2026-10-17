@@ -82,8 +82,18 @@ def propose(snapshot, per_order=Decimal('25'), per_group=Decimal('25'), gross_li
             'reason': 'UNVALIDATED_SHADOW_ONLY'}
 
 
-def evaluate(snapshot, groups=None):
+def evaluate(snapshot, groups=None, strategy='inventory-mm-shadow', feature_evidence=None, fill_model=None):
+    from .features import FeatureStore, Observation
+    from .advanced import candidates, allocate
+    store = FeatureStore()
+    for row in sorted(feature_evidence or [], key=lambda r: (int(r['receivedMs']), r['venue'], r['symbol'], r['kind'])):
+        store.add(Observation.parse(row))
+    allocation = (propose(snapshot, groups=groups) if strategy == 'inventory-mm-shadow'
+                  else allocate(snapshot, candidates(snapshot, store, strategy, fill_model), groups=groups))
+    evidence = [x.record() for x in store.available(int(snapshot['generatedMs']))]
+
     return {'mode': 'PAPER', 'researchOnly': True, 'executionEnabled': False, 'liveAllowed': False,
-            'observation': snapshot, 'allocation': propose(snapshot, groups=groups),
+            'observation': snapshot, 'strategy': strategy, 'featureEvidence': evidence,
+            'cexSignal': store.divergence('BTCUSDT', int(snapshot['generatedMs'])), 'allocation': allocation,
             'fills': None, 'netPnl': None, 'decision': 'NO_GO',
             'note': 'Proposals are neither orders nor fills. Acquisition exposure is not mark-to-market VaR.'}

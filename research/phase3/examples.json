@@ -1,0 +1,7 @@
+{
+  "featureSchema": {"venue":"forecast","symbol":"ACTUAL_CONDITION_ID","kind":"first_outcome_probability","value":"0.60","sourceMs":1800000000000,"receivedMs":1800000000000,"evidenceSha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "notes": "Schema illustration only. Times, probabilities and hashes are not real evidence. A fresh explicit resolution_risk=0 observation is also required for event proposals.",
+  "accountConfiguration": [{"alias":"paper-a","origin":"http://127.0.0.1:8080","stateDirectory":"/absolute/isolated/account-a","roles":["read","research"],"tokenEnv":"PAPER_A_TOKEN"}],
+  "labelSchema": {"orderId":"own-order-id","marketId":"actual-market-id","submittedMs":1800000000000,"featureObservedMs":1800000000000,"labelEndMs":1800000005000,"fillMs":null,"cancelMs":null,"provenance":"PAPER_MODEL","features":{"spread":"0.02","queue_ahead":"100","inventory_imbalance":"0","source_age_ms":"10","seconds_to_expiry":"60","volatility":"0.01"}},
+  "basketScenario": {"universe":{"outcomes":["a","b","c"],"metadataSha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","negativeRisk":true,"augmented":false,"complete":true},"prices":{"a":"0.2","b":"0.3","c":"0.4"},"size":"5","costs":"0.01"}
+}

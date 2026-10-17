@@ -119,7 +119,76 @@ class PhaseThreeResearchHttpTest {
                 .getStatusCode()
                 .value())
         .isEqualTo(405);
+    assertThat(
+            client
+                .exchange(
+                    "/api/research/v1/proposals/screen",
+                    HttpMethod.POST,
+                    new HttpEntity<>(" ".repeat(65537), headers),
+                    String.class)
+                .getStatusCode()
+                .value())
+        .isEqualTo(413);
+    var proposal = mapper.createObjectNode();
+    proposal
+        .put("id", "http-contract")
+        .put("strategy", "external-test")
+        .put("sessionId", snapshot.path("sessionId").asText())
+        .put("accountId", "paper-default")
+        .put("sequence", 2);
+    var legs = mapper.createArrayNode();
+    legs.add(
+        mapper.valueToTree(
+            Map.of(
+                "condition",
+                "0x" + "1".repeat(64),
+                "token",
+                "a",
+                "buy",
+                true,
+                "price",
+                "0.41",
+                "size",
+                "5",
+                "expiresMs",
+                at + 400)));
+    proposal.set("legs", legs);
+    // Remove strategy orders through the feed; the generation must be refreshed before screening.
+    emit("GAP", Map.of(), at + 251);
+    emit("FRAME", Map.of("events", events), at + 252);
+    var current = get(headers).getBody();
+    proposal.put("sequence", current.path("sequence").asLong());
+    var screened =
+        client.exchange(
+            "/api/research/v1/proposals/screen",
+            HttpMethod.POST,
+            new HttpEntity<>(proposal, headers),
+            JsonNode.class);
+    assertThat(screened.getStatusCode().value()).isEqualTo(200);
+    assertThat(screened.getBody().path("executionEnabled").asBoolean()).isFalse();
+    assertThat(get(headers).getBody().path("account")).isEqualTo(current.path("account"));
+    var repeated =
+        client.exchange(
+            "/api/research/v1/proposals/screen",
+            HttpMethod.POST,
+            new HttpEntity<>(proposal, headers),
+            JsonNode.class);
+    assertThat(repeated.getBody()).isEqualTo(screened.getBody());
+    proposal.put("sequence", 1);
+    assertThat(
+            client
+                .exchange(
+                    "/api/research/v1/proposals/screen",
+                    HttpMethod.POST,
+                    new HttpEntity<>(proposal, headers),
+                    String.class)
+                .getStatusCode()
+                .value())
+        .isEqualTo(409);
     Files.createDirectories(Path.of("target"));
-    mapper.writeValue(Path.of("target/phase3-snapshot.json").toFile(), get(headers).getBody());
+    // Keep the original frame-level contract (before the screening-only exercise).
+    ((com.fasterxml.jackson.databind.node.ObjectNode) snapshot.path("account"))
+        .put("cash", original);
+    mapper.writeValue(Path.of("target/phase3-snapshot.json").toFile(), snapshot);
   }
 }

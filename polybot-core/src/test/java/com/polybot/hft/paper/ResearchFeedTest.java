@@ -57,7 +57,9 @@ class ResearchFeedTest {
                         .put("tick_size", "0.01")
                         .put("min_order_size", "5")
                         .toString();
-              } else if (url.contains("/fee-rate?")) body = "{\"base_fee\":0}";
+              } else if (url.contains("/clob-markets/"))
+                body =
+                    "{\"mts\":0.01,\"mos\":5,\"ao\":true,\"fd\":{\"r\":0,\"e\":1,\"to\":true},\"t\":[{\"t\":\"1\"},{\"t\":\"2\"}]}";
               else if (url.contains("/v2/resolutions?")) body = "{\"data\":[]}";
               else throw new AssertionError(url);
               HttpResponse<String> response = mock(HttpResponse.class);

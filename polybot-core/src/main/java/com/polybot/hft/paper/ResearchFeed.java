@@ -244,22 +244,10 @@ public class ResearchFeed {
         || !otherBook.path("market").asText().equals(condition)
         || otherBook.path("neg_risk").asBoolean())
       throw new IllegalArgumentException("Binary outcome membership mismatch");
-    JsonNode fee = get("https://clob.polymarket.com/fee-rate?token_id=" + ids.get(0));
-    JsonNode rawFee = fee.hasNonNull("base_fee") ? fee.get("base_fee") : fee.path("fee_rate_bps");
-    if (!rawFee.asText().matches("[0-9]+")) throw new IllegalArgumentException("Unknown fee rate");
-    JsonNode schedule = row.path("feeSchedule");
-    BigDecimal rate;
-    int exponent;
-    if (!row.path("feesEnabled").asBoolean(false)
-        && new BigDecimal(rawFee.asText()).signum() == 0) {
-      rate = BigDecimal.ZERO;
-      exponent = 1;
-    } else {
-      if (!schedule.hasNonNull("rate") || !schedule.hasNonNull("exponent"))
-        throw new IllegalArgumentException("Unknown fee curve; no category defaults");
-      rate = new BigDecimal(schedule.path("rate").asText());
-      exponent = schedule.path("exponent").asInt(-1);
-    }
+    JsonNode fee = get("https://clob.polymarket.com/clob-markets/" + condition);
+    var parameters = ClobMarketParameters.parse(fee, condition, Set.copyOf(ids));
+    BigDecimal rate = parameters.fees().rate();
+    int exponent = parameters.fees().exponent();
     String evidence = "https://gamma-api.polymarket.com/markets?slug=" + slug;
     var m =
         new ResearchMarket(
@@ -269,12 +257,14 @@ public class ResearchFeed {
             start,
             end,
             new BigDecimal(book.path("tick_size").asText())
-                .max(new BigDecimal(otherBook.path("tick_size").asText())),
+                .max(new BigDecimal(otherBook.path("tick_size").asText()))
+                .max(parameters.tick()),
             new BigDecimal(book.path("min_order_size").asText())
-                .max(new BigDecimal(otherBook.path("min_order_size").asText())),
+                .max(new BigDecimal(otherBook.path("min_order_size").asText()))
+                .max(parameters.minimum()),
             rate,
             exponent,
-            row.path("acceptingOrders").asBoolean(false),
+            row.path("acceptingOrders").asBoolean(false) && parameters.accepting(),
             clock.millis(),
             evidence);
     journal.record("METADATA_EVIDENCE", null, Map.of("market", row, "book", book, "fee", fee));

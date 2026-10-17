@@ -17,6 +17,15 @@ jobs:
       - run: python3 -m unittest discover -s research/phase2/tests -v
       - run: python3 -m unittest discover -s research/phase3/tests -v
       - run: python3 -m research.phase3 inspect executor-service/target/phase3-snapshot.json --replay-clock
+      - name: Phase 3 public PAPER and CEX integration smoke
+        if: github.event_name == 'push' && github.ref == 'refs/heads/phase3-research-foundation'
+        timeout-minutes: 4
+        run: python3 research/phase3/public_smoke.py
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push' && github.ref == 'refs/heads/phase3-research-foundation' && always()
+        with:
+          name: phase3-public-research
+          path: research/output/phase3-public/
       - name: Record public data smoke (PAPER, no account)
         if: github.event_name == 'push' && github.ref == 'refs/heads/phase2-paper-validation'
         timeout-minutes: 25

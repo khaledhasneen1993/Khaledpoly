@@ -25,12 +25,18 @@ def private_write(path, data):
         os.fsync(output.fileno())
 
 
-def shadow_run(client, directory, seconds=60, interval=1, groups=None):
+def shadow_run(client, directory, seconds=60, interval=1, groups=None, strategy='inventory-mm-shadow', feature_path=None, fill_model=None):
     if not math.isfinite(seconds) or not 0 < seconds <= 86400 or not math.isfinite(interval) or not .25 <= interval <= 60:
         raise ValueError('Invalid shadow duration or sampling interval')
+    from .features import FeatureStore
+    from .feature_tail import FeatureTail
+    store = FeatureStore()
+    tail = FeatureTail(feature_path) if feature_path else None
     path = Path(directory)
     path.mkdir(mode=0o700, parents=True, exist_ok=False)
-    configuration = {'strategy': 'inventory-mm-shadow', 'groups': groups or {}, 'seconds': str(seconds), 'interval': str(interval)}
+    configuration = {'strategy': strategy, 'groups': groups or {}, 'seconds': str(seconds), 'interval': str(interval), 'fillModel': fill_model}
+    configuration = decode(dumps(configuration))
+    fill_model = configuration['fillModel']
     manifest = {'schema': 1, 'mode': 'SHADOW', 'implementationHash': implementation_hash(),
                 'configuration': configuration, 'configurationHash': hashlib.sha256(dumps(configuration).encode()).hexdigest(),
                 'researchOnly': True, 'executionEnabled': False, 'liveAllowed': False}
@@ -44,13 +50,16 @@ def shadow_run(client, directory, seconds=60, interval=1, groups=None):
             while time.monotonic() < deadline:
                 delay = interval
                 try:
+                    if tail is not None:
+                        tail.update(store)
                     snapshot = client.snapshot()
                     current = (snapshot['sessionId'], snapshot['account']['id'])
                     sequence = int(snapshot['sequence'])
                     if identity and (current != identity or sequence < previous):
                         raise ValueError('Session or account changed, or sequence regressed')
                     if previous is None or sequence > previous:
-                        row = evaluate(snapshot, groups)
+                        evidence = [x.record() for x in store.available(int(snapshot['generatedMs']))]
+                        row = decode(dumps(evaluate(snapshot, groups, strategy, evidence, fill_model)))
                         encoded = (dumps(row) + '\n').encode()
                         tape.write(encoded.decode())
                         tape.flush()
@@ -97,7 +106,7 @@ def replay_shadow(directory, output):
             current, sequence = (snapshot['sessionId'], snapshot['account']['id']), int(snapshot['sequence'])
             if identity and (current != identity or sequence <= previous):
                 raise ValueError('Noncausal replay identity')
-            if dumps(evaluate(snapshot, config['groups'])) != dumps(row):
+            if dumps(decode(dumps(evaluate(snapshot, config['groups'], config['strategy'], row.get('featureEvidence', []), config.get('fillModel'))))) != dumps(row):
                 raise ValueError('Shadow replay mismatch')
             identity, previous = current, sequence
             count += 1
