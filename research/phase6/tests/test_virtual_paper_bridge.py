@@ -86,6 +86,16 @@ class VirtualPaperIntegrationTest(unittest.TestCase):
             self.assertEqual(first['unknownOutcomes'],1)
             self.assertEqual(len(client.ledger),1)
             client.lose_reply=False
+            # A real PAPER executor advances its receipt clock after time
+            # passes while retaining the same account/session identity.
+            client.obs=observation()
+            client.obs['inputMs']=BASE+100000
+            client.obs['generatedMs']=BASE+100000
+            client.obs['sequence']=2
+            client.obs['markets'][0]['observedMs']=BASE+100000
+            for book in client.obs['books'].values():
+                book['sourceMs']=BASE+100000
+                book['receivedMs']=BASE+100000
             second=DurableVirtualPaperOrders(client).run(
                 out,obs,envelope(),enable_virtual=True,at_ms=BASE+100000)
             self.assertEqual(second['receiptCounts']['PAPER_ALREADY_RECORDED'],1)
@@ -108,6 +118,25 @@ class VirtualPaperIntegrationTest(unittest.TestCase):
             other['sessionId']='new-session'
             client.obs=other
             self.assertEqual(first['receiptCounts']['PAPER_SUBMITTED'],1)
+            self.assertEqual(len(client.ledger),1)
+
+    def test_pending_virtual_order_cannot_replay_to_new_account_session(self):
+        obs=observation()
+        client=FakeLedgerClient(obs)
+        client.lose_reply=True
+        with tempfile.TemporaryDirectory() as d:
+            out=Path(d)/'out'
+            initial=DurableVirtualPaperOrders(client).run(
+                out,obs,envelope(),enable_virtual=True,at_ms=BASE)
+            self.assertEqual(initial['unknownOutcomes'],1)
+            client.lose_reply=False
+            changed=observation()
+            changed['sessionId']='different-executor-session'
+            client.obs=changed
+            with self.assertRaisesRegex(ValueError,'Changed PAPER'):
+                DurableVirtualPaperOrders(client).run(
+                    out,obs,envelope(),enable_virtual=True,at_ms=BASE)
+            self.assertEqual(client.calls,1)
             self.assertEqual(len(client.ledger),1)
 
     def test_malformed_server_receipt_is_never_recorded_as_success(self):
