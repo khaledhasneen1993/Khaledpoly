@@ -2,7 +2,7 @@
   "scope": "PHASE3_SHARED_VIRTUAL_EXECUTION_AND_RESEARCH_TOOLKIT",
   "phase2Reference": "bf9458a6b236522c95ef52f5e43bc184ada275c1",
   "java": {
-    "tests": 116,
+    "tests": 117,
     "failures": 0,
     "errors": 0,
     "skipped": 0
@@ -50,5 +50,6 @@
   "labelPipeline": "PASS_CAUSAL_FEATURES_CENSORED_HORIZONS_MEASURED_MARKOUTS_GROUP_PURGING",
   "recoveredAccountReplay": "PASS_PRESERVES_CASH_AND_HOLDINGS_REJECTS_CHANGED_CONFIG",
   "simultaneousPartialFillMarkouts": "PASS_DISTINCT_FILL_IDENTITIES_QUANTITY_WEIGHTING_MISSING_SAMPLE_CENSORING",
-  "boundedVolatilityTelemetry": "PASS_1250_BOOK_UPDATES_MAX_SCALE_18_JSON_READABLE"
+  "boundedVolatilityTelemetry": "PASS_1250_BOOK_UPDATES_MAX_SCALE_18_JSON_READABLE",
+  "externalInventoryAdmission": "PASS_WORST_CASE_SHARE_CAP_INCLUDING_OUTSTANDING_RESERVATIONS"
 }

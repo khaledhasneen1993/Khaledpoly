@@ -1004,6 +1004,31 @@ public final class ResearchSession implements AutoCloseable {
                 PaperMatchingEngine.decimal(item, "size")));
         membership[index++] = markets.get(item.path("condition").asText());
       }
+      // Each leg may fill independently: a cheap quote must not bypass the share imbalance cap.
+      for (var market : Arrays.stream(membership).distinct().toList()) {
+        BigDecimal upper =
+            holding(market.first()).shares().subtract(holding(market.second()).shares());
+        BigDecimal lower = upper;
+        for (var order : ledger.snapshot().orders().values()) {
+          if (order.remaining().signum() <= 0) continue;
+          if ((order.token().equals(market.first()) && order.buy())
+              || (order.token().equals(market.second()) && !order.buy()))
+            upper = upper.add(order.remaining());
+          if ((order.token().equals(market.first()) && !order.buy())
+              || (order.token().equals(market.second()) && order.buy()))
+            lower = lower.subtract(order.remaining());
+        }
+        for (var intent : intents) {
+          if ((intent.token().equals(market.first()) && intent.buy())
+              || (intent.token().equals(market.second()) && !intent.buy()))
+            upper = upper.add(intent.size());
+          if ((intent.token().equals(market.first()) && !intent.buy())
+              || (intent.token().equals(market.second()) && intent.buy()))
+            lower = lower.subtract(intent.size());
+        }
+        if (upper.abs().max(lower.abs()).compareTo(cfg.maxUnhedged()) > 0)
+          throw new IllegalStateException("Worst-case unhedged inventory limit");
+      }
       // Validation failures never publish a partial reservation.
       ledger.reserveBatch(intents);
     } catch (Exception e) {

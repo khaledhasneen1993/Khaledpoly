@@ -147,7 +147,9 @@ engine. An accepted proposal is not a fill or a profitability estimate.
 `POST /api/research/v1/proposals/paper` uses the same proposal schema as screening. A registered
 observation must be no more than 250 ms old, and every leg is revalidated against current books,
 metadata, ownership and risk limits. A refresh cannot extend the original observation's lifetime.
-Every leg reserves in one durable ledger commit before any order is activated. Owned sells cannot
+Worst-case independent leg fills, including existing reservations, must stay within the configured
+unhedged share cap; a low price cannot bypass it. Every leg reserves in one durable ledger commit
+before any order is activated. Owned sells cannot
 finance unfilled buys. Duplicate token/side legs and self-crossing prices fail. The engine retains its
 activation/cancellation latency, conservative queue model and trade-print matching. Orders request
 automatic cancellation after 5 seconds; cancellation latency still applies. Missing/stale books or a

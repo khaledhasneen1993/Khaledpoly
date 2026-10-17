@@ -359,6 +359,33 @@ class ExternalPaperSessionTest {
   }
 
   @Test
+  void inexpensiveLargeOrdersCannotBypassWorstCaseUnhedgedShareCap() {
+    clock.at = base;
+    try (var ledger =
+            new AccountLedger(dir.resolve("ledger.json"), mapper, b("500"), limits, clock);
+        var session =
+            new ResearchSession(
+                ledger,
+                ResearchConfig.defaults(),
+                mapper,
+                dir.resolve("session.json"),
+                (k, v) -> {},
+                true,
+                "s")) {
+      seed(session);
+      var request = proposal(session, "cheap-but-large");
+      for (var leg : request.path("legs"))
+        ((ObjectNode) leg).put("price", ".01").put("size", "100");
+      session.accept("EXTERNAL_PROPOSAL", base + 251, request);
+      var receipt = session.externalReply("cheap-but-large");
+      assertThat(receipt.path("status").asText()).isEqualTo("PAPER_REJECTED");
+      assertThat(receipt.path("reason").asText()).contains("Worst-case unhedged inventory limit");
+      assertThat(ledger.snapshot().orders()).isEmpty();
+      assertThat(ledger.availableCash()).isEqualByComparingTo("500");
+    }
+  }
+
+  @Test
   void restartCancelsUnknownQueueAndCannotExecuteSameIdAgain() {
     clock.at = base;
     ObjectNode request;
