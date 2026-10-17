@@ -856,8 +856,24 @@ public final class ResearchSession implements AutoCloseable {
     account.put("fees", state.fees());
     account.put("halted", failed || entryStopped || state.halted());
     account.put("pendingTakers", pending.size());
-    account.put("holdings", state.holdings());
-    account.put("orders", state.orders());
+    var holdings = new TreeMap<String, AccountLedger.Holding>();
+    state
+        .holdings()
+        .forEach(
+            (token, h) -> {
+              if (h.shares().signum() > 0) holdings.put(token, h);
+            });
+    var orders = new TreeMap<String, AccountLedger.Reservation>();
+    state
+        .orders()
+        .forEach(
+            (id, o) -> {
+              if (o.remaining().signum() > 0) orders.put(id, o);
+            });
+    if (holdings.size() > 4096 || orders.size() > 4096)
+      throw new IllegalStateException("Research account observation exceeds bounds");
+    account.put("holdings", holdings);
+    account.put("orders", orders);
     var relevant =
         markets.values().stream()
             .filter(
