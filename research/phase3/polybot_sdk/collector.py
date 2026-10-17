@@ -217,7 +217,9 @@ def collect(directory, seconds=60, interval=5, symbol='BTCUSDT', initial_waterma
         with open(path / 'features.jsonl', 'x') as features, open(path / 'public.jsonl', 'x') as raw:
             for p in (path / 'features.jsonl', path / 'public.jsonl'):
                 os.chmod(p, 0o600)
-            while time.monotonic() < deadline:
+            first_cycle = True
+            while first_cycle or time.monotonic() < deadline:
+                first_cycle = False
                 for client in collectors:
                     status, observations = client.poll()
                     status.update({'venue': client.venue, 'symbol': symbol,
