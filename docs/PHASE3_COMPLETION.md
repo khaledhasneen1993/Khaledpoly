@@ -229,7 +229,9 @@ artifact `12096494914`) exposed two collector/replay differences: stale historic
 were creating replay-only gaps, and token-specific stale snapshots were clearing unrelated replay
 depth. The decoder now follows the streaming policy: stale trades are dropped, missing snapshots
 remain unavailable, and source watermarks cannot be replaced by older snapshots. Future source
-timestamps are refused in both paths. Malformed full-snapshot frames discard all partial frame
+timestamps are refused in both paths. New frames record one decoder clock so parsing latency
+cannot change freshness decisions at the timestamp boundary; strategy availability still uses the
+recorded frame-receipt clock. Malformed full-snapshot frames discard all partial frame
 outputs. Contract tests compare streaming and replay decoders directly. Replaying that captured
 public tape now matches every report field except input format and every ordered action value;
 see `research/phase3/validation/local-validation.json` for its tape hash. This is an external-intent

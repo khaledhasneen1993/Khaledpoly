@@ -73,6 +73,7 @@ public class ClobMarketWebSocketClient {
 
   private java.util.List<FrameEvent> frameEvents;
   private long frameSequence;
+  private long frameDecodeMs = -1;
 
   private void tape(String kind, Map<String, Object> data) {
     if (frameEvents != null) {
@@ -618,6 +619,7 @@ public class ClobMarketWebSocketClient {
             null,
             Map.of("text", message, "callbackReceivedMs", receivedMs, "frameId", frameId));
       rawDoneNanos = System.nanoTime();
+      frameDecodeMs = clock.millis();
       JsonNode node = objectMapper.readTree(message);
       handleMessageNode(node, receivedMs);
     } catch (Exception e) {
@@ -630,7 +632,16 @@ public class ClobMarketWebSocketClient {
       frameEvents = null;
       // One availability clock and one strategy transition for the entire socket message.
       // No listener can observe a new first leg with an old second leg from that same message.
-      JsonNode frame = objectMapper.valueToTree(Map.of("frameId", frameId, "events", completed));
+      JsonNode frame =
+          objectMapper.valueToTree(
+              Map.of(
+                  "frameId",
+                  frameId,
+                  "decodedMs",
+                  frameDecodeMs >= 0 ? frameDecodeMs : clock.millis(),
+                  "events",
+                  completed));
+      frameDecodeMs = -1;
       for (var listener : frameListeners) listener.accept("FRAME", frame);
       for (var event : completed) dispatchTape(event.kind(), event.data());
       pipelineTiming(receivedNanos, startedNanos, rawDoneNanos);
@@ -660,7 +671,7 @@ public class ClobMarketWebSocketClient {
       }
       long stamp = node.path("timestamp").asLong(-1);
       if (stamp > 0 && stamp < 100000000000L) stamp *= 1000;
-      long observedMs = clock.millis();
+      long observedMs = frameDecodeMs >= 0 ? frameDecodeMs : clock.millis();
       tape(
           "GAP",
           Map.of(
@@ -718,7 +729,7 @@ public class ClobMarketWebSocketClient {
     try {
       long stamp = Long.parseLong(node.path("timestamp").asText());
       if (stamp < 100000000000L) stamp = Math.multiplyExact(stamp, 1000);
-      long age = clock.millis() - stamp;
+      long age = (frameDecodeMs >= 0 ? frameDecodeMs : clock.millis()) - stamp;
       return age >= 0 && age <= 2000;
     } catch (RuntimeException e) {
       return false;

@@ -227,4 +227,40 @@ class WebSocketFreshnessTest {
           .isEqualTo(canonical.apply(streamed));
     }
   }
+
+  @Test
+  void frameRecordsOneDecoderClockForBoundaryFreshnessReplay() throws Exception {
+    var clock = new MutableClock();
+    clock.now = Instant.ofEpochMilli(1800000000000L);
+    long at = clock.millis();
+    var advancingMapper =
+        new ObjectMapper() {
+          @Override
+          public com.fasterxml.jackson.databind.JsonNode readTree(String text)
+              throws com.fasterxml.jackson.core.JsonProcessingException {
+            clock.now = clock.now.plusMillis(1);
+            return super.readTree(text);
+          }
+        };
+    var client =
+        new ClobMarketWebSocketClient(
+            new HftProperties(null, null, null, null, null),
+            HttpClient.newHttpClient(),
+            advancingMapper,
+            clock,
+            new HftEventsProperties(false, null, null, null, null),
+            new NoopHftEventPublisher());
+    var frames = new java.util.ArrayList<com.fasterxml.jackson.databind.JsonNode>();
+    client.onFrame((kind, frame) -> frames.add(frame));
+    String text = book(at + 1, ".5");
+    ReflectionTestUtils.invokeMethod(client, "handleMessage", text);
+    var frame = frames.getFirst();
+    assertThat(clock.millis()).isEqualTo(at + 1);
+    assertThat(frame.path("decodedMs").asLong()).isEqualTo(at);
+    assertThat(frame.path("events").get(0).path("kind").asText()).isEqualTo("GAP");
+    var replay = new com.polybot.hft.paper.RawTapeNormalizer(new ObjectMapper());
+    var kinds = new java.util.ArrayList<String>();
+    replay.accept(text, frame.path("decodedMs").asLong(), (kind, data) -> kinds.add(kind));
+    assertThat(kinds).containsExactly("GAP");
+  }
 }

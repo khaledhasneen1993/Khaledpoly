@@ -208,9 +208,12 @@ public final class ClosedLoopReplay {
               throw new IllegalArgumentException("Frame has no matching raw observation");
             if (raw) {
               var events = mapper.createArrayNode();
+              long decodedAt = data.has("decodedMs") ? data.path("decodedMs").asLong(-1) : at;
+              if (decodedAt < 0 || decodedAt > at)
+                throw new IllegalArgumentException("Invalid frame decoder clock");
               normalizer.accept(
                   pendingRaw,
-                  at,
+                  decodedAt,
                   (type, n) -> {
                     var event = mapper.createObjectNode();
                     event.put("kind", type);

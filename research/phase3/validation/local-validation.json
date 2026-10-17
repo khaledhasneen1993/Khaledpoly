@@ -2,7 +2,7 @@
   "scope": "PHASE3_SHARED_VIRTUAL_EXECUTION_AND_RESEARCH_TOOLKIT",
   "phase2Reference": "bf9458a6b236522c95ef52f5e43bc184ada275c1",
   "java": {
-    "tests": 119,
+    "tests": 120,
     "failures": 0,
     "errors": 0,
     "skipped": 0
@@ -64,5 +64,6 @@
     "netRealizedPnl": 0,
     "fills": 0,
     "qualification": "NO_GO_EXECUTION_AUDIT_ONLY"
-  }
+  },
+  "frameDecoderClock": "PASS_RECORDED_DECISION_CLOCK_PREVENTS_PARSE_LATENCY_BOUNDARY_DRIFT"
 }
