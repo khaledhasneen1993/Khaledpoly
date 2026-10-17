@@ -121,3 +121,27 @@ unverified input probabilities, not measured realized PnL or a market
 mispricing finding. This module does not call Polymarket, dispatch
 orders, or authenticate the oracle, fees, groups, match score or news.
 A flag supplied by a data feed is not an independent truth check.
+
+
+## Portfolio correlated scenario VaR, ES and settlement concentration
+
+\`research.phase5.portfolio_risk\` computes empirical VaR and expected
+shortfall from **whole-portfolio joint scenario outcome vectors**, not
+a sum of unrelated venue/token marginal VaRs. Inputs must include
+complete correlated settlement/group IDs and a common nonregressing
+scenario observation clock; missing group payoffs, nonfinite numbers
+or duplicated scenarios fail closed.
+
+    python3 -m research.phase5.portfolio_risk \
+      --positions research/data/portfolio-positions.json \
+      --scenarios research/data/joint-scenarios.jsonl \
+      --min-scenarios 100 --confidence 0.95 \
+      --output research/output/portfolio-scenarios.json
+
+Also reports gross acquisition exposure and concentration in the
+largest correlated settlement group. Unlike actual market risk, this
+calculation assumes every supplied joint scenario return is meaningful:
+it **does not** model on-chain liquidation, negative-risk conversion,
+oracle challenge/appeal, counterparties or missing tails. Real venue and
+resolution evidence are unavailable, so results never qualify risk or
+real execution.
