@@ -69,11 +69,11 @@ jobs:
           "$RUNNER_TEMP/phase3-sdk/bin/pip" install --disable-pip-version-check --no-deps ./research/phase3
           "$RUNNER_TEMP/phase3-sdk/bin/polybot-research" inspect executor-service/target/phase3-snapshot.json --replay-clock
       - name: Phase 3 public PAPER and CEX integration smoke
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/phase3-research-foundation' || github.ref == 'refs/heads/phase4-data-reliability' || github.ref == 'refs/heads/phase5-offline-research')
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/phase3-research-foundation' || github.ref == 'refs/heads/phase4-data-reliability' || (github.ref == 'refs/heads/phase5-offline-research' || github.ref == 'refs/heads/phase6-paper-integration'))
         timeout-minutes: 4
         run: python3 research/phase3/public_smoke.py
-      - name: Phase 5 real public spot signal and forward-print research (not fills)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/phase5-offline-research'
+      - name: Phase 5–6 real public spot signal and forward-print research (not fills)
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/phase5-offline-research' || github.ref == 'refs/heads/phase6-paper-integration')
         timeout-minutes: 2
         run: |
           python3 -m research.phase5.cex_signals \
@@ -86,23 +86,23 @@ jobs:
             --min-labeled 100 \
             --output research/output/phase5-cex-forward.json
       - uses: actions/upload-artifact@v4
-        if: github.event_name == 'push' && github.ref == 'refs/heads/phase5-offline-research' && always()
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/phase5-offline-research' || github.ref == 'refs/heads/phase6-paper-integration') && always()
         with:
           name: phase5-public-spot-research
           path: |
             research/output/phase5-cex-signals.json
             research/output/phase5-cex-forward.json
       - uses: actions/upload-artifact@v4
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/phase3-research-foundation' || github.ref == 'refs/heads/phase4-data-reliability' || github.ref == 'refs/heads/phase5-offline-research') && always()
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/phase3-research-foundation' || github.ref == 'refs/heads/phase4-data-reliability' || (github.ref == 'refs/heads/phase5-offline-research' || github.ref == 'refs/heads/phase6-paper-integration')) && always()
         with:
           name: phase3-public-research
           path: research/output/phase3-public/
       - name: Phase 3 actual virtual-order execution and label smoke
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/phase3-research-foundation' || github.ref == 'refs/heads/phase4-data-reliability' || github.ref == 'refs/heads/phase5-offline-research')
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/phase3-research-foundation' || github.ref == 'refs/heads/phase4-data-reliability' || (github.ref == 'refs/heads/phase5-offline-research' || github.ref == 'refs/heads/phase6-paper-integration'))
         timeout-minutes: 5
         run: python3 research/phase3/public_smoke.py --execute-paper
       - uses: actions/upload-artifact@v4
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/phase3-research-foundation' || github.ref == 'refs/heads/phase4-data-reliability' || github.ref == 'refs/heads/phase5-offline-research') && always()
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/phase3-research-foundation' || github.ref == 'refs/heads/phase4-data-reliability' || (github.ref == 'refs/heads/phase5-offline-research' || github.ref == 'refs/heads/phase6-paper-integration')) && always()
         with:
           name: phase3-public-execution
           path: research/output/phase3-public-execution/
