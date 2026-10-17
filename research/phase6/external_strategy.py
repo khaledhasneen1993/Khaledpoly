@@ -67,9 +67,11 @@ class ExternalStrategyReview:
                 raise PermissionError('Cross-account study gate failed')
         key=snap['sessionId'],snap['account']['id'],strategy,integer(snap['sequence'])
         source_hash=hashlib.sha256(dumps(envelope).encode()).hexdigest()
+        snapshot_hash=hashlib.sha256(dumps(snap).encode()).hexdigest()
         existing=self._receipts.get(key)
         if existing is not None:
-            if existing['envelopeSha256']!=source_hash:
+            if (existing['envelopeSha256']!=source_hash
+                    or existing['snapshotSha256']!=snapshot_hash):
                 raise ValueError('Strategy snapshot idempotency conflict')
             return dict(existing, replayedIdentical=True)
         allocation=allocate(snap,candidates,per_order=self.risk_limits[0],
@@ -78,7 +80,7 @@ class ExternalStrategyReview:
         output={'schema':1,'scope':'EXTERNAL_PAPER_STRATEGY_REVIEW',
                 'strategyId':strategy,'accountId':snap['account']['id'],
                 'snapshotSequence':snap['sequence'],
-                'envelopeSha256':source_hash,
+                'envelopeSha256':source_hash,'snapshotSha256':snapshot_hash,
                 'admittedResearchCandidates':len(allocation['admitted']),
                 'rejections':allocation['rejected'],
                 'replayedIdentical':False,

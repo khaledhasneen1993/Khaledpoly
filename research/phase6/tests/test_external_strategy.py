@@ -65,7 +65,12 @@ class StrategyBoundaryTest(unittest.TestCase):
                 'scope':'READ_ONLY_CROSS_ACCOUNT_PAPER_RISK_GATE',
                 'mayStudyPaperProposals':False,'mayReserveOrSubmit':False,
                 'liveAllowed':False})
-        self.assertEqual(e.review(fixture(),envelope(),at_ms=BASE)['admittedResearchCandidates'],1)
+        # The same session/sequence may never be reused with changed
+        # account state; only an independent new reviewer can study it.
+        with self.assertRaisesRegex(ValueError,'idempotency'):
+            e.review(fixture(),envelope(),at_ms=BASE)
+        self.assertEqual(ExternalStrategyReview().review(
+            fixture(),envelope(),at_ms=BASE)['admittedResearchCandidates'],1)
 
 
 if __name__=='__main__':
