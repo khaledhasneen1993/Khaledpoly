@@ -63,3 +63,18 @@ real-money orders.
 Further integration requires explicit PAPER executor acceptance,
 durable idempotent receipt accounting, sandboxed third-party
 code execution and independent interface security validation.
+
+
+## Polygon batch cost vs settlement-delay scenarios
+
+\`research.phase6.polygon_costs.compare_batching\` builds on the
+Phase-3 \`gas_scenario\` concept. It compares explicit fixed gas
+overhead, per-item gas, native USD, and operator-supplied batch waits
+against waiting/settlement exposure costs, without requiring RPC,
+wallet keys, signatures, fund transfers or on-chain operations.
+
+A least-assumed-cost batch is a **scenario** and is not an
+execution-ready batch selector. The gas estimates, risk of missed
+redemption windows, Polygon base fee, gas token price and finality
+need real-chain validation before production; all decisions remain
+NO_GO.
