@@ -126,3 +126,18 @@ Source REST polling still cannot claim every venue trade or an actual FIFO
 queue position. Even seven days of uninterrupted REST samples is not the
 full Phase-4 market-data acceptance; CLOB, settlement and venue-label
 validation remain separate.
+
+
+## Change 6: independent public-source reachability probe
+
+Each phase-four push includes a one-shot, public, read-only accessibility
+probe of Binance/Bybit trade sampling, Polymarket CLOB server time and
+the first bounded Gamma event page for Politics and Sports. Any 403,
+rate limit, malformed response or unreachable endpoint is recorded
+as a per-source result. Results are uploaded as a GitHub Actions artifact:
+
+    python3 -m research.phase4.probe --output research/output/sources-001.json
+
+The probe never uses accounts, wallets, secret tokens, signing, funded
+orders or a live position. The probe reports no fills, complete market
+universe or continuous coverage, even if every endpoint responds.
