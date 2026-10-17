@@ -131,15 +131,25 @@ class PublicCollector:
             return {'status': 'NETWORK_GAP', 'retryAtMs': self.not_before}, []
 
 
+def _sha256_file(path):
+    digest = hashlib.sha256()
+    with open(path, 'rb') as stream:
+        for chunk in iter(lambda: stream.read(65536), b''):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def collect(directory, seconds=60, interval=5, symbol='BTCUSDT'):
     if not math.isfinite(seconds) or not 0 < seconds <= 86400 or not math.isfinite(interval) or not 1 <= interval <= 60:
         raise ValueError('Invalid public collector duration/interval')
+    started_ms, started_mono = int(time.time() * 1000), time.monotonic()
     path = Path(directory)
     path.mkdir(parents=True, mode=0o700, exist_ok=False)
-    private_write(path / 'manifest.json', {'mode': 'PUBLIC_RECORD_ONLY', 'symbol': symbol,
-                  'seconds': str(seconds), 'interval': str(interval), 'coverage': 'SAMPLED', 'liveAllowed': False})
+    private_write(path / 'manifest.json', {'schema': 2, 'mode': 'PUBLIC_RECORD_ONLY', 'symbol': symbol,
+                  'seconds': str(seconds), 'interval': str(interval), 'startedAtMs': started_ms,
+                  'coverage': 'SAMPLED', 'liveAllowed': False})
     collectors = [PublicCollector(v, symbol) for v in ('binance-spot', 'bybit-spot')]
-    deadline, rows, errors, complete = time.monotonic() + seconds, 0, 0, False
+    deadline, rows, errors, complete = started_mono + seconds, 0, 0, False
     per_venue = {v: {'sampledPolls': 0, 'backoffPolls': 0, 'errorPolls': 0,
                      'featureRows': 0, 'duplicateTrades': 0, 'olderTrades': 0,
                      'sourceAccessBlocked': False} for v in ('binance-spot', 'bybit-spot')}
@@ -150,7 +160,8 @@ def collect(directory, seconds=60, interval=5, symbol='BTCUSDT'):
             while time.monotonic() < deadline:
                 for client in collectors:
                     status, observations = client.poll()
-                    status.update({'venue': client.venue, 'symbol': symbol})
+                    status.update({'venue': client.venue, 'symbol': symbol,
+                                   'polledMs': int(time.time() * 1000)})
                     raw.write(dumps(status) + '\n')
                     errors += status['status'] not in ('SAMPLED_PUBLIC_TRADES', 'BACKOFF')
                     metric = per_venue[client.venue]
@@ -175,8 +186,13 @@ def collect(directory, seconds=60, interval=5, symbol='BTCUSDT'):
                     time.sleep(min(interval, remaining))
         complete = True
     finally:
+        ended_ms = int(time.time() * 1000)
+        hashes = {name: _sha256_file(path / name) if (path / name).is_file() else None
+                  for name in ('public.jsonl', 'features.jsonl')}
         report = {'complete': complete, 'featureRows': rows, 'errors': errors, 'coverage': 'SAMPLED',
-                  'perVenue': per_venue, 'completeTradeTape': False, 'sevenDayHoldoutQualified': False,
-                  'decision': 'NO_GO', 'liveAllowed': False}
+                  'startedAtMs': started_ms, 'endedAtMs': ended_ms,
+                  'elapsedMonotonicMs': int((time.monotonic() - started_mono) * 1000),
+                  'fileSha256': hashes, 'perVenue': per_venue, 'completeTradeTape': False,
+                  'sevenDayHoldoutQualified': False, 'decision': 'NO_GO', 'liveAllowed': False}
         private_write(path / 'report.json', report)
     return report

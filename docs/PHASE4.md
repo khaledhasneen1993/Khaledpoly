@@ -50,3 +50,21 @@ phase-two suites. Recorded CI evidence is distinct from the local tests.
    outages, independent labels and market qualification. Nothing unlocks LIVE.
 
 Engineering checks here do not qualify fills, profit models or a strategy.
+
+
+## Change 2: immutable session attestation and seven-day window audit
+
+Each new PUBLIC capture stores a wall-clock start, monotonic elapsed time,
+end timestamp, polling timestamp on every raw source event, and SHA-256 digests
+of raw/feature append-only tapes. Failures preserve a report with complete=false.
+An independent audit rejects missing/altered files, invalid feature and venue
+accounting, out-of-order polling timestamps, clock drift, overlapping/duplicated
+sessions, access-blocked venues and gaps over the configured threshold.
+
+    python3 -m research.phase4.audit --output research/output/capture-audit.json \
+      research/output/session-001 research/output/session-002
+
+The seven-day criterion is a *continuous public sampling window* only; even
+a clean result is not a complete exchange tape, does not prove fill quality,
+and must never unlock models or LIVE. The capture must run on an always-on
+host; a GitHub Actions job or this chat does not keep a seven-day process alive.
