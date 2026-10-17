@@ -1,5 +1,6 @@
 """Offline Phase 5: data leakage, cost, and provenance regressions."""
 from pathlib import Path
+from decimal import Decimal
 import sys
 import unittest
 
@@ -24,9 +25,9 @@ class StrategyAccountingTest(unittest.TestCase):
         held=result['strategyResults']['s1']['heldout']
         self.assertEqual(held['trades'],1)
         self.assertEqual(held['grossPnlUsd'],'5')
-        self.assertEqual(held['transactionCostsUsd'],'0.30')
-        self.assertEqual(held['netPnlUsd'],'4.70')
-        self.assertEqual(held['stressedNetPnlUsd'],'4.60')
+        self.assertEqual(Decimal(held['transactionCostsUsd']),Decimal('0.30'))
+        self.assertEqual(Decimal(held['netPnlUsd']),Decimal('4.70'))
+        self.assertEqual(Decimal(held['stressedNetPnlUsd']),Decimal('4.60'))
         self.assertFalse(result['strategyQualified'])
         self.assertFalse(result['preregisteredHoldoutVerified'])
         self.assertEqual(result['decision'],'NO_GO')
