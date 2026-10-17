@@ -12,7 +12,7 @@
     "failures": 0
   },
   "phase3Python": {
-    "tests": 37,
+    "tests": 38,
     "failures": 0
   },
   "javaToPythonHttpContract": "PASS",
@@ -32,5 +32,17 @@
     "installedContract": "PASS",
     "sourceModules": 16,
     "compiledCachesPackaged": false
+  },
+  "firstPublicIntegration": {
+    "commit": "1db1277b693a17613418da7497bb474feea345d8",
+    "run": 39018408308,
+    "artifact": 12095344346,
+    "snapshots": 45,
+    "shadowReplay": "MATCH",
+    "markets": 4,
+    "freshBooks": 4,
+    "binanceFeatureRows": 317,
+    "bybit": "HTTP_403_BACKOFF",
+    "coverage": "PARTIAL"
   }
 }

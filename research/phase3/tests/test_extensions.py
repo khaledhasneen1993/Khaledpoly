@@ -110,6 +110,17 @@ class FeatureTest(unittest.TestCase):
         self.assertEqual(rows, [])
         self.assertEqual(client.poll(BASE + 1)[0]['status'], 'BACKOFF')
 
+    def test_bybit_forbidden_response_has_ten_minute_cooldown(self):
+        client = PublicCollector('bybit-spot')
+        class Opener:
+            def open(self, *args, **kwargs):
+                raise HTTPError('url', 403, 'forbidden', {}, BytesIO())
+        client._opener = Opener()
+        status, rows = client.poll(BASE)
+        self.assertEqual(status['retryAtMs'], BASE + 600000)
+        self.assertEqual(rows, [])
+        self.assertEqual(client.poll(BASE + 599999)[0]['status'], 'BACKOFF')
+
 
 class AdvancedStrategyTest(unittest.TestCase):
     def test_forecast_requires_explicit_resolution_risk(self):

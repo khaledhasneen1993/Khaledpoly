@@ -10,7 +10,7 @@ from urllib.error import HTTPError, URLError
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from research.phase3.polybot_sdk.client import PaperClient
-from research.phase3.polybot_sdk.model import dumps
+from research.phase3.polybot_sdk.model import dumps, decode
 from research.phase3.polybot_sdk.runtime import private_write, shadow_run, replay_shadow
 
 
@@ -53,11 +53,18 @@ def main():
             parity = replay_shadow(output / 'shadow', output / 'replay.json')
             latest = client.snapshot()
             fresh_books = sum(int(latest['generatedMs']) - int(book['sourceMs']) < int(latest['maxBookAgeMs']) for book in latest['books'].values())
+            venue_counts = {'binance-spot': 0, 'bybit-spot': 0}
+            with (output / 'signals/features.jsonl').open() as feature_stream:
+                for line in feature_stream:
+                    row = decode(line)
+                    venue_counts[row['venue']] += 1
+            signal_report = decode((output / 'signals/report.json').read_text())
             result = {'scope': 'PUBLIC_INTEGRATION_SMOKE_NOT_QUALIFICATION', 'snapshots': report['snapshots'],
                       'markets': len(latest['markets']), 'freshBooks': fresh_books,
-                      'signalCollectorExit': signal_status, 'replayStatus': parity['status'],
+                      'signalCollectorExit': signal_status, 'signalRowsByVenue': venue_counts, 'signalErrors': signal_report['errors'], 'replayStatus': parity['status'],
                       'decision': 'NO_GO', 'liveAllowed': False, 'newStrategiesExecuted': False,
-                      'status': 'PUBLIC_BOOKS_OBSERVED' if fresh_books and latest['markets'] else 'INCOMPLETE_PUBLIC_COVERAGE'}
+                      'status': ('PUBLIC_OBSERVATIONS_RECORDED' if fresh_books and latest['markets'] and all(venue_counts.values())
+                                 else 'PARTIAL_PUBLIC_INTEGRATION')}
             private_write(output / 'summary.json', result)
             print(dumps(result))
     finally:

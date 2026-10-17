@@ -130,3 +130,16 @@ permissions, not independently scoped server credentials. Do not give that token
 
 These are explicit incomplete requirements, not completed tasks hidden behind passing unit tests.
 The delivered toolkit makes them measurable and testable; it does not manufacture their evidence.
+
+## First public integration evidence
+
+Commit `1db1277b693a17613418da7497bb474feea345d8`, GitHub run
+[39018408308](https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39018408308), artifact
+`12095344346`: 45 valid streaming PAPER observations, exact shadow replay, four discovered markets
+and four fresh books at the last observation. Shadow fills and PnL remain unknown. New strategies
+were not executed. The CEX collector recorded 317 Binance feature rows; Bybit returned HTTP 403,
+then all later attempts remained in backoff. This is **partial CEX coverage**, not a successful Bybit
+connection or an arbitrage result. The summary now exposes per-venue counts explicitly.
+
+The CI job succeeding means the software checks and recording procedure completed. It does not
+turn network restrictions, missing venue data or empirical NO_GO into a pass for trading.
