@@ -78,6 +78,22 @@ class BridgeTest(unittest.TestCase):
             self.assertEqual(client.gets,1)
             self.assertEqual(list(out.glob('receipt-*.json'))[0].name,'receipt-0001.json')
 
+    def test_old_snapshot_may_only_recover_durable_receipt_not_post(self):
+        obs=fixture()
+        client=FakeClient(obs)
+        client.drop=True
+        with tempfile.TemporaryDirectory() as d:
+            folder=Path(d)/'outbox'
+            DurablePaperScreen(client).run(folder,obs,envelope(),at_ms=BASE)
+            client.drop=False
+            recovered=DurablePaperScreen(client).run(
+                folder,obs,envelope(),at_ms=BASE+86400000)
+            self.assertEqual(recovered['confirmedScreenReceipts'],1)
+            self.assertEqual(client.posts,1)
+            with self.assertRaisesRegex(ValueError,'Stale'):
+                DurablePaperScreen(FakeClient(obs)).run(
+                    Path(d)/'new-session',obs,envelope(),at_ms=BASE+86400000)
+
     def test_unknown_get_never_reissues_post_or_creates_new_id(self):
         obs=fixture()
         client=FakeClient(obs)

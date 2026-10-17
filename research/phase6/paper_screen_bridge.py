@@ -88,8 +88,13 @@ class DurablePaperScreen:
         self.reviewer = reviewer if reviewer is not None else ExternalStrategyReview()
 
     def run(self, directory, observation, envelope, *, at_ms=None, account_gate=None):
-        snap = validate(observation, at_ms)
-        review = self.reviewer.review(snap, envelope, at_ms=at_ms, account_gate=account_gate)
+        path=Path(directory)
+        recovery=(path/'manifest.json').exists()
+        # Old snapshots are allowed ONLY to reconcile an already-frozen
+        # outbox via read-only GET. They can NEVER authorize a new screen.
+        checked_at=(integer(observation['generatedMs']) if recovery else at_ms)
+        snap = validate(observation, checked_at)
+        review = self.reviewer.review(snap, envelope, at_ms=checked_at, account_gate=account_gate)
         requests = review['approvedPaperScreenRequests']
         if len(requests) != review['admittedResearchCandidates']:
             raise ValueError('Mismatched allocation and approved research requests')
@@ -101,7 +106,6 @@ class DurablePaperScreen:
                     'sequence':integer(snap['sequence']),
                     'requests':[{'id':r['id'],'sha256':digest(r)} for r in requests],
                     'executionEnabled':False,'liveAllowed':False}
-        path=Path(directory)
         path.mkdir(mode=0o700,parents=True,exist_ok=True)
         lock_fd=os.open(str(path/'.lock'),os.O_RDWR|os.O_CREAT,0o600)
         try:
