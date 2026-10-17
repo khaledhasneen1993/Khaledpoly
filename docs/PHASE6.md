@@ -78,3 +78,27 @@ execution-ready batch selector. The gas estimates, risk of missed
 redemption windows, Polygon base fee, gas token price and finality
 need real-chain validation before production; all decisions remain
 NO_GO.
+
+
+## Durable Java PAPER SCREEN integration (not order submission)
+
+The new \`research.phase6.paper_screen_bridge\` connects the versioned
+restricted strategy envelope to the **existing Java
+\`ResearchProposalInbox\`** via \`/api/research/v1/proposals/screen\`
+only. The executor's original Java account ledger remains the sole
+durable reservation authority; this endpoint *screens research
+candidates*, it never calls \`/paper\`, \`/settle-paper-group\` or any
+venue order routing. Every strategy candidate ID is deterministically
+derived from \`(session, account, sequence, strategy, candidate)\` and
+its exact JSON is persisted and fsynced **before** HTTP.
+
+On lost HTTP responses the bridge refuses to invent a new ID or
+automatically resubmit any POST. Restart queries only the new
+authenticated \`GET /api/research/v1/proposals/screen-receipts/{id}\`
+endpoint, which reads the Java inbox's persisted screening receipt
+after sequence advancement, restricted to the same PAPER session and
+account. A 404 remains explicitly UNKNOWN and needs reconciliation
+rather than being counted as accepted. Conflicting requests, snapshots,
+and journal rows fail closed. These are **not** durable venue order
+receipts and do not make actual reservations; separate integration
+with the Java PAPER execution ledger is still required.
