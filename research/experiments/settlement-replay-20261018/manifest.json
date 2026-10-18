@@ -1,0 +1,25 @@
+{
+  "workflowRun": 39112535160,
+  "sourceCommit": "b4d6dfccee46459b93342fe6f64f83d0f65d2473",
+  "artifact": 12131536794,
+  "artifactZipSha256": "aca32600aa8840657616019ce02761caa985155f975bbd6de7ce5736aee276fc",
+  "completedUtc": "2026-10-18T08:58:48Z",
+  "scope": "DEVELOPMENT_PARTIAL_ENVIRONMENT_LABELS_NOT_STRATEGY_QUALIFICATION",
+  "decision": "NO_GO",
+  "netPnlAfterConfiguredCosts": -0.85,
+  "configuredCosts": 0,
+  "markoutsTrusted": false,
+  "markoutCaveat": "Original markouts cross GAP; retain originals unchanged, do not use for strategy optimization.",
+  "originalAuditSha256": {
+    "baseline": "2837387fa17c3a8c2881191e3cbc7dd370ef1c3492ee23fc658f3bf79a0a2ae1",
+    "candidate": "3f0fb90eabfab529024def49f6384d1a76d6d4e6e4a60bb90e82e1939409eb3b"
+  },
+  "filesSha256": {
+    "baseline-report.original.json": "dd58001bc06bb8eb768cfb4de2f322c477119d35fdb318f39c4a6166a29e5beb",
+    "candidate-audit.non-alert.jsonl": "ec638da5bf6c7aeb5f862b537bbb3b443d727586d49d6cb7c5b076db576420ec",
+    "candidate-report.original.json": "46e216726858609ef2ea25ae9ca565c877021f8fee5ccba4a6f405239bffdadc",
+    "comparison.original.json": "1192e8ed1112350b8e810a0c3bd53f836fa693a8eaf5b89552f54e3ca8ebaa3c",
+    "freeze.original.json": "bce4ac21c8841ccfe56f36a9806ba95e8ff9d6ad3ad4d791890f46657d7ee3b8",
+    "markout-gap-proof.json": "9ee89442e2a4f53f26ceeda6bdb00d6e960267dc696784b7240b5f79e3c33c4a"
+  }
+}

@@ -116,6 +116,22 @@ class ResearchSessionTest {
   }
 
   @Test
+  void pairedGapInvalidatesMarkoutsWithoutChangingRealizedLedger() {
+    try (var l = new AccountLedger(dir.resolve("ledger.json"), mapper, b("500"), limits, clock);
+        var s = open(l)) {
+      enter(s);
+      trade(s, "a", "SELL", "0.41", "5", 502);
+      trade(s, "b", "SELL", "0.41", "5", 503);
+      input(s, "GAP", 600, mapper.valueToTree(Map.of("token", "a")));
+      books(s, 1600, "0.4", "0.6", "0.4", "0.6");
+      assertThat(l.snapshot().cash()).isEqualByComparingTo("500.89");
+      assertThat((Map<?, ?>) s.report().get("markoutSamples")).isEmpty();
+      assertThat(s.report().get("missingMarkoutsByReason"))
+          .isEqualTo(Map.of("DATA_GAP", Map.of(1000, 2, 5000, 2, 30000, 2)));
+    }
+  }
+
+  @Test
   void overdueInventoryUsesDelayedDepthAwareFeeAwareRiskSale() {
     try (var l = new AccountLedger(dir.resolve("ledger.json"), mapper, b("500"), limits, clock);
         var s = open(l)) {

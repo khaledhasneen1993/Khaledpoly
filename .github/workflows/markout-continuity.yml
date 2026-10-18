@@ -1,0 +1,38 @@
+name: PAPER markout continuity regression
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/markout-continuity.yml'
+      - 'polybot-core/src/main/java/com/polybot/hft/paper/PaperMetrics.java'
+      - 'polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java'
+      - 'polybot-core/src/main/java/com/polybot/hft/paper/ReplayRunner.java'
+      - 'polybot-core/src/test/java/com/polybot/hft/paper/PaperMetricsTest.java'
+      - 'polybot-core/src/test/java/com/polybot/hft/paper/ResearchSessionTest.java'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-markout-continuity
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Full regression without repeating the full tape or starting PAPER capture
+        run: |
+          mvn --batch-mode --no-transfer-progress verify
+          for phase in 2 3 4 5 6; do python3 -m unittest discover -s research/phase${phase}/tests -q; done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: markout-continuity-tests
+          retention-days: 7
+          path: '**/target/surefire-reports/'

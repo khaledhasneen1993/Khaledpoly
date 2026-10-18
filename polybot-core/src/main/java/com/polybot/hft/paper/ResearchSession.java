@@ -356,6 +356,7 @@ public final class ResearchSession implements AutoCloseable {
           kind = "TICK";
       }
       if (kind.equals("GAP")) data = scopedGap(data);
+      markouts.advance(at, cfg.maxBookAgeMs());
       long gapsBefore = matching.gaps();
       var binding=settlementLabels!=null && kind.equals("TRADE")
           ? settlementLabels.resolve(replayRowSequence,replayEventIndex,at,data):null;
@@ -377,11 +378,14 @@ public final class ResearchSession implements AutoCloseable {
         if (source < 0
             || source > at
             || at - source > cfg.maxBookAgeMs()
-            || prior != null && source < prior.source()) books.remove(token);
+            || prior != null && source < prior.source()) {
+          books.remove(token);
+          markouts.gap(Set.of(token));
+        }
         else {
           Book b = new Book(levels(data.path("bids")), levels(data.path("asks")), source, at);
           books.put(token, b);
-          markouts.book(data, at);
+          markouts.book(data, at, cfg.maxBookAgeMs());
           if (!b.bids.isEmpty() && !b.asks.isEmpty()) {
             BigDecimal mid = b.bids.lastKey().add(b.asks.firstKey()).divide(BigDecimal.valueOf(2));
             BigDecimal old = mids.put(token, mid);
@@ -398,6 +402,7 @@ public final class ResearchSession implements AutoCloseable {
       }
       if (kind.equals("GAP")) {
         Set<String> affected = DataGap.tokens(data);
+        markouts.gap(affected);
         if (affected.isEmpty()) { books.clear(); pending.clear(); }
         else {
           books.keySet().removeAll(affected);
@@ -1539,6 +1544,7 @@ public final class ResearchSession implements AutoCloseable {
     failed = true;
     entryStopped = true;
     pending.clear();
+    markouts.gap(Set.of());
     apply(matching.accept("GAP", Math.max(now, 0), mapper.createObjectNode()));
     ledger.halt();
     save();

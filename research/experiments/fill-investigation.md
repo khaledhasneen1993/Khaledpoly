@@ -612,3 +612,78 @@ acceptance criteria remain unchanged; experimental engine path is offline-only.
 No new net PnL result yet. Next read `closed-loop-settlement-comparison` artifact
 from this run, verify 52/0 normalized baseline reproduction and five consumed
 frozen bindings, then report actual net costs, holdings, exits and stop state.
+
+## Full-account comparison completed; measurement defect isolated — 2026-10-18
+
+Run 39112535160 completed SUCCESS at 08:58:48 UTC (11:58:48 Amman), using
+frozen source b4d6dfccee46459b93342fe6f64f83d0f65d2473. Artifact 12131536794:
+ZIP SHA256 aca32600aa8840657616019ce02761caa985155f975bbd6de7ce5736aee276fc.
+Exact original reports/comparison, original source freeze, non-alert account
+audit, complete audit hashes and the bounded GAP proof are now archived in
+`research/experiments/settlement-replay-20261018/`. Reports are NOT rewritten.
+
+| Same full development tape/config | Baseline | Partial-label execution model |
+| --- | ---: | ---: |
+| Submitted orders | 52 | 61 |
+| Execution fills | 0 | 3 |
+| Cash | 500.00 | 499.15 |
+| Net realized PnL after configured costs | 0.00 | -0.85 |
+| Charged fees / settlement costs | 0 | 0 |
+| Max drawdown | 0 | 1.20 |
+| Completed pairs | 0 | 0 |
+| Ending inventory / expiry residual | 0 | 0 |
+| Risk breaches / halted | 0 / false | 0 / false |
+
+All five frozen receipt bindings were consumed; 29 unique maker components,
+500 venue shares = 5 allocated + 0 queue-absorbed + 495 unused. Candidate bought
+5 shares at 0.64, then maker-reduced 3+2 shares at 0.47; -0.85 is the actual
+ledger loss, not a markout estimate. These fills incurred zero costs under the
+UNCHANGED configuration (maker fills, no merge); no hypothetical rewards or
+rebates are credited. Partial offline future receipt labels are environmental
+calibration, not causal live input, independent evidence or profitability proof.
+Both results remain NO_GO; no independent PAPER capture is justified yet.
+
+NEW correctness issue: old `PaperMetrics` allowed future fresh snapshots to
+complete pending horizons even after an intervening GAP. Buy fill arrived at
+1792269683761; affected pair GAP at 1792269684239, before its 1s horizon at
+1792269684761 (source projection row 140300/frame 69124). Nevertheless original
+report recorded 3 samples at each of 1s/5s/30s. At least the buy's three horizons
+are contaminated. Exact validity/counts for the two sells have NOT been
+recomputed; aggregate audit ALERTs omit token scope, so do not infer them from
+those alerts. Do not optimize against the original aggregate markout PnL.
+
+Measurement-only revision: scoped gaps invalidate outstanding affected horizons,
+global gaps invalidate all, recovery never resurrects them, already observed
+horizons/unrelated tokens remain intact. Invalid books and stale-depth intervals
+also invalidate pending observations. Missing horizons retain reason-specific
+counts, never fabricated zero returns. Wire both closed-loop ResearchSession
+(including paired scope and suspension) and executor action ReplayRunner;
+account/order/fee/strategy behavior is unchanged. Seven new Java regressions
+cover scope, global recovery, freshness boundary/silence, stale incoming books,
+invalid/regressing/future/crossed/empty snapshots, missing-count conservation and
+paired session accounting. Java 21/Maven validation is pending on GitHub; local
+runtime only supplies Java 17, so no claim of Java test success is made yet.
+
+Preserve the completed experiment's original freeze in the archived directory.
+Active `settlement-replay-freeze.json` is an explicitly versioned measurement
+revision linked by hash to the old freeze, adding PaperMetrics/ReplayRunner
+source hashes; strategy parameters, input, labels, fees, queue, risk and
+`research/phase2/acceptance.json` remain identical. This is not holdout tuning.
+Only a lightweight full-regression workflow is triggered, NOT another two-hour
+capture or a duplicate full-account replay.
+
+Local checks: phase2 8/8, phase4 38/38, phase5 49/49 and phase6 105/105 pass.
+A local phase3 run has
+46 passes plus two failures/two errors because Maven-generated HTTP execution
+fixtures under executor-service/target are absent; it is NOT recorded as a
+passing full suite. GitHub runs Maven first to generate these prerequisites.
+
+Next: inspect `PAPER markout continuity regression` first and fix any concrete
+failure. Once green, reconstruct clean markout coverage from original full
+normalized events with explicit gap scopes (or one justified measurement-only
+replay under the new frozen sources). Preserve -0.85 accounting as a regression
+invariant. Broaden settlement route coverage before evaluating strategy changes;
+do not claim that delaying entry improves performance using only five labels,
+since shifted orders may merely fall onto unlabelled executions. Freeze one
+causal strategy candidate on development before new independent PAPER; fixed
+acceptance and LIVE lock remain unchanged.
