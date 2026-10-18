@@ -1061,3 +1061,12 @@ Wait for that workflow before any overlapping comparison. NEXT archive both
 account reports and costs/residuals/exits; assess broader unlabelled settlement
 coverage before proposing causal strategy changes or independent tests. Neither
 variant can qualify for live or independent profitability from future labels.
+
+Launched ONLY https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39132714883
+at source d25c19a13afb55f8413af3d61846f8d4e666bd3c; full regression job
+117690973311 is running before either account comparison. Do not overlap or
+rerun. Local phase6 132 checks pass; local attempts at the broader Python
+contracts require Maven-generated executor target tapes that do not exist in
+this Java17/no-Maven environment (phase3 fails those explicit prerequisites).
+This is not counted as full regression success and no test fixture is weakened;
+the CI sequence correctly runs Maven verify BEFORE all Python phases.
