@@ -125,3 +125,46 @@ capture is scheduled as part of this comparison. Next review: inspect both
 `quote-comparison-original` and `quote-comparison-fresh` artifacts and persist
 their results here. Only a promising candidate proceeds to frozen baseline/
 stress validation on independent future recordings; LIVE remains disabled.
+
+## QB0 result — 2026-10-18 03:32 Asia/Amman
+
+Run 39079812595 passed verification and both full comparisons. Candidate commit
+d5ff383bd387e240f8a8f5deac720a0e036a04da. Artifacts: original 12118663413,
+fresh 12119320792. Persisted comparison and full candidate reports:
+`quote-qb0-20261018/`. Baselines reproduced exactly (44/52 orders, zero fills).
+
+| Development recording | QB0 orders | Fills | Net realized PnL | Completed pairs | Halted |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Original two hours | 119 | 2 | $0.16474 | 0 | true |
+| Fresh two hours | 296 | 0 | $0 | 0 | false |
+
+QB0 is REJECTED by its predeclared screen on both tapes. No new independent
+capture, adoption, parameter sweep or profitability claim is justified.
+The original two executions were one maker BUY of five shares at .37 and one
+taker risk SELL at .42, fee .08526, after the unhedged timeout. The .16474 is
+not complete-set alpha. Drawdown was .80, no numerical risk breaches; `halted`
+reflects the existing latched entry stop after 30 seconds unhedged. Do not
+remove that risk stop. Before timeout a hedge decision had positive completion
+value .02107 but higher sale value .02307; the existing policy waited/quoted
+a maker sale. This is a documented policy tradeoff, not proof of a missed fill.
+Fresh QB0 had four eligible prints across four orders; all were absorbed by
+the conservative queue (38.46 vs 305.2, 5 vs 7808.64, 64.32 vs 535.32, 2 vs
+444.28). No evidence supports reducing the multiplier or granting touch fills.
+
+Next diagnostic: count necessary quote-price/base-edge conditions on ALL
+recorded public prints, including periods when strategy orders were absent.
+This determines whether scarce eligible traffic is fundamental or confined to
+current entry windows. `opportunity_census.py` uses prior normalized books,
+source/metadata freshness, new-entry size, quote alignment, merge cost and the
+base edge floor. It deliberately omits dynamic risk premiums, activation,
+queue depletion, account/inventory limits and order placement before a print:
+passing is an UPPER BOUND, never a feasible fill, probability, or PnL estimate.
+No execution behavior or acceptance gate changes. Two local unit tests verify
+gap invalidation, price alignment and no-fill/no-profit inference.
+
+The QB0 workflow is now manual-only to avoid repeating completed comparisons.
+The new `PAPER recorded opportunity census` workflow scans the same two
+development tapes once and produces small reports. Next review: inspect
+`opportunity-census-original` and `opportunity-census-fresh`, validate logical
+tape hashes against preserved provenance, and assess print coverage before
+predeclaring any further strategy candidate. Keep QB0 rejected/default legacy.

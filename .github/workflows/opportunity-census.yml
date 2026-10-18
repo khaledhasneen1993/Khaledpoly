@@ -1,0 +1,53 @@
+name: PAPER recorded opportunity census
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/opportunity-census.yml'
+      - 'research/phase6/opportunity_census.py'
+      - 'research/phase6/tests/test_opportunity_census.py'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-opportunity-census
+  cancel-in-progress: false
+jobs:
+  census:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        recording: [original, fresh]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify no-fill inference and gap handling
+        run: python3 -m unittest research.phase6.tests.test_opportunity_census -v
+      - uses: actions/download-artifact@v4
+        if: matrix.recording == 'original'
+        with:
+          name: two-hour-paper-39048983750
+          run-id: 39048983750
+          github-token: ${{ github.token }}
+          path: original-archive
+      - name: Preserve original logical tape
+        if: matrix.recording == 'original'
+        run: python3 -u -m research.phase6.prepare_recorded_replay prepare --archive original-archive/two-hour-paper-evidence.tar.gz --output census-input
+      - uses: actions/download-artifact@v4
+        if: matrix.recording == 'fresh'
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: census-input
+      - name: Count necessary quote conditions on all recorded trades
+        run: python3 -u -m research.phase6.opportunity_census --input-root census-input --output research/output/opportunity-census.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: opportunity-census-${{ matrix.recording }}
+          retention-days: 7
+          path: |
+            research/output/opportunity-census.json
+            census-input/provenance.json

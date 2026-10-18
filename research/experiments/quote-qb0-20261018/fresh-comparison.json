@@ -1,0 +1,59 @@
+{
+  "scope": "DEVELOPMENT_ONLY_SINGLE_CANDIDATE_SCREEN",
+  "baseline": {
+    "submittedOrders": 52,
+    "fills": 0,
+    "filledOrders": 0,
+    "netRealizedPnl": 0.0,
+    "cash": 500.0,
+    "maxDrawdown": 0,
+    "riskBreaches": 0,
+    "residualExpiryWorstCaseNotional": 0,
+    "quantityPairCompletion": null,
+    "orderTerminalReasons": {
+      "RESTING_NET_EDGE": 16,
+      "RESTING_PRICE_INVALID": 10,
+      "DATA_GAP:invalid_depth": 16,
+      "PEER_REJECTED": 3,
+      "POST_ONLY_WOULD_CROSS": 5,
+      "STALE_BOOK": 2
+    }
+  },
+  "candidate": {
+    "submittedOrders": 296,
+    "fills": 0,
+    "filledOrders": 0,
+    "netRealizedPnl": 0.0,
+    "cash": 500.0,
+    "maxDrawdown": 0,
+    "riskBreaches": 0,
+    "residualExpiryWorstCaseNotional": 0,
+    "quantityPairCompletion": null,
+    "orderTerminalReasons": {
+      "RESTING_PRICE_INVALID": 42,
+      "DATA_GAP:invalid_depth": 35,
+      "POST_ONLY_WOULD_CROSS": 8,
+      "REPRICE_VALIDATED_PAIR": 2,
+      "DATA_GAP:stale_source": 2,
+      "PEER_REJECTED": 7,
+      "STALE_BOOK": 2,
+      "RESTING_NET_EDGE": 198
+    }
+  },
+  "gates": {
+    "positiveNetRealizedPnl": false,
+    "betterNetPnlThanBaseline": false,
+    "atLeastOneCompletedPair": false,
+    "noResidualHoldings": true,
+    "noRiskBreaches": true,
+    "drawdownWithinExistingLimit": true,
+    "expiryResidualWithinExistingLimit": true
+  },
+  "candidateWorthIndependentTest": false,
+  "inputSha256": "9363443ae9287016ab7c63d3cf11d6b1ae33d814d9e3ad340bb99b33e7285074",
+  "decision": "NO_GO",
+  "liveAllowed": false,
+  "qualificationGateUnchanged": "research/phase2/acceptance.json",
+  "reason": "Diagnostic tapes are development data; require a frozen independent baseline/stress holdout",
+  "candidateConfigSha256": "b00702ca5c19d5a28ca7351fbfe37f2a2ccbd2838a1e1eaa99775f44483f8888"
+}

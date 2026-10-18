@@ -1,7 +1,6 @@
 name: PAPER predeclared best-bid comparison
 on:
-  push:
-    branches: [paper-fill-investigation]
+  workflow_dispatch:
 permissions:
   contents: read
   actions: read
