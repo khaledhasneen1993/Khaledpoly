@@ -1,9 +1,6 @@
 name: PAPER closed-loop settlement calibration
 on:
   workflow_dispatch:
-  push:
-    branches: [paper-fill-investigation]
-    paths: [.github/workflows/settlement-replay.yml]
 permissions:
   contents: read
   actions: read

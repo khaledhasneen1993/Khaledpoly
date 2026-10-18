@@ -592,3 +592,23 @@ retain the failed-run record; no comparison result is valid until verification
 passes. Then inspect `closed-loop-settlement-comparison` reports, net realized
 PnL AFTER fees, residual inventory, drawdown, exits and risk stop. A positive
 partial-label result would still NOT establish profitability or justify live.
+
+## Full regression passed; complete comparison pending — 2026-10-18
+
+Run 39112535160, frozen code b4d6dfccee46459b93342fe6f64f83d0f65d2473:
+verification job 117631509526 SUCCEEDED, BUILD SUCCESS. Java module totals
+132+11+5+1 = 149; Python phase2..6 totals 8+50+38+49+105 = 250; 399 passed,
+zero Java failures/errors/skips. Full ledger integration test confirms the same
+fee-aware risk exit and cash/fee accounting as the existing regression fixture;
+that fixture is synthetic test evidence, NOT market PnL. Test artifact
+12130209319; verified executor artifact 12131260627.
+
+Dependent comparison job 117631806808 is IN_PROGRESS. It reuses the existing
+full fresh development recording; no new capture or extra receipt queries.
+Wait for its baseline/candidate reports before any overlapping replay or
+strategy change. Both completed component and full-account workflows are now
+manual-only to avoid duplicate runs on checkpoint updates. Default runtime and
+acceptance criteria remain unchanged; experimental engine path is offline-only.
+No new net PnL result yet. Next read `closed-loop-settlement-comparison` artifact
+from this run, verify 52/0 normalized baseline reproduction and five consumed
+frozen bindings, then report actual net costs, holdings, exits and stop state.
