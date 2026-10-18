@@ -1470,3 +1470,53 @@ broaden requests. Next inspect its `only-risk-pair-two-receipts` artifact before
 deciding whether any new account replay is warranted.153 tests pass locally.
 Known economics unchanged: corrected control net-1.80, candidate net0/zero fills,
 undefined pair ratio, NO_GO; default guard OFF, PAPER only, no holdout tuning.
+
+## Two actual risk-pair receipts — 2026-10-18 19:43 UTC
+
+Run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39160036669
+at frozen948f4ac9999da97d355356e778c57a753a67073c succeeded.153 phase6 tests
+passed BEFORE public reads; exactly2 receipt requests,1 block request and1
+chain identity read. Both receipts yielded one unique conserved matching group.
+Artifact12148322208, SHA2565060cec3209b2b3d2f7929a09e349b08075f0b8064d7f942f1ba622201f775f2,
+is retained in `risk-pair-context-20261018/receipts/artifact.zip.b64`, including
+original receipts/block, selection, topics, full decoded report and summary.
+
+| Actual public transaction | Actual maker BUY components | Own bid | Compatible raw shares |
+| --- | --- | ---: | ---: |
+| 410a752f...e2bb7db | MINT A5.3 at .54 | .46 | 0 |
+| 1e24b3b6...e24e20a6 | MINT B19 at .46 and5.818182 at .450000017187499... | .38 | 0 |
+
+Integer shares AND collateral conserve exactly in both groups. Prices compare
+integer collateral to bid*integer shares, not rounded public prices. There were
+NO price-compatible actual maker BUY components for our two bids in the two
+postactivation observations. The other two public observations predate actual
+activation, and both orders terminate at the proven GAP. This closes this
+specific interval's observed direct/complement-route diagnostic without another
+account replay. It does NOT prove hypothetical venue redirection/queue priority
+or that every possible counterfactual strategy could never fill. No fills or
+economic changes are inferred from settlement. Both account results remain
+control-1.80 and guarded candidate0/zero fills/undefined pair ratio: NO_GO.
+
+Two additional offline regressions re-decode original RAW receipts, reproduce
+the conserved component summary without any network calls, and reject changed
+receipt identity/ambiguous groups.155 phase6 tests now pass locally. Historical
+full suite452 and this run's153 CI tests retain their original scopes/counts;
+no claim of155 new full-build CI tests. Frozen audit code/selection unchanged.
+
+Next work must address opportunity availability, NOT this already resolved
+interval, API transport, queue loosening or a repeated two-hour run. Reuse the
+saved untruncated transaction-linked censuses BEFORE requesting more data:
+original84 and fresh590 necessary-condition examples across both quote policies
+and route screens. For a FIXED five-share order and unchanged exit budget2.50,
+redemption.01, the risk rule requires both bids<=.498 (.49 on a .01 grid).
+Do not mistake these example quotes for actual submissions or use public
+complement price alone as a maker-route binding. Census sizes can be depth-
+clipped and its omitted dynamic risk/latency/queue constraints still apply.
+Determine whether an explicitly predeclared market/entry selection candidate
+has enough causal, risk-admissible observed activity BEFORE another account
+comparison. Record quantity/metadata, actual pre-decision book state, decision
+timing, activation and GAP exclusions; missing fields require bounded original
+evidence, not optimistic defaults. No new parameters or candidate chosen yet;
+do not sweep budgets, tune on independent data, or promote an idle guard as
+profitable. Current model remains default-off research, PAPER only. Follow-up
+continues because no strategy has met unchanged independent acceptance gates.

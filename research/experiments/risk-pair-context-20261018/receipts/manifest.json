@@ -1,0 +1,25 @@
+{
+  "runId": 39160036669,
+  "jobId": 117771222436,
+  "testedCommit": "948f4ac9999da97d355356e778c57a753a67073c",
+  "completedPublicReadUtc": "2026-10-18T19:43:20Z",
+  "artifactId": 12148322208,
+  "artifactZipSha256": "5060cec3209b2b3d2f7929a09e349b08075f0b8064d7f942f1ba622201f775f2",
+  "phase6CiTestsPassed": 153,
+  "receiptRequests": 2,
+  "blockRequests": 1,
+  "uniqueConservedGroups": 2,
+  "actualRoute": "MINT",
+  "targetBuyAtOrBelowOwnBidSharesRaw": [
+    0,
+    0
+  ],
+  "fillsCreated": 0,
+  "netPnlRecomputed": false,
+  "knownAccountControlNetPnl": -1.8,
+  "knownAccountCandidateNetPnl": 0,
+  "candidateFills": 0,
+  "decision": "NO_GO_ZERO_FILLS",
+  "independentPromotionAllowed": false,
+  "liveAllowed": false
+}
