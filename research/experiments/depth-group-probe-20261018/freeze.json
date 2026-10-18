@@ -1,0 +1,20 @@
+{
+  "experiment": "RAW-HASH-GROUP-QUARANTINE-0",
+  "frozenBeforeProbeEvaluation": false,
+  "quarantineMaxMs": 250,
+  "ttlSource": "Existing research activationMs; no parameter search",
+  "productionEnabled": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    "research/phase6/depth_group_probe.py": "55444218da815f9ad75fce389cd25cbbc01a12c9b43c86bd2945b29cd68c3e55",
+    "research/phase6/tests/test_depth_group_probe.py": "d4107b54aa2ccc73b8f43acb95f52599dd68ac32f57650f3977d407a86ec4f51",
+    "research/phase6/run_depth_group_probe.py": "02f6d3b8bcf9a7d04914fce151751da3972fd1802019a9b577b4f2db8ac4484f",
+    "research/experiments/depth-group-probe-20261018/evidence.json.gz.b64": "017f70d55107f01a9ca86cdfd27906cf8769f375eb1cc8cd4337954ffd97d9b4",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  },
+  "revision": "ISOLATE_MODE_CLOCK_AND_ADD_ACTUAL_FULL_SNAPSHOT_CONTROL; NO_PROBE_CONDITION_RELAXED",
+  "initialFreezeSha256": "1e415a5b63c9472441c8bb5c574ff481f687737d8d7a326731d15a76ffd6e82a",
+  "initialFreezePrecededFirstEvaluation": true,
+  "revisionTiming": "Development harness clock correction and full-snapshot control added after initial probe; not a new preregistered strategy experiment"
+}

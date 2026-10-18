@@ -813,3 +813,86 @@ the two anchors; implement a decoder change only if those messages prove one.
 Preserve strict invalidation otherwise and broaden settlement route coverage
 before strategy selection. Acceptance/risk/fees/queue and LIVE lock unchanged;
 no holdout data used or candidate promoted.
+
+## Original RAW cause reproduced; quarantine candidate rejected — 2026-10-18
+
+Run 39124054704 on 6fda30d9e7f262321d589ab11d95457f9f73c9ec completed SUCCESS
+at 11:41:46 UTC / 14:41:46 Amman, 117 phase6 tests. Artifact 12134459459 ZIP
+SHA256 31b3186ae2ebe21d38158e157a401d600019ffa70c8471741c9c0cbedaa3dcea.
+It contains 12,632 original RAW frames in the fixed interval, 29,231,302 retained
+bytes, complete 6,163,831-row recording verified. Provenance/freeze archived in
+`research/experiments/raw-gap-context-20261018/`. Preserve the compact 29 original
+RAW rows needed for all four token cases, including actual full snapshots and
+all causal prefix deltas, in `depth-group-probe-20261018/evidence.json.gz.b64`.
+
+Concrete cause in BOTH anchors: one transaction's level addition and level
+deletions arrive across several WS frames with the SAME source timestamp,
+per-token hash and announced best bid/ask. The first update crosses the prior
+snapshot; the two actual size-zero removal messages arrive 2–3ms later and
+restore a non-crossed complete book. Do not describe this as missing deletions
+or an atomic-array bug: the deletions are present, in separate real frames.
+First anchor RAW 140299 -> deletes 140303/140305; second 155411 -> deletes
+155415/155417. Existing source-order checks do not join these separate frames.
+
+Tested one isolated default-off `depth_group_probe` using the same four original
+snapshot/prefix cases. It keeps provisional levels quarantined, requires all
+updates to share source/hash/top hints, expires after the unchanged 250ms
+activation interval and waits for actual deletions. It never publishes a book,
+creates fills, retracts historical GAPs or changes account/strategy behavior.
+Six targeted tests cover default-off, actual deletions, changed hash/source/top,
+timeout, stale/future clocks, hint-only rejection and independent per-mode clocks
+on the four real cases. All 123 phase6 checks pass locally. Java code unchanged;
+do not call this a new full Maven verification or independent PAPER test.
+
+Important control: after reconstructing each group, compare ALL its price/size
+levels with the next ACTUAL full snapshot carrying the same source/hash:
+
+| GAP / token | Conditional group recovery | Actual full snapshot delay | Gain |
+| --- | ---: | ---: | ---: |
+| 140300 / 125...3268 | 3ms | 3ms (RAW 140312) | 0ms |
+| 140300 / 885...4334 | 3ms | 3ms (RAW 140309) | 0ms |
+| 155412 / 125...3268 | 2ms | 2ms (RAW 155421) | 0ms |
+| 155412 / 885...4334 | 2ms | 2ms (RAW 155419) | 0ms |
+
+Full depth agrees in all four, but the probe has NO observed latency advantage
+over the existing full-snapshot recovery. Reject promotion/integration; no new
+capture or account replay is justified for this component. These few selected
+development cases do not prove a general safe recovery policy. The hash is an
+opaque shared identifier, not cryptographically verified; current official
+py-clob-client summary hashing also requires four fields absent from these WS
+snapshots. No guessed metadata/hash is substituted. Official source checked
+2026-10-18: https://github.com/Polymarket/py-clob-client/blob/main/py_clob_client/utilities.py .
+
+Initial probe runner failed a prefix clock check because it reused the baseline
+final row arrival for candidate initialization. Corrected the harness to use an
+independent original snapshot clock per mode and added a recorded-case regression;
+strict validation/TTL unchanged. Preserve initial failure and original freeze.
+The active revision explicitly says it was updated after initial development
+evaluation for that harness correction and the full-snapshot control; it does
+NOT claim independent preregistration. Results are reproducible via
+`python3 -m research.phase6.run_depth_group_probe --output NEW_REPORT.json`.
+
+Current state: all jobs complete; 7/9 old markout horizons remain legitimately
+censored, no new fills/account result, original net -0.85 and cash 499.15.
+The raw investigation closes this proposed recovery detour without changing the
+runtime. NEXT prioritize broadening settlement route labels across active-order
+intervals, including both public BUY and SELL observations and exact shared
+transaction volume, before testing an entry/hedge candidate. Predeclare bounded
+selection before additional public reads; reuse recorded transactions. Do not
+repeat the same two GAP scans, tune on holdout or relax acceptance/queue/cost/risk.
+
+Prepared the NEXT bounded public-read selection BEFORE any new RPC in
+`route-coverage-selection-20261018/selection.json`: first ten unique recorded
+transactions (either side/either binary token, observed source after activation)
+while original baseline order 4 was active, and first ten while labelled replay
+maker exit order 14 was active. Twenty unique transactions, two receipts already
+cached, at most eighteen new receipt requests plus read-only chain/block checks.
+Reuse cached receipts and block results. Exact source rows, original samples,
+activation/terminal diagnostics and context artifact SHA are frozen in the file.
+This is explicitly stratified calibration on two known development intervals,
+not representative market sampling, a strategy candidate or a holdout. The exit
+still uses legacy public-print matching outside the five receipt bindings, so
+its routing coverage particularly needs verification before trusting broader
+account comparisons. No new public requests executed in this turn. Next fetch
+only this selection and validate per-transaction route/volume conservation;
+do not rescan the two-hour tape or expand selection after seeing receipts.

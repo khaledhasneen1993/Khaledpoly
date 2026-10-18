@@ -1,0 +1,17 @@
+{
+  "workflowRun": 39124054704,
+  "sourceCommit": "6fda30d9e7f262321d589ab11d95457f9f73c9ec",
+  "artifact": 12134459459,
+  "artifactZipSha256": "31b3186ae2ebe21d38158e157a401d600019ffa70c8471741c9c0cbedaa3dcea",
+  "completedUtc": "2026-10-18T11:41:46Z",
+  "fullContextGzipSha256": "09464def880b4d604dc88dc4036b387fb7387d608d0cf33b5691d78069a9ea4a",
+  "frames": 12632,
+  "retainedBytes": 29231302,
+  "sourceRows": 6163831,
+  "originalRawUnmodified": true,
+  "minimalOriginalProof": "research/experiments/depth-group-probe-20261018/evidence.json.gz.b64",
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "fillsInferred": false,
+  "pnlInferred": false,
+  "decision": "NO_GO"
+}

@@ -1,0 +1,40 @@
+{
+  "experiment": "RAW-CROSSED-DEPTH-CONTEXT-0",
+  "frozenBeforeFirstExtraction": true,
+  "evidencePurpose": "Determine source of two observed crossed-depth gaps; no inferred fix or fill",
+  "spec": {
+    "tokens": [
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268"
+    ],
+    "startMs": 1792269669239,
+    "endMs": 1792269698284,
+    "anchors": [
+      {
+        "seq": 140300,
+        "eventIndex": 0,
+        "at": 1792269684239,
+        "sourceMs": 1792269684169,
+        "reason": "invalid_depth"
+      },
+      {
+        "seq": 155412,
+        "eventIndex": 0,
+        "at": 1792269696284,
+        "sourceMs": 1792269696213,
+        "reason": "invalid_depth"
+      }
+    ],
+    "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b"
+  },
+  "liveAllowed": false,
+  "filesSha256": {
+    "research/phase6/raw_gap_context.py": "646159c64b2a5724e13c4a22cd9f4e84db82c8839e12d5e22e61ab9b21e52df1",
+    "research/phase6/tests/test_raw_gap_context.py": "e42fe4633a685fd30c469d7cd52ec37e2dc3fc3a7ecc73496a867ada20606191",
+    "research/experiments/markout-coverage-20261018/report.json": "7760e443b3fe71c11c808a12adb9c2c47c574e59e229e333bb048188e6a931a6",
+    "polybot-core/src/main/java/com/polybot/hft/paper/RawTapeNormalizer.java": "fb9f8351095f9bf461a4e55206e531e18ba1723c8857facd537eacfe93e6c8d1",
+    "polybot-core/src/main/java/com/polybot/hft/polymarket/ws/LocalOrderBook.java": "2673011e8722a278a59703c16bbfe930e598b630d283ae600931f1b34599486e",
+    "polybot-core/src/main/java/com/polybot/hft/polymarket/ws/ClobMarketWebSocketClient.java": "6cdbcff8814f1a977a53d90351937cce185e58cbe59a94fe89274d56c7e3d0b4",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  }
+}

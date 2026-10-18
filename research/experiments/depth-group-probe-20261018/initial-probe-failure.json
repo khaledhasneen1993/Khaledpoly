@@ -1,0 +1,10 @@
+{
+  "scope": "DEVELOPMENT_PROBE_FAIL_CLOSED",
+  "failedRawSeq": 155377,
+  "error": "Prefix is not a verified baseline",
+  "interpretation": "Fix per-mode snapshot clock; retain all strict source/hash/hint/freshness checks",
+  "fillsCreated": 0,
+  "netPnlRecomputed": false,
+  "decision": "NO_GO",
+  "cause": "Probe runner reused the baseline final row arrival as candidate initial snapshot time; candidate prefix then failed receive-clock checks"
+}

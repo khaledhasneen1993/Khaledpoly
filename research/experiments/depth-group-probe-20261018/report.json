@@ -1,0 +1,162 @@
+{
+  "scope": "FOUR_SELECTED_DEVELOPMENT_RAW_GROUPS_NOT_STRATEGY_OR_FILL_QUALIFICATION",
+  "sourceContextArtifact": 12134459459,
+  "quarantineMaxMs": 250,
+  "cases": [
+    {
+      "anchorSeq": 140300,
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "snapshotSeq": 140293,
+      "triggerRawSeq": 140299,
+      "outcomes": {
+        "baseline": {
+          "status": "WAIT_FULL_SNAPSHOT",
+          "reason": "DEPTH_GROUP_INCOMPLETE",
+          "bookPublished": false,
+          "usedFollowupRawSequences": []
+        },
+        "quarantineCandidate": {
+          "status": "RECOVERY_CANDIDATE",
+          "delayMs": 3,
+          "bestBid": "0.49",
+          "bestAsk": "0.5",
+          "hash": "f50517b34ca44d50ac1a20ee8b583ea0e74bb9b7",
+          "sourceMs": 1792269684169,
+          "bookPublished": false,
+          "hashCryptographicallyVerified": false,
+          "priorGapRetracted": false,
+          "usedFollowupRawSequences": [
+            140303,
+            140305
+          ],
+          "confirmationSnapshotSeq": 140312,
+          "confirmationFullDepthEqual": true,
+          "confirmationSourceAndHashEqual": true,
+          "baselineFullSnapshotDelayMs": 3,
+          "latencyGainMs": 0
+        }
+      }
+    },
+    {
+      "anchorSeq": 140300,
+      "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "snapshotSeq": 140291,
+      "triggerRawSeq": 140299,
+      "outcomes": {
+        "baseline": {
+          "status": "WAIT_FULL_SNAPSHOT",
+          "reason": "DEPTH_GROUP_INCOMPLETE",
+          "bookPublished": false,
+          "usedFollowupRawSequences": []
+        },
+        "quarantineCandidate": {
+          "status": "RECOVERY_CANDIDATE",
+          "delayMs": 3,
+          "bestBid": "0.5",
+          "bestAsk": "0.51",
+          "hash": "1b683a879f2f160694aaf0f0872b3f4d3f8ab639",
+          "sourceMs": 1792269684169,
+          "bookPublished": false,
+          "hashCryptographicallyVerified": false,
+          "priorGapRetracted": false,
+          "usedFollowupRawSequences": [
+            140303,
+            140305
+          ],
+          "confirmationSnapshotSeq": 140309,
+          "confirmationFullDepthEqual": true,
+          "confirmationSourceAndHashEqual": true,
+          "baselineFullSnapshotDelayMs": 3,
+          "latencyGainMs": 0
+        }
+      }
+    },
+    {
+      "anchorSeq": 155412,
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "snapshotSeq": 155369,
+      "triggerRawSeq": 155411,
+      "outcomes": {
+        "baseline": {
+          "status": "WAIT_FULL_SNAPSHOT",
+          "reason": "DEPTH_GROUP_INCOMPLETE",
+          "bookPublished": false,
+          "usedFollowupRawSequences": []
+        },
+        "quarantineCandidate": {
+          "status": "RECOVERY_CANDIDATE",
+          "delayMs": 2,
+          "bestBid": "0.48",
+          "bestAsk": "0.49",
+          "hash": "0d38792591e62c0382d47db704a13417b2b238b7",
+          "sourceMs": 1792269696213,
+          "bookPublished": false,
+          "hashCryptographicallyVerified": false,
+          "priorGapRetracted": false,
+          "usedFollowupRawSequences": [
+            155415,
+            155417
+          ],
+          "confirmationSnapshotSeq": 155421,
+          "confirmationFullDepthEqual": true,
+          "confirmationSourceAndHashEqual": true,
+          "baselineFullSnapshotDelayMs": 2,
+          "latencyGainMs": 0
+        }
+      }
+    },
+    {
+      "anchorSeq": 155412,
+      "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "snapshotSeq": 155367,
+      "triggerRawSeq": 155411,
+      "outcomes": {
+        "baseline": {
+          "status": "WAIT_FULL_SNAPSHOT",
+          "reason": "DEPTH_GROUP_INCOMPLETE",
+          "bookPublished": false,
+          "usedFollowupRawSequences": []
+        },
+        "quarantineCandidate": {
+          "status": "RECOVERY_CANDIDATE",
+          "delayMs": 2,
+          "bestBid": "0.51",
+          "bestAsk": "0.52",
+          "hash": "e23910789fd1723c3463ac3a7b959dff9fd08355",
+          "sourceMs": 1792269696213,
+          "bookPublished": false,
+          "hashCryptographicallyVerified": false,
+          "priorGapRetracted": false,
+          "usedFollowupRawSequences": [
+            155415,
+            155417
+          ],
+          "confirmationSnapshotSeq": 155419,
+          "confirmationFullDepthEqual": true,
+          "confirmationSourceAndHashEqual": true,
+          "baselineFullSnapshotDelayMs": 2,
+          "latencyGainMs": 0
+        }
+      }
+    }
+  ],
+  "baselineInvalidations": 4,
+  "unverifiedPrefixCases": 0,
+  "baselinePolicy": "STRICT_PREFIX_VALIDATION_THEN_DISABLED_PROBE_NOT_FULL_RUNTIME_REPLAY",
+  "recoveryCandidates": 4,
+  "candidateWorthIndependentTest": false,
+  "rejectionReasons": [
+    "NO_LATENCY_GAIN_VERSUS_ACTUAL_FULL_SNAPSHOT_IN_SELECTED_CASES",
+    "SELECTED_DEVELOPMENT_COMPONENT_PROBE_NOT_STRATEGY_QUALIFICATION"
+  ],
+  "originalAccountNetPnl": -0.85,
+  "netPnlRecomputed": false,
+  "fillsCreated": 0,
+  "productionEnabled": false,
+  "historicalGapOrMarkoutRetracted": false,
+  "hashCryptographicallyVerified": false,
+  "decision": "NO_GO",
+  "liveAllowed": false,
+  "independentPaperQualificationAllowed": false,
+  "limitation": "Opaque hash/source/top agreement in selected groups is conditional recovery evidence, not a cryptographic full-book proof or independent production validation."
+}
