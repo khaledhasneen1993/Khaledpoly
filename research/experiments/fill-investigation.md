@@ -1662,3 +1662,44 @@ never jump from price arithmetic to full-account profitability/holdout/capture.
 One variant, no fitted parameters/price-level sweep. Existing QB0 and guarded
 zero-fill rejection remain intact. Preserve this preregistration in git before
 evaluating DQ3 on the downloaded witnesses. PAPER-only, defaults unchanged.
+
+## DQ3-0 frozen selected-state screen — 2026-10-18
+
+Committed preregistration0cc9cc16633ef20eea1129f2793322b683acb29d BEFORE computing
+DQ3 on the34 actual witnesses. Result `depth-quote-20261018/state-screen.json`:
+11 states have a lawful priced pair vs1 actual legacy PAIR_SUBMITTED state,
+10 additional price-feasible states. This is NOT11 submissions/fills or a
+candidate account trajectory. All19 actual minimum-size failures remain blocked,
+as do2 already-resting states. Every proposed quantity and required threshold
+equals its original snapshot; every selected quote retains10% participation at
+its own displayed level and fits the unchanged remaining worst-case loss cap.
+No future print or achieved return was used in price selection. No policy tuning.
+
+This passes ONLY the preregistered gate for necessary-TRAFFIC measurement.
+170 phase6 tests pass locally, including immutable result/arithmetic/action
+reproduction, DQ3 safety/tie rules and source/activation/GAP/aggregate-price
+negative cases. Full runtime verification remains469 CI tests at6dc5f25; these
+new Python-only helpers did not trigger another Maven build. No runtime wiring.
+
+Freeze `depth-quote-traffic-freeze.json` BEFORE a SINGLE original full tape scan.
+11 independently priced legacy decision anchors, actual original row/time/token
+identity, due cutoff+250ms, at most unchanged unhedgedMs30s, first original GAP,
+unavailable or resolution censors earlier. This deliberately RELAXED due-time
+UPPER BOUND does NOT claim actual observed activation, queue, book-source trade
+eligibility, actual resting-risk cancellation or candidate state evolution.
+All those omissions can only overstate usefulness; no fills/PnL are inferred.
+If no necessary traffic, reject these selected starts; do not infer global
+strategy impossibility from selected states. Positive traffic still requires
+actual receipt component prices AND causal queue/account replay before adoption.
+
+Record all same-token SELL and opposite-token BUY observations at ANY public
+price (mixed maker components make last/aggregate price filtering unsafe),
+bound to original RAW text/normalized frame/event/source and full logical tape
+hash/clean end. These are possible route observations, NOT actual DIRECT/MINT
+labels or volume available to our order. Deduplicate transaction hashes for later
+evidence handling; do not sum independent overlapping states as venue volume.
+Public RPC/account replay/current capture forbidden in this small workflow.
+Phase6 tests precede source reading, no Java rebuild. Inspect `dq3-necessary-traffic`
+before choosing another step; never count price-feasibility improvement as profit.
+Known account net remains control-1.80, guarded0/0fills, NO_GO. Acceptance/fees/
+queue/latency/risk/minimum/default behavior unchanged, PAPER only.

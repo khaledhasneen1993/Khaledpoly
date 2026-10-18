@@ -1,0 +1,38 @@
+name: PAPER DQ3 frozen necessary traffic screen
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/depth-quote-traffic.yml'
+      - 'research/phase6/depth-quote-traffic-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-dq3-necessary-traffic
+  cancel-in-progress: false
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Offline phase6 regressions before source scan
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: dq3-input
+      - name: One original tape scan, selected quote-state upper bounds only
+        run: >-
+          python3 -u -m research.phase6.depth_quote_traffic --input-root dq3-input
+          --output research/output/depth-quote-traffic.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dq3-necessary-traffic
+          retention-days: 7
+          path: research/output/depth-quote-traffic.json
