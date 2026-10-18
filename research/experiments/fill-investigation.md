@@ -926,3 +926,68 @@ If public reads fail transiently, retain successes and retry ONLY missing items
 with the same selection; do not launch an overlapping full recollection.
 Default execution/config/risk/queue/fees/acceptance remain unchanged. Original
 partial-model account result -0.85 is not revised by receipt acquisition alone.
+
+## Completed frozen route audit and coverage limitation — 2026-10-18
+
+Run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39128452814
+succeeded at 12:43:29 UTC, source 24a8f439f41670c475bcaa472f2747e0f2a5f404.
+All 20 selected receipts corroborate; each has one uniquely identified group
+with exact integer share AND collateral conservation; zero errors. Requests:
+18 new receipts, two block reads and one chain check, within the frozen budget.
+126 phase6 tests passed in that run. No Java, runtime or strategy changes.
+
+| Frozen cohort | Transactions | DIRECT shares | MINT shares | MERGE shares |
+| --- | ---: | ---: | ---: | ---: |
+| ENTRY_BASELINE_4 | 10 BUY | 78 | 922 | 0 |
+| MAKER_EXIT_LABELLED_14 | 9 BUY / 1 SELL | 55.57 | 79.315186 | 0 |
+
+These are volumes of actual public settlement groups, NOT our hypothetical
+fills or queue allocations. They do not establish counterfactual priority
+between direct and complementary routes. All twenty samples, including all ten
+exit-interval samples, are token 885...4334. Consequently the predeclared first-ten
+selection DOES NOT cover the own-token BUY prints that triggered the two modelled
+SELL fills. Do not treat completed conservation as verification of those exits,
+silently expand this completed experiment or rerun the account claiming new PnL.
+
+Exact original artifact 12136753379, including report, selection and all twenty
+raw receipts/blocks, is permanently archived as
+`route-coverage-20261018/artifact.zip.b64`. Original ZIP SHA256
+931df689a6775dd4deb5227f24d0b9205b228ede0501226f382357b1410c4cf1.
+The pretty selection hash e6a2a658... and report canonical selection hash
+98c7038b07323788effe9aeb54dee83ec382817da687be49cf40057a217dad04
+are different JSON encodings of the same selection. Offline reproduction checks
+the original ZIP hash, exact membership/size, frozen source/acceptance hashes,
+canonical selection, every receipt decode and conserved route against the
+original report. Run `python3 -m research.phase6.revalidate_route_coverage`;
+zero network requests, no optional Keccak dependency (original topics retained).
+Two added archive/tamper tests bring local phase6 suite to 128 passing tests;
+this is not a new complete JVM CI result or PAPER qualification.
+
+NEXT is a SEPARATE targeted diagnostic, frozen before further public reads in
+`exit-trigger-selection-20261018/selection.json` (SHA256
+fb4f4b7970c9e850fdf898f6a232ed2e29fb24fc18ff881d5043559654c141b7).
+Retrieved and verified the existing original RAW-context artifact only; no new
+market recording or public receipt requests for this next selection yet. Join
+the two known exit execution clocks to their original TRADE events and RAW text:
+
+| Normalized seq | Arrival ms | Public BUY shares | Model SELL fill | Original transaction |
+| --- | ---: | ---: | ---: | --- |
+| 153844 | 1792269694955 | 13 | 3 | 0xc8e07c1f9e610746c394fc146bb3b88eca85b8e76ef6980192330af7c590c5d8 |
+| 153978 | 1792269695069 | 5 | 2 | 0xee2a2436ad21f798967970d6d97632706a952430adfc1f3546495b344b9a9ad4 |
+
+Both are own-token 125...3268 BUY at .47, selected by the already frozen model
+fill clocks, not receipt outcomes. Preserve the two complete original RAW and
+normalized frames in `original-frames.json.gz.b64`; compare source times, token,
+side, size, price, transaction ID, frame/sequence and lifecycle before querying.
+Reuse the existing conserved-route decoder and allowlist, limit to two receipts
+and necessary public chain/block reads; cache successes. Audit maker SELL .47
+components, fees, exact shared volume and whether the initial queue of ten is
+supported, explicitly distinguishing observed routing from unproven queue.
+No account replay/qualification is authorized by this diagnostic selection;
+first establish whether the legacy exit matching assumptions need correction.
+
+No jobs remain running, no new fills/account replay and no independent test.
+Original partial-model net after its recorded costs remains -0.85, zero pairs,
+cash 499.15; that conditional model result is not promoted. Acceptance, risk,
+queue, fee and strategy settings remain unchanged. Continue the focused missing
+exit-trigger audit next; do not repeat the completed twenty receipts or GAP scans.

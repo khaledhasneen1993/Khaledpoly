@@ -1,0 +1,94 @@
+{
+  "scope": "SEPARATE_TARGETED_DEVELOPMENT_ACTUAL_EXIT_TRIGGER_AUDIT_NOT_STRATEGY_CANDIDATE",
+  "selectedBeforeAnyNewReceiptRead": true,
+  "maxNewReceiptRequests": 2,
+  "sourceContextGzipSha256": "09464def880b4d604dc88dc4036b387fb7387d608d0cf33b5691d78069a9ea4a",
+  "sourceArtifact": 12134459459,
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "originalCandidateReportSha256": "46e216726858609ef2ea25ae9ca565c877021f8fee5ccba4a6f405239bffdadc",
+  "expectedExecutions": [
+    {
+      "at": 1792269694955,
+      "quantity": 3
+    },
+    {
+      "at": 1792269695069,
+      "quantity": 2
+    }
+  ],
+  "cohorts": [
+    {
+      "role": "ACTUAL_EXIT_TRIGGER_14",
+      "transactions": [
+        "0xc8e07c1f9e610746c394fc146bb3b88eca85b8e76ef6980192330af7c590c5d8",
+        "0xee2a2436ad21f798967970d6d97632706a952430adfc1f3546495b344b9a9ad4"
+      ],
+      "orderDiagnostic": {
+        "id": "sim-research-14",
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "buy": false,
+        "price": 0.47,
+        "submittedMs": 1792269694195,
+        "activationDueMs": 1792269694445,
+        "activatedMs": 1792269694445,
+        "terminalMs": 1792269695069,
+        "terminalReason": "PRINT_FILLED",
+        "initialQueueAhead": 10,
+        "remainingQueueAhead": 0,
+        "eligiblePrintVolume": 18,
+        "remainingShares": 0,
+        "activeMs": 624,
+        "printObservations": {
+          "ELIGIBLE_PRINT": 2,
+          "ORDER_NOT_ACTIVE": 1
+        }
+      }
+    }
+  ],
+  "transactions": [
+    {
+      "transactionHash": "0xc8e07c1f9e610746c394fc146bb3b88eca85b8e76ef6980192330af7c590c5d8",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "size": "13",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269694886",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0xc8e07c1f9e610746c394fc146bb3b88eca85b8e76ef6980192330af7c590c5d8",
+        "arrivalMs": 1792269694955
+      },
+      "roles": [
+        "ACTUAL_EXIT_TRIGGER_14"
+      ],
+      "normalizedSeq": 153844,
+      "originalEventIndex": 0
+    },
+    {
+      "transactionHash": "0xee2a2436ad21f798967970d6d97632706a952430adfc1f3546495b344b9a9ad4",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "size": "5",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269694998",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0xee2a2436ad21f798967970d6d97632706a952430adfc1f3546495b344b9a9ad4",
+        "arrivalMs": 1792269695069
+      },
+      "roles": [
+        "ACTUAL_EXIT_TRIGGER_14"
+      ],
+      "normalizedSeq": 153978,
+      "originalEventIndex": 0
+    }
+  ],
+  "queueAllocationProven": false,
+  "accountReplayAllowed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

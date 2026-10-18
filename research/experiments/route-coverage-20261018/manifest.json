@@ -1,0 +1,60 @@
+{
+  "verifiedTransactions": 20,
+  "cohorts": {
+    "ENTRY_BASELINE_4": {
+      "transactions": 10,
+      "sides": {
+        "BUY": 10
+      },
+      "tokens": {
+        "88599287360325233240690982088109814021050513475420535621672707507474151524334": 10
+      },
+      "routeSharesRaw": {
+        "MINT": 922000000,
+        "DIRECT": 78000000
+      },
+      "routeShares": {
+        "MINT": "922",
+        "DIRECT": "78"
+      }
+    },
+    "MAKER_EXIT_LABELLED_14": {
+      "transactions": 10,
+      "sides": {
+        "BUY": 9,
+        "SELL": 1
+      },
+      "tokens": {
+        "88599287360325233240690982088109814021050513475420535621672707507474151524334": 10
+      },
+      "routeSharesRaw": {
+        "MINT": 79315186,
+        "DIRECT": 55570000
+      },
+      "routeShares": {
+        "MINT": "79.315186",
+        "DIRECT": "55.57"
+      }
+    }
+  },
+  "networkRequests": 0,
+  "fillsCreated": 0,
+  "netPnlRecomputed": false,
+  "decision": "NO_GO",
+  "workflowRun": 39128452814,
+  "sourceCommit": "24a8f439f41670c475bcaa472f2747e0f2a5f404",
+  "artifact": 12136753379,
+  "artifactZipSha256": "931df689a6775dd4deb5227f24d0b9205b228ede0501226f382357b1410c4cf1",
+  "completedUtc": "2026-10-18T12:43:29Z",
+  "ciPhase6Tests": 126,
+  "localPhase6TestsAfterOfflineArchiveChecks": 128,
+  "rpcCalls": {
+    "eth_chainId": 1,
+    "eth_getTransactionReceipt": 18,
+    "eth_getBlockByHash": 2
+  },
+  "originalPartialModelNetPnl": "-0.85",
+  "accountReplayPerformed": false,
+  "selectionLimitation": "All first ten exit observations are complement token 885...4334, excluding the own-token public BUY observations at 1792269694955 and 1792269695069. No queue allocation or fill conclusion.",
+  "next": "Audit ONLY the two separately frozen actual exit-trigger observations, without expanding or retuning the completed twenty-transaction selection."
+}
