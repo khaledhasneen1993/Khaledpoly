@@ -1143,3 +1143,19 @@ default runtime and strategy unchanged. Neither partial future-label model is
 eligible for independent PAPER qualification or deployment. Continue coverage
 correction before any new strategy candidate, then freeze a causal candidate
 before separate independent data and live PAPER testing.
+
+## Frozen nine-observation collector ready — 2026-10-18
+
+Starting ca0dce6cfc2e13a305ae46373b2d3320883d433e; PR9 draft, all current
+jobs complete. New `exit_window_audit` validates all nine exact RAW hashes,
+frame/sequence/event/source/token/side/price/size bindings against the unchanged
+predeclared selection. A dedicated read-window collector deliberately does NOT
+adapt the window into a fake orderDiagnostic or alter the observed terminal.
+Seeds the two original receipts from their hashed archived ZIP; checkpoint gate
+rejects changed resume selections before network. At most seven new receipts,
+same public chain/receipt/block allowlist and pacing, per-block cache, raw
+success/error checkpointing, unique group and share/collateral conservation.
+Three new binding/window/tamper/cache/resume tests; 137 phase6 checks pass locally.
+Freeze source/test/evidence/cache/acceptance hashes before reads. One small
+workflow reads only this bounded batch. Next wait for its report before any
+account replay; no strategy/fee/queue/risk/acceptance change or new PnL claimed.
