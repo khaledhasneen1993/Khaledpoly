@@ -1219,3 +1219,81 @@ control or new capture. Next read `seven-versus-fourteen-account-control`, retai
 baseline/candidate reports and audits, and measure net fees/holdings/drawdown and
 the actual exit after the first GAP. Until completed, -0.85 is the OLD partial
 model's result, NOT a new fourteen-label account result. No acceptance change.
+
+## Complete pre-gap account correction reveals dust trap — 2026-10-18
+
+Run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39141370797
+completed successfully at 15:51 UTC, source132b9eb55eed83e6bb32d79bb0e3892ccce71f63.
+139 phase6 CI tests passed, and the reused executor's tested source commit and
+artifact digest passed. Same complete development tape/config, 7/7 and 14/14
+bindings consumed. No Java/runtime/fee/queue/risk/acceptance change in this run.
+
+| Account result | Seven-label baseline | Fourteen-label correction |
+| --- | ---: | ---: |
+| Submitted orders / fills | 61 / 3 | 13 / 2 |
+| Net realized PnL after applied costs | -0.85 | -1.80 |
+| Ending cash | 499.15 | 498.20 |
+| Fees / settlement costs | 0 | 0.01 |
+| Max drawdown | 1.20 | 1.80 |
+| Unhedged quantity at expiry | 0 | 2 |
+| Ending inventory after actual resolution | 0 | 0 |
+| Completed pairs | 0 | 0 |
+| Entry suspended | false | true |
+
+The corrected model buys five at .64 and sells only three at .47. The old SELL2
+is no longer fabricated from the pre-gap public MINT aggregates. The remaining
+SELL order is cancelled at the original DATA_GAP1792269696284; the original
+recorded META at seq130093 contains minSize5. Residual two is below that current
+model minimum: 557 DUST_AWAIT_RESOLUTION decisions and no successful taker exit.
+`reduce` silently skips maker replacement below minimum; `executePending`
+rejects subminimum quantity, so repeated RISK_SELL decisions cannot liquidate
+it. Protective entry suspension starts after unhedged timeout, not because risk
+was relaxed or drawdown threshold altered; riskBreaches remains zero. Two shares
+survive until the real recorded resolution at1792269956849 paying zero to the
+held token. Ending inventory zero is resolution, NOT a successful hedge/exit.
+Loss arithmetic: maker sale3*(.64-.47)=.51, residual basis2*.64=1.28 lost at
+resolution, existing redemption cost.01 -> TOTAL1.80. Component conservation:
+814 venue shares=8 allocated+10 queue-absorbed+796 unused,49 unique components.
+Markouts still affected by true gaps; neither model qualifies independently.
+
+Exact original full reports AND full account audits AND comparison are archived
+in `exit-window-replay-20261018/result/artifact.zip.b64`, artifact12141699475,
+ZIP SHA256 0a7f87d7d0a4922392577cf557a816864c3d626c1ac271475aa73056d67636ad.
+Original comparison, exact META/exit/actual-resolution proof and loss arithmetic
+are retained beside it. A regression verifies original archive hash, bounded
+membership, report/comparison equality, complete label consumption, actual zero
+payout and monetary arithmetic. No account rerun or new receipt reads this turn.
+
+Checked official venue documentation on2026-10-18:
+https://docs.polymarket.com/trading/place-orders — API describes min_order_size
+and rounded share validation; SELL market orders use shares, BUY uses notional.
+https://github.com/Polymarket/agent-skills/blob/main/order-patterns.md .
+These sources do not justify assuming this particular below-minimum SELL was
+accepted; no orders were submitted to test it. Third-party claims of special
+FOK exceptions are not validation. Keep the recorded minimum/model constraint
+unchanged; no wallet, signed order, top-up purchase or invented dust liquidation.
+
+NEXT strategy candidate is explicitly frozen BEFORE any candidate replay in
+`research/phase6/residual-entry-risk-candidate.json`: CS-RESIDUAL-WORST-CASE-1.
+Default-off entry veto, using ONLY planned size/prices and EXISTING available
+exit-loss budget/redemption cost: q*max(firstBid,secondBid)+redemptionCost must
+fit available exit-loss budget. A single leg may fill completely while its peer
+never fills and no lawful exit exists. The known pre-entry quote5*(max(.34,.64))
++ .01=3.21 exceeds existing budget2.5; no fitted volatility/price threshold,
+parameter grid, increased stake, weaker queue, minimum size, fees or risk cap.
+Near-balanced .49/.49 quotes can fit, but whether any fills/pairs/profit remain
+requires actual causal full-account replay, not this arithmetic example.
+
+Implemented and tested only the pure research primitive `residual_entry_risk`:
+default-off behavior preservation, enabled full-loss bound, exact cost/budget
+boundary, finite/invalid fail-closed inputs and immutable original dust account
+proof. 143 phase6 tests pass locally. It is NOT wired into ResearchSession,
+streaming PAPER or default runtime and has produced NO strategy performance.
+Next integrate behind an off-by-default research option with backward-compatibility
+tests, preserve historical frozen source provenance (old verifiers currently
+compare historical source hashes to worktree files), freeze the full candidate,
+then compare fourteen-label control versus candidate on the same development
+tape/config. Do not rerun the old partial controls or collect more receipts for
+the already-complete pre-gap exit window. No holdout tuning; acceptance unchanged;
+zero fills/no loss would still fail qualification. Future receipt labels remain
+environment calibration only, never a causal signal or independent PAPER proof.

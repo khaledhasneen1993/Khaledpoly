@@ -1,0 +1,29 @@
+{
+  "run": 39141370797,
+  "sourceCommit": "132b9eb55eed83e6bb32d79bb0e3892ccce71f63",
+  "artifact": 12141699475,
+  "zipSha256": "0a7f87d7d0a4922392577cf557a816864c3d626c1ac271475aa73056d67636ad",
+  "ciPhase6Tests": 139,
+  "localPhase6TestsAfterResidualAnalysis": 143,
+  "baseline": {
+    "labels": 7,
+    "netPnl": "-.85",
+    "cash": "499.15",
+    "fills": 3
+  },
+  "candidate": {
+    "labels": 14,
+    "netPnl": "-1.80",
+    "cash": "498.20",
+    "fills": 2,
+    "costs": ".01",
+    "drawdown": "1.80",
+    "unhedgedSharesAtExpiry": 2,
+    "endingShares": 0,
+    "halted": true
+  },
+  "riskBreaches": 0,
+  "independentPaperQualificationAllowed": false,
+  "decision": "NO_GO",
+  "next": "Integrate the default-off residual entry worst-case budget guard only after preserving historical source provenance, then freeze and compare against 14-label baseline on SAME development tape. No qualification with future labels."
+}
