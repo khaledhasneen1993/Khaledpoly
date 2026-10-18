@@ -228,3 +228,46 @@ model change, queue relaxation, new strategy variant or fresh capture occurs.
 Next review: inspect route counts, overlap flags and transaction field coverage.
 Only consider a separately frozen, default-off complementary execution model
 after evidence resolves side semantics, queue allocation and duplicate prints.
+
+## Complement route census — 2026-10-18 06:39 Asia/Amman
+
+Run 39091061373 passed both scans. Artifacts original 12122577227, fresh
+12123270316; full reports persisted in `complement-census-20261018/`.
+Both logical hashes AND direct-route reference counts reproduced exactly.
+Additional optimistic complementary BUY candidates: improve-1 original 9,
+fresh 41; join-0 original 60, fresh 502. No direct/complement fingerprint
+overlap was observed; this does not establish execution uniqueness or prove
+that any candidate exhausted a queue. No fills or PnL inferred.
+
+Raw trade field coverage provides a stronger next check: all 6,410 original
+and 16,411 fresh RAW last-trade messages include `transaction_hash`. Counts
+differ from accepted normalized prints because raw observations also include
+messages rejected or deduplicated by the feed. Five bounded raw samples per
+tape retain transaction hashes, token, side, price, size, timestamp and market.
+Do not retroactively change matching from candidate counts alone.
+
+Next step is a bounded PUBLIC READ-ONLY receipt audit of those ten fixed
+samples, using Polygon chain ID 137. Only `eth_chainId`,
+`eth_getTransactionReceipt`, `eth_getBlockByHash` are allowed; all signing and
+transaction-submission methods are rejected before any network call. Persist
+raw receipts/block headers and exact RPC errors. Validate hash/status/block
+identity, then decode CTF Exchange V2 events only from official allowlisted
+addresses. Join per-maker events to ONE taker aggregate event using order hash,
+taker maker address and log order; never count aggregate+maker as separate
+traded volume. Classify BUY/BUY MINT, SELL/SELL MERGE and direct routes only
+when event fields agree. Unknown contracts/ABIs remain uncorroborated.
+
+Primary sources reviewed 2026-10-18:
+- https://docs.polymarket.com/resources/contracts — current Polygon addresses.
+- https://github.com/Polymarket/ctf-exchange-v2/blob/main/src/exchange/mixins/Events.sol
+  — exact event signatures, indexed fields and word layouts.
+- https://polygon.publicnode.com/ — public Polygon RPC.
+
+The optional isolated audit environment pins pycryptodome 3.23.0 solely for
+Ethereum Keccak event topics; no wallet/keys/signing are used and no production
+dependency changes. Three local unit tests verify maker/taker grouping,
+duplicate/unclosed groups, untrusted addresses and the read-only RPC allowlist.
+Next review: `public-receipt-audit` artifact, route types and exact sample
+token/side/price/size comparison. Receipt settlement evidence alone cannot prove
+a hypothetical order's allocation, causal queue position or profitability.
+If RPC is transiently unavailable, retain errors without manufacturing evidence.

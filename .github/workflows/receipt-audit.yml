@@ -1,0 +1,37 @@
+name: PAPER public receipt corroboration
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/receipt-audit.yml'
+      - 'research/phase6/receipt_audit.py'
+      - 'research/phase6/tests/test_receipt_audit.py'
+permissions:
+  contents: read
+concurrency:
+  group: paper-public-receipt-audit
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Isolate optional Keccak decoder dependency
+        run: |
+          python3 -m venv "$RUNNER_TEMP/receipt-audit-env"
+          "$RUNNER_TEMP/receipt-audit-env/bin/pip" install --only-binary=:all: --no-deps pycryptodome==3.23.0
+      - name: Verify event grouping and read-only RPC boundary
+        run: '"$RUNNER_TEMP/receipt-audit-env/bin/python" -m unittest research.phase6.tests.test_receipt_audit -v'
+      - name: Read fixed recorded transaction receipts, never submit transactions
+        run: >-
+          "$RUNNER_TEMP/receipt-audit-env/bin/python" -u -m research.phase6.receipt_audit
+          --census research/experiments/complement-census-20261018/original.json
+          --census research/experiments/complement-census-20261018/fresh.json
+          --output research/output/receipt-audit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-receipt-audit
+          retention-days: 7
+          path: research/output/receipt-audit/
