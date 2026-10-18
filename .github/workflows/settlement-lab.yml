@@ -1,0 +1,30 @@
+name: PAPER settlement allocation calibration
+on:
+  workflow_dispatch:
+  push:
+    branches: [paper-fill-investigation]
+    paths: [.github/workflows/settlement-lab.yml]
+permissions:
+  contents: read
+concurrency:
+  group: paper-settlement-allocation-lab
+  cancel-in-progress: false
+jobs:
+  calibration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate component conservation, causality and saved real evidence
+        run: python3 -m unittest discover -s research/phase6/tests -v
+      - name: Compare disabled and explicitly enabled fixed-lifecycle component
+        run: |
+          mkdir -p research/output/settlement-lab
+          python3 -m research.phase6.settlement_matching_lab --output research/output/settlement-lab/disabled.json
+          python3 -m research.phase6.settlement_matching_lab --enabled --output research/output/settlement-lab/enabled.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: settlement-lab-fixed-lifecycle
+          retention-days: 7
+          path: research/output/settlement-lab/

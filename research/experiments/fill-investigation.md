@@ -485,3 +485,66 @@ and `--windows research/experiments/order-window-20261018/evidence.json.gz.b64`,
 and a new `--output` path. Eighty-eight phase6 tests pass, including actual saved
 window/receipt/audit reproduction with no RPC. Execution/strategy/acceptance
 unchanged. NO_GO; no new PnL. Prior QB0 remains rejected.
+
+## CS-MINT-LAB0 allocation kernel — 2026-10-18
+
+Starting head 539726f97ce2dd91a937b80c13c7f53ee66b0732; PR #9 still draft,
+stacked on unchanged #8/#7. Prior extraction/receipt runs completed, so no
+overlapping capture or replay was launched. Implement the frozen model spec
+as an ISOLATED Python research component, disabled unless `--enabled` is explicit.
+No account, strategy, SDK, production executor or network imports are introduced.
+This is NOT yet the production Java matcher or a closed-loop strategy replay.
+
+Receipt groups must conserve BOTH integer shares and collateral, with trusted
+exchange, binary token identity and unique maker log identities. Bind the exact
+recorded public token/side/price/size/source timestamp, original tradeId fields,
+sequence and frame event index. Public price is not assumed to be weighted
+aggregate price. Process ONLY actual maker components; legacy aggregate+component
+credit is explicitly rejected. Global maker IDs cannot be reused across events
+or windows. Stale/gapped/pre-activation/discarded components cannot resurrect
+orders or become future liquidity. Invalidated orders remain terminal after
+book recovery. Original 250ms activation/cancel, 2000ms freshness and measured
+baseline queue seeds (multiplier 2) remain unchanged. The diagnostic top-book
+projection is NOT used to estimate queue depth.
+
+The allocation kernel models price priority, partial allocations and same-price
+own-order queue prefixes with one residual volume budget; it never grants queue
+cancellation credit. Retains explicit hidden-liquidity/cross-price queue
+uncertainty. Lifecycle/cancel times are the MEASURED baseline ones; after a
+counterfactual allocation the strategy's changed decisions are NOT simulated.
+Do not promote this bounded calibration into a full strategy performance test.
+
+Same fixed evidence/component comparison, persisted in `settlement-lab0-20261018/`:
+disabled yields zero allocations; explicitly enabled binds the five frozen
+fresh receipts and conditionally allocates 5 shares to sim-research-4 at its
+0.64 quote, arrival 1792269683761. Actual labelled venue component quantity
+totals 500 shares: modeled allocation 5, queue absorption 0, unused 495. Each
+share is counted once, including mixed DIRECT/MINT groups, not aggregate PLUS
+maker volume. This is a COUNTERFACTUAL allocation under measured queue seeds,
+not a new actual bot fill. No peer allocation, no account mutation, no computed
+cash or net PnL after costs. Cost/risk exits are not evaluated by this component;
+`netPnlAfterCosts` is null, not zero. Partial labels remain NO_GO and can never
+qualify independent PAPER performance. The earlier adverse quote drift remains
+relevant; no strategy/risk threshold was lowered to manufacture activity.
+
+103 phase6 tests pass locally: 15 new kernel/binding tests include mixed routes,
+share/collateral conservation, multiple orders/prices, queue prefixes, partial
+allocations, duplicate components, cancel/activation ties, stale/future/old-source
+prints, GAP recovery, exact source binding and real saved evidence. Seeded
+randomized stress covers 100 eight-order scenarios with five component bursts
+each and per-component quantity conservation. Source/test/report/frozen spec and
+acceptance hashes are recorded in the implementation manifest.
+
+Commands: `python -m research.phase6.settlement_matching_lab --output /tmp/lab-off.json`
+and the same command with `--enabled` and a distinct output. A lightweight CI
+job runs the tests and reproduces both reports using only committed evidence;
+no new market capture, large tape download or RPC is necessary.
+
+Next: inspect CI component reports, then add a research-only CLOSED-LOOP replay
+adapter into the existing account/execution engine, preserving reservations,
+fees, risk exits, cancellation and GAP semantics. Labels must remain unavailable
+to strategy decisions, and labelled aggregate liquidity must be replaced rather
+than combined with legacy full-print credit. Full-depth queue assumptions and
+counterfactual feedback must not be inferred from this top-book projection.
+Only after a same-development closed-loop comparison can a justified strategy
+candidate be frozen for new independent PAPER. Acceptance unchanged; LIVE locked.

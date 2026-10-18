@@ -1,0 +1,17 @@
+{
+  "experiment": "CS-MINT-LAB0",
+  "status": "EXPERIMENTAL_KERNEL_FIXED_LIFECYCLE_ONLY",
+  "sourceParentCommit": "539726f97ce2dd91a937b80c13c7f53ee66b0732",
+  "filesSha256": {
+    "research/phase6/settlement_matching_lab.py": "b22f96b294144e3e46bcf73e3d1a095545891d2a74361896c7625c0d4c28f664",
+    "research/phase6/tests/test_settlement_matching_lab.py": "501b25f913d51b6769bd48282171ff1445fa298479ea169d2663a997564e5edc",
+    "research/experiments/settlement-lab0-20261018/disabled.json": "9d6f31d0ea32e06ed6c5bbfda27dfacdaeae70f632bdcedb10eddd59dce2337b",
+    "research/experiments/settlement-lab0-20261018/enabled.json": "60f414258b4caa20f2a787c24d34b366fb9e0c7eb632534b572f5aa84ab0bd83",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/experiments/order-window-20261018/next-experiment-spec.json": "2e643ef96aae9f4ee4bf09253401c190005501a926af96b50d5e5cf15533cf83"
+  },
+  "newMarketDataCollected": false,
+  "netPnlAfterCosts": null,
+  "decision": "NO_GO",
+  "nextStep": "Research-only closed-loop replay adapter preserving account reservations, fees, risk exits and gaps; component calibration alone cannot qualify a strategy."
+}
