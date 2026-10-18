@@ -716,3 +716,43 @@ markouts explicitly excluded from optimization. All jobs completed; no replay
 is running. Next action remains the scoped clean markout/coverage investigation
 above, not a duplicate two-hour capture or promotion to LIVE. PR #9 remains
 draft and stacked on #8 then #7; acceptance unchanged.
+
+## Frozen-fill continuity-only audit prepared — 2026-10-18
+
+Starting head 1a4842af3056ab301c815d30f713a3c404700183, PR #9 still draft on
+#8/#7. Fresh check: 39116669304 SUCCESS and no in-progress jobs. Do not repeat
+the account comparison or a live capture. Instead scan the existing complete
+normalized recording ONCE to audit all nine horizons of the three FROZEN
+executions from the archived candidate report. This fills the missing scoped
+GAP information without rerunning strategy/queue/account decisions.
+
+New read-only `research.phase6.markout_coverage` validates full logical tape
+SHA, sequential journal/run chronology, clean RUN_END, RAW/normalized frame
+binding and observed binary pair metadata. It never computes new fills or
+account PnL. Track each horizon through own-token fresh, non-crossed books,
+paired/global GAPs, stale depth, regressed/future/empty books and missing data.
+Each horizon gets an explicit VALID or missing reason and a source row/frame
+reference. Missing observations never become zero returns. Report markout
+numbers, if any, are labelled NOT account PnL. Original -0.85 cash accounting
+and reports stay immutable; no new market performance result exists yet.
+
+Use an explicitly conservative SAME_ARRIVAL_GROUP_CENSORING policy: GAP or
+invalid depth anywhere in an arrival group prevents that group's affected
+sample, even if a BOOK appears first. Newly injected frozen fills with
+same-arrival uncertainty are censored. This is NOT asserted to exactly equal
+Java event-by-event telemetry, and cannot improve execution/profit by relaxing
+its model. It is a development data-quality audit, never qualification.
+
+Freeze analyzer/test source, original report, labels, config and acceptance
+hashes BEFORE the first full scan in `markout-coverage-freeze.json`; the prior
+settlement execution freeze is unchanged. Nine new unit tests, 114 phase6 tests
+pass locally. One small `PAPER frozen-fill continuity audit` workflow runs the
+phase6 checks then downloads the already existing fresh recording, scans it and
+uploads `frozen-fill-markout-coverage`. No JVM rebuild, new receipt RPC, account
+comparison or capture. Wait for its report before another overlapping scan.
+
+Next inspect per-fill 1s/5s/30s validity/reasons and their exact proof rows.
+If clean horizons are absent, report coverage failure, not a zero-loss or
+profitable strategy. Then broaden settlement execution labels/causal coverage
+before proposing one strategy candidate on development. No holdout tuning,
+acceptance/risk/fee/queue change or LIVE path.

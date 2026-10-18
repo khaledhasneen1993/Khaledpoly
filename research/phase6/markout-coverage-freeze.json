@@ -1,0 +1,25 @@
+{
+  "experiment": "FROZEN-FILL-CONTINUITY-0",
+  "frozenBeforeFirstFullTapeAudit": true,
+  "originalReport": "research/experiments/settlement-replay-20261018/candidate-report.original.json",
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "pairs": {
+    "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7": [
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268"
+    ]
+  },
+  "policy": "CONSERVATIVE_SAME_ARRIVAL_GROUP_CENSORING",
+  "sameArrivalAmbiguityNeverCreatesValidSample": true,
+  "strategyChanged": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    "research/phase6/markout_coverage.py": "d2a89bba3f6448d549a583db8f2e8c11b77822b0133ba886e459f9711f335c98",
+    "research/phase6/tests/test_markout_coverage.py": "594ed634f4cc0403153c2c0e145929a6e6605d6d5d9d4f012d3b496723929b45",
+    "research/experiments/settlement-replay-20261018/candidate-report.original.json": "46e216726858609ef2ea25ae9ca565c877021f8fee5ccba4a6f405239bffdadc",
+    "research/experiments/settlement-lab0-20261018/replay-labels.json": "15e240cbe3e4b0ebed5d3240627df19d4a37b8006919efcf70c69874c1aa9457",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  }
+}
