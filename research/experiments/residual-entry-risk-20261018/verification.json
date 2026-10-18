@@ -1,0 +1,17 @@
+{
+  "run": 39150564740,
+  "sourceCommit": "9465a301aa3de7e3b97537651869a383b79d46a1",
+  "verificationJob": 117743176915,
+  "verificationConclusion": "success",
+  "javaTests": 161,
+  "pythonTests": 291,
+  "totalTests": 452,
+  "comparisonJob": 117743450294,
+  "comparisonStatusAtCheckpoint": "in_progress",
+  "candidateFinancialResultAvailable": false,
+  "latestCorrectedControlNetPnl": "-1.80",
+  "enabledByDefault": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "next": "Wait for residual-entry-risk-account-control. Verify exact corrected baseline reproduction, then inspect candidate fills, pairs, net after costs, expiry exposure and risk. Zero fills/no loss is NO_GO."
+}

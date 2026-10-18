@@ -1351,3 +1351,9 @@ Wait for verification and `residual-entry-risk-account-control` before another
 comparison. No new candidate account metrics yet; latest corrected control net
 remains-1.80. Next archive default-off baseline reproduction and candidate's
 net/costs/pairs/fills/expiry/risk/reject samples; a zero-fill result is NO_GO.
+
+Verification job117743176915 has now SUCCEEDED:161 Java+291 Python=452 tests,
+including all four new Java candidate/default-off/allowed-entry checks. Compare
+job117743450294 is running on that exact tested binary. Verification provenance
+saved in `residual-entry-risk-20261018/verification.json`; do not repeat tests or
+start another account comparison while this one runs. No candidate PnL yet.
