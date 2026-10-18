@@ -1159,3 +1159,54 @@ Three new binding/window/tamper/cache/resume tests; 137 phase6 checks pass local
 Freeze source/test/evidence/cache/acceptance hashes before reads. One small
 workflow reads only this bounded batch. Next wait for its report before any
 account replay; no strategy/fee/queue/risk/acceptance change or new PnL claimed.
+
+## All nine pre-gap receipts complete — 2026-10-18
+
+Run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39141046777
+succeeded at 15:34 UTC, source 2f79b49230b51d3a1a8764cf65126b651c0af177.
+137 phase6 CI tests passed. All nine receipts and unique group conservation
+passed. Exactly seven new receipts, one block and one chain read; prior two
+receipts reused. Original ZIP archived in `exit-window-audit-20261018/`, artifact
+12140998562, SHA256 0e856ae5da7aa679a06db38a877962125f62a3c1dc61a5492b52dc2eb8338b29.
+
+| Arrival ms | Public BUY shares | Actual route |
+| --- | ---: | --- |
+| 1792269694955 | 13 | DIRECT13 (SELL .47) |
+| 1792269695069 | 5 | MINT5 |
+| 1792269695159 | 5 | MINT5 — the replacement fill was also unsupported DIRECT volume |
+| 1792269695807 | 47 | MINT47 |
+| 1792269695857 | 47 | MINT47 |
+| 1792269696116 | 47 | MINT47 |
+| 1792269696250 | 55 | MINT55 |
+| 1792269696257 | 40 | MINT40 |
+| 1792269696270 | 55 | MINT55 |
+
+Total actual group shares: DIRECT13 and MINT301. Under the unchanged queue ten,
+the one observed direct portion supports conditional allocation of three SELL
+shares, NOT all five. No other selected own-token BUY supplies an actual direct
+SELL before the first GAP; all eight are complementary BUY makers at .53. This
+does not prove hypothetical redirect priority or hidden queue, which remain
+explicitly unknown. Do not claim a new PnL or simply subtract two fills. Other
+routes/intervals and any changed strategy decisions after the GAP remain partial.
+
+Offline `export_exit_window_labels` validates original ZIP hash/membership,
+selection/frames, decoded receipt matches and every conserved route, preserves
+the old five entry labels and the next two exact labels, and adds ALL seven
+remaining bindings (14 total), not a favorable subset. Frozen full-account control
+is now seven versus fourteen labels on the SAME complete development tape/config.
+Generic `compare_frozen_label_variants --freeze ...` verifies full source/input/
+logical/config provenance and complete label consumption; no live/qualification
+path. Existing seven-label result -0.85 is only the comparison baseline, not
+validated realizable PnL. No strategy, fee, queue, risk or acceptance modification.
+
+One justified `PAPER seven versus complete pre-gap exit labels` workflow first
+runs all phase6 tests, then checks the exact executor artifact source commit and
+ZIP digest and reuses the immutable Java binary from successful full 434-test
+run39132714883. Java runtime/test sources remain unchanged, hashes frozen; no
+need to rebuild identical Java. Only two account replays, seven-label baseline
+and fourteen-label correction, capture leftover inventory, cancellations, exits,
+actual liquidity-role costs and risk. All previous freezes/results preserved.
+NEXT wait for that workflow's comparison before any overlapping run or candidate.
+After export and fail-closed control tests, 139 local phase6 tests pass. No new
+financial result yet, no independent data or profitability qualification; PAPER
+only. Preserve both reports/full account audits and follow new inventory evidence.
