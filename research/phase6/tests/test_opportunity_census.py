@@ -1,7 +1,7 @@
 import io
 import json
 import unittest
-from research.phase6.opportunity_census import census
+from research.phase6.opportunity_census import census, validate_reference
 
 
 class OpportunityCensusTest(unittest.TestCase):
@@ -40,3 +40,19 @@ class OpportunityCensusTest(unittest.TestCase):
     def test_recorded_tick_changes_update_the_quote_grid(self):
         result = self.run_tape(before_trade=[('RESEARCH_TICK_SIZE', {'token': 'a', 'tick': '.03', 'sourceMs': 0})])
         self.assertEqual(result['policyCounts']['0'], {'QUOTE_NOT_AT_PRINT': 1})
+
+    def test_complement_buy_is_only_a_candidate_and_duplicate_routes_are_flagged(self):
+        buy = ('RESEARCH_TRADE', {'token': 'b', 'sourceMs': 10, 'side': 'BUY', 'price': '.6', 'size': '1000'})
+        result = self.run_tape(before_trade=[buy])
+        self.assertEqual(result['complementBuyCandidateCounts']['0'], {'NECESSARY_CONDITIONS_ONLY': 1})
+        self.assertEqual(result['routeFingerprintOverlaps']['0'], 1)
+        self.assertTrue(result['complementPrintIsNotProofOfMint'])
+        self.assertFalse(result['fillsInferred'])
+        result = self.run_tape(gap=True, before_trade=[buy])
+        self.assertEqual(result['complementBuyCandidateCounts']['0'], {'DEPTH_UNAVAILABLE': 1})
+
+    def test_reference_rejects_different_source_or_changed_direct_counts(self):
+        result = self.run_tape()
+        validate_reference(result,result['logicalTapeSha256'],1,0)
+        with self.assertRaises(ValueError): validate_reference(result,'0'*64,1,0)
+        with self.assertRaises(ValueError): validate_reference(result,result['logicalTapeSha256'],2,0)

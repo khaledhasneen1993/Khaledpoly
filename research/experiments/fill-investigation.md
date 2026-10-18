@@ -179,3 +179,52 @@ unavailability (fresh later metadata can restore it) and apply recorded tick
 changes to the quote grid. Four unit tests now include the actual official
 resolution field and tick changes. Rerun the same read-only census after
 these corrections; do not change execution or launch another market capture.
+
+## Direct-route census and complementary-match hypothesis — 2026-10-18 05:40
+
+Run 39087175615 succeeded on both complete tapes. Reports persisted in
+`opportunity-census-20261018/`; artifacts original 12121072531, fresh
+12121675799. Original logical SHA matches preserved provenance exactly;
+fresh logical SHA is cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b.
+
+| Recording | Public prints | BUY prints | Direct necessary conditions, improve 1 | Direct necessary conditions, join 0 |
+| --- | ---: | ---: | ---: | ---: |
+| Original | 6,377 | 5,640 | 3 | 12 |
+| Fresh | 16,317 | 15,024 | 2 | 45 |
+
+These are optimistic necessary conditions, NOT fills or fill probabilities.
+The label WRONG_AGGRESSOR in the original census means wrong side for the
+existing SAME-TOKEN maker-buy model only. It does not prove that a BUY print
+cannot participate in any venue matching route. Do not conclude fundamental
+market-wide opportunity scarcity from the direct-route counts alone.
+
+Official primary sources reviewed 2026-10-18:
+- https://github.com/Polymarket/ctf-exchange-v2/blob/main/README.md (Order
+  Lifecycle): BUY/BUY MINT and SELL/SELL MERGE exist in addition to direct
+  BUY/SELL matching. Complement tokens belong to the same binary condition.
+- https://github.com/Polymarket/ctf-exchange/blob/main/docs/Overview.md
+  provides complementary-outcome mint/merge matching examples.
+- https://docs.polymarket.com/market-data/realtime-data exposes public
+  last-trade price/size/side and an optional transaction hash; it does not
+  establish a particular resting order's queue allocation or guarantee that
+  every opposite-outcome BUY print is a distinct MINT fill.
+
+New hypothesis: the strict same-token SELL-only paper matcher omits a possible
+complementary BUY/BUY route. This is NOT yet a confirmed missed execution.
+Before changing matching, extend diagnostic census only: for a BUY on token B
+test candidate BUY-A price 1-p(B), requiring known binary complement metadata,
+fresh prior books/source, exact quote alignment and the same necessary base
+edge/size checks. Exclude unverified negative-risk routes. Do not emit trades
+or credit any queue/fill/fee/PnL from this diagnostic conversion. Identify
+overlapping direct/complement fingerprints without assuming uniqueness; one
+venue execution must never be counted twice. Inspect raw public trade field
+coverage and five bounded samples for available transaction-level evidence.
+
+Six local tests cover direct-route invariance, complementary candidate mapping,
+overlapping route fingerprints, gaps, resolution, tick changes and reference
+validation. The next full scan must preserve original direct counts (12/3 and
+45/2 for policies 0/1) AND both logical tape hashes, or fail. No execution
+model change, queue relaxation, new strategy variant or fresh capture occurs.
+Next review: inspect route counts, overlap flags and transaction field coverage.
+Only consider a separately frozen, default-off complementary execution model
+after evidence resolves side semantics, queue allocation and duplicate prints.
