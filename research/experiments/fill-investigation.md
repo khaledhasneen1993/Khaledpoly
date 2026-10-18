@@ -1520,3 +1520,44 @@ evidence, not optimistic defaults. No new parameters or candidate chosen yet;
 do not sweep budgets, tune on independent data, or promote an idle guard as
 profitable. Current model remains default-off research, PAPER only. Follow-up
 continues because no strategy has met unchanged independent acceptance gates.
+
+## Complete saved-census feasibility — 2026-10-18 20:31 UTC review
+
+PR9 headc0317fe and all prior jobs checked first: none running. No duplicate
+capture/replay/RPC/build launched. Added offline `risk_feasible_census.py` with
+source/config/acceptance hashes and4 regression tests. All original84 and
+fresh590 necessary examples are complete; route/policy counts reconcile.
+The old export omitted quantity: exact Decimal expression replay on the lawful
+.01 grid yields ONE5-share census size for every example, not an optimistic
+default. This recovers census size only, NOT actual metadata/decision state.
+
+The unchanged worst-case guard, assuming the FULL still-unused2.50 budget and
+.01 redemption, admits only1/12 original and4/43 fresh improve1 observations.
+For already rejected join0 policy it admits1/72 original and13/547 fresh.
+These are route/policy observations and UPPER bounds, not unique feasible fills.
+All four fresh improve1 survivors lack a matching actual guarded active order:
+first source precedes submission; other three are after actual cancellation.
+Even historical UNGUARDED QB0 had NO matching outstanding BUY at the required
+price at its1 original/13 fresh surviving observations. Historical QB0 order
+lives are compared separately; the combined QB0+guard was NOT replayed or chosen
+as a new candidate. Both original QB0 rejection and guard NO_GO remain in force.
+
+This rules out a rationale for another receipt batch or pretending modeled
+route-credit alone will make these nonexistent own orders fill. It does NOT
+prove all hypothetical strategies impossible, nor identify the precise cause
+of each missed entry. Need actual PRE-DECISION metadata, top depth/source clocks,
+volatility/dynamic threshold, decision timer and GAP witnesses to distinguish
+causal entry gating from a quote window shorter than activation. Never zero-fill
+missing volatility or treat contemporaneous census quotes as earlier placements.
+The surviving timestamps are all retained in `risk-feasible-census-20261018/`.
+Reuse the prior4.506s original context where possible; inspect the last fresh
+improve1 pair at1792269724135/1792269724142 together and remaining QB0 clusters
+before predeclaring a change. No further full account replay, parameter sweep,
+current-market capture or independent promotion justified by this screen.
+
+159 phase6 tests pass locally, with report reproduced byte-content-equivalently
+from the frozen inputs. Existing CI153 and historical full suite452 retain their
+original scope; no redundant CI/Maven run requested. Acceptance SHA remains
+7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503.
+Known economics unchanged: corrected control net-1.80, guard0/zero fills/no pair
+ratio: NO_GO. Follow-up continues, PAPER only, guard default-off, no real funds.

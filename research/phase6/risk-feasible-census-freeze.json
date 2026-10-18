@@ -1,0 +1,21 @@
+{
+  "experiment": "COMPLETE-EXISTING-CENSUS-RISK-SCREEN-0",
+  "selectionStatus": "DEVELOPMENT_REANALYSIS_NO_NEW_CANDIDATE_OR_PARAMETER",
+  "publicReadsAllowed": false,
+  "accountReplayAllowed": false,
+  "independentCaptureAllowed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    "research/phase6/risk_feasible_census.py": "8c53f299fbc20bff877d3d5dd7cd85190aa4cce2e8d18862b8d102a44ef8aee5",
+    "research/phase6/tests/test_risk_feasible_census.py": "b59c568f2017c9fc68b7a44c39e10475dd9a2953a902cd3248c1d088390cdfb1",
+    "research/phase6/residual_entry_risk.py": "82f7fae693c1a9a0b33d175a302419ac363c1069004d9392671f7704015dddbc",
+    "research/phase6/opportunity_census.py": "ce9a2e75e1a83abc33dc3ab8f7de80c7f1bcf99640d82eb660108d3b0ed06485",
+    "research/experiments/transaction-linked-census-20261018/original.json": "bdd426052487a44268ed8467fb7e1f56f4a8fa99662c937be4bb473660c10f96",
+    "research/experiments/transaction-linked-census-20261018/fresh.json": "df75e708a9af2f1afd8fbca1d840d38b1415068d4b7c974d6017463a49a150aa",
+    "research/experiments/residual-entry-risk-20261018/result/only-pair-diagnostic.json": "ffe4f80933217822d183ea75bc25983089b613214d9c2889131389bcad2a6896",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/experiments/quote-qb0-20261018/original-candidate-report.json": "8b9b2e5493ca5a2f81b90ffca1306da7bbda430ea3a9f1df26c76a0c76d948a8",
+    "research/experiments/quote-qb0-20261018/fresh-candidate-report.json": "38bf6d729766f23896a1354269df4b92af7f231c1b6b766dd0ad486fb86393e1"
+  }
+}
