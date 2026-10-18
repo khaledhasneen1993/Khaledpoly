@@ -1342,3 +1342,12 @@ candidate checks; no duplicate Maven build. Ordinary/manual markout checks remai
 enabled. NEXT inspect this one workflow before overlapping action. No new net
 result yet; zero fills or no loss cannot qualify, future-labelled environment is
 not independent PAPER proof. No holdout/capture/live action or acceptance edit.
+
+Current run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39150564740
+at9465a301aa3de7e3b97537651869a383b79d46a1, verify job117743176915 is running
+the full Maven+Python sequence. Markout-only run39150564712 is intentionally
+skipped by the documented dedup tag; the dedicated full check is NOT skipped.
+Wait for verification and `residual-entry-risk-account-control` before another
+comparison. No new candidate account metrics yet; latest corrected control net
+remains-1.80. Next archive default-off baseline reproduction and candidate's
+net/costs/pairs/fills/expiry/risk/reject samples; a zero-fill result is NO_GO.
