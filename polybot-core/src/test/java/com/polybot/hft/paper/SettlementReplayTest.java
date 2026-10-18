@@ -45,6 +45,28 @@ class SettlementReplayTest {
     assertThat((BigDecimal)report.get("allocatedQuantity")).isEqualByComparingTo("5");
   }
 
+  @Test void sellExitConsumesDirectSharesButNotComplementaryMintAggregate() {
+    var engine=new PaperMatchingEngine(100,100,2000,b("2"));
+    var own=(ObjectNode)book("a",1000,"0.46","0.47","100");
+    ((ObjectNode)own.path("asks").get(0)).put("size","5"); // unchanged queue multiplier: ten ahead
+    engine.accept("BOOK",1000,own);
+    engine.accept("BOOK",1000,book("b",1000,"0.53","0.54","100"));
+    engine.accept("ORDER",1000,mapper.valueToTree(Map.of("id","exit","token","a","side","SELL","price","0.47","size","5")));
+    engine.accept("TICK",1101,mapper.createObjectNode());
+    var direct=new SettlementReplayLabels.Binding(1,0,1102,1102,"","a","BUY",b("0.47"),b("13"),Set.of("a","b"),
+        List.of(new SettlementReplayLabels.Portion("direct","a",false,b("0.47"),b("13"))));
+    assertThat(engine.acceptSettlement(1102,trade(1102),direct).fills()).singleElement()
+        .satisfies(f->{assertThat(f.buy()).isFalse();assertThat(f.size()).isEqualByComparingTo("3");});
+    var mint=new SettlementReplayLabels.Binding(2,0,1103,1103,"","a","BUY",b("0.47"),b("5"),Set.of("a","b"),
+        List.of(new SettlementReplayLabels.Portion("mint","b",true,b("0.53"),b("5"))));
+    assertThat(engine.acceptSettlement(1103,trade(1103),mint).fills()).isEmpty();
+    // No fallback aggregate credit, no queue cancellation credit, two SELL shares still outstanding.
+    var later=new SettlementReplayLabels.Binding(3,0,1104,1104,"","a","BUY",b("0.47"),b("2"),Set.of("a","b"),
+        List.of(new SettlementReplayLabels.Portion("later-direct","a",false,b("0.47"),b("2"))));
+    assertThat(engine.acceptSettlement(1104,trade(1104),later).fills()).singleElement()
+        .satisfies(f->assertThat(f.size()).isEqualByComparingTo("2"));
+  }
+
   @Test void cancelDueGapAndOlderThanBookCannotFillOrResurrect() {
     var engine=engine("0");
     engine.accept("CANCEL",1102,mapper.valueToTree(Map.of("id","one")));

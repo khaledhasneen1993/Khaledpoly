@@ -1,0 +1,32 @@
+{
+  "scope": "SEPARATE_TARGETED_DEVELOPMENT_ACTUAL_EXIT_TRIGGER_AUDIT_NOT_STRATEGY_CANDIDATE",
+  "observations": [
+    {
+      "transactionHash": "0xc8e07c1f9e610746c394fc146bb3b88eca85b8e76ef6980192330af7c590c5d8",
+      "routeSharesRaw": {
+        "DIRECT": 13000000
+      },
+      "ownSideSamePriceDirectSharesRaw": 13000000,
+      "makerFeesRaw": 0,
+      "takerFeeRaw": 226680,
+      "queueAllocationProven": false
+    },
+    {
+      "transactionHash": "0xee2a2436ad21f798967970d6d97632706a952430adfc1f3546495b344b9a9ad4",
+      "routeSharesRaw": {
+        "MINT": 5000000
+      },
+      "ownSideSamePriceDirectSharesRaw": 0,
+      "makerFeesRaw": 0,
+      "takerFeeRaw": 87180,
+      "queueAllocationProven": false
+    }
+  ],
+  "originalInitialQueueAhead": 10,
+  "queueAllocationProven": false,
+  "fillsCreated": 0,
+  "netPnlRecomputed": false,
+  "liveAllowed": false,
+  "independentPaperQualificationAllowed": false,
+  "decision": "NO_GO"
+}

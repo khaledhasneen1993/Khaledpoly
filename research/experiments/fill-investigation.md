@@ -1008,3 +1008,56 @@ No JVM changes or new capture/account replay. Next inspect the one small
 `PAPER two frozen exit trigger receipts` workflow and archive original evidence;
 do not re-fetch the preceding twenty transactions. Account net -0.85 conditional
 result, default runtime and acceptance remain unchanged. Not independent data.
+
+## Exit trigger receipts complete; freeze account-model control — 2026-10-18
+
+Run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39132403617
+succeeded, source 891e13c49afa8fb15848d03ba81a96c19deecf59. All 131 phase6
+tests passed before two receipt reads. Both uniquely identified groups conserve
+integer shares AND collateral. Exact original artifact 12138561972 is archived
+under `exit-trigger-audit-20261018/`, ZIP SHA256
+72c428ee7a3adbd8881bc86ebe1a52560e3462bbf9371163b78874e2482d36da.
+
+| Recorded exit trigger | Actual route | Own-token SELL .47 DIRECT shares | Actual maker fee | Actual taker fee (raw collateral / 1e6) |
+| --- | --- | ---: | ---: | ---: |
+| seq153844, public BUY13 | DIRECT13 | 13 | 0 | .226680 |
+| seq153978, public BUY5 | MINT5 | 0 | 0 | .087180 |
+
+The legacy second SELL fill of two shares credited an entire public BUY aggregate
+that actually matched a complementary BUY, not an own-token SELL. This is
+unsupported DIRECT liquidity in that model. Receipt evidence does not prove our
+hypothetical order could not redirect the taker, nor does it prove the original
+initial queue of ten: leave counterfactual priority uncertainty explicit. Do not
+manufacture a new account result by simply deleting the old second fill; remaining
+inventory changes future orders, risk, costs and possibly taker liquidation.
+Original -0.85 remains an archived conditional PARTIAL-model result, not a newly
+validated realizable PnL. Actual taker fees above are not charged to virtual maker
+orders; virtual account uses unchanged fee logic by its actual liquidity role.
+
+`export_exit_covered_labels` revalidates original ZIP membership/hash, RAW/frame/
+execution joins, selection, decoded receipts, summary and route conservation
+entirely offline. It preserves the previous five label bindings exactly, adds
+only these two preselected BUY-taker bindings and suppresses their aggregate
+fallback through the existing offline research-only engine. No production model
+or runtime setting changes; no permission to deploy future receipt labels live.
+132 phase6 tests pass locally. Added a Java regression with queue ten: DIRECT13
+can allocate three SELL shares, complementary MINT5 cannot fill the remaining two,
+and only a subsequent actual DIRECT portion can complete them. That new Java
+check is pending CI, not claimed as locally executed (local Java17, no Maven).
+
+Freeze a SEPARATE full-account DEVELOPMENT control in
+`research/phase6/exit-covered-replay-freeze.json` before either replay. Baseline
+is the existing FIVE-label partial model; candidate is SEVEN labels, same engine,
+full original development tape and account/config/queue/fees/risk. This is an
+execution-environment calibration control, NOT a strategy candidate. Includes
+current markout-continuity measurement code for BOTH variants; preserve original
+zero-fill normalized baseline and all previous results. Verify exact compressed
+input hash separately from decompressed logical tape hash, same config hash and
+complete consumption of 5/7 bindings. Full-account replay captures subsequent
+inventory/risk effects, not just the two trigger events. No acceptance edits,
+holdout use or new PAPER recording. `PAPER same tape five versus seven receipt
+labels` first runs full regressions, then ONLY these two justified account runs.
+Wait for that workflow before any overlapping comparison. NEXT archive both
+account reports and costs/residuals/exits; assess broader unlabelled settlement
+coverage before proposing causal strategy changes or independent tests. Neither
+variant can qualify for live or independent profitability from future labels.
