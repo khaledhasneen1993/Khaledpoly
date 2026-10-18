@@ -64,6 +64,9 @@ public final class ResearchSession implements AutoCloseable {
   private long now = -1, nextDecision, sequence, inputSequence;
   private final String sessionId;
   private final boolean externalMode;
+  private final SettlementReplayLabels settlementLabels;
+  private long replayRowSequence=-1;
+  private int replayEventIndex=-1;
   private final ResearchProposalInbox externalValidator;
   private final LinkedHashMap<Long, Long> observations = new LinkedHashMap<>();
   private final LinkedHashMap<String, JsonNode> externalReplies = new LinkedHashMap<>();
@@ -96,6 +99,15 @@ public final class ResearchSession implements AutoCloseable {
       BiConsumer<String, Object> output,
       boolean externalMode,
       String replaySessionId) {
+    this(ledger,cfg,mapper,state,output,externalMode,replaySessionId,null);
+  }
+
+  ResearchSession(AccountLedger ledger, ResearchConfig cfg, ObjectMapper mapper, Path state,
+      BiConsumer<String,Object> output, boolean externalMode, String replaySessionId,
+      SettlementReplayLabels settlementLabels) {
+    if (settlementLabels!=null && (externalMode || java.nio.file.Files.exists(state)))
+      throw new IllegalArgumentException("Settlement experiment requires a fresh research replay account");
+    this.settlementLabels=settlementLabels;
     this.externalMode = externalMode;
     this.sessionId = replaySessionId == null ? UUID.randomUUID().toString() : replaySessionId;
     externalValidator =
@@ -205,6 +217,13 @@ public final class ResearchSession implements AutoCloseable {
     return Set.copyOf(resolutions.keySet());
   }
 
+  synchronized void acceptReplay(String kind,long at,JsonNode data,long originalSequence) {
+    if (settlementLabels==null) throw new IllegalStateException("No research label experiment");
+    replayRowSequence=originalSequence;replayEventIndex=0;
+    try { accept(kind,at,data); }
+    finally { replayRowSequence=-1;replayEventIndex=-1; }
+  }
+
   public synchronized void accept(String kind, long at, JsonNode data) {
     if (failed)
       throw new IllegalStateException("Research session failed; restart/reconciliation required");
@@ -230,8 +249,11 @@ public final class ResearchSession implements AutoCloseable {
           throw new IllegalArgumentException("Invalid research frame event");
       insideFrame = true;
       try {
-        for (var event : data.path("events"))
+        int eventIndex=0;
+        for (var event : data.path("events")) {
+          replayEventIndex=eventIndex++;
           accept(event.path("kind").asText(), at, event.path("data"));
+        }
       } catch (RuntimeException e) {
         failed = true;
         throw e;
@@ -335,7 +357,9 @@ public final class ResearchSession implements AutoCloseable {
       }
       if (kind.equals("GAP")) data = scopedGap(data);
       long gapsBefore = matching.gaps();
-      apply(matching.accept(kind, at, data));
+      var binding=settlementLabels!=null && kind.equals("TRADE")
+          ? settlementLabels.resolve(replayRowSequence,replayEventIndex,at,data):null;
+      apply(binding==null?matching.accept(kind,at,data):matching.acceptSettlement(at,data,binding));
       if (matching.gaps() > gapsBefore && !kind.equals("GAP"))
         output.accept(
             "ALERT",
@@ -1470,6 +1494,11 @@ public final class ResearchSession implements AutoCloseable {
   public synchronized Map<String, Object> report() {
     var r = new LinkedHashMap<String, Object>(metrics.report());
     r.put("makerExecutionDiagnostics", matching.diagnostics());
+    if (settlementLabels!=null) {
+      r.put("settlementExperiment",settlementLabels.report());
+      r.put("settlementVolumeConservation",matching.settlementDiagnostics());
+      r.put("independentPaperQualificationAllowed",false);
+    }
     r.putAll(markouts.snapshot(Math.max(now, 0)));
     var active = new ArrayList<Map<String, Object>>();
     for (var m : markets.values()) {

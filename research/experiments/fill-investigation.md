@@ -548,3 +548,47 @@ than combined with legacy full-print credit. Full-depth queue assumptions and
 counterfactual feedback must not be inferred from this top-book projection.
 Only after a same-development closed-loop comparison can a justified strategy
 candidate be frozen for new independent PAPER. Acceptance unchanged; LIVE locked.
+
+## Research-only full-account adapter — 2026-10-18
+
+Starting head e40ff8158f8d55701a80a041d76d09b57c4aeec3. Component CI
+39104790561 succeeded; no overlapping jobs remain. Its disabled/enabled fixed
+lifecycle results are calibration only, not closed-loop PnL. No new capture/RPC.
+
+Implement a separate `SettlementReplayMain` OFFLINE entry point, never a service
+property, SDK mode or production endpoint. Existing constructors/default replay
+remain on the legacy path. Only the package-private research session constructor
+can install offline labels on a fresh account. The adapter matches original
+sequence/frame index, source/arrival, token/side/price/size and full tradeId SHA;
+validates trusted exchange, unique groups/maker identities, integer share AND
+collateral conservation and the complete logical tape hash. Missing frozen
+bindings or changed observations fail closed. Other aggregate observations of
+covered transactions are suppressed rather than double-counted with components.
+
+Component fills now flow through the EXISTING AccountLedger, markouts, inventory,
+unhedged timer, entry stop, cancellation, exit sizing and fee-aware taker exit.
+No future receipt fields enter strategy proposals/decision inputs; only the
+environmental execution outcome changes. Due cancellation and stale/GAP ordering
+remain the existing engine preamble. Full recorded books, not the compact
+top-book projection, seed the actual replay order queues. Hidden/cross-price
+queue uncertainty remains explicit, and all labelled reports are permanently
+development-only/NO_GO with partial coverage and independent qualification false.
+
+Freeze source/config/acceptance/label hashes BEFORE the first complete development
+comparison in `research/phase6/settlement-replay-freeze.json`. Compare normalized
+baseline (must reproduce 52 submitted/zero fills) and one labelled candidate on
+the SAME full fresh recording and configuration. This changes the execution
+model, not strategy parameters. No holdout or acceptance changes, no new capture.
+New Java tests cover component queue/conservation/dedup, cancel ties, GAP recovery,
+book source ordering, loader/tape/binding validation and an actual ledger/risk
+exit integration scenario using the same fee-aware sale as existing regressions.
+105 phase6 Python tests pass locally, including deterministic label export/freeze
+verification. Java 21/Maven are unavailable locally, so Java compilation/full
+regression is delegated to the single GitHub workflow before comparison.
+
+Next inspect `PAPER closed-loop settlement calibration` verification job before
+its dependent comparison. If compilation/tests fail, fix the exact failure and
+retain the failed-run record; no comparison result is valid until verification
+passes. Then inspect `closed-loop-settlement-comparison` reports, net realized
+PnL AFTER fees, residual inventory, drawdown, exits and risk stop. A positive
+partial-label result would still NOT establish profitability or justify live.

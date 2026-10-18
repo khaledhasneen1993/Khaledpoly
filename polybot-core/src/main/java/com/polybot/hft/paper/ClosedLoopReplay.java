@@ -34,7 +34,7 @@ public final class ClosedLoopReplay {
       String freezeSha)
       throws Exception {
     return runInternal(
-        tape, out, config, limits, mapper, raw, windowStart, windowEnd, freezeSha, false);
+        tape, out, config, limits, mapper, raw, windowStart, windowEnd, freezeSha, false, null);
   }
 
   public static Map<String, Object> runExternal(
@@ -46,7 +46,13 @@ public final class ClosedLoopReplay {
       boolean raw)
       throws Exception {
     return runInternal(
-        tape, out, config, limits, mapper, raw, Long.MIN_VALUE, Long.MAX_VALUE, "", true);
+        tape, out, config, limits, mapper, raw, Long.MIN_VALUE, Long.MAX_VALUE, "", true, null);
+  }
+
+  static Map<String,Object> runSettlementLab(Path tape,Path out,ResearchConfig config,
+      AccountLedger.Limits limits,ObjectMapper mapper,SettlementReplayLabels labels) throws Exception {
+    labels.verifyTape(tape);
+    return runInternal(tape,out,config,limits,mapper,false,Long.MIN_VALUE,Long.MAX_VALUE,"",false,labels);
   }
 
   private static Map<String, Object> runInternal(
@@ -59,7 +65,8 @@ public final class ClosedLoopReplay {
       long windowStart,
       long windowEnd,
       String freezeSha,
-      boolean external)
+      boolean external,
+      SettlementReplayLabels settlementLabels)
       throws Exception {
     if (windowStart >= windowEnd) throw new IllegalArgumentException("Empty heldout window");
     if (Files.exists(out)) throw new IllegalArgumentException("Replay output must not exist");
@@ -129,7 +136,8 @@ public final class ClosedLoopReplay {
                 out.resolve("session.json"),
                 (kind, data) -> audit.add(Map.of("kind", kind, "at", clock.millis(), "data", data)),
                 external,
-                externalSession);
+                externalSession,
+                settlementLabels);
         var reader = TapeIO.reader(tape)) {
       String line;
       while ((line = reader.readLine()) != null) {
@@ -253,11 +261,13 @@ public final class ClosedLoopReplay {
             marketDays.add(
                 Instant.ofEpochMilli(m.startMs()).atZone(ZoneOffset.UTC).toLocalDate().toString());
           }
-          session.accept(input, at, data);
+          if (settlementLabels==null) session.accept(input, at, data);
+          else session.acceptReplay(input,at,data,seq);
         }
       }
       if (pendingFrameId != -1)
         throw new IllegalArgumentException("Raw observation without completed frame");
+      if (settlementLabels!=null) settlementLabels.requireConsumed();
       var result = new LinkedHashMap<String, Object>(session.report());
       result.put("frameAtomicity", framed ? "recorded-frame-v1" : "legacy-unframed");
       result.put("decisionClock", "recorded-inputs");
@@ -271,6 +281,11 @@ public final class ClosedLoopReplay {
       result.put("inputFormat", raw ? "raw-market" : "normalized-public-v1");
       result.put("strategyIndependentDataset", declared && !external);
       result.put("externalPaperInputs", external);
+      if (settlementLabels!=null) {
+        result.put("replayMode","research-settlement-labelled-development-only");
+        result.put("strategyIndependentDataset",false);
+        result.put("independentPaperQualificationAllowed",false);
+      }
       if (external) {
         result.put("startingCash", initialExternalAccount.path("cash"));
         result.put("startingRealizedPnl", initialExternalAccount.path("realized"));

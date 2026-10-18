@@ -45,6 +45,9 @@ public final class PaperMatchingEngine {
   private final BigDecimal queueMultiplier;
   private long now = -1;
   private int gaps, duplicates;
+  private final Set<String> settlementComponents = new HashSet<>();
+  private BigDecimal settlementVenue = BigDecimal.ZERO, settlementAllocated = BigDecimal.ZERO,
+      settlementQueue = BigDecimal.ZERO, settlementUnused = BigDecimal.ZERO;
 
   public PaperMatchingEngine(
       long latency, long cancelLatency, long maxAge, BigDecimal queueMultiplier) {
@@ -298,6 +301,69 @@ public final class PaperMatchingEngine {
         terminal.put(order.id, "CANCELED");
         reasons.put(order.id, reason);
       }
+  }
+
+  /** Package-private offline replay only. Replaces, never supplements, the public aggregate. */
+  synchronized Update acceptSettlement(long at, JsonNode trade, SettlementReplayLabels.Binding binding) {
+    Update before = accept("TICK", at, trade); // identical activation, stale-book and cancel-due ordering
+    var fills = new ArrayList<Fill>();
+    var terminal = new LinkedHashMap<String,String>(before.terminal());
+    var reasons = new LinkedHashMap<String,String>(before.reasons());
+    long source=trade.path("sourceMs").asLong(-1);
+    boolean causal=binding.pair().size()==2 && source>=0 && source<=at && at-source<=maxAge;
+    for (String token:binding.pair()) {
+      Book book=books.get(token);
+      causal &= book!=null && !book.bids.isEmpty() && !book.asks.isEmpty()
+          && at-book.source<=maxAge && source>=book.source;
+    }
+    for (var portion:binding.portions()) {
+      if (!settlementComponents.add(portion.identity())) continue;
+      BigDecimal remaining=portion.quantity(), absorbed=BigDecimal.ZERO, allocated=BigDecimal.ZERO;
+      settlementVenue=settlementVenue.add(remaining);
+      if (causal) {
+        Comparator<BigDecimal> direction=portion.buy()?Comparator.reverseOrder():Comparator.naturalOrder();
+        NavigableMap<BigDecimal,List<Order>> levels=new TreeMap<>(direction);
+        for (var order:orders.values()) {
+          boolean price=order.buy?order.price.compareTo(portion.price())>=0:order.price.compareTo(portion.price())<=0;
+          if (order.active && order.remaining.signum()>0 && order.token.equals(portion.token())
+              && order.buy==portion.buy() && source>order.activated && price)
+            levels.computeIfAbsent(order.price,key->new ArrayList<>()).add(order);
+        }
+        for (var level:levels.values()) {
+          if (remaining.signum()==0) break;
+          level.sort(Comparator.comparingLong(order->order.activated));
+          BigDecimal prefix=BigDecimal.ZERO;
+          for (var order:level) { order.ahead=order.ahead.max(prefix);prefix=order.ahead.add(order.remaining); }
+          BigDecimal incoming=remaining, used=BigDecimal.ZERO;
+          BigDecimal extent=level.stream().map(o->o.ahead.add(o.remaining)).max(Comparator.naturalOrder()).orElseThrow();
+          for (var order:level) {
+            observe(order,"SETTLEMENT_COMPONENT");
+            BigDecimal quantity=incoming.subtract(order.ahead).max(BigDecimal.ZERO).min(order.remaining);
+            order.ahead=order.ahead.subtract(incoming).max(BigDecimal.ZERO);
+            if (quantity.signum()>0) {
+              order.remaining=order.remaining.subtract(quantity);used=used.add(quantity);
+              fills.add(new Fill(order.id,order.token,order.buy,order.price,quantity,at));
+              if (order.remaining.signum()==0) { terminal.put(order.id,"FILLED");reasons.put(order.id,"LAB_SETTLEMENT_COMPONENT"); }
+            }
+          }
+          BigDecimal consumed=incoming.min(extent);
+          if (used.compareTo(consumed)>0) throw new IllegalStateException("Component volume exceeded");
+          allocated=allocated.add(used);absorbed=absorbed.add(consumed.subtract(used));remaining=remaining.subtract(consumed);
+        }
+      }
+      if (allocated.add(absorbed).add(remaining).compareTo(portion.quantity())!=0)
+        throw new IllegalStateException("Settlement volume does not conserve");
+      settlementAllocated=settlementAllocated.add(allocated);settlementQueue=settlementQueue.add(absorbed);
+      settlementUnused=settlementUnused.add(remaining);
+    }
+    removeTerminals(terminal,reasons);
+    return new Update(List.copyOf(fills),Collections.unmodifiableMap(terminal),Map.copyOf(reasons));
+  }
+
+  Map<String,Object> settlementDiagnostics() {
+    return Map.of("uniqueMakerComponents",settlementComponents.size(),"venueQuantity",settlementVenue,
+        "allocatedQuantity",settlementAllocated,"queueAbsorbed",settlementQueue,"unusedQuantity",settlementUnused,
+        "hiddenLiquidityAndCrossPriceQueueUncertainty",true);
   }
 
   private static NavigableMap<BigDecimal, BigDecimal> levels(JsonNode n) {
