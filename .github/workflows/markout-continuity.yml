@@ -9,6 +9,7 @@ on:
       - 'polybot-core/src/main/java/com/polybot/hft/paper/ReplayRunner.java'
       - 'polybot-core/src/test/java/com/polybot/hft/paper/PaperMetricsTest.java'
       - 'polybot-core/src/test/java/com/polybot/hft/paper/ResearchSessionTest.java'
+      - 'executor-service/src/test/java/com/polybot/hft/ExternalPaperHttpTest.java'
   workflow_dispatch:
 permissions:
   contents: read

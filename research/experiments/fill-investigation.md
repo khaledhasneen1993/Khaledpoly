@@ -678,6 +678,17 @@ A local phase3 run has
 fixtures under executor-service/target are absent; it is NOT recorded as a
 passing full suite. GitHub runs Maven first to generate these prerequisites.
 
+First regression run 39116530182 on b69fbba: Maven BUILD SUCCESS, all 156 Java
+tests pass (including seven new regressions), but phase3 downstream label tests
+fail twice: zero markout labels / missing markout key. The synthetic
+ExternalPaperHttpTest fixture jumped from a 504ms fill to a 5504ms book without
+updates; the new stale censoring correctly rejects those horizons. Fix the
+fixture with regular 1s fresh book updates through the existing 5504ms endpoint,
+and assert two clean samples at both 1s and 5s. Keep original expected label
+returns and production freshness limits unchanged; no market data rewritten.
+Retain failed run/test artifact 12133010681 as diagnostic evidence. Re-run only
+the small regression workflow after this fixture correction; no replay/capture.
+
 Next: inspect `PAPER markout continuity regression` first and fix any concrete
 failure. Once green, reconstruct clean markout coverage from original full
 normalized events with explicit gap scopes (or one justified measurement-only
