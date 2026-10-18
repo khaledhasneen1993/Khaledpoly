@@ -312,3 +312,36 @@ continually rescanning 20 GB recordings. Next review: validate candidate hashes,
 then audit a fixed bounded sample of actual complement candidates and assess
 mixed-route volume/identity before designing a default-off matching experiment.
 No execution model or profitability qualification changes in this iteration.
+
+## Transaction-linked candidate evidence — 2026-10-18 07:42 Asia/Amman
+
+Run 39094813284 completed successfully. Original artifact 12123834350 and fresh
+artifact 12123563657 preserve all 84 and 590 necessary-condition rows, with no
+truncation and a transaction hash on every row. Both logical tape SHA-256 values
+and frozen direct counts (12/3 original, 45/2 fresh for zero/one tick) matched.
+Persist the compact reports under `transaction-linked-census-20261018/` so no
+further 20 GB tape scan is needed for these candidate identities.
+
+Freeze the first five UNIQUE one-tick complementary candidate transactions per
+tape, sorted by source time, observed time and transaction hash BEFORE public
+receipt queries. The full population remains 9/41 rows; do not cherry-pick a
+different sample after outcomes. `fixed-selection.json` records the ten chosen
+samples, source digests, target token/price and condition. Fail closed on missing
+hashes, truncated evidence, inconsistent binary pairs or counts.
+
+The bounded candidate audit compares the exact recorded public aggregate size,
+token/side and rounded price against each settlement group. It reports actual
+target-token MINT maker shares separately from DIRECT shares, checks share
+conservation and counts matching groups without collapsing repeated taker hashes.
+Even conserved MINT volume at the implied price is NOT a hypothetical order fill
+and does not establish queue exhaustion, priority or a pre-cancel match. Receipt
+data is future information, offline validation only. Seventeen local unit tests
+pass, including mixed routes, ambiguous groups, wrong size/price and conservation
+failures. No execution, fees, risk, latency or acceptance changes.
+
+Next: inspect fixed-candidate-receipt-audit selection/report/raw receipts. If
+target-token volumes and identity corroborate, specify a conservative default-off
+experimental route model with causality, deduplication and queue assumptions
+explicitly frozen before another comparison. Otherwise record the exact mismatch;
+do not convert full public BUY volume into complement fills. Existing QB0 is
+still rejected; net PnL results remain +0.16474 original / 0 fresh, not qualified.

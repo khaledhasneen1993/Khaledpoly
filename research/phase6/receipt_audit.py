@@ -92,23 +92,37 @@ def corroborate(sample, receipt, block, topics):
                 'sizeDifference':str(abs(Decimal(shares)/Decimal(1000000)-Decimal(sample['size'])))})
     # A taker can appear once per maker. Do not count its aggregate multiple times.
     unique={(row['ordersMatchedLogIndex'],row['orderHash']):row for row in quantities}
-    return {'transactionHash':tx, 'blockHash':receipt['blockHash'],
+    result = {'transactionHash':tx, 'blockHash':receipt['blockHash'],
             'blockTimestampMs':int(block['timestamp'],16)*1000,'recordedTradeTimestampMs':int(sample['timestamp']),
             'matches':matches,'matchTypes':dict(Counter(row['matchType'] for row in matches)),
             'takerAggregateComparisons':list(unique.values()),'sample':sample,
             'counterfactualQueueAllocationProven':False,'simulatedFillsCreated':False}
+    if 'targetToken' in sample:
+        from research.phase6.candidate_receipt_audit import label_candidate
+        result['candidateSettlementLabel'] = label_candidate(sample, matches)
+    return result
 
 
-def run(paths, output):
+def run(paths, output, candidates=False):
     output=Path(output); output.mkdir(parents=True,exist_ok=False)
     topics=event_topics(); samples={}; errors=[]; results=[]
     for path in paths:
         report=json.loads(Path(path).read_text())
-        for sample in report['rawLastTradeSamples']:
+        if candidates:
+            from research.phase6.candidate_receipt_audit import select_samples
+            selected = select_samples(report, str(path))
+        else:
+            selected = report['rawLastTradeSamples']
+        for sample in selected:
             tx=sample.get('transaction_hash','')
             if not re.fullmatch('0x[0-9a-fA-F]{64}',tx): raise ValueError('Invalid recorded transaction hash')
+            if candidates and tx in samples:
+                raise ValueError('Candidate samples overlap across recordings')
             samples.setdefault(tx,sample)
     if not 1<=len(samples)<=10: raise ValueError('Audit requires at most ten fixed recorded samples')
+    # Persist the exact selection before the first RPC, including on network failure.
+    (output/'selection.json').write_text(json.dumps({'mode':'FIRST_FIVE_LEGACY_COMPLEMENT_PER_TAPE'
+        if candidates else 'FIRST_RAW_SAMPLES', 'samples':list(samples.values())},indent=2))
     try:
         if int(rpc('eth_chainId',[]),16)!=137: raise ValueError('Wrong public chain')
         for number,(tx,sample) in enumerate(samples.items()):
@@ -134,7 +148,8 @@ def run(paths, output):
 
 def main():
     p=argparse.ArgumentParser(); p.add_argument('--census',action='append',required=True);p.add_argument('--output',required=True)
-    a=p.parse_args();run(a.census,a.output)
+    p.add_argument('--candidates',action='store_true')
+    a=p.parse_args();run(a.census,a.output,a.candidates)
 
 
 if __name__=='__main__':main()
