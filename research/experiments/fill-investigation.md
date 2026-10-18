@@ -766,3 +766,50 @@ projection reproduces all three buy horizons censored by the paired GAP at row
 verification. Next read the `frozen-fill-markout-coverage` artifact from THIS
 run and archive exact results/provenance. No new PnL result yet; -0.85 remains
 the original development account result. All default trading code unchanged.
+
+## Complete continuity audit: seven censored, two valid — 2026-10-18
+
+Run 39120483374 on bed655fb completed SUCCESS at 10:49:41 UTC / 13:49:41 Amman;
+114 phase6 checks passed. Artifact 12134390936 ZIP SHA256
+a7b192044612f4fa331e76ad4af017b2741315018777d22e15fd3498412cdd76.
+Exact report, frozen sources/inputs and provenance manifest are committed in
+`research/experiments/markout-coverage-20261018/`. Complete source verified:
+6,163,831 rows, logical SHA cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b.
+
+| Frozen execution | 1s | 5s | 30s |
+| --- | --- | --- | --- |
+| Buy 5 at .64 | DATA_GAP | DATA_GAP | DATA_GAP |
+| Sell 3 at .47 | VALID | DATA_GAP | DATA_GAP |
+| Sell 2 at .47 | VALID | DATA_GAP | DATA_GAP |
+
+Seven of nine horizons are censored. Both valid sell 1s observations have mid
+.465 and +.005/share markout, NOT account PnL. There are zero clean buy markout
+labels and zero clean 5s/30s labels; this is insufficient entry-quality training
+or strategy qualification. Original actual account net remains -0.85, cash
+499.15, ending inventory zero. No account or strategy replay was performed.
+
+The two causal GAP anchors both report `invalid_depth: Crossed final batch`:
+row 140300/event 0 at 1792269684239 (source 1792269684169), expanded to the pair;
+row 155412/event 0 at 1792269696284 (source 1792269696213). The normalized
+recording establishes invalidation, but does NOT prove whether the source is
+venue message sequencing, an omitted update or a local decoder problem.
+Do not "fix" this by accepting crossed books or carrying stale depth forward.
+
+Next collect the original RAW frames for one predeclared 29,045ms interval
+from 1792269669239 through 1792269698284, including both exact GAP anchors.
+`research.phase6.raw_gap_context` preserves original message text, RAW/normalized
+frame IDs/timing and GAP event indices. Its normalized BOOK output is explicitly
+a three-level diagnostic projection; original raw full snapshots retain depth.
+History before the window is explicitly unreconstructed; require an observed
+full snapshot before replaying raw deltas. Cap evidence at 32MB and fail closed
+on changed anchors, wrong full-tape SHA, missing frames or truncation.
+Source/spec/core decoder/acceptance hashes frozen before extraction in
+`raw-gap-context-freeze.json`. Three new targeted extraction tests, 117 phase6
+checks pass. Start one bounded evidence extraction only after the preceding
+audit completed; reuse the existing recording. No account/capture/RPC run.
+
+Next inspect actual raw snapshot/delta chronology and venue best-price hints at
+the two anchors; implement a decoder change only if those messages prove one.
+Preserve strict invalidation otherwise and broaden settlement route coverage
+before strategy selection. Acceptance/risk/fees/queue and LIVE lock unchanged;
+no holdout data used or candidate promoted.

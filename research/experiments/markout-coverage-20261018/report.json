@@ -1,0 +1,256 @@
+{
+  "scope": "DEVELOPMENT_FROZEN_FILL_CONTINUITY_AUDIT_NOT_ACCOUNT_REPLAY",
+  "policy": "CONSERVATIVE_SAME_ARRIVAL_GROUP_CENSORING",
+  "maxBookAgeMs": 2000,
+  "frozenExecutions": [
+    {
+      "orderId": "sim-research-4",
+      "at": 1792269683761,
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "buy": true,
+      "size": 5,
+      "price": 0.64,
+      "fee": 0,
+      "liquidity": "MAKER",
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "purpose": "ENTRY",
+      "expectedEdge": 0.02,
+      "decisionToFillMs": 586,
+      "fillIndex": 0
+    },
+    {
+      "orderId": "sim-research-14",
+      "at": 1792269694955,
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "buy": false,
+      "size": 3,
+      "price": 0.47,
+      "fee": 0,
+      "liquidity": "MAKER",
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "purpose": "MAKER_REDUCTION",
+      "expectedEdge": -0.17,
+      "decisionToFillMs": 760,
+      "fillIndex": 1
+    },
+    {
+      "orderId": "sim-research-14",
+      "at": 1792269695069,
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "buy": false,
+      "size": 2,
+      "price": 0.47,
+      "fee": 0,
+      "liquidity": "MAKER",
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "purpose": "MAKER_REDUCTION",
+      "expectedEdge": -0.17,
+      "decisionToFillMs": 874,
+      "fillIndex": 2
+    }
+  ],
+  "frozenFills": 3,
+  "expectedHorizons": 9,
+  "statusCounts": {
+    "DATA_GAP": 7,
+    "VALID": 2
+  },
+  "horizons": [
+    {
+      "fillIndex": 0,
+      "orderId": "sim-research-4",
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "fillMs": 1792269683761,
+      "horizonMs": 1000,
+      "status": "DATA_GAP",
+      "proof": {
+        "seq": 140300,
+        "eventIndex": 0,
+        "at": 1792269684239,
+        "kind": "GAP",
+        "data": {
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "sourceMs": 1792269684169,
+          "detail": "Crossed final batch",
+          "reason": "invalid_depth"
+        }
+      }
+    },
+    {
+      "fillIndex": 0,
+      "orderId": "sim-research-4",
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "fillMs": 1792269683761,
+      "horizonMs": 5000,
+      "status": "DATA_GAP",
+      "proof": {
+        "seq": 140300,
+        "eventIndex": 0,
+        "at": 1792269684239,
+        "kind": "GAP",
+        "data": {
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "sourceMs": 1792269684169,
+          "detail": "Crossed final batch",
+          "reason": "invalid_depth"
+        }
+      }
+    },
+    {
+      "fillIndex": 0,
+      "orderId": "sim-research-4",
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "fillMs": 1792269683761,
+      "horizonMs": 30000,
+      "status": "DATA_GAP",
+      "proof": {
+        "seq": 140300,
+        "eventIndex": 0,
+        "at": 1792269684239,
+        "kind": "GAP",
+        "data": {
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "sourceMs": 1792269684169,
+          "detail": "Crossed final batch",
+          "reason": "invalid_depth"
+        }
+      }
+    },
+    {
+      "fillIndex": 1,
+      "orderId": "sim-research-14",
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "fillMs": 1792269694955,
+      "horizonMs": 1000,
+      "status": "VALID",
+      "proof": {
+        "seq": 154917,
+        "eventIndex": 1,
+        "at": 1792269696025,
+        "kind": "BOOK",
+        "data": {
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268"
+        }
+      },
+      "sourceMs": 1792269695956,
+      "midPrice": "0.465",
+      "perShare": "0.005",
+      "quantity": "3",
+      "markoutNotAccountPnl": "0.015"
+    },
+    {
+      "fillIndex": 1,
+      "orderId": "sim-research-14",
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "fillMs": 1792269694955,
+      "horizonMs": 5000,
+      "status": "DATA_GAP",
+      "proof": {
+        "seq": 155412,
+        "eventIndex": 0,
+        "at": 1792269696284,
+        "kind": "GAP",
+        "data": {
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "sourceMs": 1792269696213,
+          "detail": "Crossed final batch",
+          "reason": "invalid_depth"
+        }
+      }
+    },
+    {
+      "fillIndex": 1,
+      "orderId": "sim-research-14",
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "fillMs": 1792269694955,
+      "horizonMs": 30000,
+      "status": "DATA_GAP",
+      "proof": {
+        "seq": 155412,
+        "eventIndex": 0,
+        "at": 1792269696284,
+        "kind": "GAP",
+        "data": {
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "sourceMs": 1792269696213,
+          "detail": "Crossed final batch",
+          "reason": "invalid_depth"
+        }
+      }
+    },
+    {
+      "fillIndex": 2,
+      "orderId": "sim-research-14",
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "fillMs": 1792269695069,
+      "horizonMs": 1000,
+      "status": "VALID",
+      "proof": {
+        "seq": 155115,
+        "eventIndex": 0,
+        "at": 1792269696141,
+        "kind": "BOOK",
+        "data": {
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268"
+        }
+      },
+      "sourceMs": 1792269696069,
+      "midPrice": "0.465",
+      "perShare": "0.005",
+      "quantity": "2",
+      "markoutNotAccountPnl": "0.010"
+    },
+    {
+      "fillIndex": 2,
+      "orderId": "sim-research-14",
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "fillMs": 1792269695069,
+      "horizonMs": 5000,
+      "status": "DATA_GAP",
+      "proof": {
+        "seq": 155412,
+        "eventIndex": 0,
+        "at": 1792269696284,
+        "kind": "GAP",
+        "data": {
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "sourceMs": 1792269696213,
+          "detail": "Crossed final batch",
+          "reason": "invalid_depth"
+        }
+      }
+    },
+    {
+      "fillIndex": 2,
+      "orderId": "sim-research-14",
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "fillMs": 1792269695069,
+      "horizonMs": 30000,
+      "status": "DATA_GAP",
+      "proof": {
+        "seq": 155412,
+        "eventIndex": 0,
+        "at": 1792269696284,
+        "kind": "GAP",
+        "data": {
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "sourceMs": 1792269696213,
+          "detail": "Crossed final batch",
+          "reason": "invalid_depth"
+        }
+      }
+    }
+  ],
+  "fillsInferred": false,
+  "netPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO",
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "sourceRows": 6163831,
+  "runId": "e4040b5c-f460-436e-86db-9fe60d656ea8",
+  "originalReportSha256": "46e216726858609ef2ea25ae9ca565c877021f8fee5ccba4a6f405239bffdadc",
+  "originalAccountNetPnl": -0.85,
+  "originalAccountCash": 499.15,
+  "caveat": "Existing partial offline settlement labels remain unqualified; this audit changes no account or strategy decisions."
+}

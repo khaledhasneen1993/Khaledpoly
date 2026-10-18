@@ -1,0 +1,40 @@
+name: PAPER original crossed-depth context
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/raw-gap-context.yml'
+      - 'research/phase6/raw_gap_context.py'
+      - 'research/phase6/tests/test_raw_gap_context.py'
+      - 'research/phase6/raw-gap-context-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-original-gap-context
+  cancel-in-progress: false
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Offline bounded-context and provenance tests
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: context-input
+      - name: Extract original frames around two proven crossed-depth gaps
+        run: >-
+          python3 -u -m research.phase6.raw_gap_context --input-root context-input
+          --output research/output/raw-gap-context.json.gz
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-crossed-depth-context
+          retention-days: 7
+          path: research/output/raw-gap-context.json.gz
