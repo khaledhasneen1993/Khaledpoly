@@ -1,0 +1,22 @@
+{
+  "workflowRun": 39116669304,
+  "sourceCommit": "c3ee4bdd56453f2a4ce97e631ba10d3aba55a4c2",
+  "completedUtc": "2026-10-18T09:48:00Z",
+  "conclusion": "success",
+  "javaTests": 156,
+  "pythonTests": 250,
+  "totalTests": 406,
+  "javaTestArtifact": 12133001132,
+  "previousFailureRun": 39116530182,
+  "previousFailureCause": "Synthetic HTTP fixture had five seconds of stale depth but expected clean markout labels",
+  "fixtureCorrection": "Regular synthetic fresh snapshots; original expected label returns unchanged",
+  "marketComparisonRepeatedAfterFix": false,
+  "newMarketNetPnl": null,
+  "originalDevelopmentNetPnlAfterConfiguredCosts": -0.85,
+  "originalMarkoutsTrusted": false,
+  "strategyChanged": false,
+  "acceptanceChanged": false,
+  "decision": "NO_GO",
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

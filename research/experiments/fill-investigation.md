@@ -698,3 +698,21 @@ do not claim that delaying entry improves performance using only five labels,
 since shifted orders may merely fall onto unlabelled executions. Freeze one
 causal strategy candidate on development before new independent PAPER; fixed
 acceptance and LIVE lock remain unchanged.
+
+## Measurement correction verified — 2026-10-18 09:48 UTC
+
+Run 39116669304 on c3ee4bdd56453f2a4ce97e631ba10d3aba55a4c2 SUCCEEDED;
+156 Java + 250 Python = 406 tests passed, zero Java failures/errors/skips.
+Java module totals 139/11/5/1, Python phase2..6 totals 8/50/38/49/105.
+The HTTP fixture now has genuine synthetic observation continuity; unchanged
+expected .09/.15 markout label assertions pass. Artifact 12133001132 preserves
+the Java test reports. Previous failure 39116530182 remains in history.
+
+This verifies measurement/accounting regressions, NOT profitable market
+performance. No full comparison rerun or independent capture occurred after
+the fix: the only market-account result remains the archived -0.85 under the
+original frozen development execution model, with contaminated original
+markouts explicitly excluded from optimization. All jobs completed; no replay
+is running. Next action remains the scoped clean markout/coverage investigation
+above, not a duplicate two-hour capture or promotion to LIVE. PR #9 remains
+draft and stacked on #8 then #7; acceptance unchanged.
