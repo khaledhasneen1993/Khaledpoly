@@ -399,3 +399,22 @@ model. Do not launch another two-hour capture until a justified frozen candidate
 passes same-development comparison. Strategy/execution and acceptance remain
 unchanged; NO_GO, no new PnL. Seventy-nine phase6 unit tests pass locally, including
 offline re-decoding of all actual candidate receipts with no network calls.
+
+## Bounded causal window extraction — 2026-10-18
+
+No overlapping runs remain: 39097821365 and 39094813284 completed successfully;
+PR #9 remains draft/open on unchanged stacked bases, head 479426a9d5ada64a413828a606be9d7d3c81cec4.
+Extract two fixed windows from the EXISTING fresh tape, not another market
+capture or census. Specs retain both peer order lifecycles, token pair/condition,
+three seconds before submission and three seconds after terminal, and the
+previously verified full logical tape hash. Keep original rows and frame order,
+RAW messages concerning either token, scoped/global gaps and preceding metadata.
+The context is deliberately wider than the frozen 2000ms book freshness limit.
+Do not call the cropped rows a complete replay tape or infer fills from them.
+The extractor rejects unclean chronology, wrong logical hash, oversized/empty
+windows or truncation. Three local tests pass. No execution behavior changed.
+
+Next inspect `bounded-active-order-windows`: source/arrival ordering at the first
+corroborated MINT overlapping sim-research-4; both current books; pending
+cancellation and peer-leg risk; GAP invalidation around sim-research-42. Use
+the existing committed receipts for route/price volumes without extra RPCs.
