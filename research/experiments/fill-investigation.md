@@ -1610,3 +1610,55 @@ The narrowly deduplicated markout job39168798819 was skipped as intended, not
 another failed build. Witness job117797675258 is processing the original tape;
 wait for its artifact rather than rerunning. No diagnostic reason/result from
 that pending job is asserted yet. Default behavior/acceptance remain unchanged.
+
+## Actual entry decision result — 2026-10-18 22:37 UTC review
+
+Run39168798844 completed successfully at21:47 UTC. Source6dc5f25, artifact
+12152096415, ZIP SHA934abe8054ebbc30c3c9625d65176843f63a0bfbe39676f9b50ce2c3e6ffc6e6,
+retained losslessly in `entry-decision-witness-20261018/result/artifact.zip.b64`.
+All69 original report fields reproduced, and a separate offline comparison
+also reproduces EVERY original audit action in order, not only final cash.
+All6 frozen windows contain decisions:34 actual causal snapshots. Actual reasons:
+16 MIN_SIZE_AND_NET_EDGE,3 MIN_SIZE,12 NET_EDGE,1 PAIR_SUBMITTED,2 RESTING.
+Thus31 rejections,19 size-limited and28 edge-limited with16 overlapping; these
+counts are bounded selected decision observations, not whole-run rates.
+
+Market minimum is5. Original size is min(5,10% of smaller best-bid depth), rounded
+down .01. The19 rejected small sizes are real outcomes of the current rule, not
+missing balances or a need to disable minimum size. Example decision1792269724247:
+quantity3.5 vs minimum5, net total.025 vs required.040255698...
+per share; the census print112ms earlier had DIFFERENT prior quotes/depth.
+Do not backdate a quote or count the print as executable at the later decision.
+Many full-size decisions have net.04 TOTAL on5shares (.008/share), below actual
+required approximately.023..037/share. Actual volatility/expiry/thin-depth
+premiums account for the thresholds; never replace them with a fixed1% floor.
+Metadata/book freshness, cash500 and entryStopped=false were observed, not
+guessed, in these windows. No additional fill/economic improvement is shown.
+Corrected control net-1.80; guarded account0/zero fills/undefined pair ratio:NO_GO.
+
+Verified all34 quantities and original risk-premium/net-edge arithmetic with
+exact Decimal exports, original branch predicates, complete window coverage and
+raw archive hash. Negative tests reject changed threshold/size/edge or missing
+window.166 phase6 tests pass locally (469 full CI tests remain the earlier
+runtime verification scope; no second Maven/CI run needed for offline additions).
+
+Freeze ONE new PURE research price candidate BEFORE computing its screen: DQ3-0,
+`depth-quote-candidate-freeze.json`. Choose from the first3 original displayed
+bid levels of each leg, join only. Keep EXACT ORIGINAL top-depth quantity (do
+not raise a .5-share request to5), actual minimum, dynamic threshold calculated
+from ORIGINAL top depth/volatility/expiry, remaining loss cap, cash and portfolio
+limits, active-market/freshness/taker-source/flat-account/no-open-order guards.
+Each chosen price must separately show at least10x own requested quantity.
+Maximize combined bid, then prefer shallower level indices deterministically.
+Do not lower premiums using a thicker deep level. No queue/fee/latency/model or
+service changes, no execution wiring or independent promotion. Lower prices
+could increase visible queue and REDUCE fill probability; price feasibility is
+not edge capture. The19 actual size-limited observations must remain blocked.
+
+Predeclared gate: if there are NO additional legal priced entries on these34
+states vs actual PAIR_SUBMITTED, reject DQ3 without a full-tape scan/replay.
+Otherwise only consider a frozen necessary-TRAFFIC census on development data;
+never jump from price arithmetic to full-account profitability/holdout/capture.
+One variant, no fitted parameters/price-level sweep. Existing QB0 and guarded
+zero-fill rejection remain intact. Preserve this preregistration in git before
+evaluating DQ3 on the downloaded witnesses. PAPER-only, defaults unchanged.

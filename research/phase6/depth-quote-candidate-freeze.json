@@ -1,0 +1,30 @@
+{
+  "experiment": "DQ3-0",
+  "status": "DEVELOPMENT_PREDECLARED_BEFORE_CANDIDATE_WITNESS_SCREEN_NOT_INDEPENDENT",
+  "reason": "Actual entry witnesses show insufficient edge at unchanged size/dynamic threshold. Inspect lower existing bid levels without reducing either requirement.",
+  "quoteUniverse": "First three displayed original bid levels per leg, join only, never synthetic price or future data",
+  "quantityRule": "EXACT original min(orderShares,0.1*min(bestBidDepth)) rounded down .01; never increased, market minimum unchanged",
+  "dynamicRiskRule": "EXACT original effective observed volatility/expiry/top-depth threshold; do not recompute lower premium using thicker deeper quote depth",
+  "ownLevelParticipationCap": "At most 10% actual displayed size at selected quote",
+  "selectionRule": "Maximize combined displayed bid, then minimize maximum level index, then index sum, then higher first-token bid",
+  "safetyRule": "Actual freshness,metadata,remaining exit loss cap,account/portfolio budget,holdings/open-order/taker-source restrictions unchanged",
+  "fixedVariants": 1,
+  "scope": "34 actual legacy guarded DEVELOPMENT decision states only, not new account replay or performance",
+  "predeclaredNextGate": "If no additional legal priced entry vs actual PAIR_SUBMITTED branches, reject without full tape scan. Otherwise only predeclare full-tape necessary-traffic screening; price feasibility alone never authorizes account promotion or independent capture.",
+  "queueFeeLatencyChanged": false,
+  "minimumSizeChanged": false,
+  "runtimeIntegration": false,
+  "executionAllowed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    "research/phase6/depth_quote_lab.py": "9cb867a19ddeb29ad5480ce37914c6fff6b2f0358616b524b96fd3a31002a2c0",
+    "research/phase6/tests/test_depth_quote_lab.py": "e1f39bd81fd515ea0b3c8b74d8413ce2a9cc36b56452d704cb320d46b781a427",
+    "research/phase6/entry_witness_result.py": "f2131177bc0205af9d1466b0171b05198f2dc0037e50574f5d2d52b5c9970cf8",
+    "research/phase6/tests/test_entry_witness_result.py": "4a2df2dbf08a8d81d9b330e1c11486b59fd081ffcb951e861a5612070c9870eb",
+    "research/experiments/entry-decision-witness-20261018/result/artifact.zip.b64": "15fb072bea3a4e755ae74952f7d0db3b0284ae389dc31d261cd5bf441f9a4549",
+    "research/experiments/entry-decision-witness-20261018/windows.json": "5456a3028bb104753f07a749dc832ce2f4c4b84a9eeba31ec75e703164e616a7",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  }
+}
