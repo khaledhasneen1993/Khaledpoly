@@ -1,0 +1,58 @@
+# DQ3-0 — one preregistered DEVELOPMENT quote experiment
+
+PAPER research only. Pure Python proposal, no service/executor wiring, no
+simulated executions or candidate account trajectory yet. Not qualified.
+
+Preregistration commit: `0cc9cc16633ef20eea1129f2793322b683acb29d`, BEFORE
+evaluating `state-screen.json`. The source witnesses are retrospectively selected
+DEVELOPMENT observations, not an unbiased population or independent sample.
+
+Cause evidence: the original guarded account is reproduced in all69 old report
+fields AND every original audit action. Of34 selected actual decisions,31 reject:
+19 have insufficient original size,28 insufficient original dynamic net edge,
+with16 overlapping. One actual pair was submitted; two decisions maintained it.
+Original metadata minimum5, actual top-depth quantity rule, volatility/expiry/
+thin-depth edge premiums are retained exactly, not replaced by optimistic defaults.
+
+DQ3-0 considers only the first3 actual displayed bid levels per leg, joins those
+levels and maximizes combined bid with frozen deterministic tie rules. Original
+quantity and dynamic threshold remain identical. Each chosen quote must display
+at least10x requested size. Remaining exit loss/cash/portfolio/market/freshness/
+flat/no-open-order/last-taker-source guards remain. No fee, queue, minimum,
+latency, risk-budget or acceptance loosening; no future prints in quote selection.
+
+Result on independent LEGACY state snapshots:11 price-feasible states versus1
+actual legacy submitted state,10 additional priced states. All19 size-rejected
+states remain blocked; both already-resting states are skipped. This is NOT11
+candidate submissions, executions or PnL. A candidate's earlier fills/cancels
+could alter all later states; that trajectory was not simulated. Deeper quotes
+can have larger queues and lower fill probability.
+
+Next gate is necessary TRAFFIC only, not account promotion. Frozen11 starts,
+original source anchors, delayed due cutoff+250ms and <=30s after each start,
+earlier GAP/unavailability/resolution censorship. The due cutoff is an explicit
+relaxed upper bound, NOT observed activation. Queue, actual resting-edge cancel
+and current-book-source eligibility/candidate state evolution are omitted;
+passing this optimistic diagnostic cannot establish a fill. Same-token SELL
+and opposite-token BUY at ANY public price need actual conserved receipt maker
+components. Do not infer DIRECT/MINT from side or aggregate/last price, and do
+not sum overlapping state observations as available venue volume.
+
+Started ONE full original tape scan:
+https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39173960311
+at `605b6ab1d9c6746451afa5841305565a799a95c2`. Wait for `dq3-necessary-traffic`;
+do not duplicate its scan or request receipts before reading it. There is no
+new current-market capture, public RPC or account replay in that workflow.
+
+If necessary traffic is absent, reject these selected starts, not all hypothetical
+global policies. If present, require conserved actual route component evidence,
+observed activation, genuine queue/cancellations and a frozen baseline/candidate
+full account comparison on the SAME development data before any new independent
+PAPER validation. No parameter sweep or holdout tuning. Existing independent
+acceptance criteria stay fixed. Price-feasibility alone never authorizes capture.
+
+170 phase6 tests passed locally; full runtime CI469 passed at6dc5f25. No additional
+Java build was needed for these pure offline helpers. Source/evidence hashes in
+`depth-quote-candidate-freeze.json` and `depth-quote-traffic-freeze.json` bind scope.
+Current economics unchanged: corrected control-$1.80, guarded0/0fills/undefined
+pair-completion ratio, NO_GO. No economic improvement claimed for DQ3-0.
