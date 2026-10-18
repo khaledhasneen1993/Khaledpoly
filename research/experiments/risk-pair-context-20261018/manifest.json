@@ -1,0 +1,18 @@
+{
+  "sourceRun": 39155138746,
+  "sourceCommit": "a01cb4b9e39c4329b48d30dcc5ba4ffd3df96902",
+  "artifactId": 12147061686,
+  "artifactZipSha256": "fddaeffc29f635b643d9e5ac715c33f85935155968bd6951b29b69c8ddfdbb36",
+  "phase6CiTestsPassed": 149,
+  "sourceRows": 6163831,
+  "retainedOriginalFramePairs": 2259,
+  "retainedBytes": 5012097,
+  "windowMs": [
+    1792269709477,
+    1792269713983
+  ],
+  "receiptReadsBeforeFreeze": 0,
+  "decision": "NO_GO_ZERO_FILLS_PENDING_TWO_RECEIPTS",
+  "fillsInferred": false,
+  "pnlInferred": false
+}

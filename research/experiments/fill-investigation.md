@@ -1426,3 +1426,47 @@ at a01cb4b9e39c4329b48d30dcc5ba4ffd3df96902. Wait for
 The candidate remains NO_GO_ZERO_FILLS, net0/no profit, OFF by default. Current
 work did not launch another account comparison, new capture, public receipt reads
 or Maven build. All source/results/next window are committed for continuation.
+
+## Only-pair original context — 2026-10-18 19:35 UTC review
+
+Run39155138746 succeeded (149 phase6 tests); original bounded context artifact
+12147061686 is retained losslessly under `risk-pair-context-20261018/` with ZIP
+SHA256 fddaeffc29f635b643d9e5ac715c33f85935155968bd6951b29b69c8ddfdbb36.
+The complete6,163,831-row source hash is unchanged;2,259 original frame pairs
+are retained. New offline proof verifies RAW hashes/frame joins, original full
+snapshot top-depth projection, public trade identity, and actual order times.
+
+At submission1792269711477 BOTH latest books have source1792269711392 and
+arrival1792269711468 (85ms source age,0ms cross-leg source skew). Original full
+snapshots at normalized sequences173337/173339 show A .45/.63 and B .37/.55;
+own .46/.38 bids improve these bids by one tick. This interval is NOT evidence
+of differently timed paired source snapshots, nor proof of executable16% edge.
+
+Actual activation remains1792269711729, NOT activationDue1792269711727. Four
+public BUY observations arrive during actual254ms active interval. Sources
+1792269711664 and1792269711727 precede observed activation, so exclude both
+from causal allocation without querying receipts. The two postactivation public
+prints are B5.3@.46 (source1763, normalizedseq173610) and A24.818182@.54
+(source1904,seq173728), with the shared179226971 prefix. Their aggregate
+complement prices .54/.46 are NOT sufficient to reject/credit individual maker
+components: mixed settlement prices must be decoded and volume conserved.
+
+Cancellation is original GAPseq173753, source1792269711911, invalid_depth
+`Crossed final batch` for both tokens. Full snapshots recover at1987,4ms AFTER
+actual cancellation1983. Do not postpone cancellation, infer a missed fill or
+repeat the previously rejected separate-frame recovery probe. No runtime edit.
+
+Freeze exactly TWO new receipts before public reads:
+`risk-pair-receipts-freeze.json` and deterministic original-bound `selection.json`.
+Transactions410a752f...e2bb7db and1e24b3b6...e24e20a6 are bound to actual opposite
+BUY orders and observed source/arrival/terminal intervals. New small workflow
+runs153 phase6 tests then public chain/receipt/block reads only, preserves raw
+receipts and checks exact integer maker-price eligibility for target BUY bids.
+It NEVER grants queue priority/fills, recomputes account PnL, changes acceptance,
+or launches Maven, another full-tape replay/capture. Existing collector's legacy
+unrelated -.85 field is explicitly removed from this new report. If incomplete,
+retain successful receipts/errors and resume only this frozen selection; do not
+broaden requests. Next inspect its `only-risk-pair-two-receipts` artifact before
+deciding whether any new account replay is warranted.153 tests pass locally.
+Known economics unchanged: corrected control net-1.80, candidate net0/zero fills,
+undefined pair ratio, NO_GO; default guard OFF, PAPER only, no holdout tuning.

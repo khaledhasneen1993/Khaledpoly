@@ -1,0 +1,35 @@
+name: PAPER only risk pair two frozen receipts
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/risk-pair-receipts.yml'
+      - 'research/phase6/risk-pair-receipts-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-risk-pair-two-receipts
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit-only Keccak dependency
+        run: |
+          python3 -m venv "$RUNNER_TEMP/risk-receipt-env"
+          "$RUNNER_TEMP/risk-receipt-env/bin/pip" install --only-binary=:all: --no-deps pycryptodome==3.23.0
+      - name: Offline context identity and phase6 regressions before public reads
+        run: '"$RUNNER_TEMP/risk-receipt-env/bin/python" -m unittest discover -s research/phase6/tests -q'
+      - name: Public read-only audit of exactly two frozen transactions
+        run: >-
+          "$RUNNER_TEMP/risk-receipt-env/bin/python" -u -m research.phase6.risk_pair_context_audit
+          --output research/output/risk-pair-receipts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: only-risk-pair-two-receipts
+          retention-days: 7
+          path: research/output/risk-pair-receipts/

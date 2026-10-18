@@ -1,0 +1,20 @@
+{
+  "experiment": "ONLY-RISK-PAIR-TWO-RECEIPTS-0",
+  "selectionStatus": "DEVELOPMENT_DIAGNOSTIC_FROZEN_BEFORE_PUBLIC_READS",
+  "maxNewReceiptRequests": 2,
+  "noAccountReplay": true,
+  "noIndependentCapture": true,
+  "liveAllowed": false,
+  "filesSha256": {
+    "research/phase6/risk_pair_context_audit.py": "72e7e11c5f6ae6c1d05e88b5dce6e466ecdba0d19d86cdb57a2ffa75a0c9ee4f",
+    "research/phase6/tests/test_risk_pair_context_audit.py": "a44d44a07f8efe2072c869f63568ada316d40031292a07db2436a9779ce00dfa",
+    "research/phase6/route_coverage_audit.py": "4febb1dc81e3e6077c5bd2cd3d87c126900dc24cc0316a24e5fcaaad1a8350fb",
+    "research/phase6/receipt_audit.py": "4337ac09ca5b5364e5f23a15359e44695e283a99584acdbafbf4c9c4fbcc21c4",
+    "research/phase6/candidate_receipt_audit.py": "88f02d3ddc7614fcc4f676a00ba63b6819d805532d5ef0336fc2e57c173a2f38",
+    "research/phase6/risk-opportunity-context-freeze.json": "b43cce6c5aa9db67db6fb84aa574e282faf4012a6542f761e6cc3a80f49bd861",
+    "research/experiments/risk-pair-context-20261018/artifact.zip.b64": "0e0c8768c10486890f5574559c0a86c6d8f427255c098af7d9dd71e7dfb1953c",
+    "research/experiments/risk-pair-context-20261018/selection.json": "f1cf685e4592d28ebec11272f72e7cba4f0effc7389be28cca1d9f29aa1e14af",
+    "research/experiments/residual-entry-risk-20261018/result/only-pair-diagnostic.json": "ffe4f80933217822d183ea75bc25983089b613214d9c2889131389bcad2a6896",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  }
+}

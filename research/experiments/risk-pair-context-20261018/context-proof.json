@@ -1,0 +1,196 @@
+{
+  "scope": "ONLY_PAIR_ORIGINAL_CONTEXT_NOT_FILL_PROOF",
+  "sourceRows": 6163831,
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "artifactZipSha256": "fddaeffc29f635b643d9e5ac715c33f85935155968bd6951b29b69c8ddfdbb36",
+  "submitMs": 1792269711477,
+  "observedActivationMs": 1792269711729,
+  "terminalMs": 1792269711983,
+  "activeMs": 254,
+  "booksAtSubmit": {
+    "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+      "seq": 173337,
+      "arrivalMs": 1792269711468,
+      "sourceMs": 1792269711392,
+      "bids": [
+        {
+          "price": "0.45",
+          "size": "113.54"
+        },
+        {
+          "price": "0.44",
+          "size": "10"
+        },
+        {
+          "price": "0.43",
+          "size": "10"
+        }
+      ],
+      "asks": [
+        {
+          "price": "0.63",
+          "size": "75.49"
+        },
+        {
+          "price": "0.64",
+          "size": "76.3"
+        },
+        {
+          "price": "0.65",
+          "size": "41.4"
+        }
+      ],
+      "originalEventType": "book"
+    },
+    "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+      "seq": 173339,
+      "arrivalMs": 1792269711468,
+      "sourceMs": 1792269711392,
+      "bids": [
+        {
+          "price": "0.37",
+          "size": "75.49"
+        },
+        {
+          "price": "0.36",
+          "size": "76.3"
+        },
+        {
+          "price": "0.35",
+          "size": "41.4"
+        }
+      ],
+      "asks": [
+        {
+          "price": "0.55",
+          "size": "113.54"
+        },
+        {
+          "price": "0.56",
+          "size": "10"
+        },
+        {
+          "price": "0.57",
+          "size": "10"
+        }
+      ],
+      "originalEventType": "book"
+    }
+  },
+  "sourceClockSkewMs": 0,
+  "sourceAgeAtSubmitMs": {
+    "88599287360325233240690982088109814021050513475420535621672707507474151524334": 85,
+    "12589566430666404778428222777978747623958961794906352412512658324998006663268": 85
+  },
+  "publicTradesDuringArrivalActiveInterval": [
+    {
+      "seq": 173553,
+      "eventIndex": 0,
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.63",
+        "size": "38",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269711664",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0xa3250e27ca47adf265c535a4c362267d9dc5e39db5c59196460c93836fff2f7d",
+        "arrivalMs": 1792269711733
+      },
+      "classification": "SOURCE_BEFORE_OBSERVED_ACTIVATION"
+    },
+    {
+      "seq": 173580,
+      "eventIndex": 0,
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.65",
+        "size": "34",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269711727",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0xcc231a37e51c966edfcb81f5c44beb424d6e5c7df702a65b05b818b740c4e122",
+        "arrivalMs": 1792269711797
+      },
+      "classification": "SOURCE_BEFORE_OBSERVED_ACTIVATION"
+    },
+    {
+      "seq": 173610,
+      "eventIndex": 0,
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.46",
+        "size": "5.3",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269711763",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x410a752f186dc9c17f57e98e887fd238dd4fcef2614ebf5e72e6b9ba6e2bb7db",
+        "arrivalMs": 1792269711832
+      },
+      "classification": "RECEIPT_REQUIRED"
+    },
+    {
+      "seq": 173728,
+      "eventIndex": 0,
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.54",
+        "size": "24.818182",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269711904",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x1e24b3b6ec6c76842d0bd5e5a8916579a4ef730444770d10bf619b20e24e20a6",
+        "arrivalMs": 1792269711973
+      },
+      "classification": "RECEIPT_REQUIRED"
+    }
+  ],
+  "terminalGaps": [
+    {
+      "seq": 173753,
+      "eventIndex": 0,
+      "data": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "sourceMs": 1792269711911,
+        "detail": "Crossed final batch",
+        "reason": "invalid_depth"
+      }
+    },
+    {
+      "seq": 173753,
+      "eventIndex": 1,
+      "data": {
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "sourceMs": 1792269711911,
+        "detail": "Crossed final batch",
+        "reason": "invalid_depth"
+      }
+    }
+  ],
+  "firstFullSnapshotAfterCancel": [
+    {
+      "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "seq": 173761,
+      "arrivalMs": 1792269711987,
+      "sourceMs": 1792269711911
+    },
+    {
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "seq": 173763,
+      "arrivalMs": 1792269711987,
+      "sourceMs": 1792269711911
+    }
+  ],
+  "queueReconstructed": false,
+  "fillsInferred": false,
+  "pnlInferred": false,
+  "liveAllowed": false,
+  "decision": "NO_GO_ZERO_FILLS_PENDING_TWO_RECEIPTS"
+}
