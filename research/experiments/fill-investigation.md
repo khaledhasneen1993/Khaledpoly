@@ -271,3 +271,44 @@ Next review: `public-receipt-audit` artifact, route types and exact sample
 token/side/price/size comparison. Receipt settlement evidence alone cannot prove
 a hypothetical order's allocation, causal queue position or profitability.
 If RPC is transiently unavailable, retain errors without manufacturing evidence.
+
+## Receipt corroboration result — 2026-10-18 06:46 Asia/Amman
+
+Run 39094538217 succeeded; artifact 12123388351. All TEN fixed public samples
+returned successful Polygon receipts and matching block headers; no RPC or
+decoding errors. Across these ten taker matching groups there were 27 MINT
+maker portions and 5 DIRECT maker portions. Every sampled transaction included
+MINT; one included both DIRECT and MINT. These portions are not 32 independent
+public prints and must not be added to the ten taker aggregates as new volume.
+Recorded token/side matched the taker event; sizes matched exactly, and price
+differences were zero or below 0.00000001 (integer settlement rounding).
+Full receipt report is persisted in `receipt-audit-20261018/`; raw RPC evidence
+is retained in the linked workflow artifact.
+
+This corroborates an incomplete route representation in the same-token-only
+model; it does NOT establish the queue allocation of any hypothetical bot
+order. The ten samples are the first five per tape, not necessarily the
+previous quote-aligned candidates. Do not extrapolate MINT share to all prints
+or convert these samples into historical fills. Receipts arrive after the WS
+matching messages: they are offline ground-truth labels, never features for
+earlier decisions or permission to backdate a fill after an order was canceled.
+
+Harden the decoder to reject invalid aggregate sides/amounts and to retain
+separate matching groups even when the same taker order hash repeats. All ten
+actual saved receipts were revalidated OFFLINE through the hardened decoder;
+match types and aggregate counts were unchanged. Eleven local tests now pass.
+The completed RPC audit workflow becomes manual-only: no repeat public requests
+are needed for decoder-only changes.
+
+Next required evidence is the transactions of the actual quote-aligned
+candidates. The original normalized `tradeId` already retains the full public
+message JSON, including transaction_hash; no production feed or execution
+change is needed. Extract a typed transaction hash and binary token pair into
+the diagnostic candidate rows, increase the bounded example limit to 2000
+and explicitly flag truncation. At current counts this retains all 84/590
+necessary-condition rows. Keep source hashes and direct-route counts frozen.
+This yields a compact candidate evidence set for future receipt audits without
+continually rescanning 20 GB recordings. Next review: validate candidate hashes,
+then audit a fixed bounded sample of actual complement candidates and assess
+mixed-route volume/identity before designing a default-off matching experiment.
+No execution model or profitability qualification changes in this iteration.

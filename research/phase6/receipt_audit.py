@@ -56,6 +56,7 @@ def decode_matches(logs, topics):
         elif ts[0] == topics['matched']:
             if len(ts)!=3: raise ValueError('Invalid OrdersMatched indexed fields')
             side,token,making,taking=words(log['data'],4)
+            if side not in (0,1) or making<=0 or taking<=0: raise ValueError('Invalid taker aggregate fields')
             batch=pending.pop(address,[]); taker_hash=ts[1]; taker_maker='0x'+ts[2][-40:].lower()
             takers=[row for row in batch if row['orderHash']==taker_hash and row['maker']==taker_maker]
             if len(takers)!=1: raise ValueError('Cannot uniquely join taker aggregate event')
@@ -86,11 +87,11 @@ def corroborate(sample, receipt, block, topics):
         taker=row['taker']; shares=taker['takingRaw'] if taker['side']=='BUY' else taker['makingRaw']
         collateral=taker['makingRaw'] if taker['side']=='BUY' else taker['takingRaw']
         if taker['token']==sample['asset_id'] and taker['side']==sample['side']:
-            quantities.append({'orderHash':taker['orderHash'],
+            quantities.append({'orderHash':taker['orderHash'],'ordersMatchedLogIndex':row['ordersMatchedLogIndex'],
                 'priceDifference':str(abs(Decimal(collateral)/Decimal(shares)-Decimal(sample['price']))),
                 'sizeDifference':str(abs(Decimal(shares)/Decimal(1000000)-Decimal(sample['size'])))})
     # A taker can appear once per maker. Do not count its aggregate multiple times.
-    unique={row['orderHash']:row for row in quantities}
+    unique={(row['ordersMatchedLogIndex'],row['orderHash']):row for row in quantities}
     return {'transactionHash':tx, 'blockHash':receipt['blockHash'],
             'blockTimestampMs':int(block['timestamp'],16)*1000,'recordedTradeTimestampMs':int(sample['timestamp']),
             'matches':matches,'matchTypes':dict(Counter(row['matchType'] for row in matches)),
@@ -123,6 +124,7 @@ def run(paths, output):
     except (OSError,ValueError,KeyError,TypeError) as error:
         errors.append({'scope':'RPC_CHAIN_CHECK','error':str(error)[:200]})
     summary={'scope':'PUBLIC_RECORDED_TRANSACTION_SETTLEMENT_AUDIT','rpc':RPC,'chainId':137,
+             'eventTopics':topics,'allowlistedExchanges':sorted(EXCHANGES),
              'requestedTransactions':len(samples),'corroboratedReceipts':len(results),'results':results,'errors':errors,
              'complete':len(results)==len(samples),'decision':'NO_GO','liveAllowed':False,
              'note':'Public settlements corroborate route semantics, never hypothetical maker queue position or profitability.'}

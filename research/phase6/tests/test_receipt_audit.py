@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from research.phase6.receipt_audit import decode_matches, rpc, EXCHANGES
+from research.phase6.receipt_audit import decode_matches, corroborate, rpc, EXCHANGES
 
 
 class ReceiptAuditTest(unittest.TestCase):
@@ -30,3 +30,18 @@ class ReceiptAuditTest(unittest.TestCase):
             for method in ('eth_sendTransaction','eth_sendRawTransaction','personal_sign'):
                 with self.assertRaises(ValueError):rpc(method,[])
             network.assert_not_called()
+
+    def test_same_taker_order_in_separate_groups_is_not_collapsed(self):
+        import copy
+        logs,topics=self.logs(); second=copy.deepcopy(logs)
+        for row in second: row['logIndex']=hex(int(row['logIndex'],16)+3)
+        logs+=second; tx='0x'+'7'*64; block_hash='0x'+'8'*64
+        for row in logs:row['transactionHash']=tx
+        sample={'transaction_hash':tx,'asset_id':'22','side':'BUY','price':'.6','size':'1','timestamp':'1000'}
+        receipt={'transactionHash':tx,'status':'0x1','blockHash':block_hash,'logs':logs}
+        block={'hash':block_hash,'timestamp':'0x2'}
+        result=corroborate(sample,receipt,block,topics)
+        self.assertEqual(len(result['takerAggregateComparisons']),2)
+        self.assertFalse(result['simulatedFillsCreated'])
+        receipt['status']='0x0'
+        with self.assertRaises(ValueError):corroborate(sample,receipt,block,topics)

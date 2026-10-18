@@ -45,8 +45,17 @@ def census(stream, config):
         identity = (improvement, m['condition'], token, source, price.normalize(), decimal(data['size']).normalize())
         if len(fingerprints) >= 100000 and identity not in fingerprints: raise ValueError('Rotate bounded census dataset')
         fingerprints.setdefault(identity, set()).add(route)
-        if len(examples) < 50:
+        if len(examples) < 2000:
+            raw_identity = data.get('tradeId','')
+            transaction = None
+            if isinstance(raw_identity,str) and raw_identity.startswith('{') and len(raw_identity)<=65536:
+                recorded_identity=json.loads(raw_identity)
+                candidate_hash=recorded_identity.get('transaction_hash')
+                if isinstance(candidate_hash,str) and len(candidate_hash)==66 and candidate_hash.startswith('0x'):
+                    transaction=candidate_hash
             examples.append({'at': at, 'condition': m['condition'], 'token': token, 'route': route,
+                             'firstToken':m['first'],'secondToken':m['second'],'sourceMs':source,
+                             'transactionHash':transaction,'tradeIdSha256':hashlib.sha256(raw_identity.encode()).hexdigest(),
                              'reportedToken': data['token'], 'reportedSide': data['side'], 'reportedPrice': str(data['price']),
                              'improvementTicks': improvement, 'printPrice': str(price), 'printSize': str(data['size']),
                              'otherQuote': str(quote[1]), 'netEdgeUpperBound': str(net/quantity)})
@@ -121,6 +130,7 @@ def census(stream, config):
             'logicalTapeSha256': digest.hexdigest(), 'runId': run_id, 'recordingClosedCleanly': clean,
             'observedTrades': trades, 'oneClassificationPerPrintPerPolicy': True,
             'policyCounts': {str(k): dict(v) for k,v in reasons.items()}, 'examples': examples,
+            'examplesLimit':2000,'examplesTruncated':sum(v.get('NECESSARY_CONDITIONS_ONLY',0) for v in (*reasons.values(),*complement_reasons.values()))>len(examples),
             'complementBuyCandidateCounts': {str(k):dict(v) for k,v in complement_reasons.items()},
             'routeFingerprintOverlaps': {str(k):sum(identity[0] == k and len(routes) > 1 for identity,routes in fingerprints.items()) for k in (0,1)},
             'routesMayDescribeSameExecution': True, 'complementPrintIsNotProofOfMint': True,

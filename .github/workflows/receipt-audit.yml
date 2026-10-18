@@ -1,11 +1,6 @@
 name: PAPER public receipt corroboration
 on:
-  push:
-    branches: [paper-fill-investigation]
-    paths:
-      - '.github/workflows/receipt-audit.yml'
-      - 'research/phase6/receipt_audit.py'
-      - 'research/phase6/tests/test_receipt_audit.py'
+  workflow_dispatch:
 permissions:
   contents: read
 concurrency:

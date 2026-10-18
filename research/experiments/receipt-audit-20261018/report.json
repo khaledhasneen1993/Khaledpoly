@@ -1,0 +1,1169 @@
+{
+  "scope": "PUBLIC_RECORDED_TRANSACTION_SETTLEMENT_AUDIT",
+  "rpc": "https://polygon-bor-rpc.publicnode.com",
+  "chainId": 137,
+  "requestedTransactions": 10,
+  "corroboratedReceipts": 10,
+  "results": [
+    {
+      "transactionHash": "0x0a33e1a0e263bd7b8bbb635da34b2610580b18ac3e4b1a39a505c0e4350d2bb5",
+      "blockHash": "0x93211c047c675932a12e67b4228feb6f70782a2fd8f1f93b907e31fae1eca052",
+      "blockTimestampMs": 1792254068000,
+      "recordedTradeTimestampMs": 1792254064595,
+      "matches": [
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x274c8cb7f3c47c9eec1510d7cecaad6ea233400ae3744f910582e046f80878c6",
+            "maker": "0xf8af03f1e68ee7162db8983f0d6dd0dc869854c6",
+            "taker": "0xc6accd5b5f647aacb751b8f3e9d640e723733778",
+            "side": "BUY",
+            "token": "55712981369629746860327772695991631952861234076237886811737566986512020748402",
+            "makingRaw": 10440000,
+            "takingRaw": 12000000,
+            "feeRaw": 0,
+            "logIndex": 1352
+          },
+          "taker": {
+            "orderHash": "0x498088bd63b289b1a03922b083b7ae0cc0bb041ea6005d8219f2650101095bd6",
+            "maker": "0xc6accd5b5f647aacb751b8f3e9d640e723733778",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "27408352719849487670705818670923750078438821936671447881386982555326658944340",
+            "makingRaw": 10400000,
+            "takingRaw": 80000000,
+            "feeRaw": 633360,
+            "logIndex": 1362
+          },
+          "ordersMatchedLogIndex": 1363
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0xf6455b335afa64caad679f235afc4d3dcb8ed338939d6271d0cf7b0a480ea3ed",
+            "maker": "0xdcedfd60071d904471fb22464be85f54139992c6",
+            "taker": "0xc6accd5b5f647aacb751b8f3e9d640e723733778",
+            "side": "BUY",
+            "token": "55712981369629746860327772695991631952861234076237886811737566986512020748402",
+            "makingRaw": 13920000,
+            "takingRaw": 16000000,
+            "feeRaw": 0,
+            "logIndex": 1354
+          },
+          "taker": {
+            "orderHash": "0x498088bd63b289b1a03922b083b7ae0cc0bb041ea6005d8219f2650101095bd6",
+            "maker": "0xc6accd5b5f647aacb751b8f3e9d640e723733778",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "27408352719849487670705818670923750078438821936671447881386982555326658944340",
+            "makingRaw": 10400000,
+            "takingRaw": 80000000,
+            "feeRaw": 633360,
+            "logIndex": 1362
+          },
+          "ordersMatchedLogIndex": 1363
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x47f7b51c76572d7d93012eeacf5dcd302bf87d131444ad73ef69f2e6f7cf1bb6",
+            "maker": "0xb945945d5bcaf7b56834d4da8cdf8f8f94b2db68",
+            "taker": "0xc6accd5b5f647aacb751b8f3e9d640e723733778",
+            "side": "BUY",
+            "token": "55712981369629746860327772695991631952861234076237886811737566986512020748402",
+            "makingRaw": 26100000,
+            "takingRaw": 30000000,
+            "feeRaw": 0,
+            "logIndex": 1356
+          },
+          "taker": {
+            "orderHash": "0x498088bd63b289b1a03922b083b7ae0cc0bb041ea6005d8219f2650101095bd6",
+            "maker": "0xc6accd5b5f647aacb751b8f3e9d640e723733778",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "27408352719849487670705818670923750078438821936671447881386982555326658944340",
+            "makingRaw": 10400000,
+            "takingRaw": 80000000,
+            "feeRaw": 633360,
+            "logIndex": 1362
+          },
+          "ordersMatchedLogIndex": 1363
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x556bbba3cce5d78762025a5bbccc1763b7f59c59abf7dcd8279fbdd576e910d6",
+            "maker": "0xcfddfb6e1b321fcfdcb6f9aa09b11990142ce5da",
+            "taker": "0xc6accd5b5f647aacb751b8f3e9d640e723733778",
+            "side": "BUY",
+            "token": "55712981369629746860327772695991631952861234076237886811737566986512020748402",
+            "makingRaw": 19140000,
+            "takingRaw": 22000000,
+            "feeRaw": 0,
+            "logIndex": 1358
+          },
+          "taker": {
+            "orderHash": "0x498088bd63b289b1a03922b083b7ae0cc0bb041ea6005d8219f2650101095bd6",
+            "maker": "0xc6accd5b5f647aacb751b8f3e9d640e723733778",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "27408352719849487670705818670923750078438821936671447881386982555326658944340",
+            "makingRaw": 10400000,
+            "takingRaw": 80000000,
+            "feeRaw": 633360,
+            "logIndex": 1362
+          },
+          "ordersMatchedLogIndex": 1363
+        }
+      ],
+      "matchTypes": {
+        "MINT": 4
+      },
+      "takerAggregateComparisons": [
+        {
+          "orderHash": "0x498088bd63b289b1a03922b083b7ae0cc0bb041ea6005d8219f2650101095bd6",
+          "priceDifference": "0.00",
+          "sizeDifference": "0"
+        }
+      ],
+      "sample": {
+        "asset_id": "27408352719849487670705818670923750078438821936671447881386982555326658944340",
+        "market": "0x217c4eab87e4828762fcbf05443c43c6b08a7d740d5b64ae2af2cf43bd741edd",
+        "side": "BUY",
+        "price": "0.13",
+        "size": "80",
+        "timestamp": "1792254064595",
+        "transaction_hash": "0x0a33e1a0e263bd7b8bbb635da34b2610580b18ac3e4b1a39a505c0e4350d2bb5"
+      },
+      "counterfactualQueueAllocationProven": false,
+      "simulatedFillsCreated": false
+    },
+    {
+      "transactionHash": "0xcb16954a108f7e1cb1d174d591ba8bc426bab635fe03e77689936f94adabd01e",
+      "blockHash": "0x45d9e1eaf8042af04737fea75dee3156909a238858d7cfc5e0d3483ffff8e9a6",
+      "blockTimestampMs": 1792254066000,
+      "recordedTradeTimestampMs": 1792254064631,
+      "matches": [
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x556bbba3cce5d78762025a5bbccc1763b7f59c59abf7dcd8279fbdd576e910d6",
+            "maker": "0xcfddfb6e1b321fcfdcb6f9aa09b11990142ce5da",
+            "taker": "0xe349bbbc5c179ed7f8f13ab5502381980f532147",
+            "side": "BUY",
+            "token": "55712981369629746860327772695991631952861234076237886811737566986512020748402",
+            "makingRaw": 6960000,
+            "takingRaw": 8000000,
+            "feeRaw": 0,
+            "logIndex": 594
+          },
+          "taker": {
+            "orderHash": "0xc1d3a06b764fb3c4eb0d35e54b8018b9b26e4141cc1ad4eba997c980478033c8",
+            "maker": "0xe349bbbc5c179ed7f8f13ab5502381980f532147",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "27408352719849487670705818670923750078438821936671447881386982555326658944340",
+            "makingRaw": 1040000,
+            "takingRaw": 8000000,
+            "feeRaw": 63330,
+            "logIndex": 598
+          },
+          "ordersMatchedLogIndex": 599
+        }
+      ],
+      "matchTypes": {
+        "MINT": 1
+      },
+      "takerAggregateComparisons": [
+        {
+          "orderHash": "0xc1d3a06b764fb3c4eb0d35e54b8018b9b26e4141cc1ad4eba997c980478033c8",
+          "priceDifference": "0.00",
+          "sizeDifference": "0"
+        }
+      ],
+      "sample": {
+        "asset_id": "27408352719849487670705818670923750078438821936671447881386982555326658944340",
+        "market": "0x217c4eab87e4828762fcbf05443c43c6b08a7d740d5b64ae2af2cf43bd741edd",
+        "side": "BUY",
+        "price": "0.13",
+        "size": "8",
+        "timestamp": "1792254064631",
+        "transaction_hash": "0xcb16954a108f7e1cb1d174d591ba8bc426bab635fe03e77689936f94adabd01e"
+      },
+      "counterfactualQueueAllocationProven": false,
+      "simulatedFillsCreated": false
+    },
+    {
+      "transactionHash": "0xdbfb3146c4f82046a26f079d11b0b506b3e36c8cd1bb8d581ee6269bcb926cb4",
+      "blockHash": "0x93211c047c675932a12e67b4228feb6f70782a2fd8f1f93b907e31fae1eca052",
+      "blockTimestampMs": 1792254068000,
+      "recordedTradeTimestampMs": 1792254065183,
+      "matches": [
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0xf1e47aec04f77da9ff5a898b46b210f0b0723e79b3a095cb58133ef1efa96ee4",
+            "maker": "0x71f598dd23a96fc68c7f125f916c4a9b400e966e",
+            "taker": "0x68455ff79c8184cf0c290cf6600dbb0d8b9bbe3e",
+            "side": "BUY",
+            "token": "55712981369629746860327772695991631952861234076237886811737566986512020748402",
+            "makingRaw": 4250000,
+            "takingRaw": 5000000,
+            "feeRaw": 0,
+            "logIndex": 1722
+          },
+          "taker": {
+            "orderHash": "0xb72f5df5339670b0aaa8e5b01a198bfcd05c1704b4467bdeffb97803db029bb3",
+            "maker": "0x68455ff79c8184cf0c290cf6600dbb0d8b9bbe3e",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "27408352719849487670705818670923750078438821936671447881386982555326658944340",
+            "makingRaw": 1000000,
+            "takingRaw": 6666667,
+            "feeRaw": 59500,
+            "logIndex": 1728
+          },
+          "ordersMatchedLogIndex": 1729
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x9f9a78186d82f57f36b3a976ee2811386432a8345008ff94e5bfffa10f39de44",
+            "maker": "0x68d368652d9abd766a6bbef00635840c0f4fd1b0",
+            "taker": "0x68455ff79c8184cf0c290cf6600dbb0d8b9bbe3e",
+            "side": "BUY",
+            "token": "55712981369629746860327772695991631952861234076237886811737566986512020748402",
+            "makingRaw": 1416667,
+            "takingRaw": 1666667,
+            "feeRaw": 0,
+            "logIndex": 1724
+          },
+          "taker": {
+            "orderHash": "0xb72f5df5339670b0aaa8e5b01a198bfcd05c1704b4467bdeffb97803db029bb3",
+            "maker": "0x68455ff79c8184cf0c290cf6600dbb0d8b9bbe3e",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "27408352719849487670705818670923750078438821936671447881386982555326658944340",
+            "makingRaw": 1000000,
+            "takingRaw": 6666667,
+            "feeRaw": 59500,
+            "logIndex": 1728
+          },
+          "ordersMatchedLogIndex": 1729
+        }
+      ],
+      "matchTypes": {
+        "MINT": 2
+      },
+      "takerAggregateComparisons": [
+        {
+          "orderHash": "0xb72f5df5339670b0aaa8e5b01a198bfcd05c1704b4467bdeffb97803db029bb3",
+          "priceDifference": "7.4999996250000187500E-9",
+          "sizeDifference": "0.000000"
+        }
+      ],
+      "sample": {
+        "asset_id": "27408352719849487670705818670923750078438821936671447881386982555326658944340",
+        "market": "0x217c4eab87e4828762fcbf05443c43c6b08a7d740d5b64ae2af2cf43bd741edd",
+        "side": "BUY",
+        "price": "0.15",
+        "size": "6.666667",
+        "timestamp": "1792254065183",
+        "transaction_hash": "0xdbfb3146c4f82046a26f079d11b0b506b3e36c8cd1bb8d581ee6269bcb926cb4"
+      },
+      "counterfactualQueueAllocationProven": false,
+      "simulatedFillsCreated": false
+    },
+    {
+      "transactionHash": "0x9e4b788b75ba1096d3f46129d8753162340da2391e126f14988bfae21d89f83c",
+      "blockHash": "0x93211c047c675932a12e67b4228feb6f70782a2fd8f1f93b907e31fae1eca052",
+      "blockTimestampMs": 1792254068000,
+      "recordedTradeTimestampMs": 1792254065225,
+      "matches": [
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x9f9a78186d82f57f36b3a976ee2811386432a8345008ff94e5bfffa10f39de44",
+            "maker": "0x68d368652d9abd766a6bbef00635840c0f4fd1b0",
+            "taker": "0xc6accd5b5f647aacb751b8f3e9d640e723733778",
+            "side": "BUY",
+            "token": "55712981369629746860327772695991631952861234076237886811737566986512020748402",
+            "makingRaw": 2830500,
+            "takingRaw": 3330000,
+            "feeRaw": 0,
+            "logIndex": 1506
+          },
+          "taker": {
+            "orderHash": "0x6b990ee3ed51f805483e17c660bed4897e06882eb25edbc2a6ca265a1a89d0ef",
+            "maker": "0xc6accd5b5f647aacb751b8f3e9d640e723733778",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "27408352719849487670705818670923750078438821936671447881386982555326658944340",
+            "makingRaw": 499500,
+            "takingRaw": 3330000,
+            "feeRaw": 29720,
+            "logIndex": 1510
+          },
+          "ordersMatchedLogIndex": 1511
+        }
+      ],
+      "matchTypes": {
+        "MINT": 1
+      },
+      "takerAggregateComparisons": [
+        {
+          "orderHash": "0x6b990ee3ed51f805483e17c660bed4897e06882eb25edbc2a6ca265a1a89d0ef",
+          "priceDifference": "0.00",
+          "sizeDifference": "0.00"
+        }
+      ],
+      "sample": {
+        "asset_id": "27408352719849487670705818670923750078438821936671447881386982555326658944340",
+        "market": "0x217c4eab87e4828762fcbf05443c43c6b08a7d740d5b64ae2af2cf43bd741edd",
+        "side": "BUY",
+        "price": "0.15",
+        "size": "3.33",
+        "timestamp": "1792254065225",
+        "transaction_hash": "0x9e4b788b75ba1096d3f46129d8753162340da2391e126f14988bfae21d89f83c"
+      },
+      "counterfactualQueueAllocationProven": false,
+      "simulatedFillsCreated": false
+    },
+    {
+      "transactionHash": "0x6c83db1b563bdc28d786c5ce5b50374a31d0cba730c99b76f520fa12999b3a57",
+      "blockHash": "0x93211c047c675932a12e67b4228feb6f70782a2fd8f1f93b907e31fae1eca052",
+      "blockTimestampMs": 1792254068000,
+      "recordedTradeTimestampMs": 1792254065314,
+      "matches": [
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x07f3088b2173332cabbf6dce573f69c6eb042ee087485d221524aec8bd150e55",
+            "maker": "0xe2511c9e41c5e762887e538b1d6e7221807aa237",
+            "taker": "0xa65399912b4029d0fccc23e3f1d1260af27c08cf",
+            "side": "BUY",
+            "token": "65220039170758555531472707879434295419448489003530875907276381227443862177802",
+            "makingRaw": 666666,
+            "takingRaw": 2666664,
+            "feeRaw": 0,
+            "logIndex": 653
+          },
+          "taker": {
+            "orderHash": "0x65cc288ec9dfc1a0144b927345412c41a23ebeeec985b5bb65d85ac6effa3c7e",
+            "maker": "0xa65399912b4029d0fccc23e3f1d1260af27c08cf",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "62772470259820654769688910284800574286393556276242381871897063607918456253250",
+            "makingRaw": 1999998,
+            "takingRaw": 2666664,
+            "feeRaw": 34990,
+            "logIndex": 657
+          },
+          "ordersMatchedLogIndex": 658
+        }
+      ],
+      "matchTypes": {
+        "MINT": 1
+      },
+      "takerAggregateComparisons": [
+        {
+          "orderHash": "0x65cc288ec9dfc1a0144b927345412c41a23ebeeec985b5bb65d85ac6effa3c7e",
+          "priceDifference": "0.00",
+          "sizeDifference": "0.000000"
+        }
+      ],
+      "sample": {
+        "asset_id": "62772470259820654769688910284800574286393556276242381871897063607918456253250",
+        "market": "0xb97c04fd0d1d7eb20763142c7f90d79dde4ba9563553fbb320cc73c64f521892",
+        "side": "BUY",
+        "price": "0.75",
+        "size": "2.666664",
+        "timestamp": "1792254065314",
+        "transaction_hash": "0x6c83db1b563bdc28d786c5ce5b50374a31d0cba730c99b76f520fa12999b3a57"
+      },
+      "counterfactualQueueAllocationProven": false,
+      "simulatedFillsCreated": false
+    },
+    {
+      "transactionHash": "0x12251c3fc5cc98f770892d16a115904cec18f729ffb7f15d2f8558beeea196fc",
+      "blockHash": "0xeedda85220ea56bf6c5c1743cc3cceb92eaa305ee6e588537571fa6134f1f7db",
+      "blockTimestampMs": 1792269591000,
+      "recordedTradeTimestampMs": 1792269588056,
+      "matches": [
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "DIRECT",
+          "maker": {
+            "orderHash": "0x477e77309c13f6c59034aaef5963c1416441019a41198e14a40295398b305947",
+            "maker": "0x7e531479cc3da5f014c891de002ca6fcdf94a456",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "SELL",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 10000000,
+            "takingRaw": 5700000,
+            "feeRaw": 0,
+            "logIndex": 93
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "DIRECT",
+          "maker": {
+            "orderHash": "0x9fa161d61a7af0121fc95507aca497f5be2879c9efa1f5ed8cc3e6bddb4d4b32",
+            "maker": "0xbbe7ef2e8b5b82b6bc7421fa2452eada82ce6114",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "SELL",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 15000000,
+            "takingRaw": 8550000,
+            "feeRaw": 0,
+            "logIndex": 95
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x193f9a4fab86d83b01adc2195ff24b5902b046a64815430c0623805e26823b7a",
+            "maker": "0x69720b2a8f434a1cec463a45c649b7896db1ebcc",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 2150000,
+            "takingRaw": 5000000,
+            "feeRaw": 0,
+            "logIndex": 97
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x43f4a6df82f2f5fea5cd3672215225cb096e9d687a2589e56e4f92da2170a6e9",
+            "maker": "0x62e38f7e5d4db593efdca8665639c22c613c8362",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 2150000,
+            "takingRaw": 5000000,
+            "feeRaw": 0,
+            "logIndex": 99
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "DIRECT",
+          "maker": {
+            "orderHash": "0x9c325cf889a2891aab6accba30ab5550db220e9ec849d53e056f4bc65ccff89c",
+            "maker": "0x537e40b82b15b6089da3cb13e0d8b760e83053cb",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "SELL",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 10000000,
+            "takingRaw": 5700000,
+            "feeRaw": 0,
+            "logIndex": 101
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "DIRECT",
+          "maker": {
+            "orderHash": "0xa77a7e4246328314f291da1c3fd2dfb2887fac62d37f146661bd24ed8d7e87de",
+            "maker": "0x079514d8bd06169642efb63dd9366ec4861fb281",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "SELL",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 10000000,
+            "takingRaw": 5700000,
+            "feeRaw": 0,
+            "logIndex": 103
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x6e6fc698b67fdf532d3c2d85e479aa3704bb56d2cab943582d6ba07d83dea369",
+            "maker": "0x513b28f61acfe1999010e4cc861a80489242ade9",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 2150000,
+            "takingRaw": 5000000,
+            "feeRaw": 0,
+            "logIndex": 105
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x95677629959b4cdf4a9c08fbd6b002a1d04a9a606afbded6d720f0d917355ddf",
+            "maker": "0x81c935efa4b16376d93c9d0a7970644643de94cd",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 2150000,
+            "takingRaw": 5000000,
+            "feeRaw": 0,
+            "logIndex": 107
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "DIRECT",
+          "maker": {
+            "orderHash": "0xc517db26e2aa6207ec620f741dae8d643620a0831621ef886862a906f928a43c",
+            "maker": "0xd6d2b81f0c60e358500a84ce8fbd566bbcc73f40",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "SELL",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 10000000,
+            "takingRaw": 5700000,
+            "feeRaw": 0,
+            "logIndex": 109
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0xe3db4eca21584f9678dcfbf9968eadd1900e6e8fce19aeb59f102d02ee545533",
+            "maker": "0xf79dccd12edb1e599dc3f9bff979b95987609fe9",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 2150000,
+            "takingRaw": 5000000,
+            "feeRaw": 0,
+            "logIndex": 111
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x7fd8838d79862c2ce3410ba406de196fa29b6c00e222e40453c657a258be8456",
+            "maker": "0x5b843791af2db7c78cbc4ec3faa264821a2c38d4",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 2150000,
+            "takingRaw": 5000000,
+            "feeRaw": 0,
+            "logIndex": 113
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x0944123a52477a6c0642589a9e4964d735163933924facbf95b05b20a0c74f91",
+            "maker": "0xcfddfb6e1b321fcfdcb6f9aa09b11990142ce5da",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 12900000,
+            "takingRaw": 30000000,
+            "feeRaw": 0,
+            "logIndex": 115
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x7cff01b5d8fa38db531c6ee322fe5e9e9a1f67c57bb6ed3e4994006b19259a2d",
+            "maker": "0xf548517cbefe7636bef51ee31a1817f021e7c20e",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 8595700,
+            "takingRaw": 19990000,
+            "feeRaw": 0,
+            "logIndex": 117
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0xc93911f97865daf561ed016e1074e876beda904e53fdb5e275951817d0ea4ebe",
+            "maker": "0x86b9a88a75194d15bb36c092ea85202da5596d67",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 25365700,
+            "takingRaw": 58990000,
+            "feeRaw": 0,
+            "logIndex": 119
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0xa03c17edf2a5b7403c854bdb879fcb52e7c08b139ef3709db789b6be09ad626b",
+            "maker": "0x3ab0939c062644fd9b676c07dfadcf428ebc0a44",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 2150000,
+            "takingRaw": 5000000,
+            "feeRaw": 0,
+            "logIndex": 121
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0xfb0d7e6bc731028a557096d17a48c3523d08766ed43d7e8a563e278154698ffb",
+            "maker": "0xac3f080329eb85d8587a37a60ece1101c87528d7",
+            "taker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 438600,
+            "takingRaw": 1020000,
+            "feeRaw": 0,
+            "logIndex": 123
+          },
+          "taker": {
+            "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+            "maker": "0xd33d0d185cd215162c86cb481cd01acdc7d28489",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 114000000,
+            "takingRaw": 200000000,
+            "feeRaw": 3431400,
+            "logIndex": 127
+          },
+          "ordersMatchedLogIndex": 128
+        }
+      ],
+      "matchTypes": {
+        "DIRECT": 5,
+        "MINT": 11
+      },
+      "takerAggregateComparisons": [
+        {
+          "orderHash": "0xb89081918d3fd2b839aa621125215bcc53731a81cb01597d69a20245e9393b3d",
+          "priceDifference": "0.00",
+          "sizeDifference": "0"
+        }
+      ],
+      "sample": {
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "side": "BUY",
+        "price": "0.57",
+        "size": "200",
+        "timestamp": "1792269588056",
+        "transaction_hash": "0x12251c3fc5cc98f770892d16a115904cec18f729ffb7f15d2f8558beeea196fc"
+      },
+      "counterfactualQueueAllocationProven": false,
+      "simulatedFillsCreated": false
+    },
+    {
+      "transactionHash": "0xab04630289f70e9cff07206d4ee31f5d291d73ba79bd4dd0c9281f0427d9ba90",
+      "blockHash": "0xeedda85220ea56bf6c5c1743cc3cceb92eaa305ee6e588537571fa6134f1f7db",
+      "blockTimestampMs": 1792269591000,
+      "recordedTradeTimestampMs": 1792269588824,
+      "matches": [
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0xfb0d7e6bc731028a557096d17a48c3523d08766ed43d7e8a563e278154698ffb",
+            "maker": "0xac3f080329eb85d8587a37a60ece1101c87528d7",
+            "taker": "0xb0c078c893300f44d341f4e854d8964b47dce88f",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 1711400,
+            "takingRaw": 3980000,
+            "feeRaw": 0,
+            "logIndex": 284
+          },
+          "taker": {
+            "orderHash": "0x017c6d7de91627a1c8536bd2649d92ff57c1fd571f2ff522924252c844113d61",
+            "maker": "0xb0c078c893300f44d341f4e854d8964b47dce88f",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 6840000,
+            "takingRaw": 12000000,
+            "feeRaw": 205880,
+            "logIndex": 292
+          },
+          "ordersMatchedLogIndex": 293
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0xde2da10e4f451f82ae9c8cf532247e8e76b8bfb9af68251e480b50c70e45a5f5",
+            "maker": "0xe80ce79c412c3ed5100df1778ad14e6530ee4bd8",
+            "taker": "0xb0c078c893300f44d341f4e854d8964b47dce88f",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 2945500,
+            "takingRaw": 6850000,
+            "feeRaw": 0,
+            "logIndex": 286
+          },
+          "taker": {
+            "orderHash": "0x017c6d7de91627a1c8536bd2649d92ff57c1fd571f2ff522924252c844113d61",
+            "maker": "0xb0c078c893300f44d341f4e854d8964b47dce88f",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 6840000,
+            "takingRaw": 12000000,
+            "feeRaw": 205880,
+            "logIndex": 292
+          },
+          "ordersMatchedLogIndex": 293
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x9272e1416ec6da11c992da9f1ad4c8a5907803bd22b0e4f99c0c062cb39a98a7",
+            "maker": "0xe7615ba5219bc4dcd42f91d8e60048d407170522",
+            "taker": "0xb0c078c893300f44d341f4e854d8964b47dce88f",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 503100,
+            "takingRaw": 1170000,
+            "feeRaw": 0,
+            "logIndex": 288
+          },
+          "taker": {
+            "orderHash": "0x017c6d7de91627a1c8536bd2649d92ff57c1fd571f2ff522924252c844113d61",
+            "maker": "0xb0c078c893300f44d341f4e854d8964b47dce88f",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 6840000,
+            "takingRaw": 12000000,
+            "feeRaw": 205880,
+            "logIndex": 292
+          },
+          "ordersMatchedLogIndex": 293
+        }
+      ],
+      "matchTypes": {
+        "MINT": 3
+      },
+      "takerAggregateComparisons": [
+        {
+          "orderHash": "0x017c6d7de91627a1c8536bd2649d92ff57c1fd571f2ff522924252c844113d61",
+          "priceDifference": "0.00",
+          "sizeDifference": "0"
+        }
+      ],
+      "sample": {
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "side": "BUY",
+        "price": "0.57",
+        "size": "12",
+        "timestamp": "1792269588824",
+        "transaction_hash": "0xab04630289f70e9cff07206d4ee31f5d291d73ba79bd4dd0c9281f0427d9ba90"
+      },
+      "counterfactualQueueAllocationProven": false,
+      "simulatedFillsCreated": false
+    },
+    {
+      "transactionHash": "0xb6eb08ceb1b1a52743a32583420a7e1c20bbd660773f35c6e152cb3fe3ba92e1",
+      "blockHash": "0xeedda85220ea56bf6c5c1743cc3cceb92eaa305ee6e588537571fa6134f1f7db",
+      "blockTimestampMs": 1792269591000,
+      "recordedTradeTimestampMs": 1792269588840,
+      "matches": [
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x9272e1416ec6da11c992da9f1ad4c8a5907803bd22b0e4f99c0c062cb39a98a7",
+            "maker": "0xe7615ba5219bc4dcd42f91d8e60048d407170522",
+            "taker": "0xb0c078c893300f44d341f4e854d8964b47dce88f",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 2554200,
+            "takingRaw": 5940000,
+            "feeRaw": 0,
+            "logIndex": 197
+          },
+          "taker": {
+            "orderHash": "0x6817053a7a5ea50373f87dcd3cbf82d3d0e8352beda05dfae39892190e7d995e",
+            "maker": "0xb0c078c893300f44d341f4e854d8964b47dce88f",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 3990000,
+            "takingRaw": 7000000,
+            "feeRaw": 120090,
+            "logIndex": 203
+          },
+          "ordersMatchedLogIndex": 204
+        },
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x53867aa535a571d6ea4dd170037e4e9e388c86216336e0f0046b420945fcbf3d",
+            "maker": "0xc3584c39a46f3a134d0b26b747b839480ac5c52e",
+            "taker": "0xb0c078c893300f44d341f4e854d8964b47dce88f",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 455800,
+            "takingRaw": 1060000,
+            "feeRaw": 0,
+            "logIndex": 199
+          },
+          "taker": {
+            "orderHash": "0x6817053a7a5ea50373f87dcd3cbf82d3d0e8352beda05dfae39892190e7d995e",
+            "maker": "0xb0c078c893300f44d341f4e854d8964b47dce88f",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 3990000,
+            "takingRaw": 7000000,
+            "feeRaw": 120090,
+            "logIndex": 203
+          },
+          "ordersMatchedLogIndex": 204
+        }
+      ],
+      "matchTypes": {
+        "MINT": 2
+      },
+      "takerAggregateComparisons": [
+        {
+          "orderHash": "0x6817053a7a5ea50373f87dcd3cbf82d3d0e8352beda05dfae39892190e7d995e",
+          "priceDifference": "0.00",
+          "sizeDifference": "0"
+        }
+      ],
+      "sample": {
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "side": "BUY",
+        "price": "0.57",
+        "size": "7",
+        "timestamp": "1792269588840",
+        "transaction_hash": "0xb6eb08ceb1b1a52743a32583420a7e1c20bbd660773f35c6e152cb3fe3ba92e1"
+      },
+      "counterfactualQueueAllocationProven": false,
+      "simulatedFillsCreated": false
+    },
+    {
+      "transactionHash": "0xf43495c5f55241a02ff397590cc56ccfb5f4e4b20cd6f6fce918370380ecb6c3",
+      "blockHash": "0xeedda85220ea56bf6c5c1743cc3cceb92eaa305ee6e588537571fa6134f1f7db",
+      "blockTimestampMs": 1792269591000,
+      "recordedTradeTimestampMs": 1792269589150,
+      "matches": [
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x53867aa535a571d6ea4dd170037e4e9e388c86216336e0f0046b420945fcbf3d",
+            "maker": "0xc3584c39a46f3a134d0b26b747b839480ac5c52e",
+            "taker": "0x5be3970ef90bc849b07f41b7d92c925bccd9b984",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 807193,
+            "takingRaw": 1877193,
+            "feeRaw": 0,
+            "logIndex": 308
+          },
+          "taker": {
+            "orderHash": "0x2578f01ca41be59964c70169c1b602397cd6146294b161a45de46abd168a80aa",
+            "maker": "0x5be3970ef90bc849b07f41b7d92c925bccd9b984",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 1070000,
+            "takingRaw": 1877193,
+            "feeRaw": 37540,
+            "logIndex": 312
+          },
+          "ordersMatchedLogIndex": 313
+        }
+      ],
+      "matchTypes": {
+        "MINT": 1
+      },
+      "takerAggregateComparisons": [
+        {
+          "orderHash": "0x2578f01ca41be59964c70169c1b602397cd6146294b161a45de46abd168a80aa",
+          "priceDifference": "5.3271027539523107107E-9",
+          "sizeDifference": "0.000000"
+        }
+      ],
+      "sample": {
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "side": "BUY",
+        "price": "0.57",
+        "size": "1.877193",
+        "timestamp": "1792269589150",
+        "transaction_hash": "0xf43495c5f55241a02ff397590cc56ccfb5f4e4b20cd6f6fce918370380ecb6c3"
+      },
+      "counterfactualQueueAllocationProven": false,
+      "simulatedFillsCreated": false
+    },
+    {
+      "transactionHash": "0x51c578bc93ab824f015cd5f06d69f9dae790fde253e65fb6a5eb70fe75bd3d50",
+      "blockHash": "0xeedda85220ea56bf6c5c1743cc3cceb92eaa305ee6e588537571fa6134f1f7db",
+      "blockTimestampMs": 1792269591000,
+      "recordedTradeTimestampMs": 1792269589428,
+      "matches": [
+        {
+          "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+          "matchType": "MINT",
+          "maker": {
+            "orderHash": "0x53867aa535a571d6ea4dd170037e4e9e388c86216336e0f0046b420945fcbf3d",
+            "maker": "0xc3584c39a46f3a134d0b26b747b839480ac5c52e",
+            "taker": "0x5be3970ef90bc849b07f41b7d92c925bccd9b984",
+            "side": "BUY",
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "makingRaw": 807193,
+            "takingRaw": 1877193,
+            "feeRaw": 0,
+            "logIndex": 429
+          },
+          "taker": {
+            "orderHash": "0x9bbc22fdf441e2553b37362ea84c86909d00828afd7e337ebe37b19d790d52ec",
+            "maker": "0x5be3970ef90bc849b07f41b7d92c925bccd9b984",
+            "taker": "0xe111180000d2663c0091e4f400237545b87b996b",
+            "side": "BUY",
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "makingRaw": 1070000,
+            "takingRaw": 1877193,
+            "feeRaw": 37540,
+            "logIndex": 433
+          },
+          "ordersMatchedLogIndex": 434
+        }
+      ],
+      "matchTypes": {
+        "MINT": 1
+      },
+      "takerAggregateComparisons": [
+        {
+          "orderHash": "0x9bbc22fdf441e2553b37362ea84c86909d00828afd7e337ebe37b19d790d52ec",
+          "priceDifference": "5.3271027539523107107E-9",
+          "sizeDifference": "0.000000"
+        }
+      ],
+      "sample": {
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "side": "BUY",
+        "price": "0.57",
+        "size": "1.877193",
+        "timestamp": "1792269589428",
+        "transaction_hash": "0x51c578bc93ab824f015cd5f06d69f9dae790fde253e65fb6a5eb70fe75bd3d50"
+      },
+      "counterfactualQueueAllocationProven": false,
+      "simulatedFillsCreated": false
+    }
+  ],
+  "errors": [],
+  "complete": true,
+  "decision": "NO_GO",
+  "liveAllowed": false,
+  "note": "Public settlements corroborate route semantics, never hypothetical maker queue position or profitability."
+}

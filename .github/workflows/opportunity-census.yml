@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Verify no-fill inference and gap handling
-        run: python3 -m unittest research.phase6.tests.test_opportunity_census -v
+        run: python3 -m unittest research.phase6.tests.test_opportunity_census research.phase6.tests.test_receipt_audit -v
       - uses: actions/download-artifact@v4
         if: matrix.recording == 'original'
         with:

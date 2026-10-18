@@ -56,3 +56,13 @@ class OpportunityCensusTest(unittest.TestCase):
         validate_reference(result,result['logicalTapeSha256'],1,0)
         with self.assertRaises(ValueError): validate_reference(result,'0'*64,1,0)
         with self.assertRaises(ValueError): validate_reference(result,result['logicalTapeSha256'],2,0)
+
+    def test_candidate_keeps_recorded_transaction_fingerprint_without_filling(self):
+        tx='0x'+'a'*64
+        buy=('RESEARCH_TRADE',{'token':'b','sourceMs':10,'side':'BUY','price':'.6','size':'1',
+                              'tradeId':json.dumps({'transaction_hash':tx,'asset_id':'b'})})
+        result=self.run_tape(before_trade=[buy])
+        example=next(row for row in result['examples'] if row['route']=='COMPLEMENT_BUY_CANDIDATE')
+        self.assertEqual(example['transactionHash'],tx)
+        self.assertEqual(example['firstToken'],'a');self.assertEqual(example['secondToken'],'b')
+        self.assertFalse(result['examplesTruncated']); self.assertFalse(result['fillsInferred'])
