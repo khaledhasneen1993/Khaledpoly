@@ -1707,7 +1707,34 @@ queue/latency/risk/minimum/default behavior unchanged, PAPER only.
 Started only https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39173960311
 at605b6ab1d9c6746451afa5841305565a799a95c2, screen job117812666986. Offline
 regressions passed before the original tape scan, which was still processing
-at22:52 UTC. Await `dq3-necessary-traffic`; no result/route/fill assertion yet.
-Do not rerun or launch independent PAPER while its report is pending. Current
-candidate result remains price feasibility only; prerequisites/next gate in
-`depth-quote-20261018/README.md`. All work preserved for continuation.
+at22:52 UTC. Subsequently completed successfully; see the result below.
+
+## DQ3 necessary traffic result and bounded receipt preregistration — 2026-10-18
+
+Run39173960311 SUCCESS, original artifact12153622815 `dq3-necessary-traffic`,
+ZIP SHA256 c0750f3db849972f1d4cd01f5428944c1b55b179fbe66c0dd1e7f236b2817490.
+Exact original ZIP is retained as `depth-quote-20261018/traffic-result/artifact.zip.b64`.
+It contains only depth-quote-traffic.json (794108 bytes). Full original source:
+6163831 rows, logical SHA256 cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b.
+823 overlapping observations,416 unique transactions across11 independent
+hypothetical states; every interval ends at its first original invalid_depth GAP.
+These are relaxed necessary-traffic upper bounds, NOT fills, queue allocations,
+observed activation/cancellation or a candidate account trajectory. No PnL change.
+
+Freeze ONE bounded next diagnostic before public receipt reads: first additional
+priced state by original sequence197690, complete least-observed target leg A,
+8 observations/8 transactions, own bid0.47. Other leg47 observations and all
+other states remain unaudited. Selection keeps ALL prices; mixed settlement
+components make aggregate 1-price filtering unsafe. No parameter fitting.
+`bottleneck-selection.json` retains exact original samples and relaxed window;
+`dq3-bottleneck-receipts-freeze.json` hashes source, tests, selection, evidence,
+and unchanged acceptance. Collector allows only public Polygon read methods,
+<=8 new receipts, cached blocks, exact conserved maker components and integer
+price comparisons. No fabricated actual order lifecycle is passed to validators.
+174 phase6 tests pass locally before reads. One small receipt workflow only;
+no full-tape rescan, Maven rebuild, account replay or independent PAPER capture.
+Inspect complete receipt output before deciding next action. Even positive
+actual component volume needs causal activation, queue/cancels and frozen
+same-development baseline/candidate account comparison before promotion.
+Control net remains-$1.80, guarded0/0fills, NO_GO. Defaults/fees/queue/risk and
+fixed independent acceptance remain unchanged. PAPER only, no live permissions.

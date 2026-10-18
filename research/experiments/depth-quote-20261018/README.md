@@ -40,8 +40,12 @@ not sum overlapping state observations as available venue volume.
 
 Started ONE full original tape scan:
 https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39173960311
-at `605b6ab1d9c6746451afa5841305565a799a95c2`. Wait for `dq3-necessary-traffic`;
-do not duplicate its scan or request receipts before reading it. There is no
+at `605b6ab1d9c6746451afa5841305565a799a95c2`. Completed SUCCESS. Retained exact
+artifact12153622815 as `traffic-result/artifact.zip.b64`; ZIP SHA256
+c0750f3db849972f1d4cd01f5428944c1b55b179fbe66c0dd1e7f236b2817490.
+823 overlapping observations/416 unique transactions across11 hypothetical
+states, all censored at original invalid_depth GAPs. Zero inferred fills/PnL.
+Do not duplicate its scan. There is no
 new current-market capture, public RPC or account replay in that workflow.
 
 If necessary traffic is absent, reject these selected starts, not all hypothetical
@@ -51,7 +55,15 @@ full account comparison on the SAME development data before any new independent
 PAPER validation. No parameter sweep or holdout tuning. Existing independent
 acceptance criteria stay fixed. Price-feasibility alone never authorizes capture.
 
-170 phase6 tests passed locally; full runtime CI469 passed at6dc5f25. No additional
+Next frozen diagnostic: complete8 observations of least-observed leg of FIRST
+additional priced state197690, bid0.47. Other47 observations/other states NOT
+audited. `bottleneck-selection.json` and `dq3-bottleneck-receipts-freeze.json`
+bind exact source samples before reads. Public receipt component prices only,
+no assumed order activation, queue allocation or account replay. Inspect the
+`dq3-first-bottleneck-leg-receipts` artifact before further work; no broad416
+receipt batch, price sweep or independent capture. No aggregate-price shortcut.
+
+174 phase6 tests passed locally; full runtime CI469 passed at6dc5f25. No additional
 Java build was needed for these pure offline helpers. Source/evidence hashes in
 `depth-quote-candidate-freeze.json` and `depth-quote-traffic-freeze.json` bind scope.
 Current economics unchanged: corrected control-$1.80, guarded0/0fills/undefined

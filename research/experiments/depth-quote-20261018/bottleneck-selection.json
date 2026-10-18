@@ -1,0 +1,174 @@
+{
+  "scope": "FIRST_ADDITIONAL_DQ3_STATE_COMPLETE_LEAST_OBSERVED_LEG",
+  "rule": "First additional state by original sequence; least observed target leg, lexical token tie-break; ALL its observations",
+  "originalTrafficZipSha256": "c0750f3db849972f1d4cd01f5428944c1b55b179fbe66c0dd1e7f236b2817490",
+  "state": {
+    "id": "dq3-0-197690",
+    "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "originalSequence": 197690,
+    "submitMs": 1792269723747,
+    "activationDueMs": 1792269723997,
+    "endMs": 1792269753747,
+    "quotes": [
+      {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.47",
+        "quantity": "5.00"
+      },
+      {
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.49",
+        "quantity": "5.00"
+      }
+    ]
+  },
+  "terminalMs": 1792269725802,
+  "terminalReason": "ORIGINAL_GAP:invalid_depth",
+  "targetQuote": {
+    "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "price": "0.47",
+    "quantity": "5.00"
+  },
+  "otherLegObservationsNotAudited": 47,
+  "maxNewReceiptRequests": 8,
+  "actualOrderOrObservedActivationClaimed": false,
+  "relaxedUpperBoundNotActualLifecycle": true,
+  "transactions": [
+    {
+      "transactionHash": "0x38f3a6d64e22cd524cd0aa1e1bab530674a29c9c3e460db4f0fab637506d95ed",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.52",
+        "size": "13.25",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269724156",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x38f3a6d64e22cd524cd0aa1e1bab530674a29c9c3e460db4f0fab637506d95ed",
+        "arrivalMs": 1792269724230
+      },
+      "normalizedSeq": 198526,
+      "eventIndex": 0
+    },
+    {
+      "transactionHash": "0x110aefd3cb5bfc8f4ad06f277fa29bf2a9d9dcc43d57127c0a8d77fa7176930c",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.52",
+        "size": "36",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269724177",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x110aefd3cb5bfc8f4ad06f277fa29bf2a9d9dcc43d57127c0a8d77fa7176930c",
+        "arrivalMs": 1792269724246
+      },
+      "normalizedSeq": 198580,
+      "eventIndex": 0
+    },
+    {
+      "transactionHash": "0x5af5f5d8a8acd4a044cd1c3351756d4e2e1dc0eadde045a4438d45e8f3b1adff",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.51",
+        "size": "18.352942",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269724290",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x5af5f5d8a8acd4a044cd1c3351756d4e2e1dc0eadde045a4438d45e8f3b1adff",
+        "arrivalMs": 1792269724360
+      },
+      "normalizedSeq": 198757,
+      "eventIndex": 0
+    },
+    {
+      "transactionHash": "0x1ce854c6b45de0f4adfbf2b8042dbcd3da9f1298755b24b759f4434cd1194995",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.51",
+        "size": "48",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269724585",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x1ce854c6b45de0f4adfbf2b8042dbcd3da9f1298755b24b759f4434cd1194995",
+        "arrivalMs": 1792269724654
+      },
+      "normalizedSeq": 198992,
+      "eventIndex": 0
+    },
+    {
+      "transactionHash": "0x49cb8b8952f8c3f400464b51dcc8d119990238ec20c6f8e015b60a1c23613ee4",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.49",
+        "size": "79.99",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269725163",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x49cb8b8952f8c3f400464b51dcc8d119990238ec20c6f8e015b60a1c23613ee4",
+        "arrivalMs": 1792269725232
+      },
+      "normalizedSeq": 199901,
+      "eventIndex": 0
+    },
+    {
+      "transactionHash": "0xf38f61d271ba71997ff756c3468088bc6702e10c7d00f1dfcee02cd68e2fd76c",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.48",
+        "size": "15.3125",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269725226",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0xf38f61d271ba71997ff756c3468088bc6702e10c7d00f1dfcee02cd68e2fd76c",
+        "arrivalMs": 1792269725295
+      },
+      "normalizedSeq": 200068,
+      "eventIndex": 0
+    },
+    {
+      "transactionHash": "0x3be6b9f11c40c289b6e80722f7cbc0d5a5c8ac7500b78db540a6ba396be574ce",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.49",
+        "size": "14.285715",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269725409",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x3be6b9f11c40c289b6e80722f7cbc0d5a5c8ac7500b78db540a6ba396be574ce",
+        "arrivalMs": 1792269725479
+      },
+      "normalizedSeq": 200546,
+      "eventIndex": 0
+    },
+    {
+      "transactionHash": "0x6c38a94fc2683ac8aac6fcf4e16c6a654fd0a5b909fad10408f3334e33b4895e",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "size": "50.042554",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269725646",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x6c38a94fc2683ac8aac6fcf4e16c6a654fd0a5b909fad10408f3334e33b4895e",
+        "arrivalMs": 1792269725715
+      },
+      "normalizedSeq": 201199,
+      "eventIndex": 0
+    }
+  ]
+}
