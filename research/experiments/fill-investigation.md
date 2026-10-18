@@ -313,7 +313,7 @@ then audit a fixed bounded sample of actual complement candidates and assess
 mixed-route volume/identity before designing a default-off matching experiment.
 No execution model or profitability qualification changes in this iteration.
 
-## Transaction-linked candidate evidence — 2026-10-18 07:42 Asia/Amman
+## Transaction-linked candidate evidence — 2026-10-18 07:37 Asia/Amman
 
 Run 39094813284 completed successfully. Original artifact 12123834350 and fresh
 artifact 12123563657 preserve all 84 and 590 necessary-condition rows, with no
@@ -345,3 +345,57 @@ experimental route model with causality, deduplication and queue assumptions
 explicitly frozen before another comparison. Otherwise record the exact mismatch;
 do not convert full public BUY volume into complement fills. Existing QB0 is
 still rejected; net PnL results remain +0.16474 original / 0 fresh, not qualified.
+
+## Fixed-candidate audit results — 2026-10-18 07:43 Asia/Amman
+
+Run 39097821365 succeeded, artifact 12124454874. All ten frozen transactions
+returned receipts with no errors; runtime selection exactly matched the
+pre-query committed selection. Persisted original strict report, all ten raw
+receipts/block headers, selection and reproducible offline labels under
+`candidate-receipt-audit-20261018/`. The completed workflow is now manual-only.
+
+Nine samples contain target-token MINT; one is DIRECT-only; three of the nine
+mix MINT and DIRECT. Across ten taker aggregates, total shares are 623.652586:
+595.592586 target MINT plus 28.06 DIRECT, not those amounts PLUS the taker total.
+Only 530.97 MINT shares meet the strict implied-price comparison (1e-8), or
+536.06804 when separately reporting integer collateral rounding within ONE
+micro-unit. Neither number is an eligible bot fill or a relaxed execution rule.
+The remaining MINT volume traded at other prices. Blind complementing the
+entire public print therefore misallocates both route and price-level volume.
+
+Five samples passed the initial exact public-price/aggregate comparison and
+five did not. Retain that result. Offline inspection found all ten have a
+unique conserved aggregate with matching token/side/size; in four samples the
+public price differs materially from the aggregate weighted price (up to
+0.004444...), and one differs by integer collateral rounding. Separate identity
+matching from the strict price result; do not pretend the public price is
+necessarily the weighted average. No RPC repeated; unchanged decoded maker
+groups checked against original reports. These are offline ground-truth labels,
+not earlier decision features. Reproduce with:
+
+`python -m research.phase6.candidate_receipt_audit --offline-from research/experiments/candidate-receipt-audit-20261018 --output /tmp/candidate-labels-new.json`
+
+Also join ALL 9/41 one-tick candidates to actual baseline order lifecycles:
+original has zero active target-token orders; fresh has 11 overlapping rows,
+all with a MORE aggressive live BUY price, none at the public implied price.
+Ten overlap sim-research-4 (0.64, initial queue zero, active for 752 ms before
+RESTING_NET_EDGE); one overlaps sim-research-42 (0.15, initial queue 1240.32,
+later invalid-depth GAP). More aggressive does not mean a proven fill: current
+book validity, priority, queue and unique route volume still need validation.
+Do NOT conclude that absent exact-price overlap proves no potential execution.
+Historical compressed-input SHA differs from logical uncompressed SHA by
+design; the join verifies retained report/provenance manifest hashes, lossless
+storage declaration, logical tape hash and row count instead of ignoring it.
+
+Next concrete investigation: inspect the already compact receipt labels and
+raw order/book evidence around sim-research-4, including source-vs-arrival book
+ordering and its peer leg. Specify a default-off, development-only
+settlement-labelled fill experiment with unique (exchange, transaction,
+OrdersMatched index, maker log index) identity, price priority and per-price
+volume conservation. Labels may describe the replay environment but must never
+enter strategy decisions, activate an order before its latency, survive a GAP,
+resurrect a canceled order, or be mistaken for an independently validated live
+model. Do not launch another two-hour capture until a justified frozen candidate
+passes same-development comparison. Strategy/execution and acceptance remain
+unchanged; NO_GO, no new PnL. Seventy-nine phase6 unit tests pass locally, including
+offline re-decoding of all actual candidate receipts with no network calls.

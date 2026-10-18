@@ -1,5 +1,8 @@
 """Fixed, outcome-blind sample selection and OFFLINE settlement labels, not fills."""
 from decimal import Decimal
+import argparse
+import json
+from pathlib import Path
 import re
 
 
@@ -46,6 +49,7 @@ def label_candidate(sample, matches):
     for row in matches:
         groups.setdefault((row['exchange'], row['ordersMatchedLogIndex'], row['taker']['orderHash']), []).append(row)
     plausible = []
+    identity_groups = []
     tolerance = Decimal('0.00000001')  # public price rounding only; never a fill-price relaxation
     for rows in groups.values():
         taker = rows[0]['taker']
@@ -53,26 +57,72 @@ def label_candidate(sample, matches):
             continue
         shares = taker['takingRaw'] if taker['side'] == 'BUY' else taker['makingRaw']
         collateral = taker['makingRaw'] if taker['side'] == 'BUY' else taker['takingRaw']
-        if (abs(Decimal(collateral)/shares - Decimal(sample['price'])) > tolerance
-                or Decimal(shares)/1000000 != Decimal(sample['size'])):
+        if Decimal(shares)/1000000 != Decimal(sample['size']):
             continue
+        price_difference = abs(Decimal(collateral)/shares - Decimal(sample['price']))
         maker_total = sum(r['maker']['takingRaw'] if r['maker']['side'] == 'BUY'
                           else r['maker']['makingRaw'] for r in rows)
         mint = [r for r in rows if r['matchType'] == 'MINT'
                 and r['maker']['token'] == sample['targetToken']]
         at_price = [r for r in mint if abs(Decimal(r['maker']['makingRaw']) /
                     r['maker']['takingRaw'] - Decimal(sample['targetPrice'])) <= tolerance]
-        plausible.append({'exchange': rows[0]['exchange'],
+        # Settlement amounts are integer micro-collateral. Report this rounding
+        # separately, without changing the strict price comparison or fill rules.
+        within_unit = [r for r in mint if abs(Decimal(r['maker']['makingRaw']) -
+                       Decimal(sample['targetPrice']) * r['maker']['takingRaw']) <= 1]
+        group = {'exchange': rows[0]['exchange'],
             'ordersMatchedLogIndex': rows[0]['ordersMatchedLogIndex'],
             'takerShares': str(Decimal(shares)/1000000),
             'makerSharesSum': str(Decimal(maker_total)/1000000),
             'shareConservation': maker_total == shares,
             'targetMintShares': str(Decimal(sum(r['maker']['takingRaw'] for r in mint))/1000000),
             'targetMintSharesAtImpliedPrice': str(Decimal(sum(r['maker']['takingRaw'] for r in at_price))/1000000),
+            'targetMintSharesWithinOneCollateralUnit': str(Decimal(sum(r['maker']['takingRaw'] for r in within_unit))/1000000),
+            'publicPriceVsWeightedAggregateDifference': str(price_difference),
+            'publicPriceMatchesWeightedAggregate': price_difference <= tolerance,
             'directShares': str(Decimal(sum(r['maker']['makingRaw'] for r in rows
                                 if r['matchType'] == 'DIRECT'))/1000000),
-            'targetMintMakerLogIndices': [r['maker']['logIndex'] for r in mint]})
+            'targetMintMakerLogIndices': [r['maker']['logIndex'] for r in mint]}
+        identity_groups.append(group)
+        if price_difference <= tolerance:
+            plausible.append(group)
     return {'matchingPublicAggregateCount': len(plausible), 'matchingGroups': plausible,
             'uniqueConservedGroup': len(plausible) == 1 and plausible[0]['shareConservation'],
+            'identityMatchingGroupCount': len(identity_groups), 'identityMatchingGroups': identity_groups,
+            'uniqueIdentityConservedGroup': len(identity_groups) == 1 and identity_groups[0]['shareConservation'],
             'queueAllocationProven': False, 'receiptIsFutureInformation': True,
             'usableAsEarlierDecisionFeature': False, 'simulatedFillsCreated': False}
+
+
+def revalidate_saved(folder, output):
+    """Reproduce labels from committed receipts without importing Keccak or using RPC."""
+    from research.phase6.receipt_audit import corroborate
+    folder = Path(folder)
+    initial = json.loads((folder/'initial-strict-report.json').read_text())
+    selection = json.loads((folder/'selection.json').read_text())['samples']
+    if selection != [r['sample'] for r in initial['results']] or initial['errors'] or not initial['complete']:
+        raise ValueError('Require complete original frozen receipt audit')
+    results = []
+    for index, original in enumerate(initial['results']):
+        raw = json.loads((folder/'raw'/('receipt-'+str(index)+'.json')).read_text())
+        result = corroborate(original['sample'], raw['receipt'], raw['block'], initial['eventTopics'])
+        if result['matches'] != original['matches']:
+            raise ValueError('Offline decoding changed original settlement groups')
+        results.append(result)
+    report = dict(initial, results=results, offlineRevalidation=True,
+                  networkCalls=0, originalStrictComparisonsPreserved=True)
+    with Path(output).open('x') as target:
+        target.write(json.dumps(report, indent=2)+'\n')
+    return report
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--offline-from', required=True)
+    parser.add_argument('--output', required=True)
+    args = parser.parse_args()
+    revalidate_saved(args.offline_from, args.output)
+
+
+if __name__ == '__main__':
+    main()

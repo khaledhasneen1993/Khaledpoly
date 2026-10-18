@@ -2,7 +2,9 @@ import copy
 import json
 from pathlib import Path
 import unittest
-from research.phase6.candidate_receipt_audit import select_samples, label_candidate
+import tempfile
+from unittest.mock import patch
+from research.phase6.candidate_receipt_audit import select_samples, label_candidate, revalidate_saved
 from research.phase6.receipt_audit import decode_matches
 from research.phase6.tests import test_receipt_audit as fixture
 
@@ -69,3 +71,38 @@ class CandidateAuditTest(unittest.TestCase):
         sample = self.sample(); sample['targetPrice'] = '.41'
         group = label_candidate(sample, self.matches())['matchingGroups'][0]
         self.assertEqual(group['targetMintSharesAtImpliedPrice'], '0')
+
+    def test_public_price_not_assumed_to_be_weighted_aggregate(self):
+        sample = self.sample(); sample['price'] = '.61'
+        label = label_candidate(sample, self.matches())
+        self.assertEqual(label['matchingPublicAggregateCount'], 0)
+        self.assertTrue(label['uniqueIdentityConservedGroup'])
+        self.assertFalse(label['identityMatchingGroups'][0]['publicPriceMatchesWeightedAggregate'])
+
+    def test_integer_collateral_rounding_reported_separately_not_as_fill(self):
+        rows = self.matches(); rows[0]['maker']['makingRaw'] += 1
+        label = label_candidate(self.sample(), rows)
+        group = label['identityMatchingGroups'][0]
+        self.assertEqual(group['targetMintSharesAtImpliedPrice'], '0')
+        self.assertEqual(group['targetMintSharesWithinOneCollateralUnit'], '1')
+        self.assertFalse(label['simulatedFillsCreated'])
+
+    def test_committed_selection_matches_both_reports(self):
+        folder = Path('research/experiments/transaction-linked-census-20261018')
+        samples = [sample for name in ('original','fresh')
+                   for sample in select_samples(json.loads((folder/(name+'.json')).read_text()), str(folder/(name+'.json')))]
+        frozen = json.loads((folder/'fixed-selection.json').read_text())
+        self.assertEqual(samples, frozen['samples'])
+
+    def test_real_saved_receipts_reproduce_without_network_or_duplicate_volume(self):
+        from decimal import Decimal
+        folder = Path('research/experiments/candidate-receipt-audit-20261018')
+        with tempfile.TemporaryDirectory() as temporary, patch('research.phase6.receipt_audit.rpc') as network:
+            result = revalidate_saved(folder, Path(temporary)/'report.json')
+            network.assert_not_called()
+        groups = [r['candidateSettlementLabel']['identityMatchingGroups'][0] for r in result['results']]
+        self.assertEqual(len(groups),10)
+        self.assertTrue(all(g['shareConservation'] for g in groups))
+        self.assertEqual(sum(Decimal(g['takerShares']) for g in groups), Decimal('623.652586'))
+        self.assertEqual(sum(Decimal(g['directShares']) for g in groups), Decimal('28.06'))
+        self.assertEqual(sum(Decimal(g['targetMintSharesAtImpliedPrice']) for g in groups), Decimal('530.97'))

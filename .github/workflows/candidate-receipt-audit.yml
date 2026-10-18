@@ -1,9 +1,6 @@
 name: PAPER fixed candidate receipt corroboration
 on:
   workflow_dispatch:
-  push:
-    branches: [paper-fill-investigation]
-    paths: [.github/workflows/candidate-receipt-audit.yml]
 permissions:
   contents: read
 concurrency:
