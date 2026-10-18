@@ -1601,3 +1601,12 @@ commit skips only duplicate markout CI, leaving ordinary/manual checks intact.
 Read `causal-entry-decision-witnesses` before proposing any strategy adjustment.
 Known corrected control net-1.80 and guarded0/0fills remain NO_GO; independent
 acceptance unchanged, no holdout retuning, no profitability/promotion claim.
+
+Started ONLY https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39168798844
+at6dc5f25aec764ae55ecf0610a617baba77b7a6f7. Full verification job117797342104
+succeeded:163 Java (146 core+11 executor+5 strategy+1 analytics) and306 Python
+(8+50+38+49+161)=469 tests. Both new Java observer-equivalence/bounds tests pass.
+The narrowly deduplicated markout job39168798819 was skipped as intended, not
+another failed build. Witness job117797675258 is processing the original tape;
+wait for its artifact rather than rerunning. No diagnostic reason/result from
+that pending job is asserted yet. Default behavior/acceptance remain unchanged.
