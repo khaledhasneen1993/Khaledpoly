@@ -1297,3 +1297,48 @@ tape/config. Do not rerun the old partial controls or collect more receipts for
 the already-complete pre-gap exit window. No holdout tuning; acceptance unchanged;
 zero fills/no loss would still fail qualification. Future receipt labels remain
 environment calibration only, never a causal signal or independent PAPER proof.
+
+## CS-RESIDUAL-WORST-CASE-1 integration frozen — 2026-10-18
+
+Starting b47cf9e5f0aa119015cb207c85fb2478f2d10908, draft PR9, all existing
+jobs complete. Integrated the EXACT preregistered q*max(pair bids)+redemptionCost
+<= existing exitLossAvailable entry veto; no parameter search. New private
+constructor option defaults false through every old ResearchSession constructor
+and every old replay path. Explicit ResidualRiskReplayMain accepts only control
+or candidate, requires receipt-labelled fresh offline account; no service config,
+HTTP endpoint, wallet or live/independent activation. Veto occurs only before
+new pair reservation; no quantity/exits/queue/minimum/fees/risk-limit changes.
+This is a per-entry bound, not a proof of portfolio-wide worst-case coverage
+across multiple simultaneously resting pairs. Up to ten causal reject samples
+and a decision counter are reported, no unbounded new trace volume.
+
+Four Java regressions cover exact budget+cost boundary, default old constructor
+versus explicit off, enabled rejection without cash loss, allowed near-balanced
+entries, and rejection of service/malformed CLI activation. They are pending
+Java21 CI (local Java17/no Maven), not claimed locally executed. 146 phase6
+Python tests pass locally, including three new source-proof fail-closed tests.
+
+Preserve exact pre-change ResearchSession and ClosedLoopReplay source text from
+tested commit d25c19a13afb55f8413af3d61846f8d4e666bd3c in a hashed immutable
+archive under `residual-entry-risk-20261018/` (compressed SHA256
+ee7541f7755c53deaf4c05addce714e57f6e3bb4f29d7e9f089e5e8dd0aa8b81).
+Historical offline account verification now verifies THESE original two sources
+against UNCHANGED historical freeze hashes, not the later working tree. Only
+those two exact archived source paths may use that proof; config/acceptance and
+all other historical inputs remain strict current hash checks. Tampered archive,
+wrong acceptance or unrelated code cannot fall back. Current replay freeze checks
+CURRENT source bytes strictly; this helper is never used to validate current
+candidate execution or waive its tests. All prior results/freezes preserved.
+
+Freeze full current source/Java tests/labels/config/acceptance provenance in
+`residual-entry-risk-replay-freeze.json` BEFORE first candidate replay. Same full
+development recording and fourteen bindings in both modes, control must exactly
+reproduce13 orders/2 fills/cash498.20/net-1.80/cost.01/drawdown1.80/expiry2/halt.
+If not, stop; do not rebaseline silently. Candidate mode differs only in the
+entry veto. Full Maven+all Python regressions precede both account runs. The old
+markout-only workflow skips this explicitly `[residual-risk-control]` tagged
+push because the dedicated workflow runs the SAME full regressions plus new
+candidate checks; no duplicate Maven build. Ordinary/manual markout checks remain
+enabled. NEXT inspect this one workflow before overlapping action. No new net
+result yet; zero fills or no loss cannot qualify, future-labelled environment is
+not independent PAPER proof. No holdout/capture/live action or acceptance edit.

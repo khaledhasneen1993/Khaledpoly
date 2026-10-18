@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import unittest
 from research.phase6.export_settlement_labels import export
+from research.phase6.historical_source_proof import verify_historical_sources
 
 
 class ExportSettlementLabelsTest(unittest.TestCase):
@@ -13,8 +14,7 @@ class ExportSettlementLabelsTest(unittest.TestCase):
         self.assertTrue(expected['partialLabels'])
         self.assertFalse(expected['liveAllowed'])
 
-    def test_predeclared_source_config_and_acceptance_hashes_match(self):
+    def test_original_sources_and_current_config_acceptance_hashes_match(self):
         freeze=json.loads(Path('research/phase6/settlement-replay-freeze.json').read_text())
-        for path,digest in freeze['filesSha256'].items():
-            self.assertEqual(hashlib.sha256(Path(path).read_bytes()).hexdigest(),digest,path)
+        verify_historical_sources(freeze)
         self.assertFalse(freeze['independentPaperQualificationAllowed'])

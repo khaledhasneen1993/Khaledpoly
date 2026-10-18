@@ -6,6 +6,7 @@ import io
 import json
 from pathlib import Path
 import zipfile
+from research.phase6.historical_source_proof import verify_historical_sources
 
 ROOT = Path('research/experiments/exit-covered-replay-20261018/result')
 ZIP_SHA = 'c3f46b928b6cb150356c44317737975bf8d798c9418af9b1015550889750dbb6'
@@ -19,9 +20,7 @@ def revalidate(archive=ROOT / 'artifact.zip.b64'):
     if hashlib.sha256(raw).hexdigest() != ZIP_SHA:
         raise ValueError('Original account artifact hash changed')
     frozen = json.loads(Path('research/phase6/exit-covered-replay-freeze.json').read_text())
-    for path, digest in frozen['filesSha256'].items():
-        if hashlib.sha256(Path(path).read_bytes()).hexdigest() != digest:
-            raise ValueError('Frozen account-control source changed: '+path)
+    verify_historical_sources(frozen)
     expected = {'comparison.json','baseline/report.json','baseline/audit.jsonl',
                 'candidate/report.json','candidate/audit.jsonl'}
     with zipfile.ZipFile(io.BytesIO(raw)) as z:

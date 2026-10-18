@@ -65,6 +65,8 @@ public final class ResearchSession implements AutoCloseable {
   private final String sessionId;
   private final boolean externalMode;
   private final SettlementReplayLabels settlementLabels;
+  private final boolean residualEntryRiskGuard;
+  private final List<Map<String,Object>> residualRiskRejectSamples=new ArrayList<>();
   private long replayRowSequence=-1;
   private int replayEventIndex=-1;
   private final ResearchProposalInbox externalValidator;
@@ -105,9 +107,18 @@ public final class ResearchSession implements AutoCloseable {
   ResearchSession(AccountLedger ledger, ResearchConfig cfg, ObjectMapper mapper, Path state,
       BiConsumer<String,Object> output, boolean externalMode, String replaySessionId,
       SettlementReplayLabels settlementLabels) {
+    this(ledger,cfg,mapper,state,output,externalMode,replaySessionId,settlementLabels,false);
+  }
+
+  ResearchSession(AccountLedger ledger, ResearchConfig cfg, ObjectMapper mapper, Path state,
+      BiConsumer<String,Object> output, boolean externalMode, String replaySessionId,
+      SettlementReplayLabels settlementLabels, boolean residualEntryRiskGuard) {
+    if (residualEntryRiskGuard && settlementLabels==null)
+      throw new IllegalArgumentException("Residual entry guard is explicit fresh offline research only");
     if (settlementLabels!=null && (externalMode || java.nio.file.Files.exists(state)))
       throw new IllegalArgumentException("Settlement experiment requires a fresh research replay account");
     this.settlementLabels=settlementLabels;
+    this.residualEntryRiskGuard=residualEntryRiskGuard;
     this.externalMode = externalMode;
     this.sessionId = replaySessionId == null ? UUID.randomUUID().toString() : replaySessionId;
     externalValidator =
@@ -708,6 +719,13 @@ public final class ResearchSession implements AutoCloseable {
         metrics.decision(
             small && insufficientEdge ? "MIN_SIZE_AND_NET_EDGE" : small ? "MIN_SIZE" : "NET_EDGE",
             edge);
+        continue;
+      }
+      if (residualEntryRiskGuard && !ResidualEntryRisk.allows(true,q,ap,bp,exitLossAvailable(),cfg.redemptionCost())) {
+        metrics.decision("ENTRY_RESIDUAL_LOSS_BUDGET",edge);
+        if (residualRiskRejectSamples.size()<10)
+          residualRiskRejectSamples.add(Map.of("at",now,"condition",m.condition(),"quantity",q,
+              "firstBid",ap,"secondBid",bp,"budget",exitLossAvailable(),"redemptionCost",cfg.redemptionCost()));
         continue;
       }
       BigDecimal value = ap.add(bp).multiply(q);
@@ -1535,6 +1553,10 @@ public final class ResearchSession implements AutoCloseable {
     r.put("pendingTakers", pending.size());
     r.put("openOrderCount", open(null).size());
     r.put("exitLossUsed", exitLossUsed);
+    if (settlementLabels!=null) {
+      r.put("residualEntryRiskGuard",residualEntryRiskGuard);
+      r.put("residualEntryRiskRejectSamples",List.copyOf(residualRiskRejectSamples));
+    }
     r.put("decision", "NO_GO");
     r.put("configuration", cfg);
     return r;

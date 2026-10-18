@@ -34,7 +34,7 @@ public final class ClosedLoopReplay {
       String freezeSha)
       throws Exception {
     return runInternal(
-        tape, out, config, limits, mapper, raw, windowStart, windowEnd, freezeSha, false, null);
+        tape, out, config, limits, mapper, raw, windowStart, windowEnd, freezeSha, false, null, false);
   }
 
   public static Map<String, Object> runExternal(
@@ -46,13 +46,19 @@ public final class ClosedLoopReplay {
       boolean raw)
       throws Exception {
     return runInternal(
-        tape, out, config, limits, mapper, raw, Long.MIN_VALUE, Long.MAX_VALUE, "", true, null);
+        tape, out, config, limits, mapper, raw, Long.MIN_VALUE, Long.MAX_VALUE, "", true, null, false);
   }
 
   static Map<String,Object> runSettlementLab(Path tape,Path out,ResearchConfig config,
       AccountLedger.Limits limits,ObjectMapper mapper,SettlementReplayLabels labels) throws Exception {
     labels.verifyTape(tape);
-    return runInternal(tape,out,config,limits,mapper,false,Long.MIN_VALUE,Long.MAX_VALUE,"",false,labels);
+    return runInternal(tape,out,config,limits,mapper,false,Long.MIN_VALUE,Long.MAX_VALUE,"",false,labels,false);
+  }
+
+  static Map<String,Object> runResidualRiskLab(Path tape,Path out,ResearchConfig config,
+      AccountLedger.Limits limits,ObjectMapper mapper,SettlementReplayLabels labels,boolean enabled) throws Exception {
+    labels.verifyTape(tape);
+    return runInternal(tape,out,config,limits,mapper,false,Long.MIN_VALUE,Long.MAX_VALUE,"",false,labels,enabled);
   }
 
   private static Map<String, Object> runInternal(
@@ -66,7 +72,8 @@ public final class ClosedLoopReplay {
       long windowEnd,
       String freezeSha,
       boolean external,
-      SettlementReplayLabels settlementLabels)
+      SettlementReplayLabels settlementLabels,
+      boolean residualEntryRiskGuard)
       throws Exception {
     if (windowStart >= windowEnd) throw new IllegalArgumentException("Empty heldout window");
     if (Files.exists(out)) throw new IllegalArgumentException("Replay output must not exist");
@@ -137,7 +144,8 @@ public final class ClosedLoopReplay {
                 (kind, data) -> audit.add(Map.of("kind", kind, "at", clock.millis(), "data", data)),
                 external,
                 externalSession,
-                settlementLabels);
+                settlementLabels,
+                residualEntryRiskGuard);
         var reader = TapeIO.reader(tape)) {
       String line;
       while ((line = reader.readLine()) != null) {
