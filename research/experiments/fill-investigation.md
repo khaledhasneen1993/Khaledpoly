@@ -991,3 +991,20 @@ Original partial-model net after its recorded costs remains -0.85, zero pairs,
 cash 499.15; that conditional model result is not promoted. Acceptance, risk,
 queue, fee and strategy settings remain unchanged. Continue the focused missing
 exit-trigger audit next; do not repeat the completed twenty receipts or GAP scans.
+
+## Two original exit-trigger audit prepared — 2026-10-18
+
+Starting bce47c165973449bc55786e633e4e89500f92c0a, PR9 draft on PR8/7;
+all existing runs complete. `exit_trigger_audit` verifies the prior unchanged
+two-transaction selection against both complete original RAW/normalized frames,
+canonical RAW hashes and original account execution records BEFORE public reads.
+Freeze code/tests/frames/selection/original account/acceptance hashes. Reuse the
+existing receipt decoder, conservation and cache; only two fresh receipt reads
+plus necessary chain/block checks. Report actual route shares, exact-price own
+SELL-side DIRECT volume and actual maker/taker fees separately. Initial queue
+ten is recorded, never inferred to be proven by conservation. Three new binding,
+tamper, direct-price selection and ambiguity checks; 131 phase6 tests pass locally.
+No JVM changes or new capture/account replay. Next inspect the one small
+`PAPER two frozen exit trigger receipts` workflow and archive original evidence;
+do not re-fetch the preceding twenty transactions. Account net -0.85 conditional
+result, default runtime and acceptance remain unchanged. Not independent data.

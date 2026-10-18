@@ -1,0 +1,36 @@
+name: PAPER two frozen exit trigger receipts
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/exit-trigger-audit.yml'
+      - 'research/phase6/exit_trigger_audit.py'
+      - 'research/phase6/exit-trigger-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-two-frozen-exit-triggers
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Optional audit-only Keccak decoder
+        run: |
+          python3 -m venv "$RUNNER_TEMP/exit-audit-env"
+          "$RUNNER_TEMP/exit-audit-env/bin/pip" install --only-binary=:all: --no-deps pycryptodome==3.23.0
+      - name: Offline regressions and exact RAW execution bindings before public reads
+        run: '"$RUNNER_TEMP/exit-audit-env/bin/python" -m unittest discover -s research/phase6/tests -q'
+      - name: Two selected public receipts only, no account replay
+        run: >-
+          "$RUNNER_TEMP/exit-audit-env/bin/python" -u -m research.phase6.exit_trigger_audit
+          --output research/output/exit-trigger-audit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frozen-two-exit-trigger-receipts
+          retention-days: 7
+          path: research/output/exit-trigger-audit/
