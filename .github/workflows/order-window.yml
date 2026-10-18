@@ -25,6 +25,7 @@ jobs:
           github-token: ${{ github.token }}
           path: window-input
       - name: Extract two fixed lifecycle windows, no new market capture
+        # Retain normalized book frames and only relevant RAW last-trade messages.
         run: >-
           python3 -u -m research.phase6.order_window --input-root window-input
           --spec research/experiments/order-window-20261018/spec.json

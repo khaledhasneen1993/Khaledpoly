@@ -418,3 +418,10 @@ Next inspect `bounded-active-order-windows`: source/arrival ordering at the firs
 corroborated MINT overlapping sim-research-4; both current books; pending
 cancellation and peer-leg risk; GAP invalidation around sim-research-42. Use
 the existing committed receipts for route/price volumes without extra RPCs.
+
+First extraction run 39101087860 failed closed at the 16 MB window retention
+bound; it produced no usable evidence. Do not treat it as a market-data failure.
+Narrow RAW selection to original target-token last-trade messages (normalized
+book frames remain unchanged), increase the explicit memory bound to 64 MB
+and include row/byte counts on failure. No truncation, chronology or source-hash
+checks are removed. Retry this corrected extraction, not a new capture.

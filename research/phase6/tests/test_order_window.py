@@ -36,4 +36,6 @@ class OrderWindowTest(unittest.TestCase):
     def test_only_relevant_scoped_gaps_and_raw_tokens(self):
         self.assertFalse(related('RESEARCH_GAP',{'tokens':['c']},{'a','b'},'m'))
         self.assertTrue(related('RESEARCH_GAP',{'tokens':['b']},{'a','b'},'m'))
-        self.assertTrue(related('RAW_MARKET',{'text':'token-b'},{'a','b'},'m'))
+        self.assertFalse(related('RAW_MARKET',{'text':'token-b'},{'a','b'},'m'))
+        raw = json.dumps({'event_type':'last_trade_price','asset_id':'b'})
+        self.assertTrue(related('RAW_MARKET',{'text':raw},{'a','b'},'m'))

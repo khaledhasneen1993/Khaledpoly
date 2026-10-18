@@ -1,4 +1,4 @@
-"""Lossless bounded diagnostic windows; not a replay tape or a fill model."""
+"""Selected original diagnostic rows; not a complete replay tape or a fill model."""
 import argparse
 import hashlib
 import json
@@ -8,7 +8,11 @@ from research.phase3.polybot_sdk.tapes import open_tape
 
 def related(kind, data, tokens, condition):
     if kind == 'RAW_MARKET':
-        return any(token in data.get('text', '') for token in tokens)
+        text = data.get('text', '')
+        if 'last_trade_price' not in text or not any(token in text for token in tokens): return False
+        value = json.loads(text)
+        nodes = value if isinstance(value,list) else [value]
+        return any(n.get('event_type') == 'last_trade_price' and n.get('asset_id') in tokens for n in nodes)
     if kind == 'RESEARCH_FRAME':
         return any(related('RESEARCH_'+item['kind'], item['data'], tokens, condition)
                    for item in data['events'])
@@ -42,8 +46,9 @@ def extract(stream, specifications, expected_sha, limit=6000):
                     window['precedingMetadata'] = row
                 continue
             if last > spec['endMs'] or not related(kind, data, tokens, spec['condition']): continue
-            if len(window['rows']) >= limit or window['retainedBytes']+len(line) > 16000000:
-                raise ValueError('Window evidence exceeds bound; never silently truncate')
+            if len(window['rows']) >= limit or window['retainedBytes']+len(line) > 64000000:
+                raise ValueError('Window evidence exceeds bound; rows='+str(len(window['rows']))+
+                                 ' bytes='+str(window['retainedBytes'])+'; never silently truncate')
             window['rows'].append(row); window['retainedBytes'] += len(line)
         if kind == 'RUN_END':
             clean = data.get('complete') is True
@@ -54,6 +59,7 @@ def extract(stream, specifications, expected_sha, limit=6000):
     return {'scope':'BOUNDED_ORIGINAL_ORDER_WINDOWS_NOT_REPLAY', 'logicalTapeSha256':digest.hexdigest(),
         'sourceRows':count, 'runId':run_id, 'recordingClosedCleanly':True, 'windows':windows,
         'rowsRetainOriginalSeqAndFrames':True, 'sourceBeforeWindowNotFullyReconstructed':True,
+        'rawMarketSelection':'TARGET_LAST_TRADE_MESSAGES_ONLY; normalized books/frames retained unchanged',
         'fillsInferred':False, 'pnlInferred':False, 'decision':'NO_GO', 'liveAllowed':False}
 
 
