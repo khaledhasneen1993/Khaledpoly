@@ -1070,3 +1070,76 @@ contracts require Maven-generated executor target tapes that do not exist in
 this Java17/no-Maven environment (phase3 fails those explicit prerequisites).
 This is not counted as full regression success and no test fixture is weakened;
 the CI sequence correctly runs Maven verify BEFORE all Python phases.
+
+## Five-versus-seven account control complete — 2026-10-18
+
+Run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39132714883
+completed successfully at 13:58 UTC, source d25c19a13afb55f8413af3d61846f8d4e666bd3c.
+Full CI passed 157 Java tests plus 277 Python tests = 434 total, including the
+new SELL DIRECT/MINT regression. This resolves the local missing Maven fixture
+prerequisite; no fixture or assertion was relaxed. Test artifact 12138408392.
+
+| Complete same-tape account result | Five-label control | Seven-label correction |
+| --- | ---: | ---: |
+| Orders / fills | 61 / 3 | 61 / 3 |
+| Final cash | 499.15 | 499.15 |
+| Net realized PnL after applied costs | -0.85 | -0.85 |
+| Applied maker fees / settlement costs | 0 | 0 |
+| Max drawdown | 1.20 | 1.20 |
+| Completed pairs / ending inventory | 0 / 0 | 0 / 0 |
+| Last SELL2 fill time (arrival ms) | 1792269695069 | 1792269695159 |
+| Receipt bindings consumed | 5/5 | 7/7 |
+
+Correction REMOVES the unsupported MINT-based direct fill at 5069, but a LATER
+still-unlabelled public BUY at 5159 fills the remaining two via legacy aggregate
+matching. Thus same account PnL is not validation of complete settlement coverage:
+the replacement is only 90ms later, at the same .47 price. Do not say the blocked
+fill itself was reinstated, or that the second virtual fill is receipt-validated.
+The seven-label component accounting conserves 518 venue shares = 8 allocated +
+10 queue-absorbed + 500 unused across 33 unique maker components; only three of
+the SELL shares are from those labelled components. Queue assumptions unchanged.
+Markout continuity is now applied in both: 2 valid 1s samples, seven horizons
+censored by actual DATA_GAP (1 at 1s, 3 at 5s, 3 at 30s). No clean new entry label,
+no completed pair, no profitable/independent strategy result; keep NO_GO.
+
+Exact original ZIP (both reports AND full audit logs AND comparison) is archived
+as `exit-covered-replay-20261018/result/artifact.zip.b64`, artifact 12138763339,
+SHA256 c3f46b928b6cb150356c44317737975bf8d798c9418af9b1015550889750dbb6.
+Original comparison and provenance/test counts are adjacent. New offline
+`python3 -m research.phase6.revalidate_exit_account_control` verifies the ZIP hash,
+exact bounded membership, frozen source/config/acceptance hashes, both reports
+against original comparison, execution records against original account audits,
+coverage consumption and integer-decimal volume conservation, without any network
+or account rerun. Two archive/tamper checks bring local phase6 to 134 passing.
+
+Do not launch another full replay for just this later print. Instead freeze ONE
+bounded completion of the remaining legacy exit-print evidence. Existing RAW
+context contains exactly NINE unique own-token public BUY observations from
+actual activation 1792269694445 up to (excluding) the FIRST actual invalid-depth
+GAP at 1792269696284 / normalized seq155412. This censoring boundary is independent
+of which later print would fill: it bounds any continued life of that old order
+under unchanged gap cancellation. Nine printed transactions, two receipts already
+archived, only SEVEN new receipts needed. No new tape/capture/GAP scan needed.
+
+Selection and all nine unmodified RAW/normalized frame pairs are preserved in
+`exit-window-selection-20261018/`. Selection SHA256
+52ff778f09e50e73871b0905d69858da668a15864620d7937887009a390468ef.
+This window is NOT the observed lifetime of baseline or seven-label order14;
+keep their actual terminals recorded separately (5069 and 5159). It is a bounded
+counterfactual evidence window censored by the independently observed GAP. Do NOT
+change the earlier two-trigger or twenty-transaction selections. Select every
+own-token BUY in the window, not just those having favorable receipt outcomes;
+no subset dropping, post-receipt expansion or replacement. Reuse the two prior
+receipts and decoder, cap fresh reads at seven, retain exact tx/source/price/size
+bindings and conserved maker portions. Audit actual 5159 replacement plus all
+possible later legacy BUY triggers before the GAP in one batch. Other routes
+and coverage outside this window remain explicitly unresolved.
+
+NEXT implement/check that bounded read-window collector (do not misrepresent the
+window as an observed order lifecycle), then obtain only those seven missing
+public receipts. No new public receipt reads or account replays were started in
+this turn; all current workflows completed. Keep acceptance, fees, queue, risk,
+default runtime and strategy unchanged. Neither partial future-label model is
+eligible for independent PAPER qualification or deployment. Continue coverage
+correction before any new strategy candidate, then freeze a causal candidate
+before separate independent data and live PAPER testing.
