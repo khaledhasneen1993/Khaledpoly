@@ -1,9 +1,6 @@
 name: PAPER bounded active-order evidence
 on:
   workflow_dispatch:
-  push:
-    branches: [paper-fill-investigation]
-    paths: [.github/workflows/order-window.yml]
 permissions:
   contents: read
   actions: read

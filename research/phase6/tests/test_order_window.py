@@ -2,7 +2,7 @@ import hashlib
 import io
 import json
 import unittest
-from research.phase6.order_window import extract, related
+from research.phase6.order_window import extract, related, project
 
 
 class OrderWindowTest(unittest.TestCase):
@@ -39,3 +39,15 @@ class OrderWindowTest(unittest.TestCase):
         self.assertFalse(related('RAW_MARKET',{'text':'token-b'},{'a','b'},'m'))
         raw = json.dumps({'event_type':'last_trade_price','asset_id':'b'})
         self.assertTrue(related('RAW_MARKET',{'text':raw},{'a','b'},'m'))
+
+    def test_projection_is_explicit_and_retains_top_and_own_price_not_fake_depth(self):
+        original=dict(windows=[dict(spec=dict(tokens=['a','b'],orders=[dict(token='a',price='.4')],condition='m'),
+            rows=[dict(seq=1,kind='RESEARCH_FRAME',arrivalMs=10,data=dict(events=[
+                dict(kind='BOOK',data=dict(token='c',bids=[],asks=[])),
+                dict(kind='BOOK',data=dict(token='a',sourceMs=9,bids=[dict(price=p,size='10') for p in ['.3','.4','.5']],
+                                         asks=[dict(price='.6',size='10')]))]))])])
+        result=project(original)
+        self.assertTrue(result['cannotCalibrateQueueFromProjection'])
+        events=result['windows'][0]['rows'][0]['data']['events']
+        self.assertEqual(len(events),1);self.assertEqual(events[0]['originalEventIndex'],1)
+        self.assertEqual([x['price'] for x in events[0]['data']['bids']],['.4','.5'])

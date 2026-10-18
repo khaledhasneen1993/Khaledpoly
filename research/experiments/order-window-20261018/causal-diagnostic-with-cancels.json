@@ -1,0 +1,2996 @@
+{
+  "scope": "CAUSAL_ORDER_BOOK_SETTLEMENT_DIAGNOSTIC_NOT_EXECUTION",
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "windows": [
+    {
+      "orderIds": [
+        "sim-research-3",
+        "sim-research-4"
+      ],
+      "complementTradesDuringRecordedActiveOrders": [
+        {
+          "seq": 139405,
+          "eventIndex": 0,
+          "at": 1792269683749,
+          "sourceMs": 1792269683679,
+          "transactionHash": "0xcb04618cfaf0c832751c5e2bb3c91f8c9f6652470ab3751156f0b73a9a57e2a3",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.36",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683676,
+              "fresh": true,
+              "bestBid": "0.63",
+              "bestAsk": "0.67"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683676,
+              "fresh": true,
+              "bestBid": "0.33",
+              "bestAsk": "0.37"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139409,
+          "eventIndex": 0,
+          "at": 1792269683751,
+          "sourceMs": 1792269683681,
+          "transactionHash": "0x34b517067bc5bf44b31f1aaf2cab07b440353034b2fe48de1bbd036dcd940f07",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.37",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683676,
+              "fresh": true,
+              "bestBid": "0.63",
+              "bestAsk": "0.67"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683676,
+              "fresh": true,
+              "bestBid": "0.33",
+              "bestAsk": "0.37"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139431,
+          "eventIndex": 0,
+          "at": 1792269683761,
+          "sourceMs": 1792269683691,
+          "transactionHash": "0xeff5d430a86833db0aa6e5bcda6af787a62ba94765d2b33ebb003864718fec57",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.37",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683685,
+              "fresh": true,
+              "bestBid": "0.62",
+              "bestAsk": "0.67"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683685,
+              "fresh": true,
+              "bestBid": "0.33",
+              "bestAsk": "0.38"
+            }
+          },
+          "receiptAvailable": true,
+          "settlementLabel": {
+            "matchingPublicAggregateCount": 1,
+            "matchingGroups": [
+              {
+                "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+                "ordersMatchedLogIndex": 609,
+                "takerShares": "100",
+                "makerSharesSum": "100",
+                "shareConservation": true,
+                "targetMintShares": "100",
+                "targetMintSharesAtImpliedPrice": "100",
+                "targetMintSharesWithinOneCollateralUnit": "100",
+                "publicPriceVsWeightedAggregateDifference": "0.00",
+                "publicPriceMatchesWeightedAggregate": true,
+                "directShares": "0",
+                "targetMintMakerLogIndices": [
+                  600,
+                  602,
+                  604
+                ]
+              }
+            ],
+            "uniqueConservedGroup": true,
+            "identityMatchingGroupCount": 1,
+            "identityMatchingGroups": [
+              {
+                "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+                "ordersMatchedLogIndex": 609,
+                "takerShares": "100",
+                "makerSharesSum": "100",
+                "shareConservation": true,
+                "targetMintShares": "100",
+                "targetMintSharesAtImpliedPrice": "100",
+                "targetMintSharesWithinOneCollateralUnit": "100",
+                "publicPriceVsWeightedAggregateDifference": "0.00",
+                "publicPriceMatchesWeightedAggregate": true,
+                "directShares": "0",
+                "targetMintMakerLogIndices": [
+                  600,
+                  602,
+                  604
+                ]
+              }
+            ],
+            "uniqueIdentityConservedGroup": true,
+            "queueAllocationProven": false,
+            "receiptIsFutureInformation": true,
+            "usableAsEarlierDecisionFeature": false,
+            "simulatedFillsCreated": false
+          },
+          "mintMakerPortions": [
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xeff5d430a86833db0aa6e5bcda6af787a62ba94765d2b33ebb003864718fec57",
+                609,
+                600
+              ],
+              "shares": "28.06",
+              "makerPrice": "0.63",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xeff5d430a86833db0aa6e5bcda6af787a62ba94765d2b33ebb003864718fec57",
+                609,
+                602
+              ],
+              "shares": "50",
+              "makerPrice": "0.63",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xeff5d430a86833db0aa6e5bcda6af787a62ba94765d2b33ebb003864718fec57",
+                609,
+                604
+              ],
+              "shares": "21.94",
+              "makerPrice": "0.63",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            }
+          ],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139463,
+          "eventIndex": 0,
+          "at": 1792269683776,
+          "sourceMs": 1792269683705,
+          "transactionHash": "0xac33d255f2f20bcdcbec36d67bb889cabed384a2fc129e1b3dfe885388a7d81a",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.37",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683701,
+              "fresh": true,
+              "bestBid": "0.61",
+              "bestAsk": "0.67"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683701,
+              "fresh": true,
+              "bestBid": "0.33",
+              "bestAsk": "0.39"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139477,
+          "eventIndex": 0,
+          "at": 1792269683781,
+          "sourceMs": 1792269683710,
+          "transactionHash": "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.38",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683709,
+              "fresh": true,
+              "bestBid": "0.61",
+              "bestAsk": "0.67"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683709,
+              "fresh": true,
+              "bestBid": "0.33",
+              "bestAsk": "0.39"
+            }
+          },
+          "receiptAvailable": true,
+          "settlementLabel": {
+            "matchingPublicAggregateCount": 0,
+            "matchingGroups": [],
+            "uniqueConservedGroup": false,
+            "identityMatchingGroupCount": 1,
+            "identityMatchingGroups": [
+              {
+                "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+                "ordersMatchedLogIndex": 604,
+                "takerShares": "100",
+                "makerSharesSum": "100",
+                "shareConservation": true,
+                "targetMintShares": "91.94",
+                "targetMintSharesAtImpliedPrice": "64.73",
+                "targetMintSharesWithinOneCollateralUnit": "64.73",
+                "publicPriceVsWeightedAggregateDifference": "0.003527",
+                "publicPriceMatchesWeightedAggregate": false,
+                "directShares": "8.06",
+                "targetMintMakerLogIndices": [
+                  589,
+                  591,
+                  593,
+                  595,
+                  597,
+                  599
+                ]
+              }
+            ],
+            "uniqueIdentityConservedGroup": true,
+            "queueAllocationProven": false,
+            "receiptIsFutureInformation": true,
+            "usableAsEarlierDecisionFeature": false,
+            "simulatedFillsCreated": false
+          },
+          "mintMakerPortions": [
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+                604,
+                589
+              ],
+              "shares": "27.21",
+              "makerPrice": "0.63",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+                604,
+                591
+              ],
+              "shares": "16",
+              "makerPrice": "0.62",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+                604,
+                593
+              ],
+              "shares": "20",
+              "makerPrice": "0.62",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+                604,
+                595
+              ],
+              "shares": "5",
+              "makerPrice": "0.62",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+                604,
+                597
+              ],
+              "shares": "5",
+              "makerPrice": "0.62",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+                604,
+                599
+              ],
+              "shares": "18.73",
+              "makerPrice": "0.62",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            }
+          ],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139493,
+          "eventIndex": 0,
+          "at": 1792269683786,
+          "sourceMs": 1792269683716,
+          "transactionHash": "0x0196b9849eebb44bc6990c45aca124b7ce37492b0b0c63ebeb70750c20d0ca45",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.38",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683711,
+              "fresh": true,
+              "bestBid": "0.6",
+              "bestAsk": "0.67"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683711,
+              "fresh": true,
+              "bestBid": "0.33",
+              "bestAsk": "0.4"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139511,
+          "eventIndex": 0,
+          "at": 1792269683799,
+          "sourceMs": 1792269683729,
+          "transactionHash": "0xe818727be473c9b96e2322b6e58e1d8d0db1e62d229084b73f59bc8cbda6fe8b",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.38",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683722,
+              "fresh": true,
+              "bestBid": "0.6",
+              "bestAsk": "0.67"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683722,
+              "fresh": true,
+              "bestBid": "0.33",
+              "bestAsk": "0.4"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139535,
+          "eventIndex": 0,
+          "at": 1792269683815,
+          "sourceMs": 1792269683746,
+          "transactionHash": "0xcbb2bb3ebf2c6911c8fb044f09ca56a2fa85c2080c89ca2c711d812fecdd4781",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.39",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683739,
+              "fresh": true,
+              "bestBid": "0.59",
+              "bestAsk": "0.67"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683739,
+              "fresh": true,
+              "bestBid": "0.33",
+              "bestAsk": "0.41"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139537,
+          "eventIndex": 0,
+          "at": 1792269683819,
+          "sourceMs": 1792269683748,
+          "transactionHash": "0xb047085dd8d397a3e401559c4d65a0504201611b8d5a097fbf7a30d1389afd0a",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.4",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683739,
+              "fresh": true,
+              "bestBid": "0.59",
+              "bestAsk": "0.67"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683739,
+              "fresh": true,
+              "bestBid": "0.33",
+              "bestAsk": "0.41"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139551,
+          "eventIndex": 0,
+          "at": 1792269683828,
+          "sourceMs": 1792269683759,
+          "transactionHash": "0xb52255786311efce3508c2c7e3724d72b83d282682a29401646018d0cf6d9f3e",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.4",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683749,
+              "fresh": true,
+              "bestBid": "0.58",
+              "bestAsk": "0.67"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683749,
+              "fresh": true,
+              "bestBid": "0.33",
+              "bestAsk": "0.42"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139565,
+          "eventIndex": 0,
+          "at": 1792269683836,
+          "sourceMs": 1792269683767,
+          "transactionHash": "0x4251e2df8151d1cb3f7861948641ad2f564b6638d05b730cd776fa11917812b5",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.41",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683762,
+              "fresh": true,
+              "bestBid": "0.58",
+              "bestAsk": "0.67"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683762,
+              "fresh": true,
+              "bestBid": "0.33",
+              "bestAsk": "0.42"
+            }
+          },
+          "receiptAvailable": true,
+          "settlementLabel": {
+            "matchingPublicAggregateCount": 1,
+            "matchingGroups": [
+              {
+                "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+                "ordersMatchedLogIndex": 1431,
+                "takerShares": "100",
+                "makerSharesSum": "100",
+                "shareConservation": true,
+                "targetMintShares": "100",
+                "targetMintSharesAtImpliedPrice": "100",
+                "targetMintSharesWithinOneCollateralUnit": "100",
+                "publicPriceVsWeightedAggregateDifference": "0.00",
+                "publicPriceMatchesWeightedAggregate": true,
+                "directShares": "0",
+                "targetMintMakerLogIndices": [
+                  1416,
+                  1418,
+                  1420,
+                  1422,
+                  1424,
+                  1426
+                ]
+              }
+            ],
+            "uniqueConservedGroup": true,
+            "identityMatchingGroupCount": 1,
+            "identityMatchingGroups": [
+              {
+                "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+                "ordersMatchedLogIndex": 1431,
+                "takerShares": "100",
+                "makerSharesSum": "100",
+                "shareConservation": true,
+                "targetMintShares": "100",
+                "targetMintSharesAtImpliedPrice": "100",
+                "targetMintSharesWithinOneCollateralUnit": "100",
+                "publicPriceVsWeightedAggregateDifference": "0.00",
+                "publicPriceMatchesWeightedAggregate": true,
+                "directShares": "0",
+                "targetMintMakerLogIndices": [
+                  1416,
+                  1418,
+                  1420,
+                  1422,
+                  1424,
+                  1426
+                ]
+              }
+            ],
+            "uniqueIdentityConservedGroup": true,
+            "queueAllocationProven": false,
+            "receiptIsFutureInformation": true,
+            "usableAsEarlierDecisionFeature": false,
+            "simulatedFillsCreated": false
+          },
+          "mintMakerPortions": [
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0x4251e2df8151d1cb3f7861948641ad2f564b6638d05b730cd776fa11917812b5",
+                1431,
+                1416
+              ],
+              "shares": "19.53",
+              "makerPrice": "0.59",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0x4251e2df8151d1cb3f7861948641ad2f564b6638d05b730cd776fa11917812b5",
+                1431,
+                1418
+              ],
+              "shares": "5",
+              "makerPrice": "0.59",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0x4251e2df8151d1cb3f7861948641ad2f564b6638d05b730cd776fa11917812b5",
+                1431,
+                1420
+              ],
+              "shares": "10",
+              "makerPrice": "0.59",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0x4251e2df8151d1cb3f7861948641ad2f564b6638d05b730cd776fa11917812b5",
+                1431,
+                1422
+              ],
+              "shares": "20",
+              "makerPrice": "0.59",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0x4251e2df8151d1cb3f7861948641ad2f564b6638d05b730cd776fa11917812b5",
+                1431,
+                1424
+              ],
+              "shares": "20",
+              "makerPrice": "0.59",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0x4251e2df8151d1cb3f7861948641ad2f564b6638d05b730cd776fa11917812b5",
+                1431,
+                1426
+              ],
+              "shares": "25.47",
+              "makerPrice": "0.59",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            }
+          ],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139587,
+          "eventIndex": 0,
+          "at": 1792269683854,
+          "sourceMs": 1792269683785,
+          "transactionHash": "0xb1a6cb3eb43aebed9e4c84fa9981afe387f74f7777f6fd0af8a56eb9130e17f3",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.42",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683782,
+              "fresh": true,
+              "bestBid": "0.58",
+              "bestAsk": "0.67"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683782,
+              "fresh": true,
+              "bestBid": "0.33",
+              "bestAsk": "0.42"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139589,
+          "eventIndex": 0,
+          "at": 1792269683855,
+          "sourceMs": 1792269683785,
+          "transactionHash": "0x73356fcd9663f1ab64b92385f77141cb3575916d5792fd62d81cc292c47fe552",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.42",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683782,
+              "fresh": true,
+              "bestBid": "0.58",
+              "bestAsk": "0.67"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683782,
+              "fresh": true,
+              "bestBid": "0.33",
+              "bestAsk": "0.42"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139629,
+          "eventIndex": 0,
+          "at": 1792269683877,
+          "sourceMs": 1792269683807,
+          "transactionHash": "0x9ffa4a00146df722a502e55607236481dbf0c1283ab64ccc474044b063590f6f",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.42",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683801,
+              "fresh": true,
+              "bestBid": "0.56",
+              "bestAsk": "0.67"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683801,
+              "fresh": true,
+              "bestBid": "0.33",
+              "bestAsk": "0.44"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139655,
+          "eventIndex": 0,
+          "at": 1792269683893,
+          "sourceMs": 1792269683821,
+          "transactionHash": "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.43",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683821,
+              "fresh": true,
+              "bestBid": "0.56",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683821,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.44"
+            }
+          },
+          "receiptAvailable": true,
+          "settlementLabel": {
+            "matchingPublicAggregateCount": 0,
+            "matchingGroups": [],
+            "uniqueConservedGroup": false,
+            "identityMatchingGroupCount": 1,
+            "identityMatchingGroups": [
+              {
+                "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+                "ordersMatchedLogIndex": 1818,
+                "takerShares": "100",
+                "makerSharesSum": "100",
+                "shareConservation": true,
+                "targetMintShares": "93.26",
+                "targetMintSharesAtImpliedPrice": "80",
+                "targetMintSharesWithinOneCollateralUnit": "80",
+                "publicPriceVsWeightedAggregateDifference": "0.000652",
+                "publicPriceMatchesWeightedAggregate": false,
+                "directShares": "6.74",
+                "targetMintMakerLogIndices": [
+                  1801,
+                  1803,
+                  1805,
+                  1807,
+                  1809,
+                  1811,
+                  1813
+                ]
+              }
+            ],
+            "uniqueIdentityConservedGroup": true,
+            "queueAllocationProven": false,
+            "receiptIsFutureInformation": true,
+            "usableAsEarlierDecisionFeature": false,
+            "simulatedFillsCreated": false
+          },
+          "mintMakerPortions": [
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+                1818,
+                1801
+              ],
+              "shares": "10",
+              "makerPrice": "0.57",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+                1818,
+                1803
+              ],
+              "shares": "20",
+              "makerPrice": "0.57",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+                1818,
+                1805
+              ],
+              "shares": "20",
+              "makerPrice": "0.57",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+                1818,
+                1807
+              ],
+              "shares": "20",
+              "makerPrice": "0.57",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+                1818,
+                1809
+              ],
+              "shares": "10",
+              "makerPrice": "0.57",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+                1818,
+                1811
+              ],
+              "shares": "10",
+              "makerPrice": "0.56",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+                1818,
+                1813
+              ],
+              "shares": "3.26",
+              "makerPrice": "0.56",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            }
+          ],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139699,
+          "eventIndex": 0,
+          "at": 1792269683910,
+          "sourceMs": 1792269683833,
+          "transactionHash": "0xcae00c0de444fa1fcb7eaf0cdc93800c4c59e7a2b36abd6e23c562541fe59323",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.44",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683832,
+              "fresh": true,
+              "bestBid": "0.55",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683832,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.45"
+            }
+          },
+          "receiptAvailable": true,
+          "settlementLabel": {
+            "matchingPublicAggregateCount": 1,
+            "matchingGroups": [
+              {
+                "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+                "ordersMatchedLogIndex": 791,
+                "takerShares": "100",
+                "makerSharesSum": "100",
+                "shareConservation": true,
+                "targetMintShares": "91.74",
+                "targetMintSharesAtImpliedPrice": "91.74",
+                "targetMintSharesWithinOneCollateralUnit": "91.74",
+                "publicPriceVsWeightedAggregateDifference": "0.00",
+                "publicPriceMatchesWeightedAggregate": true,
+                "directShares": "8.26",
+                "targetMintMakerLogIndices": [
+                  778,
+                  780,
+                  782,
+                  784
+                ]
+              }
+            ],
+            "uniqueConservedGroup": true,
+            "identityMatchingGroupCount": 1,
+            "identityMatchingGroups": [
+              {
+                "exchange": "0xe111180000d2663c0091e4f400237545b87b996b",
+                "ordersMatchedLogIndex": 791,
+                "takerShares": "100",
+                "makerSharesSum": "100",
+                "shareConservation": true,
+                "targetMintShares": "91.74",
+                "targetMintSharesAtImpliedPrice": "91.74",
+                "targetMintSharesWithinOneCollateralUnit": "91.74",
+                "publicPriceVsWeightedAggregateDifference": "0.00",
+                "publicPriceMatchesWeightedAggregate": true,
+                "directShares": "8.26",
+                "targetMintMakerLogIndices": [
+                  778,
+                  780,
+                  782,
+                  784
+                ]
+              }
+            ],
+            "uniqueIdentityConservedGroup": true,
+            "queueAllocationProven": false,
+            "receiptIsFutureInformation": true,
+            "usableAsEarlierDecisionFeature": false,
+            "simulatedFillsCreated": false
+          },
+          "mintMakerPortions": [
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xcae00c0de444fa1fcb7eaf0cdc93800c4c59e7a2b36abd6e23c562541fe59323",
+                791,
+                778
+              ],
+              "shares": "16.74",
+              "makerPrice": "0.56",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xcae00c0de444fa1fcb7eaf0cdc93800c4c59e7a2b36abd6e23c562541fe59323",
+                791,
+                780
+              ],
+              "shares": "20",
+              "makerPrice": "0.56",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xcae00c0de444fa1fcb7eaf0cdc93800c4c59e7a2b36abd6e23c562541fe59323",
+                791,
+                782
+              ],
+              "shares": "35",
+              "makerPrice": "0.56",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            },
+            {
+              "identity": [
+                "0xe111180000d2663c0091e4f400237545b87b996b",
+                "0xcae00c0de444fa1fcb7eaf0cdc93800c4c59e7a2b36abd6e23c562541fe59323",
+                791,
+                784
+              ],
+              "shares": "20",
+              "makerPrice": "0.56",
+              "botBuyPriceAtLeastMakerPrice": true,
+              "alreadyObserved": false
+            }
+          ],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139713,
+          "eventIndex": 0,
+          "at": 1792269683916,
+          "sourceMs": 1792269683844,
+          "transactionHash": "0x2dad5a700fec679ef9010a7e7cbc03d699d80aeafa7a0bcd653c3a8c769222ca",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.44",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683842,
+              "fresh": true,
+              "bestBid": "0.55",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683842,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.45"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139731,
+          "eventIndex": 0,
+          "at": 1792269683926,
+          "sourceMs": 1792269683856,
+          "transactionHash": "0x32cdf75bb212a61e892cb4bb11bc1e2f657ac372ed011dcec45f8ee20dbd19c7",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.44",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683850,
+              "fresh": true,
+              "bestBid": "0.54",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683850,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.46"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": true,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139751,
+          "eventIndex": 0,
+          "at": 1792269683934,
+          "sourceMs": 1792269683865,
+          "transactionHash": "0x1dc3f34f221d5129ef79322a0c6fac4c313fdc19d44d3bf1e5d9226d3c151814",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.45",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683860,
+              "fresh": true,
+              "bestBid": "0.54",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683860,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.46"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139767,
+          "eventIndex": 0,
+          "at": 1792269683947,
+          "sourceMs": 1792269683878,
+          "transactionHash": "0xdfc833b0e428b096e73461f86b5a5487fb6104850863c376c0ba4064da3e6b0f",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.45",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683869,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683869,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139775,
+          "eventIndex": 0,
+          "at": 1792269683954,
+          "sourceMs": 1792269683884,
+          "transactionHash": "0x9c6428f02461cdbf6354e0b37440cb3527f4bb47470004e1de44889e053fdedd",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.46",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683879,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683879,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139807,
+          "eventIndex": 0,
+          "at": 1792269683970,
+          "sourceMs": 1792269683899,
+          "transactionHash": "0xb2548e84aff27606d19aef66afb535cb1c971060c5d19e39e8490f36089d785a",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683898,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683898,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139809,
+          "eventIndex": 0,
+          "at": 1792269683970,
+          "sourceMs": 1792269683901,
+          "transactionHash": "0x3d2c6732a533709ed4c3cf5cce72dcbeb5675c0e0dfad982256b25f7b8e80adb",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683898,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683898,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139823,
+          "eventIndex": 0,
+          "at": 1792269683982,
+          "sourceMs": 1792269683912,
+          "transactionHash": "0x2a46c3d2b4f1696667286c1d1bf0505748092ae1a1ff7ed0b1da09f1d916c865",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683906,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683906,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139845,
+          "eventIndex": 0,
+          "at": 1792269683989,
+          "sourceMs": 1792269683919,
+          "transactionHash": "0x98e787bdb773bb5ff9c49c0dcbdcdf16addf4919268690bb950157d7615c1d6e",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683918,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683918,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139857,
+          "eventIndex": 0,
+          "at": 1792269684000,
+          "sourceMs": 1792269683931,
+          "transactionHash": "0xf11fab755071357d8a56f3061b8b94b10d2b433699ed9390cc96ddb3cbb39d34",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683924,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683924,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139881,
+          "eventIndex": 0,
+          "at": 1792269684010,
+          "sourceMs": 1792269683940,
+          "transactionHash": "0x8af9014963ba7e95bd841f3e56af95d2580ffaf0fe00b3adb7a7ac6e9951e165",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.46",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683939,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683939,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139887,
+          "eventIndex": 0,
+          "at": 1792269684014,
+          "sourceMs": 1792269683944,
+          "transactionHash": "0x87b47767295b954d9aeb4700e64acd6c1a3636f75e390180ca45d37c502cf7f9",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683939,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683939,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139909,
+          "eventIndex": 0,
+          "at": 1792269684027,
+          "sourceMs": 1792269683957,
+          "transactionHash": "0x8abf3cb6ece7b873db917e8036af3bb2be3b7aa69f45eff5580d718fae09ccd6",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683952,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683952,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139921,
+          "eventIndex": 0,
+          "at": 1792269684030,
+          "sourceMs": 1792269683961,
+          "transactionHash": "0x4873c27b8459a1378de785e57afa9501a5af6b45decadc7d239658d25c254d19",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683959,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683959,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139933,
+          "eventIndex": 0,
+          "at": 1792269684037,
+          "sourceMs": 1792269683967,
+          "transactionHash": "0xb6ac4e0ab44ab88adae6198245aa500c0f103a70a676ef3f5d95428759f9a967",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683964,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683964,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139945,
+          "eventIndex": 0,
+          "at": 1792269684043,
+          "sourceMs": 1792269683971,
+          "transactionHash": "0x366bf1756414ca966f59b6b99dda6ee58f82966141d069d97e12284e2dddbea6",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683971,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683971,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139957,
+          "eventIndex": 0,
+          "at": 1792269684053,
+          "sourceMs": 1792269683983,
+          "transactionHash": "0xf6b9254653746cbf439fcd4e56ef4ee5ee37dfac587278fd1129f50810270645",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683976,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683976,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139959,
+          "eventIndex": 0,
+          "at": 1792269684053,
+          "sourceMs": 1792269683984,
+          "transactionHash": "0x285515231d2873454f4d6849ca19cd4fded09b1cbfa29ae329d26f5a97d74822",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683976,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683976,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139971,
+          "eventIndex": 0,
+          "at": 1792269684058,
+          "sourceMs": 1792269683989,
+          "transactionHash": "0xb27c99fd9a6a3f9c98c4f9db51554cfab6006704544e81b7655fee2678a54066",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683984,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683984,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139991,
+          "eventIndex": 0,
+          "at": 1792269684066,
+          "sourceMs": 1792269683996,
+          "transactionHash": "0xbecfe9e7bbc8e186ff8ddfc204e6719f7880fdb90416ad677c5b66f902b7fbba",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683996,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683996,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 139997,
+          "eventIndex": 0,
+          "at": 1792269684073,
+          "sourceMs": 1792269684005,
+          "transactionHash": "0x1eb41d82127d59b6369d653935f8364cfe13408578f709257e309a2093719fae",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269683996,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269683996,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 140009,
+          "eventIndex": 0,
+          "at": 1792269684077,
+          "sourceMs": 1792269684008,
+          "transactionHash": "0xd429ebddca29fefdfb7402a31d9e6654fb1295cbf669e31c51eedb2bacaac248",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269684005,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269684005,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 140023,
+          "eventIndex": 0,
+          "at": 1792269684090,
+          "sourceMs": 1792269684020,
+          "transactionHash": "0x2c6b49c8dd7abd57084c980a1101a1d5fc5421b7c316bc64d955ff98fc35fb03",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269684013,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269684013,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 140029,
+          "eventIndex": 0,
+          "at": 1792269684095,
+          "sourceMs": 1792269684025,
+          "transactionHash": "0x4919ad7d81e86006f27e63895b2e4c0a04acbf81f3aa90ee8b7d463e3951325a",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269684013,
+              "fresh": true,
+              "bestBid": "0.53",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269684013,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.47"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 140059,
+          "eventIndex": 0,
+          "at": 1792269684113,
+          "sourceMs": 1792269684043,
+          "transactionHash": "0xcc64a2dcb4a6ee5221fa1588f89cd6fdb0246a6eb145ba07e2fd70f3ac65b67e",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269684043,
+              "fresh": true,
+              "bestBid": "0.52",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269684043,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.48"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 140085,
+          "eventIndex": 0,
+          "at": 1792269684121,
+          "sourceMs": 1792269684052,
+          "transactionHash": "0xbfb0ab5932690ba57d2b2d48d4e6d64c2be4f36bb295f4cb2ad4e131e1e1df36",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.47",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269684050,
+              "fresh": true,
+              "bestBid": "0.52",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269684050,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.48"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 140097,
+          "eventIndex": 0,
+          "at": 1792269684131,
+          "sourceMs": 1792269684062,
+          "transactionHash": "0x2353c131e3fe871e55f03a18b49264ebe8b7217a13821f58d02f6d17f6a6eacd",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.48",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269684056,
+              "fresh": true,
+              "bestBid": "0.52",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269684056,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.48"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 140109,
+          "eventIndex": 0,
+          "at": 1792269684139,
+          "sourceMs": 1792269684065,
+          "transactionHash": "0x8eafd44555692bfed37d81306f7ff4870c5491b6b0acde5578deff4d68c5b475",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.48",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269684063,
+              "fresh": true,
+              "bestBid": "0.52",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269684063,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.48"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 140111,
+          "eventIndex": 0,
+          "at": 1792269684141,
+          "sourceMs": 1792269684071,
+          "transactionHash": "0xa92b64410913736d53ed2774686d0fafcb3f51626b68ccab19c513385e30dd68",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.48",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269684063,
+              "fresh": true,
+              "bestBid": "0.52",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269684063,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.48"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 140123,
+          "eventIndex": 0,
+          "at": 1792269684146,
+          "sourceMs": 1792269684078,
+          "transactionHash": "0xdbb2572664f1d943cf814a32831ee1955b6dff60671dcc5252041e01257aab9d",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.48",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269684071,
+              "fresh": true,
+              "bestBid": "0.52",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269684071,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.48"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 140143,
+          "eventIndex": 0,
+          "at": 1792269684153,
+          "sourceMs": 1792269684083,
+          "transactionHash": "0xf084890cde6fd0b1daa6dc2fa3cd59c8bd02a1059f3de90291cfc44aa6f40b73",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.48",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269684083,
+              "fresh": true,
+              "bestBid": "0.52",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269684083,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.48"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 140157,
+          "eventIndex": 0,
+          "at": 1792269684164,
+          "sourceMs": 1792269684094,
+          "transactionHash": "0x5a0a598ccd36834297d6100ec6f9edcf4fd776c253ea957dbcf91e83b061f63c",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.48",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269684090,
+              "fresh": true,
+              "bestBid": "0.52",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269684090,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.48"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 140169,
+          "eventIndex": 0,
+          "at": 1792269684170,
+          "sourceMs": 1792269684100,
+          "transactionHash": "0x26be9882e3266d1e24ceb38ca1c6d24906a8e52af91fbae866d1c25aa0631760",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.48",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269684096,
+              "fresh": true,
+              "bestBid": "0.52",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269684096,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.48"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        },
+        {
+          "seq": 140181,
+          "eventIndex": 0,
+          "at": 1792269684177,
+          "sourceMs": 1792269684106,
+          "transactionHash": "0x0db54d8d48f85cd3e1a9360c362fff5447a29556056c03f5c061fcc961b039c0",
+          "reportedToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "reportedPrice": "0.48",
+          "reportedSize": "100",
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268": {
+              "sourceMs": 1792269684106,
+              "fresh": true,
+              "bestBid": "0.52",
+              "bestAsk": "0.66"
+            },
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334": {
+              "sourceMs": 1792269684106,
+              "fresh": true,
+              "bestBid": "0.34",
+              "bestAsk": "0.48"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": false,
+          "cancelRequestMs": 1792269683929,
+          "cancelDueMsFromFrozen250ms": 1792269684179,
+          "observedBeforeCancelRequest": false,
+          "observedBeforeCancelDue": true
+        }
+      ],
+      "gapObservations": [
+        {
+          "seq": 136085,
+          "at": 1792269681536,
+          "eventIndex": 0,
+          "reason": "invalid_depth",
+          "scope": [
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268"
+          ]
+        },
+        {
+          "seq": 136085,
+          "at": 1792269681536,
+          "eventIndex": 1,
+          "reason": "invalid_depth",
+          "scope": [
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334"
+          ]
+        },
+        {
+          "seq": 140300,
+          "at": 1792269684239,
+          "eventIndex": 0,
+          "reason": "invalid_depth",
+          "scope": [
+            "88599287360325233240690982088109814021050513475420535621672707507474151524334"
+          ]
+        },
+        {
+          "seq": 140300,
+          "at": 1792269684239,
+          "eventIndex": 1,
+          "reason": "invalid_depth",
+          "scope": [
+            "12589566430666404778428222777978747623958961794906352412512658324998006663268"
+          ]
+        }
+      ],
+      "uniqueMintMakerIdentities": 26,
+      "quoteContextNotPnl": [
+        {
+          "orderId": "sim-research-4",
+          "orderPrice": "0.64",
+          "referenceAt": 1792269683761,
+          "referenceIsNotBotFill": true,
+          "quoteObservations": [
+            {
+              "horizonMs": 0,
+              "at": 1792269683761,
+              "bookFresh": true,
+              "bid": "0.62",
+              "ask": "0.67",
+              "mid": "0.645",
+              "gapSinceReference": false,
+              "coveredByWindow": true
+            },
+            {
+              "horizonMs": 100,
+              "at": 1792269683861,
+              "bookFresh": true,
+              "bid": "0.56",
+              "ask": "0.67",
+              "mid": "0.615",
+              "gapSinceReference": false,
+              "coveredByWindow": true
+            },
+            {
+              "horizonMs": 250,
+              "at": 1792269684011,
+              "bookFresh": true,
+              "bid": "0.53",
+              "ask": "0.66",
+              "mid": "0.595",
+              "gapSinceReference": false,
+              "coveredByWindow": true
+            },
+            {
+              "horizonMs": 500,
+              "at": 1792269684261,
+              "bookFresh": true,
+              "bid": "0.49",
+              "ask": "0.5",
+              "mid": "0.495",
+              "gapSinceReference": true,
+              "coveredByWindow": true
+            },
+            {
+              "horizonMs": 1000,
+              "at": 1792269684761,
+              "bookFresh": true,
+              "bid": "0.49",
+              "ask": "0.5",
+              "mid": "0.495",
+              "gapSinceReference": true,
+              "coveredByWindow": true
+            },
+            {
+              "horizonMs": 2000,
+              "at": 1792269685761,
+              "bookFresh": true,
+              "bid": "0.49",
+              "ask": "0.5",
+              "mid": "0.495",
+              "gapSinceReference": true,
+              "coveredByWindow": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "orderIds": [
+        "sim-research-41",
+        "sim-research-42"
+      ],
+      "complementTradesDuringRecordedActiveOrders": [
+        {
+          "seq": 3049793,
+          "eventIndex": 0,
+          "at": 1792273548589,
+          "sourceMs": 1792273548519,
+          "transactionHash": "0x2be0410173fbec8f5cc0b7ef9ada371182ca91bc6f2704abfb974cd80de64f08",
+          "reportedToken": "114953758067521965270511378081785848850861134452028212551328204259190146744366",
+          "reportedPrice": "0.16",
+          "reportedSize": "6.25",
+          "orderId": "sim-research-41",
+          "orderPrice": "0.81",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "114953758067521965270511378081785848850861134452028212551328204259190146744366": {
+              "sourceMs": 1792273548514,
+              "fresh": true,
+              "bestBid": "0.15",
+              "bestAsk": "0.16"
+            },
+            "29131754755567212351062316123224412461519036887322564961665137729819314532072": {
+              "sourceMs": 1792273548514,
+              "fresh": true,
+              "bestBid": "0.84",
+              "bestAsk": "0.85"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": true,
+          "cancelRequestMs": null,
+          "cancelDueMsFromFrozen250ms": null,
+          "observedBeforeCancelRequest": null,
+          "observedBeforeCancelDue": null
+        },
+        {
+          "seq": 3051113,
+          "eventIndex": 0,
+          "at": 1792273549328,
+          "sourceMs": 1792273549257,
+          "transactionHash": "0x32d6afbd95b7287982c5b3f33401e9ce61c8b9de2bd857d2964009a7d58e16b9",
+          "reportedToken": "29131754755567212351062316123224412461519036887322564961665137729819314532072",
+          "reportedPrice": "0.85",
+          "reportedSize": "30.70588",
+          "orderId": "sim-research-42",
+          "orderPrice": "0.15",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "114953758067521965270511378081785848850861134452028212551328204259190146744366": {
+              "sourceMs": 1792273549246,
+              "fresh": true,
+              "bestBid": "0.15",
+              "bestAsk": "0.16"
+            },
+            "29131754755567212351062316123224412461519036887322564961665137729819314532072": {
+              "sourceMs": 1792273549246,
+              "fresh": true,
+              "bestBid": "0.84",
+              "bestAsk": "0.85"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": true,
+          "cancelRequestMs": null,
+          "cancelDueMsFromFrozen250ms": null,
+          "observedBeforeCancelRequest": null,
+          "observedBeforeCancelDue": null
+        },
+        {
+          "seq": 3053383,
+          "eventIndex": 0,
+          "at": 1792273551474,
+          "sourceMs": 1792273551404,
+          "transactionHash": "0x40e0c2048c66cf263e6e729a48ae0e569b046711f5976512f13e4e08ed4878bf",
+          "reportedToken": "29131754755567212351062316123224412461519036887322564961665137729819314532072",
+          "reportedPrice": "0.85",
+          "reportedSize": "8",
+          "orderId": "sim-research-42",
+          "orderPrice": "0.15",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "114953758067521965270511378081785848850861134452028212551328204259190146744366": {
+              "sourceMs": 1792273551394,
+              "fresh": true,
+              "bestBid": "0.13",
+              "bestAsk": "0.16"
+            },
+            "29131754755567212351062316123224412461519036887322564961665137729819314532072": {
+              "sourceMs": 1792273551394,
+              "fresh": true,
+              "bestBid": "0.84",
+              "bestAsk": "0.87"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": true,
+          "cancelRequestMs": null,
+          "cancelDueMsFromFrozen250ms": null,
+          "observedBeforeCancelRequest": null,
+          "observedBeforeCancelDue": null
+        },
+        {
+          "seq": 3053397,
+          "eventIndex": 0,
+          "at": 1792273551494,
+          "sourceMs": 1792273551425,
+          "transactionHash": "0x741de0ab6e7a683497bb298641695554062df172b065cf91b41730cff76be451",
+          "reportedToken": "29131754755567212351062316123224412461519036887322564961665137729819314532072",
+          "reportedPrice": "0.86",
+          "reportedSize": "30.281492",
+          "orderId": "sim-research-42",
+          "orderPrice": "0.15",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "114953758067521965270511378081785848850861134452028212551328204259190146744366": {
+              "sourceMs": 1792273551424,
+              "fresh": true,
+              "bestBid": "0.13",
+              "bestAsk": "0.16"
+            },
+            "29131754755567212351062316123224412461519036887322564961665137729819314532072": {
+              "sourceMs": 1792273551424,
+              "fresh": true,
+              "bestBid": "0.84",
+              "bestAsk": "0.87"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": true,
+          "cancelRequestMs": null,
+          "cancelDueMsFromFrozen250ms": null,
+          "observedBeforeCancelRequest": null,
+          "observedBeforeCancelDue": null
+        },
+        {
+          "seq": 3053407,
+          "eventIndex": 0,
+          "at": 1792273551517,
+          "sourceMs": 1792273551447,
+          "transactionHash": "0x32e4658dac31ab5e822626a5da102c42cbe7a4fc4af34f083d9266ef22ac612b",
+          "reportedToken": "29131754755567212351062316123224412461519036887322564961665137729819314532072",
+          "reportedPrice": "0.87",
+          "reportedSize": "7.080453",
+          "orderId": "sim-research-42",
+          "orderPrice": "0.15",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "114953758067521965270511378081785848850861134452028212551328204259190146744366": {
+              "sourceMs": 1792273551434,
+              "fresh": true,
+              "bestBid": "0.13",
+              "bestAsk": "0.16"
+            },
+            "29131754755567212351062316123224412461519036887322564961665137729819314532072": {
+              "sourceMs": 1792273551434,
+              "fresh": true,
+              "bestBid": "0.84",
+              "bestAsk": "0.87"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": true,
+          "cancelRequestMs": null,
+          "cancelDueMsFromFrozen250ms": null,
+          "observedBeforeCancelRequest": null,
+          "observedBeforeCancelDue": null
+        },
+        {
+          "seq": 3053433,
+          "eventIndex": 0,
+          "at": 1792273551570,
+          "sourceMs": 1792273551500,
+          "transactionHash": "0xf82084dcbd93695a3c605dfcf20cc8b7ca3db325843810a886032b8be714f5f1",
+          "reportedToken": "29131754755567212351062316123224412461519036887322564961665137729819314532072",
+          "reportedPrice": "0.87",
+          "reportedSize": "54.14",
+          "orderId": "sim-research-42",
+          "orderPrice": "0.15",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "114953758067521965270511378081785848850861134452028212551328204259190146744366": {
+              "sourceMs": 1792273551462,
+              "fresh": true,
+              "bestBid": "0.12",
+              "bestAsk": "0.16"
+            },
+            "29131754755567212351062316123224412461519036887322564961665137729819314532072": {
+              "sourceMs": 1792273551462,
+              "fresh": true,
+              "bestBid": "0.84",
+              "bestAsk": "0.88"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": true,
+          "cancelRequestMs": null,
+          "cancelDueMsFromFrozen250ms": null,
+          "observedBeforeCancelRequest": null,
+          "observedBeforeCancelDue": null
+        },
+        {
+          "seq": 3053706,
+          "eventIndex": 0,
+          "at": 1792273551890,
+          "sourceMs": 1792273551820,
+          "transactionHash": "0x9b263a9a4577f7b23171cb785e3124b88e5c8a2c615c5d42a551afbe9759e72c",
+          "reportedToken": "29131754755567212351062316123224412461519036887322564961665137729819314532072",
+          "reportedPrice": "0.85",
+          "reportedSize": "5.05882",
+          "orderId": "sim-research-42",
+          "orderPrice": "0.15",
+          "activeAtArrival": true,
+          "sourceStrictlyAfterObservedActivation": true,
+          "tradeSourceFresh": true,
+          "bothBooksFresh": true,
+          "tradeNotBeforeEitherBook": true,
+          "booksBeforeTrade": {
+            "114953758067521965270511378081785848850861134452028212551328204259190146744366": {
+              "sourceMs": 1792273551814,
+              "fresh": true,
+              "bestBid": "0.15",
+              "bestAsk": "0.16"
+            },
+            "29131754755567212351062316123224412461519036887322564961665137729819314532072": {
+              "sourceMs": 1792273551814,
+              "fresh": true,
+              "bestBid": "0.84",
+              "bestAsk": "0.85"
+            }
+          },
+          "receiptAvailable": false,
+          "settlementLabel": null,
+          "mintMakerPortions": [],
+          "queueAtEventNotProven": true,
+          "cancelRequestTimeNotReconstructed": true,
+          "cancelRequestMs": null,
+          "cancelDueMsFromFrozen250ms": null,
+          "observedBeforeCancelRequest": null,
+          "observedBeforeCancelDue": null
+        }
+      ],
+      "gapObservations": [
+        {
+          "seq": 3047096,
+          "at": 1792273546959,
+          "eventIndex": 0,
+          "reason": "invalid_depth",
+          "scope": [
+            "114953758067521965270511378081785848850861134452028212551328204259190146744366"
+          ]
+        },
+        {
+          "seq": 3047096,
+          "at": 1792273546959,
+          "eventIndex": 1,
+          "reason": "invalid_depth",
+          "scope": [
+            "29131754755567212351062316123224412461519036887322564961665137729819314532072"
+          ]
+        },
+        {
+          "seq": 3054297,
+          "at": 1792273552901,
+          "eventIndex": 0,
+          "reason": "invalid_depth",
+          "scope": [
+            "29131754755567212351062316123224412461519036887322564961665137729819314532072"
+          ]
+        },
+        {
+          "seq": 3054297,
+          "at": 1792273552901,
+          "eventIndex": 1,
+          "reason": "invalid_depth",
+          "scope": [
+            "114953758067521965270511378081785848850861134452028212551328204259190146744366"
+          ]
+        }
+      ],
+      "uniqueMintMakerIdentities": 0,
+      "quoteContextNotPnl": []
+    }
+  ],
+  "sourceHashVerifiedByExtractor": true,
+  "fillsInferred": false,
+  "pnlInferred": false,
+  "decision": "NO_GO",
+  "liveAllowed": false,
+  "note": "Lifecycle comes from baseline report. A receipt label or price priority never establishes counterfactual queue allocation or a live executable fill."
+}

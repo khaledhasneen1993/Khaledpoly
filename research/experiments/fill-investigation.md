@@ -425,3 +425,63 @@ Narrow RAW selection to original target-token last-trade messages (normalized
 book frames remain unchanged), increase the explicit memory bound to 64 MB
 and include row/byte counts on failure. No truncation, chronology or source-hash
 checks are removed. Retry this corrected extraction, not a new capture.
+
+## Causal window result and adverse-selection evidence — 2026-10-18
+
+Corrected extraction run 39101203025 succeeded; artifact 12126507232. Full source
+logical hash matched. Windows retained 3333/3851 original rows, 18,253,026 and
+25,873,292 original encoded bytes. Pretty-printed extraction is 162,747,208
+bytes, so do not commit redundant full-depth snapshots. Persist a deterministic
+gzip/base64 top-of-book/own-price diagnostic projection (~693 KB), with source
+extract hash, per-row canonical fingerprints and projection hash. It is explicitly
+NOT full depth or queue-calibration evidence. The causal analyzer produces
+EXACTLY the same result from the full extraction and projected evidence; source
+frame event indices and arrival/source order remain intact. Full original rows
+remain in the linked artifact. Completed extraction workflow becomes manual-only.
+
+Reuse the ALREADY COMPLETED quote comparison's baseline audit, run 39079812595,
+artifact 12119320792: no new replay required. All four investigated order
+lifecycles exactly equal the original live report. Persist the relevant ORDER,
+RESTING_RISK_CHECK, CANCEL_REQUEST and terminal records plus full source file
+hashes in `order-window-20261018/baseline-order-audit.json`.
+
+The first window has 50 complementary BUY observations during sim-research-4's
+recorded activity, five covered by the previously frozen actual receipts.
+At those five events both books were fresh, trade source was not earlier than
+either current book, and source was strictly after observed activation. All
+five arrived BEFORE the real cancellation REQUEST at 1792269683929, not merely
+before terminal at 1792269684180. First corroborated arrival: 1792269683761.
+The initial model queue was zero, quote 0.64; the first corroborated venue MINT
+maker portions traded at 0.63. Later receipts show still lower maker prices.
+This isolates missing complementary route AND cross-price priority coverage,
+not a stale-book or already-effective-cancel explanation for those observations.
+It still does not establish private queue allocation or an actual bot fill.
+
+Crucially, these missing executions are NOT evidence of profit. Target best
+bid/mid after the first corroborated observation were 0.62/0.645 initially,
+0.56/0.615 at +100ms, and 0.53/0.595 at +250ms versus the bot's 0.64 buy quote.
+This is adverse quote movement, NOT realized bot PnL or a fabricated fill.
+At +500ms mid is 0.495 but a GAP occurred in between, explicitly flagged; do not
+report a clean markout across it. The peer 0.34 buy has no demonstrated hedge
+fill in this evidence. The existing risk cancellation was justified: reserved
+net edge 0.018 fell below dynamic required edge 0.0302947852655060345. Do not
+lower that requirement simply to keep adverse quotes alive. Second window has
+seven complementary observations, no corroborated receipts in the frozen set,
+and the invalid-depth GAP at its actual terminal time; no extra fills inferred.
+
+Next implementation is frozen as CS-MINT-LAB0 in `next-experiment-spec.json`:
+default-off, research-only settlement-labelled matching calibration, no strategy
+changes. Preserve latency, queues, fees and risk; unique maker identities and
+per-price volume conservation; replace labelled aggregate liquidity rather than
+double-counting legacy+MINT; no future receipt features or resurrected orders.
+Partial label coverage can NEVER qualify independent PAPER profitability.
+Implement synthetic causality/conservation tests before a same-development
+comparison. No new two-hour capture until a justified candidate exists.
+
+Reproduce causal diagnostics offline with `python -m research.phase6.analyze_order_window`
+and `--windows research/experiments/order-window-20261018/evidence.json.gz.b64`,
+`--receipts research/experiments/candidate-receipt-audit-20261018/offline-volume-labels.json`,
+`--audit research/experiments/order-window-20261018/baseline-order-audit.json`,
+and a new `--output` path. Eighty-eight phase6 tests pass, including actual saved
+window/receipt/audit reproduction with no RPC. Execution/strategy/acceptance
+unchanged. NO_GO; no new PnL. Prior QB0 remains rejected.

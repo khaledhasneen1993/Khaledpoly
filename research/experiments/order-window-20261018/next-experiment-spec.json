@@ -1,0 +1,35 @@
+{
+  "id": "CS-MINT-LAB0",
+  "status": "FROZEN_RESEARCH_MODEL_SPEC_NOT_IMPLEMENTED_OR_QUALIFIED",
+  "enabledByDefault": false,
+  "scope": "DEVELOPMENT_EXECUTION_MODEL_CALIBRATION_ONLY",
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "strategyChangesAllowed": false,
+  "acceptanceChangesAllowed": false,
+  "liveAllowed": false,
+  "independentPaperQualificationAllowedFromPartialLabels": false,
+  "publicTradeIsNotProofOfMint": true,
+  "matchingAssumptions": {
+    "activationMs": 250,
+    "cancelMs": 250,
+    "maxBookAgeMs": 2000,
+    "queueMultiplier": "2",
+    "touchFillsAllowed": false,
+    "queueCancellationCreditAllowed": false,
+    "inferredMakerRebates": "0",
+    "changeFeesOrRiskLimitsAllowed": false
+  },
+  "requiredBehavior": [
+    "Receipt data describes the historical replay environment only; never expose future receipt fields to strategy decisions or call it a causal live model.",
+    "Join labels to exact normalized trade identity, sourceMs, original sequence/frame index and original arrival; require unique conserved token/side/size settlement groups.",
+    "Preserve per-maker route, actual price and quantity. Never treat public boundary price as weighted average or complement the full aggregate volume.",
+    "Use unique exchange/transaction/OrdersMatched-index/maker-log-index identity globally; repeated public observations cannot reuse venue volume.",
+    "For labelled public trades, replace legacy aggregate liquidity with conserved DIRECT/MINT maker portions. Do not add both legacy full aggregate fills and labelled component fills.",
+    "No MINT credit on missing, conflicting or ambiguous labels; partial label coverage remains explicitly NO_GO.",
+    "Require active order, trade source after observed activation, both books fresh and source not before either current book. Cancel-due wins ties; GAP/terminal invalidation cannot resurrect orders.",
+    "Process price priority and share residual volume across all virtual orders once. Keep the original queue multiplier and own-order queue precedence, with no cancellation credit.",
+    "Keep account reservation, fees, exit policy, markout validity, gap handling and risk stops unchanged. Compare the same baseline strategy and data, not a retuned profitable candidate.",
+    "Report missing queue/hidden-liquidity knowledge as model uncertainty; do not promote venue MINT observations into actual bot fills or independent profitability evidence."
+  ],
+  "nextImplementation": "Add a default-off research-only settlement-labelled matching path with synthetic conservation/causality tests, then same-development baseline comparison. Validate adverse one-leg risk before proposing any strategy change."
+}

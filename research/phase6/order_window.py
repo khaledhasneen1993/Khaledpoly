@@ -1,8 +1,11 @@
 """Selected original diagnostic rows; not a complete replay tape or a fill model."""
 import argparse
+import base64
+import gzip
 import hashlib
 import json
 from pathlib import Path
+from decimal import Decimal
 from research.phase3.polybot_sdk.tapes import open_tape
 
 
@@ -61,6 +64,49 @@ def extract(stream, specifications, expected_sha, limit=6000):
         'rowsRetainOriginalSeqAndFrames':True, 'sourceBeforeWindowNotFullyReconstructed':True,
         'rawMarketSelection':'TARGET_LAST_TRADE_MESSAGES_ONLY; normalized books/frames retained unchanged',
         'fillsInferred':False, 'pnlInferred':False, 'decision':'NO_GO', 'liveAllowed':False}
+
+
+def project(evidence):
+    """Compact diagnostic projection, explicitly NOT depth or queue evidence."""
+    result = dict(evidence, windows=[], depthProjectionNotFullDepth=True,
+                  rowsRetainOriginalSeqAndFrames=False,
+                  frameProjectionPreservesBoundariesAndOriginalEventIndices=True,
+                  cannotCalibrateQueueFromProjection=True)
+    for window in evidence['windows']:
+        spec=window['spec']; tokens=set(spec['tokens']); projected=dict(window,rows=[])
+        limits={token:{Decimal(str(o['price'])) for o in spec['orders'] if o['token']==token} for token in tokens}
+        def book(data):
+            data=dict(data,depthProjectionNotFullDepth=True)
+            for side,choice in [('bids',max),('asks',min)]:
+                levels=data[side]
+                top=choice(Decimal(str(x['price'])) for x in levels) if levels else None
+                data[side]=[x for x in levels if Decimal(str(x['price']))==top or Decimal(str(x['price'])) in limits[data['token']]]
+            return data
+        for row in window['rows']:
+            projected_row=dict(row,sourceCanonicalRowSha256=hashlib.sha256(json.dumps(row,sort_keys=True,separators=(',',':')).encode()).hexdigest())
+            if row['kind']=='RESEARCH_FRAME':
+                events=[]
+                for index,event in enumerate(row['data']['events']):
+                    if not related('RESEARCH_'+event['kind'],event['data'],tokens,spec['condition']):continue
+                    events.append(dict(event,originalEventIndex=index,data=book(event['data']) if event['kind']=='BOOK' else event['data']))
+                projected_row['data']=dict(row['data'],events=events)
+            elif row['kind']=='RESEARCH_BOOK': projected_row['data']=book(row['data'])
+            projected['rows'].append(projected_row)
+        result['windows'].append(projected)
+    return result
+
+
+def read_evidence(path):
+    raw=Path(path).read_bytes()
+    if str(path).endswith('.gz.b64'):
+        import io
+        with gzip.GzipFile(fileobj=io.BytesIO(base64.b64decode(raw,validate=True))) as stream:
+            raw=stream.read(64000001)
+        if len(raw)>64000000:raise ValueError('Oversized decoded window projection')
+        manifest=json.loads((Path(path).parent/'evidence-manifest.json').read_text())
+        if hashlib.sha256(raw).hexdigest()!=manifest['projectionSha256']:
+            raise ValueError('Committed projection hash mismatch')
+    return json.loads(raw)
 
 
 def main():
