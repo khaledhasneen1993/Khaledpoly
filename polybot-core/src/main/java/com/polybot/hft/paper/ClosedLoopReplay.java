@@ -75,6 +75,21 @@ public final class ClosedLoopReplay {
       SettlementReplayLabels settlementLabels,
       boolean residualEntryRiskGuard)
       throws Exception {
+    return runInternal(tape,out,config,limits,mapper,raw,windowStart,windowEnd,freezeSha,external,
+        settlementLabels,residualEntryRiskGuard,null);
+  }
+
+  static Map<String,Object> runDecisionWitnessLab(Path tape,Path out,ResearchConfig config,
+      AccountLedger.Limits limits,ObjectMapper mapper,SettlementReplayLabels labels,
+      EntryDecisionWitness witness) throws Exception {
+    labels.verifyTape(tape);
+    return runInternal(tape,out,config,limits,mapper,false,Long.MIN_VALUE,Long.MAX_VALUE,"",false,labels,true,witness);
+  }
+
+  private static Map<String, Object> runInternal(Path tape,Path out,ResearchConfig config,
+      AccountLedger.Limits limits,ObjectMapper mapper,boolean raw,long windowStart,long windowEnd,
+      String freezeSha,boolean external,SettlementReplayLabels settlementLabels,
+      boolean residualEntryRiskGuard,EntryDecisionWitness witness) throws Exception {
     if (windowStart >= windowEnd) throw new IllegalArgumentException("Empty heldout window");
     if (Files.exists(out)) throw new IllegalArgumentException("Replay output must not exist");
     Files.createDirectories(out);
@@ -147,6 +162,7 @@ public final class ClosedLoopReplay {
                 settlementLabels,
                 residualEntryRiskGuard);
         var reader = TapeIO.reader(tape)) {
+      if (witness!=null) session.enableDecisionWitness(witness);
       String line;
       while ((line = reader.readLine()) != null) {
         JsonNode row = mapper.readTree(line);

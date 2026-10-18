@@ -83,6 +83,13 @@ public final class ResearchSession implements AutoCloseable {
   private boolean insideFrame;
   private BigDecimal exitLossUsed = ZERO;
   private int riskBreaches;
+  private EntryDecisionWitness entryDecisionWitness;
+
+  synchronized void enableDecisionWitness(EntryDecisionWitness witness) {
+    if (witness==null || entryDecisionWitness!=null || settlementLabels==null || externalMode || now!=-1)
+      throw new IllegalArgumentException("Decision witnesses require a fresh explicit offline label replay");
+    entryDecisionWitness=witness;
+  }
 
   public ResearchSession(
       AccountLedger ledger,
@@ -646,6 +653,10 @@ public final class ResearchSession implements AutoCloseable {
             .sorted(Comparator.comparing(this::cost).thenComparing(ResearchMarket::condition))
             .toList();
     for (var m : ranked) {
+      Map<String,Object> witness=entryDecisionWitness!=null && entryDecisionWitness.selects(m.condition(),now)
+          ? entryWitness(m) : null;
+      Map<String,Long> beforeReasons=witness==null ? null : metrics.decisionReasonsSnapshot();
+      try {
       if (resolutions.containsKey(m.condition())
           || now < m.startMs()
           || now >= m.endMs()
@@ -747,7 +758,58 @@ public final class ResearchSession implements AutoCloseable {
       quoteAt.put(m.condition(), now);
       metrics.decision("PAIR_SUBMITTED", edge);
       save();
+      } finally {
+        if (witness!=null) {
+          var delta=new TreeMap<String,Long>();
+          metrics.decisionReasonsSnapshot().forEach((k,v)-> {
+            long n=v-beforeReasons.getOrDefault(k,0L); if(n!=0) delta.put(k,n);
+          });
+          witness.put("actualDecisionReasonDelta",delta);
+          entryDecisionWitness.append(witness);
+        }
+      }
     }
+  }
+
+  private Map<String,Object> witnessBook(Book book) {
+    if (book==null) return null;
+    var r=new LinkedHashMap<String,Object>();
+    r.put("sourceMs",book.source); r.put("receivedMs",book.received);
+    r.put("bids",book.bids.descendingMap().entrySet().stream().limit(3)
+        .map(e->Map.of("price",e.getKey(),"size",e.getValue())).toList());
+    r.put("asks",book.asks.entrySet().stream().limit(3)
+        .map(e->Map.of("price",e.getKey(),"size",e.getValue())).toList());
+    r.put("projectedDepthNotQueueReconstruction",true);
+    return r;
+  }
+
+  private Map<String,Object> entryWitness(ResearchMarket m) {
+    var r=new LinkedHashMap<String,Object>();
+    Book a=books.get(m.first()),b=books.get(m.second());
+    r.put("at",now); r.put("condition",m.condition()); r.put("market",m);
+    r.put("originalSequence",replayRowSequence);r.put("originalEventIndex",replayEventIndex);
+    r.put("nextDecisionMs",nextDecision);r.put("firstBook",witnessBook(a));r.put("secondBook",witnessBook(b));
+    r.put("firstObservedVolatility",vols.get(m.first()));r.put("secondObservedVolatility",vols.get(m.second()));
+    r.put("entryStopped",entryStopped);r.put("ledgerHalted",ledger.snapshot().halted());
+    r.put("imbalance",holding(m.first()).shares().subtract(holding(m.second()).shares()));
+    r.put("availableCash",ledger.availableCash());r.put("exitLossAvailable",exitLossAvailable());
+    r.put("openOrderIds",List.copyOf(open(m)));r.put("gross",gross());
+    r.put("resolved",resolutions.containsKey(m.condition()));
+    r.put("lastFirstTakerSource",lastTakerSource.get(m.first()));
+    r.put("lastSecondTakerSource",lastTakerSource.get(m.second()));
+    if (a!=null && b!=null && !a.bids.isEmpty() && !a.asks.isEmpty() && !b.bids.isEmpty() && !b.asks.isEmpty()) {
+      BigDecimal ap=bid(a,m.tick()),bp=bid(b,m.tick());
+      BigDecimal depth=a.bids.lastEntry().getValue().min(b.bids.lastEntry().getValue());
+      BigDecimal q=cfg.orderShares().min(depth.multiply(new BigDecimal("0.1"))).setScale(2,RoundingMode.DOWN);
+      BigDecimal vol=vols.getOrDefault(m.first(),ZERO).max(vols.getOrDefault(m.second(),ZERO));
+      r.put("firstBid",ap);r.put("secondBid",bp);r.put("depth",depth);r.put("quantity",q);
+      r.put("effectivePolicyVolatility",vol);
+      r.put("secondsToExpiry",(m.endMs()-now)/1000);
+      r.put("requiredEdge",PairPolicy.requiredEdge(cfg.minimumEdge(),vol,(m.endMs()-now)/1000,depth,cfg.activationMs(),ZERO));
+      r.put("netEdgeTotal",ONE.subtract(ap).subtract(bp).multiply(q).subtract(cfg.mergeCost()));
+      r.put("firstFresh",fresh(a));r.put("secondFresh",fresh(b));
+    }
+    return r;
   }
 
   private JsonNode scopedGap(JsonNode data) {
@@ -1516,6 +1578,7 @@ public final class ResearchSession implements AutoCloseable {
 
   public synchronized Map<String, Object> report() {
     var r = new LinkedHashMap<String, Object>(metrics.report());
+    if (entryDecisionWitness!=null) r.put("entryDecisionWitnesses",List.copyOf(entryDecisionWitness.rows));
     r.put("makerExecutionDiagnostics", matching.diagnostics());
     if (settlementLabels!=null) {
       r.put("settlementExperiment",settlementLabels.report());

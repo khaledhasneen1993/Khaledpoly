@@ -20,7 +20,8 @@ jobs:
   verify:
     # The dedicated residual-risk workflow runs the SAME full regressions plus
     # candidate controls for this explicitly tagged change; avoid a duplicate build.
-    if: github.event_name != 'push' || !contains(github.event.head_commit.message, '[residual-risk-control]')
+    # Entry-witness workflow also executes this full suite before its diagnostic.
+    if: github.event_name != 'push' || (!contains(github.event.head_commit.message, '[residual-risk-control]') && !contains(github.event.head_commit.message, '[entry-witness-control]'))
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

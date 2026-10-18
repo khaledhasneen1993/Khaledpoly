@@ -1561,3 +1561,43 @@ original scope; no redundant CI/Maven run requested. Acceptance SHA remains
 7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503.
 Known economics unchanged: corrected control net-1.80, guard0/zero fills/no pair
 ratio: NO_GO. Follow-up continues, PAPER only, guard default-off, no real funds.
+
+## Causal entry witnesses prepared — 2026-10-18 21:34 UTC review
+
+Checked latest PR9 head73da036 and prior jobs: completed, no overlap. The saved
+census and order lives cannot identify the actual pre-decision volatility/risk
+threshold. Add a strictly observational offline trace, not a new strategy:
+six frozen condition/time windows, total8,714ms, covering ALL17 fresh risk-
+admissible route/policy observations +/-500ms (nearby windows merged up to3s).
+Retain the FULL replay history so volatility is never initialized from a slice.
+
+Package-private fresh settlement-replay-only observer is absent by default, has
+no service config or public activation flag, and cannot be enabled after input.
+It records pre-decision market metadata/minimum, book source/receive clocks and
+top depth (not queue reconstruction), actual observed and effective policy
+volatility (missing observed values stay null), proposed bid/quantity, actual
+PairPolicy threshold, edge/cash/risk/open orders, next-decision clock and original
+input sequence. A finally block records the REAL per-market metrics reason
+delta, including continue/return paths; no replacement decision logic or timing.
+Bounds1..20 windows/max3s each/max30s total/max500 records fail closed, not truncate.
+No pricing, activation, queue, fee, minimum, risk or acceptance changes.
+
+New Java tests require observer-on/off reports to be identical after removing
+ONLY the added witness list, for both risk-rejected and admissible entry fixtures;
+they also check null missing volatility, actual branch reasons and activation/
+window/cap restrictions.161 phase6 Python tests pass locally, including new tests
+requiring ALL original account fields (fees, orders, fills, decisions, queue and
+settlement labels included) to reproduce and rejecting missing/outside witnesses.
+Full Java verification is pending CI, not claimed successful yet.
+
+Freeze `entry-decision-witness-freeze.json` before its FIRST diagnostic replay.
+Workflow runs full Maven/all Python regressions FIRST, then ONE existing full
+development-tape guarded replay with14 unchanged environment labels. Reuse the
+archived zero-fill candidate as golden; compare EVERY original report field
+except code revision. Abort if observation changes any field. No new control/
+candidate parameter search, current-market capture or public receipt requests.
+Dedicated workflow supplies full regressions; narrowly tagged entry-witness
+commit skips only duplicate markout CI, leaving ordinary/manual checks intact.
+Read `causal-entry-decision-witnesses` before proposing any strategy adjustment.
+Known corrected control net-1.80 and guarded0/0fills remain NO_GO; independent
+acceptance unchanged, no holdout retuning, no profitability/promotion claim.
