@@ -896,3 +896,33 @@ its routing coverage particularly needs verification before trusting broader
 account comparisons. No new public requests executed in this turn. Next fetch
 only this selection and validate per-transaction route/volume conservation;
 do not rescan the two-hour tape or expand selection after seeing receipts.
+
+## Frozen entry/exit receipt collection prepared — 2026-10-18
+
+Starting head bbd0bbba95ed9b8c0a1a37723510948c815d682f; PR #9 remains draft on
+#8/#7, all existing jobs completed. Selection SHA256
+e6a2a65813593fe454b6c4ceb85a52012845c668cfec6a8703f0f9e3128fe9c4
+is unchanged from the preceding checkpoint. New `route_coverage_audit` reads
+only these twenty unique transactions, reuses the two committed receipts and
+same-block results, and caps fresh receipt requests at eighteen. Existing
+read-only RPC allowlist remains chain ID / receipt / block only, with pacing.
+
+Before public reads, freeze source/test/selection/cache/acceptance hashes in
+`route-coverage-freeze.json`. Validate each selected observation lies in its
+predeclared order's activation/terminal interval. Decode actual exchange groups,
+validate integer share AND collateral conservation for BUY/SELL, DIRECT/MINT/
+MERGE, and preserve unrelated-market groups without allocating them to this
+binary pair. Identity ambiguity remains explicit; no weighted public-price
+assumption, queue/fill claim or account mutation. Raw successes and errors are
+checkpointed; same-selection output can be resumed without refetching successful
+receipts. Three new conservation/cache/resume/negative-path tests passed;
+126 phase6 tests passed locally. Only these Python files change, no JVM rebuild
+or new two-hour recording. One small workflow fetches the frozen receipts.
+
+Next wait for `PAPER frozen entry and exit route receipts`, inspect
+`frozen-entry-exit-route-receipts/report.json`, archive raw evidence and compare
+actual route/volume decomposition across ENTRY_BASELINE_4 and MAKER_EXIT_LABELLED_14.
+If public reads fail transiently, retain successes and retry ONLY missing items
+with the same selection; do not launch an overlapping full recollection.
+Default execution/config/risk/queue/fees/acceptance remain unchanged. Original
+partial-model account result -0.85 is not revised by receipt acquisition alone.
