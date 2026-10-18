@@ -756,3 +756,13 @@ If clean horizons are absent, report coverage failure, not a zero-loss or
 profitable strategy. Then broaden settlement execution labels/causal coverage
 before proposing one strategy candidate on development. No holdout tuning,
 acceptance/risk/fee/queue change or LIVE path.
+
+Audit source bed655fb4dae8d2ed2fb05afa8f4620f314f312f is running once in
+39120483374 (job 117654909499). Its 114 phase6 checks passed, recording download
+completed, full scan in progress. Do not start another scan/account replay or
+capture while it runs. Bounded buy-only cross-check against the committed
+projection reproduces all three buy horizons censored by the paired GAP at row
+140300/frame 69124; this does not settle sell coverage or replace full-tape
+verification. Next read the `frozen-fill-markout-coverage` artifact from THIS
+run and archive exact results/provenance. No new PnL result yet; -0.85 remains
+the original development account result. All default trading code unchanged.
