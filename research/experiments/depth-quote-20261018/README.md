@@ -68,3 +68,15 @@ Java build was needed for these pure offline helpers. Source/evidence hashes in
 `depth-quote-candidate-freeze.json` and `depth-quote-traffic-freeze.json` bind scope.
 Current economics unchanged: corrected control-$1.80, guarded0/0fills/undefined
 pair-completion ratio, NO_GO. No economic improvement claimed for DQ3-0.
+
+Receipt result: run39177547282, artifact12155300727, all8 uniquely conserved;
+zero actual target BUY volume at or below own0.47 bid in this complete relaxed
+leg window. Actual MINT components start0.48; two opposite-token DIRECT-only
+transactions cannot fill target leg. Exact ZIP/RAW/blocks/topics/selection retained
+in `bottleneck-result/artifact.zip.b64`; SHA256
+7b937464f275b0b562e12d3f203517a9c138448930761bb72178eb9fffe961dd.
+`test_dq3_bottleneck_result.py` re-decodes everything offline. No fills/PnL or
+global-policy rejection inferred. Other47 observations/other states unaudited.
+Next: reuse archived exact overlapping evidence before any new receipts;
+otherwise preregister another bounded complete-leg scope before reads. No price
+retuning or independent capture from this necessary-condition result.

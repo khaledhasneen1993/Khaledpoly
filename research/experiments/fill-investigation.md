@@ -1738,3 +1738,31 @@ actual component volume needs causal activation, queue/cancels and frozen
 same-development baseline/candidate account comparison before promotion.
 Control net remains-$1.80, guarded0/0fills, NO_GO. Defaults/fees/queue/risk and
 fixed independent acceptance remain unchanged. PAPER only, no live permissions.
+
+## DQ3 first additional state's bottleneck result — 2026-10-18 23:41 UTC
+
+Frozen source ce78cbaf96ceaf34055d1d939983e9ae0ae5b34e, run39177547282:
+https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39177547282
+174 phase6 CI tests passed before exactly8 public receipts. All8 uniquely
+conserved against original public observations. Artifact12155300727 ZIP SHA256
+7b937464f275b0b562e12d3f203517a9c138448930761bb72178eb9fffe961dd is
+retained in `depth-quote-20261018/bottleneck-result/artifact.zip.b64` with every
+original receipt/block, topics, selection and reports. Separate offline test
+re-decodes all8 receipts, reproduces exact routes and summary without public RPC.
+
+Result: ZERO actual target BUY component shares at or below own0.47 bid across
+the complete selected leg window. Actual target MINT components start at0.48;
+two transactions are entirely DIRECT in the opposite token. Thus no recorded
+actual price-compatible component supports this selected leg, even in its
+relaxed due-time window. Do NOT turn actual venue components into hypothetical
+taker redirection claims, fake queue fills, or global DQ3 impossibility. Other47
+leg observations and all other states remain unaudited. Fills/PnL not recomputed.
+
+Next justified gate: use already-archived receipts for any exact overlapping
+state leg before requesting more; preserve distinct window/price and never
+count duplicates. For remaining states, preregister bounded complete-leg audits
+before reads, or reject cost/benefit of further investigation. No new PAPER
+capture until a frozen candidate passes same-development causal full-account
+comparison. Do not tune prices against this result. Known net after costs stays
+control-$1.80 vs guarded0 with0fills (not profitable); independent acceptance
+unmet. No defaults/queue/fees/minimum/risk changes and no live actions.
