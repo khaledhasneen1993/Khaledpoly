@@ -1210,3 +1210,12 @@ NEXT wait for that workflow's comparison before any overlapping run or candidate
 After export and fail-closed control tests, 139 local phase6 tests pass. No new
 financial result yet, no independent data or profitability qualification; PAPER
 only. Preserve both reports/full account audits and follow new inventory evidence.
+
+Running control: https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39141370797
+source132b9eb55eed83e6bb32d79bb0e3892ccce71f63, job117716324427. Offline
+139 phase6 checks and reused executor source-commit/artifact-digest checks have
+passed; account comparison is pending/in progress. Do not launch an overlapping
+control or new capture. Next read `seven-versus-fourteen-account-control`, retain
+baseline/candidate reports and audits, and measure net fees/holdings/drawdown and
+the actual exit after the first GAP. Until completed, -0.85 is the OLD partial
+model's result, NOT a new fourteen-label account result. No acceptance change.
