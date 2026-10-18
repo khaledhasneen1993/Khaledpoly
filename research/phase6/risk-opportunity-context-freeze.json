@@ -1,0 +1,37 @@
+{
+  "experiment": "ONLY-ADMISSIBLE-RISK-PAIR-CONTEXT-0",
+  "selectionStatus": "POST_DEVELOPMENT_RESULT_DIAGNOSTIC_FROZEN_BEFORE_EXTRACTION_NOT_HOLDOUT",
+  "evidencePurpose": "Determine whether the only submitted .46/.38 pair had coherent earlier depth and what caused its cancellation. Do not infer fills from public BUY prints.",
+  "spec": {
+    "tokens": [
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268"
+    ],
+    "startMs": 1792269709477,
+    "endMs": 1792269713983,
+    "anchors": [],
+    "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b"
+  },
+  "originalSubmitMs": 1792269711477,
+  "originalActivationMs": 1792269711729,
+  "originalTerminalMs": 1792269711983,
+  "originalPairActiveMs": 254,
+  "exactGapSequenceAndSourceNotYetKnown": true,
+  "originalRecordedFrameTextUnmodified": true,
+  "normalizedDepthIsProjected": true,
+  "liveAllowed": false,
+  "accountReplayAllowed": false,
+  "independentPaperQualificationAllowed": false,
+  "filesSha256": {
+    "research/phase6/extract_frozen_context.py": "ed60f91cd5e9e920adddc1585c9c8a349094478e6a52c841374f8ac04eef3c33",
+    "research/phase6/raw_gap_context.py": "646159c64b2a5724e13c4a22cd9f4e84db82c8839e12d5e22e61ab9b21e52df1",
+    "research/phase6/tests/test_raw_gap_context.py": "e42fe4633a685fd30c469d7cd52ec37e2dc3fc3a7ecc73496a867ada20606191",
+    "research/phase6/tests/test_residual_risk_result.py": "ffc8b55c69e01f2bd46e6352789f39ec476eb8553406ded8063e082970b08c71",
+    "research/experiments/residual-entry-risk-20261018/result/only-pair-diagnostic.json": "ffe4f80933217822d183ea75bc25983089b613214d9c2889131389bcad2a6896",
+    "research/experiments/residual-entry-risk-20261018/result/comparison.original.json": "26231fd58b831a0f86a6675646a8cd7d84ccaae33f645f1ce5ce79510978d599",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "polybot-core/src/main/java/com/polybot/hft/paper/RawTapeNormalizer.java": "fb9f8351095f9bf461a4e55206e531e18ba1723c8857facd537eacfe93e6c8d1",
+    "polybot-core/src/main/java/com/polybot/hft/polymarket/ws/LocalOrderBook.java": "2673011e8722a278a59703c16bbfe930e598b630d283ae600931f1b34599486e",
+    "research/phase6/tests/test_frozen_context_target.py": "02fd2fadc38c2940034854f4bacaae9d0b9aedc56690d94eb64749e926a9921b"
+  }
+}

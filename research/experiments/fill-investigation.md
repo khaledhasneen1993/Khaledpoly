@@ -1357,3 +1357,65 @@ including all four new Java candidate/default-off/allowed-entry checks. Compare
 job117743450294 is running on that exact tested binary. Verification provenance
 saved in `residual-entry-risk-20261018/verification.json`; do not repeat tests or
 start another account comparison while this one runs. No candidate PnL yet.
+
+## Residual entry veto result: loss avoided, zero fills, still NO_GO — 2026-10-18
+
+Run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39150564740
+completed successfully at17:47 UTC, tested source9465a301aa3de7e3b97537651869a383b79d46a1.
+The explicit OFF control exactly reproduced corrected baseline13orders/2fills,
+cash498.20/net-1.80/cost.01/drawdown1.80/expiry2/halt, as required; no silent
+rebaseline. Full regression provenance remains161 Java+291 Python=452 passing.
+
+| Same-tape account result | Guard OFF control | Guard ON candidate |
+| --- | ---: | ---: |
+| Orders / fills | 13 / 2 | 2 / 0 |
+| Net realized PnL after applied costs | -1.80 | 0 |
+| Final cash | 498.20 | 500 |
+| Applied costs / drawdown | .01 / 1.80 | 0 / 0 |
+| Entry risk rejections | 0 | 31 |
+| Unhedged shares at expiry | 2 | 0 |
+| Quantity pair-completion ratio | 0 | UNDEFINED (no fills) |
+
+The candidate avoided the known toxic entry, but made NO MONEY and provides no
+fill/pair/edge evidence. Record NO_GO_ZERO_FILLS, NOT profitability or permission
+for independent promotion. Do not retune the budget upward, reduce share minimum,
+queue, fees or acceptance to recover activity. Keep default-off research status.
+Candidate consumed all14 environment bindings but had no matching own orders at
+those observations; future-label coverage does not fabricate executions.
+
+There was exactly ONE submitted candidate pair: BUY5 first token at.46 and BUY5
+second at.38, same condition0x678cc...6dba7, submitted1792269711477. Actual
+activation1792269711729, terminal1792269711983 DATA_GAP:invalid_depth for BOTH;
+254ms active each, queue seed0, eligible direct print volume0. Public observations
+were wrong-aggressor or before activation; no price-touch fills. Both orders
+were cancelled, no pair fill. The large apparent edge (.46+.38=.84) and short
+life warrant ORIGINAL book/source coherence inspection, not an assumption that
+this is an executable16% opportunity or a justification to loosen risk. This
+is a NEW interval, not a repeat of the two earlier GAP probes rejected for0ms gain.
+
+Exact full reports/audits/comparison retained in
+`residual-entry-risk-20261018/result/artifact.zip.b64`, artifact12145347002,
+ZIP SHA256680a934c5e0d38d57cbd85a725052e0771f3a1fcfae7a3958a07a37d405d4bf7.
+Original comparison, exact only-pair order/terminal diagnostics and bounded risk
+samples retained adjacent. Regression verifies original hash/member/size bounds,
+report/comparison identity, both14-label consumption, off-control loss, zero fills,
+undefined ratio,31 vetoes,254ms lifetimes and explicit NO_GO. No missing ratio is
+zero-filled into a success score. No further account replay or public RPC this turn.
+
+Freeze ONE next diagnostic before extracting additional RAW evidence:
+`risk-opportunity-context-freeze.json`, fixed window1792269709477..1792269713983
+(4.506s:2s before submission,2s after cancellation), same two tokens and original
+development tape. Keep complete original RAW frame text, original sequence/frame
+joins and source timestamps, with existing bounded normalized-depth projection;
+do not treat three levels as queue evidence. GAP sequence/source at this NEW
+terminal are not known yet; don't invent anchors. Reused extractor must find the
+exact terminal-time invalid_depth GAP or fail, and still verify the complete
+original tape digest/chronology/clean end. Wrapper is generic by freeze path;
+original raw-gap extractor, old windows and runtime unchanged. Tests cover both
+frame/standalone GAP identity and rejection of wrong time/reason.149 phase6
+tests pass locally; no new Java changes/build needed. One small workflow extracts
+only this bounded context from the existing recording; no new capture or strategy
+replay. Next inspect whether paired quotes were coherent and whether legitimate
+source BUY/MINT candidates existed in the actual254ms active interval. No receipt
+fetch or model change until original messages justify it. All strategies remain
+unqualified; acceptance/queue/cost/risk/holdout policy unchanged, PAPER only.

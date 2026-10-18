@@ -1,0 +1,39 @@
+name: PAPER only admissible risk pair original context
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/risk-opportunity-context.yml'
+      - 'research/phase6/risk-opportunity-context-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-only-admissible-risk-pair-context
+  cancel-in-progress: false
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Offline evidence, zero-fill rejection and bounded extraction checks
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: risk-context-input
+      - name: One 4.506 second original context, no account simulation or new capture
+        run: >-
+          python3 -u -m research.phase6.extract_frozen_context --input-root risk-context-input
+          --freeze research/phase6/risk-opportunity-context-freeze.json
+          --output research/output/risk-opportunity-context.json.gz
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: only-admissible-risk-pair-context
+          retention-days: 7
+          path: research/output/risk-opportunity-context.json.gz
