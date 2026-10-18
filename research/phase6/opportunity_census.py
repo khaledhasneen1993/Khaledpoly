@@ -20,7 +20,11 @@ def census(stream, config):
     age = config['maxBookAgeMs']; metadata_age = config['metadataMaxAgeMs']
     def event(kind, data, at):
         nonlocal trades
-        if kind == 'GAP':
+        if kind == 'TICK_SIZE':
+            market = markets.get(tokens.get(data['token']))
+            if market and 0 <= at-data['sourceMs'] <= age:
+                market['tick'] = str(max(decimal(market['tick']), decimal(data['tick'])))
+        elif kind == 'GAP':
             scope = set(data.get('tokens', []))
             if data.get('token'): scope.add(data['token'])
             if not scope: books.clear()
@@ -80,10 +84,13 @@ def census(stream, config):
             for token in (data['first'], data['second']): tokens[token] = data['condition']
         elif kind == 'RESEARCH_FRAME':
             for item in data['events']: event(item['kind'], item['data'], last)
-        elif kind in ('RESEARCH_GAP', 'RESEARCH_BOOK', 'RESEARCH_TRADE'):
+        elif kind in ('RESEARCH_GAP', 'RESEARCH_BOOK', 'RESEARCH_TRADE', 'RESEARCH_TICK_SIZE'):
             event(kind.removeprefix('RESEARCH_'), data, last)
-        elif kind in ('RESEARCH_RESOLUTION', 'RESEARCH_MARKET_UNAVAILABLE'):
-            resolved.add(data['condition'])
+        elif kind == 'RESEARCH_RESOLUTION':
+            resolved.add(data['condition_id'])
+        elif kind == 'RESEARCH_MARKET_UNAVAILABLE':
+            market = markets.get(data['condition'])
+            if market: market['accepting'] = False
         elif kind == 'RESEARCH_FEED_ERROR': books.clear()
         elif kind == 'RUN_END':
             clean = data.get('complete') is True

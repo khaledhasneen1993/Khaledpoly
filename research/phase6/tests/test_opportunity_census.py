@@ -5,13 +5,14 @@ from research.phase6.opportunity_census import census
 
 
 class OpportunityCensusTest(unittest.TestCase):
-    def run_tape(self, gap=False, complete=True):
+    def run_tape(self, gap=False, complete=True, before_trade=()):
         events = [('RESEARCH_META', {'condition': 'm', 'first': 'a', 'second': 'b', 'tick': '.01',
                                     'minSize': '1', 'accepting': True, 'startMs': 0, 'endMs': 900000, 'observedMs': 0})]
         for token, bid in (('a', '.4'), ('b', '.55')):
             events.append(('RESEARCH_BOOK', {'token': token, 'sourceMs': 0, 'bids': [{'price': bid, 'size': '100'}],
                                              'asks': [{'price': '.8', 'size': '100'}]}))
         if gap: events.append(('RESEARCH_GAP', {'token': 'a', 'reason': 'test'}))
+        events.extend(before_trade)
         events.append(('RESEARCH_TRADE', {'token': 'a', 'sourceMs': 10, 'side': 'SELL', 'price': '.4', 'size': '1000'}))
         if complete: events.append(('RUN_END', {'complete': True}))
         rows = [dict(schema=1, seq=i+1, runId='r', arrivalMs=10 if kind in ('RESEARCH_TRADE','RUN_END') else 0,
@@ -29,3 +30,13 @@ class OpportunityCensusTest(unittest.TestCase):
     def test_gap_blocks_census_and_missing_end_fails(self):
         self.assertEqual(self.run_tape(gap=True)['policyCounts']['0'], {'DEPTH_UNAVAILABLE': 1})
         with self.assertRaises(ValueError): self.run_tape(complete=False)
+
+    def test_official_resolution_field_and_temporary_market_unavailability(self):
+        for event in (('RESEARCH_RESOLUTION', {'condition_id': 'm'}),
+                      ('RESEARCH_MARKET_UNAVAILABLE', {'condition': 'm'})):
+            result = self.run_tape(before_trade=[event])
+            self.assertEqual(result['policyCounts']['0'], {'NO_FRESH_ACTIVE_BINARY_MARKET': 1})
+
+    def test_recorded_tick_changes_update_the_quote_grid(self):
+        result = self.run_tape(before_trade=[('RESEARCH_TICK_SIZE', {'token': 'a', 'tick': '.03', 'sourceMs': 0})])
+        self.assertEqual(result['policyCounts']['0'], {'QUOTE_NOT_AT_PRINT': 1})

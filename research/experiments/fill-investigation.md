@@ -168,3 +168,14 @@ development tapes once and produces small reports. Next review: inspect
 `opportunity-census-original` and `opportunity-census-fresh`, validate logical
 tape hashes against preserved provenance, and assess print coverage before
 predeclaring any further strategy candidate. Keep QB0 rejected/default legacy.
+
+## Census transport correction — 2026-10-18 04:37 Asia/Amman
+
+Run 39083353569 failed in both scans at the official resolution event: the
+new analysis script incorrectly read `condition` instead of the recorded
+`condition_id`. No census result was produced and no result may be inferred
+from that run. Correct the schema handling, preserve temporary market
+unavailability (fresh later metadata can restore it) and apply recorded tick
+changes to the quote grid. Four unit tests now include the actual official
+resolution field and tick changes. Rerun the same read-only census after
+these corrections; do not change execution or launch another market capture.
