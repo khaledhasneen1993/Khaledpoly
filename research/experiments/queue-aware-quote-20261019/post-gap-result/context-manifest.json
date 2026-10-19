@@ -1,0 +1,34 @@
+{
+  "format": "original-research-records-jsonl-gzip-v1",
+  "spec": {
+    "startMs": 1792269758873,
+    "endMs": 1792269786123,
+    "maxBookAgeMs": 2000,
+    "sourceRows": 6163831,
+    "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+    "states": [
+      {
+        "originalSequence": 260656,
+        "submitMs": 1792269760873
+      }
+    ],
+    "firstModelAllocationMs": 1792269754123,
+    "firstGapMs": 1792269760873,
+    "unchangedUnhedgedDeadlineMs": 1792269784123
+  },
+  "complete": true,
+  "sourceRows": 6163831,
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "retainedRecords": 20691,
+  "retainedBytes": 120990623,
+  "retainedLogicalSha256": "979e23d894f7b4e3d229de9955d7b093f12d96757be1a5580e0ad4428fe4ec64",
+  "compressedSha256": "69bdd106567b5730fdff368bcbd39446164187ae2499912cfa26191925ba96cf",
+  "maxRetainedBytes": 536870912,
+  "fullNormalizedDepthUnmodified": true,
+  "originalRawFramesUnmodified": true,
+  "tailIdentityBoundToCompleteOriginalSha256": true,
+  "recordsNeverTruncated": true,
+  "fillsInferred": false,
+  "pnlInferred": false,
+  "liveAllowed": false
+}

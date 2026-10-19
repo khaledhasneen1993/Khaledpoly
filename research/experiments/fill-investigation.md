@@ -2751,3 +2751,51 @@ prior independent reduction result remains0 SELL fills,5 uncovered A shares;
 no new account PnL. Control-$1.80 after costs, guard0/0fills, QW0 net UNKNOWN,
 NO_GO; PR9 unmerged, PAPER only, automation continues. Unknown dirty old local
 archive remains untouched; work uses isolated clean committed evidence.
+
+## Complete post-GAP context verified; all451 generic labels frozen — 2026-10-19
+
+Latest branch/PR9 and run39272171582/source7ec5a5d checked COMPLETE SUCCESS;
+no active overlapping run.244 offline CI tests passed BEFORE extraction. One
+original source scan completed with all6163831 rows/full original logical SHA.
+Artifact12196720327 ZIP SHA
+`0b5b7cb1ec76f53bfb4e5128eea91bd2b3c6c6eac14ce67178755048b9e836f6`.
+Retain exact compressed JSONL context and small native metadata/summary/member
+hashes under `queue-aware-quote-20261019/post-gap-result/`, no duplicate ZIP.
+Compressed SHA `69bdd106567b5730fdff368bcbd39446164187ae2499912cfa26191925ba96cf`;
+logical retained SHA `979e23d894f7b4e3d229de9955d7b093f12d96757be1a5580e0ad4428fe4ec64`.
+
+Offline verifier streamed/rehashed all20691 original records/120990623 compact
+bytes, validated ordering/time window/run, EVERY retained RAW/normalized frame
+binding and complete manifest, reproduced exact data-only summary. All source
+depth/events/empty frames retained. First fresh BOTH-book NONEMPTY frame is
+original260664 at1792269760875,2ms after GAP. This is advance-actions-eligible
+data recovery, NOT necessarily the next scheduled strategy decision. There
+are30 scoped GAP events in15 distinct frames and451 unique original pair trade
+observations in unchanged window. Recovery alone proves no exit/fill/PnL.
+
+Freeze ALL451 original pair observations, both public sides/tokens, NOT a price
+or outcome-selected sample, through the SAME previously frozen risk-derived
+window. Generic conserved BUY/SELL maker component labels are necessary for
+changed re-submission/cancellation trajectories and potential partial fills;
+do not infer them from aggregate complements or assume queue credit. Reuse all
+191 previously archived raw transactions wherever overlapping, plus exact local
+resume checkpoints; request at most451 previously unknown original receipts
+with public chain137/block reads only. No new market capture, tape scan, engine
+build, wallet/key or orders. Every raw receipt/source sample must corroborate
+and identify ONE conserved route; unknown/ambiguous/non-conserved is NOT zero.
+Keep ALL partial raw successes if interrupted; resume that exact checkpoint,
+never blindly re-request successful receipts or broaden the cohort.
+
+Three new offline tests passed: exact original context/summary/451 selection,
+invalid budget/changed resume selection/wrong chain, unknown-route and corrupted
+context rejection.247 tests now collected by CI BEFORE public reads. New source,
+tests, selection, complete context, policies/config/acceptance hashes frozen
+before reading recovery receipts. No strategy tuning or model evaluation on
+new labels yet; unchanged native reduction still0 SELL fills/5 uncovered A at
+first GAP. Next WAIT for `qw0-original-recovery451-receipts`, independently
+reproduce complete451 components, freeze original scheduled recovery actions
+and full bounded native lifecycle, STOP/handle partial fills without stale
+state. Then full-account SAME-development baseline/candidate comparison before
+frozen independent PAPER; acceptance unchanged. Control net-$1.80 after costs,
+guard0/0fills, QW0 account UNKNOWN, NO_GO. PR9 remains unmerged, PAPER only;
+automation continues. Unknown dirty old activation archive preserved untouched.

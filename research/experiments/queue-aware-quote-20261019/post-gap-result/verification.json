@@ -1,0 +1,18 @@
+{
+  "scope": "VERIFIED_ORIGINAL_POST_GAP_CONTEXT_NOT_EXECUTION",
+  "retainedRecords": 20691,
+  "retainedBytes": 120990623,
+  "completeSourceRows": 6163831,
+  "originalPairObservations": 451,
+  "firstFreshBothBookNonemptyFrame": {
+    "seq": 260664,
+    "at": 1792269760875
+  },
+  "scopedGapEvents": 30,
+  "uniqueScopedGapFrames": 15,
+  "modelFillsCreated": 0,
+  "netPnlRecomputed": false,
+  "candidateAccountSimulated": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}
