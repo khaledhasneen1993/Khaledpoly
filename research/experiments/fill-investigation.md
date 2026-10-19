@@ -2597,3 +2597,57 @@ continue unchanged strategy state after a new fill or turn a prefix into account
 PnL. Full post-GAP/other-market/account/resolution path and SAME-development
 baseline/candidate comparison still required before independent PAPER. Known
 account net control-$1.80 after costs, guard0/0fills; QW0 unknown, NO_GO.
+
+## Final14 reproduced; separate active-reduction gate frozen — 2026-10-19
+
+Checked no active runs before further work. Run39246876655/source7dbeb47
+completed successfully:230 phase6 CI tests BEFORE public reads,14/14 original
+receipts,2 original blocks,0 errors. Exact archive12183754194 is retained in
+`queue-aware-quote-20261019/gap-tail-result/` with ZIP SHA
+`0b6570d1cffb396b4bc2345d0a1db563ddca4d5bd38ae1320167b092ce776e82`.
+Offline verification independently re-decodes/corroborates every raw transaction
+and reconstructs the conserved integer route components and exact SELL predicate.
+All14 B<=0.40 compatible shares remain0. Actual A SELL>=0.51 compatible volume
+is23 shares. This is NECESSARY PRICE VOLUME, NOT23 filled shares, NOT proof of
+source eligibility, queue consumption, risk availability, execution or profit.
+Missing receipts, fabricated positive volume, changed source selection fail.
+
+Complete original input preparation now covers39 A+123 B=162 groups to first
+GAP, checks EVERY relevant original pair observation including the tail, rejects
+missing labels/duplicate component identities, and reuses retained source and
+receipts without new RPC reads/scans/capture/build. New tests cover complete162
+source binding and bounded-gate safeguards. Prior through-GAP safety stop remains
+UNMODIFIED: never relabel its failed run as successful.
+
+New SEPARATE `Qw0ActiveReductionProbe` is frozen before native model evaluation,
+not a production strategy change. Reuses the same verified engine artifact,
+250ms activation/cancel,2x displayed-level queue, freshness/source gates and
+unchanged fee/wait/hedge policy. It tracks resting-reduction callbacks, aborts
+on unmodelled new cancellation/resubmission/risk actions, and stops IMMEDIATELY
+at the first reduction allocation (even partial/intra-frame); never continues
+strategy on obsolete inventory. If no reduction fills, the permitted endpoint
+is the original GAP, retaining unresolved inventory. Account risk/other markets
+and post-GAP/resolution remain explicitly outside scope.
+
+Important research-observer correction BEFORE SELL evaluation: old BUY-only
+component conversion rounded ALL prices UP28. Reusing that for SELL could
+credit a rational price just below a SELL limit. Separate observer uses BUY-UP /
+SELL-DOWN28 with synthetic just-below/above/equal integer-boundary assertions;
+old archived observers/results and production matcher are unchanged. CI runs
+offline tests and synthetic assertions BEFORE this new frozen bounded gate.
+Local full suite passed233 tests; the subsequently added separate-gate source
+safeguard passed individually (234 tests now collected by CI). Java observer
+compile/boundary assertions and native evaluation are pending that frozen CI run.
+
+Unknown pre-existing local modification truncates the old DQ3 activation archive
+(invalid base64 padding). It was NOT overwritten/staged/repaired or used as
+evidence. Work/tests use an isolated clean git worktree with the committed,
+hash-verified old evidence; preserve original unknown working-tree bytes.
+
+Next read `qw0-bounded-active-reduction` result before any overlapping replay;
+independently verify pre-event SELL queue, causal component allocation and
+conservation, then handle actual post-fill actions or post-GAP recovery on the
+same original source. Full-account baseline/candidate development comparison
+and frozen independent PAPER acceptance still outstanding. Acceptance unchanged;
+known account net remains control-$1.80 after costs, guard0 with0fills;
+QW0 account net UNKNOWN, NO_GO. No independent/profitable/live claim.
