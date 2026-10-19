@@ -80,3 +80,16 @@ global-policy rejection inferred. Other47 observations/other states unaudited.
 Next: reuse archived exact overlapping evidence before any new receipts;
 otherwise preregister another bounded complete-leg scope before reads. No price
 retuning or independent capture from this necessary-condition result.
+
+2026-10-19 cached reuse:10 archived receipts re-decoded against exact frozen
+windows. Complete A legs173342/197690/198832 have1/8/4 observations respectively,
+all with zero actual compatible component volume at own0.45/0.47/0.48. Overlap
+does not create new transactions or fills. `cached-overlap-coverage.json` lists
+all22 legs; incomplete coverage is null, never zero. 178 offline tests pass.
+
+Next preregistered batch: source-chronological next uncovered additional state
+243583, complete least-observed A leg,39 unique receipts, unchanged0.49 bid.
+`overlap-selection.json`/`dq3-overlap-receipts-freeze.json` freeze BEFORE reads.
+One bounded public-read job only; retain raw receipts/blocks and exact component
+prices. Reuse across later windows only with exact original sample and quote
+binding. No account execution/PnL or independent-paper qualification inferred.

@@ -1766,3 +1766,32 @@ capture until a frozen candidate passes same-development causal full-account
 comparison. Do not tune prices against this result. Known net after costs stays
 control-$1.80 vs guarded0 with0fills (not profitable); independent acceptance
 unmet. No defaults/queue/fees/minimum/risk changes and no live actions.
+
+## Exact overlapping receipt reuse and next complete-leg freeze — 2026-10-19
+
+Remote PR9 head909e912 and both relevant traffic/receipt jobs verified complete
+SUCCESS before work; no duplicate capture/scan/replay. Re-decoded10 already
+archived receipts from the two earlier bounded cohorts. Across all22 DQ3 state
+legs, three have complete receipt coverage:173342/A (1 observation),197690/A (8),
+198832/A (4). All three have ZERO actual target BUY component volume at/below
+their OWN frozen bids0.45/0.47/0.48. The latter4 are reused transactions from
+the earlier8, NOT new venue volume. This is exact-window/price reuse, not a new
+policy or new fills. All incomplete legs report null rather than inferred zero.
+`depth-quote-20261018/cached-overlap-coverage.json` retains this22-leg coverage.
+
+Next selection frozen before public reads: earliest additional state whose
+least-observed leg remains uncovered,243583/A, unchanged own bid0.49, complete39
+observations/39 unique transactions before the first invalid_depth GAP. Rule:
+source chronology, minimum leg observation count, lexical token tie, no prices/
+profits optimized. Later overlapping windows may reuse this evidence only with
+their exact source/price bindings; do not infer their results in advance.
+`overlap-selection.json` and `dq3-overlap-receipts-freeze.json` bind exact samples,
+source/tests, original DQ3 price policy, cached evidence and fixed acceptance.
+178 phase6 tests pass locally, including offline re-decode, complete-vs-unknown,
+quote-binding,39-read budget/block cache/resume and selection immutability.
+The single small workflow will run offline tests BEFORE public reads. No Maven,
+full-tape scan, account replay or independent capture; no keys/wallet/live orders.
+Preserve raw successes and errors if incomplete, do not expand scope or count
+partial missing coverage as zero. Next: inspect its full coverage/receipt report,
+archive and re-decode before any strategy adoption. Known economics unchanged:
+control-$1.80, guard0/0fills, undefined pair ratio, NO_GO; no profitability proof.
