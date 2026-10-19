@@ -2004,3 +2004,45 @@ queue/risk/acceptance changes. Next inspect `dq3-last-cancel-cached-proof`, arch
 and validate actual acknowledgement, then close the eleven-selected-start gate.
 Do NOT infer global DQ3 impossibility or profitability from selected snapshots.
 Net economics remain control-$1.80, guarded0/0fills; DQ3 account unknown, NO_GO.
+
+## Cached actual-engine cancel proof and selected-gate closure — 2026-10-19
+
+Run39195758632 SUCCESS at frozen source682929a203139331dfdfb7ddef5ba38fcd8f3d88.
+190 phase6 CI tests passed, actual-matcher assertions passed. No new public RPC,
+source scan, market capture or Maven build. Actual PairPolicy reproduces exact
+0.0400009719998870480 requirement for the original first risk callback. Actual
+matcher acknowledges the CONDITIONAL isolated target cancellation at
+1792269786347, original input300416, RESTING_NET_EDGE,251ms after activation.
+This precedes the FIRST possible target observation300498 at1792269786398 by
+51ms. Quantity5 remains unchanged; legacy new-entry quantity0.5 was NOT used.
+Trades suppressed, candidate ResearchSession/full account not simulated.
+
+Artifact12160839606 ZIP SHA256
+e90d8fb1cb8068fe41b97db20105080cd1057694971799264294182741471ac7 retained in
+`depth-quote-20261018/last-cancel-result/artifact.zip.b64`. Two members: exact
+source/witness evidence and actual-engine cancel report. Offline verification
+checks immutable artifacts, exact callback quantities/edge, original ack row,
+ack-before-first-print and all eleven selected-leg reasons.192 phase6 tests pass
+locally, including fake earlier cancellation and entry/resting-size negatives.
+
+`depth-quote-20261018/selected-gate.json` closes the necessary selected-start gate:
+7 A legs have zero actual price-compatible volume;2 starts cannot clear actual
+initial queue even under full priced-volume upper bounds;1 post-only rejects;
+1 conditional unchanged resting check cancels before any possible A observation.
+Do not promote DQ3 on these34 legacy witnesses/11 independently selected starts.
+This is NOT global DQ3 impossibility or a full candidate account PnL. Opposite
+legs can still have unknown execution/risk; never report zero total fills for
+the unrun DQ3 account. Stop re-auditing these same starts/receipts or retrying
+their captures. Preserve the negative evidence, acceptance/fees/queue/risk.
+
+Next research hypothesis QW0 is preregistered in
+`depth-quote-20261018/qw0-preregistration.md` BEFORE implementation/evaluation:
+same actual size/budgets/ticks/participation, structural existing thin-premium
+maximum reserve, deterministic minimum displayed queue objective among first3
+levels. No fitted weights, future prints or threshold loosening. First gate
+uses SAME34 immutable legacy witnesses vs DQ3 and actual legacy, without another
+tape scan. If no additional legal state or no changed quote, reject early. Any
+pass remains price feasibility only and requires separate causal full-account
+evidence before independent PAPER. QW0 not yet implemented/evaluated, defaults
+unchanged. Fixed acceptance unpassed: control net-$1.80, guard0/0fills; DQ3/QW0
+account performance unmeasured. No live permissions or profitability claim.

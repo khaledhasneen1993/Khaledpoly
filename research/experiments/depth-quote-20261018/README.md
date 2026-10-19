@@ -161,3 +161,18 @@ Frozen conditional actual-engine cancellation probe uses ONLY cached context,
 unchanged PairPolicy/matcher, no public RPC/full tape scan/Maven/account replay.
 Await `dq3-last-cancel-cached-proof` and exact acknowledgement. This is not an
 observed historical candidate cancellation or global policy rejection.
+
+Cached cancel run39195758632 SUCCESS. Actual matcher conditional acknowledgement
+at1792269786347/input300416 precedes first possible A print by51ms. Exact proof
+ZIP retained in `last-cancel-result/artifact.zip.b64`, SHA256
+e90d8fb1cb8068fe41b97db20105080cd1057694971799264294182741471ac7.
+192 offline tests pass. `selected-gate.json` records all11 scoped reasons:
+7 zero component legs,2 queue bounds,1 post-only rejection,1 conditional resting
+cancel. Do NOT promote DQ3 on these witnesses; no full candidate account PnL or
+global rejection claimed. No more duplicate scans/captures of these starts.
+
+Next: implement ONLY the single QW0 rule in `qw0-preregistration.md`, frozen
+before implementation/evaluation. Same size/risk/queue/fees, stronger structural
+thin-premium reserve plus lower displayed queue objective. Screen original34
+witnesses before any further source scan. Not implemented/evaluated yet; no
+strategy adoption or independent PAPER authorization from that screen alone.
