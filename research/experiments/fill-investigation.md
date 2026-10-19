@@ -2855,3 +2855,66 @@ state. Then full-account SAME-development baseline/candidate comparison before
 frozen independent PAPER; acceptance unchanged. Control net-$1.80 after costs,
 guard0/0fills, QW0 account UNKNOWN, NO_GO. PR9 remains unmerged, PAPER only;
 automation continues. Unknown dirty old activation archive preserved untouched.
+
+## Baseline first exit independently verified; one fee-positive candidate frozen — 2026-10-19
+
+Latest branch/PR9 and run39287345589/sourcee42f1ca checked COMPLETE SUCCESS;
+no overlapping active run.250 offline CI tests passed, plus three callback/
+four side-rounding assertions and two risk-clock/three native FOK/fee/depth
+assertions BEFORE new baseline model evaluation. Artifact12202764797 ZIP SHA
+`152c9a2d2e107e10653dac92b8bc9731ba77085695b9eb23ffbaea638b1dbc43`.
+Retain exact small native report/member hashes and independent proof under
+`queue-aware-quote-20261019/first-exit-result/`; reconstruct EXACT700603-byte
+input from previously retained source/receipts and compare SHA, no duplicate.
+
+Independent Python replay reproduced ALL14 submitted maker reductions,
+original250ms decision/activation/cancel clocks, pre-event queues, post-only
+rejections and GAP cancellations, source metadata/freshness, every policy
+choice, exact final depth sweep and native HALF_UP5 fees. Independently consume
+439 original groups/1013 actual conserved maker components through stop;
+venue16911.279387=418.128624 queue+0 allocated+16493.150763 unused. No maker
+fills despite14 attempts. Risk deadline triggers cancel at1792269784344,
+ACK/TAKER_PENDING at1792269784594, due1792269784844, actual first execution
+callback1792269784845 (original298009). Unchanged RISK_SELL FOK sells5 A at0.49,
+notional2.45, fee0.08747, original conditional basis2.40. Conditional round-trip
+net=2.45-0.08747-2.40=-0.03747, remaining A0. No merge/redemption needed for SELL.
+This is a LIMITED CONDITIONAL POSITION EXIT, NOT the full QW0 account return.
+Other markets/account risk, re-entry and subsequent strategy remain omitted.
+
+Three new result tests reject lower/fake fees, fake smaller activation queues,
+full-account/live scope escalation; two candidate-contract tests pass locally.
+255 total CI tests now collected, BEFORE candidate model evaluation. Original
+baseline source/policy/report preserved, never rerun just to obtain a nicer
+result. No holdout/independent data inspected or tuned.
+
+Evidence-backed fixed hypothesis: the existing non-overdue PairPolicy can WAIT
+despite a fee-positive executable exit, because it prefers the theoretically
+higher SELL value yet sends a MAKER reduction, not that taker sale. First
+recovery decision already has completeValue0.01051 and sellValue0.01251 per
+share, both >= unchanged0.01 minimum; baseline still waits behind queues/GAPs
+until eventual fee-negative risk exit. Freeze ONE candidate rule BEFORE its
+evaluation: WHEN NO OPEN ORDERS and not overdue, choose argmax(complete,sell)
+if its expected NET per share >= ORIGINAL minimumEdge. Choose COMPLETE on ties,
+otherwise explicit TAKER_SELL. If neither qualifies, preserve original WAIT /
+maker behavior; overdue/native risk policy unchanged. No extra tuned threshold.
+Recheck actual FOK NET at execution against unchanged minimumEdge*quantity;
+reject if fees/depth/latency remove edge, preserve exit-loss cap/minimum size/
+conditional cash checks. All fees,250ms delays,2x queues, data-gap/source rules,
+source inputs, starting conditional inventory and horizon IDENTICAL to baseline.
+
+New separate `Qw0FeePositiveExitProbe`/research preparation only; production
+PairPolicy/strategy/runtime unchanged, not enabled for live or general PAPER.
+Native synthetic candidate selection checks cover COMPLETE/SELL/WAIT, overdue
+unchanged, exact threshold/tie and just-below cases BEFORE evaluation. Stop
+immediately on first maker allocation or atomic FOK, before changed-inventory
+strategy/merge. A candidate BUY needs actual post-fill merge/account proof,
+not an assumed profit. Baseline and candidate comparisons are expressly only
+this selected DEVELOPMENT exit component, not fair full-strategy account proof.
+
+Next WAIT for `qw0-fee-positive-first-exit`, independently reproduce its choice,
+execution/fees/stop and compare with retained baseline on SAME source. Preserve
+adverse/rejected outcomes, no further parameter fitting to this tape or any
+holdout. Full-account baseline/candidate comparison and frozen independent
+PAPER acceptance remain outstanding; control net-$1.80 after costs, guard0/0fills,
+QW0 full account UNKNOWN, NO_GO. Acceptance unchanged, no new RPC/capture/tape
+scan/build. PR9 unmerged, PAPER only; unknown dirty local archive untouched.

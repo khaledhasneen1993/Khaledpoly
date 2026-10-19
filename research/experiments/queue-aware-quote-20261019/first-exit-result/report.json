@@ -1,0 +1,772 @@
+{
+  "scope" : "CONDITIONAL_FIRST_POST_GAP_EXIT_ALLOCATION_NOT_FULL_ACCOUNT",
+  "stopReason" : "FIRST_NEW_ATOMIC_TAKER_FOK_STOP_BEFORE_MERGE_OR_STRATEGY",
+  "stopAt" : 1792269784845,
+  "stopSequence" : 298009,
+  "stopEventIndex" : -1,
+  "stoppedOnNewAllocation" : true,
+  "modelExitAllocations" : [ {
+    "result" : {
+      "size" : 5,
+      "notional" : 2.45,
+      "fee" : 0.08747,
+      "average" : 0.490000000000000000,
+      "legs" : [ {
+        "size" : 5,
+        "price" : 0.49,
+        "fee" : 0.08747
+      } ]
+    },
+    "quantity" : 5,
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "seq" : 298009,
+    "buy" : false,
+    "purpose" : "RISK_REDUCTION",
+    "at" : 1792269784845
+  } ],
+  "decisions" : [ {
+    "at" : 1792269761068,
+    "id" : "qw0-recovery-1",
+    "reason" : "MAKER_REDUCTION",
+    "price" : 0.52,
+    "choice" : {
+      "action" : "WAIT",
+      "completeValue" : 0.010510000000000000,
+      "sellValue" : 0.01251
+    },
+    "seq" : 260911
+  }, {
+    "at" : 1792269761319,
+    "id" : "qw0-recovery-2",
+    "reason" : "MAKER_REDUCTION",
+    "price" : 0.53,
+    "choice" : {
+      "action" : "WAIT",
+      "completeValue" : 0.020530000000000000,
+      "sellValue" : 0.02253
+    },
+    "seq" : 261117
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269761569,
+    "seq" : 261252
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269761820,
+    "seq" : 261430
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269762070,
+    "seq" : 261602
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269762320,
+    "seq" : 261736
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269762570,
+    "seq" : 262094
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269762820,
+    "seq" : 262337
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269763071,
+    "seq" : 262585
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269763321,
+    "seq" : 262736
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269763571,
+    "seq" : 262923
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269763821,
+    "seq" : 263126
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269764072,
+    "seq" : 263338
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269764322,
+    "seq" : 263542
+  }, {
+    "at" : 1792269764572,
+    "id" : "qw0-recovery-3",
+    "reason" : "MAKER_REDUCTION",
+    "price" : 0.51,
+    "choice" : {
+      "action" : "WAIT",
+      "completeValue" : 0.000500000000000000,
+      "sellValue" : 0.00250
+    },
+    "seq" : 263696
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269764822,
+    "seq" : 264125
+  }, {
+    "at" : 1792269765073,
+    "id" : "qw0-recovery-4",
+    "reason" : "MAKER_REDUCTION",
+    "price" : 0.57,
+    "choice" : {
+      "action" : "WAIT",
+      "completeValue" : 0.060750000000000000,
+      "sellValue" : 0.06275
+    },
+    "seq" : 264297
+  }, {
+    "at" : 1792269765323,
+    "id" : "qw0-recovery-5",
+    "reason" : "MAKER_REDUCTION",
+    "price" : 0.50,
+    "choice" : {
+      "action" : "WAIT",
+      "completeValue" : -0.009490000000000000,
+      "sellValue" : -0.00749
+    },
+    "seq" : 264622
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269765573,
+    "seq" : 264906
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269765823,
+    "seq" : 265329
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269766073,
+    "seq" : 265680
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269766324,
+    "seq" : 266027
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269766574,
+    "seq" : 266398
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269766824,
+    "seq" : 266582
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269767074,
+    "seq" : 266736
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269767324,
+    "seq" : 267021
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269767575,
+    "seq" : 267407
+  }, {
+    "at" : 1792269767825,
+    "id" : "qw0-recovery-6",
+    "reason" : "MAKER_REDUCTION",
+    "price" : 0.66,
+    "choice" : {
+      "action" : "WAIT",
+      "completeValue" : 0.152070000000000000,
+      "sellValue" : 0.15407
+    },
+    "seq" : 267763
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269768075,
+    "seq" : 268282
+  }, {
+    "at" : 1792269768325,
+    "id" : "qw0-recovery-7",
+    "reason" : "MAKER_REDUCTION",
+    "price" : 0.62,
+    "choice" : {
+      "action" : "WAIT",
+      "completeValue" : 0.111350000000000000,
+      "sellValue" : 0.11335
+    },
+    "seq" : 268887
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269768575,
+    "seq" : 269397
+  }, {
+    "at" : 1792269768825,
+    "id" : "qw0-recovery-8",
+    "reason" : "MAKER_REDUCTION",
+    "price" : 0.54,
+    "choice" : {
+      "action" : "WAIT",
+      "completeValue" : 0.030560000000000000,
+      "sellValue" : 0.03256
+    },
+    "seq" : 270107
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269769075,
+    "seq" : 270725
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269769326,
+    "seq" : 270943
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269769576,
+    "seq" : 271096
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269769827,
+    "seq" : 271295
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269770079,
+    "seq" : 271616
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269770329,
+    "seq" : 271830
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269770579,
+    "seq" : 272055
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269770829,
+    "seq" : 272403
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269771079,
+    "seq" : 272889
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269771330,
+    "seq" : 273355
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269771580,
+    "seq" : 273666
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269771830,
+    "seq" : 273893
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269772081,
+    "seq" : 274101
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269772331,
+    "seq" : 274382
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269772581,
+    "seq" : 274653
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269772831,
+    "seq" : 274974
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269773081,
+    "seq" : 275277
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269773332,
+    "seq" : 275607
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269773582,
+    "seq" : 275957
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269773832,
+    "seq" : 276251
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269774082,
+    "seq" : 276538
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269774332,
+    "seq" : 277031
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269774582,
+    "seq" : 277252
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269774833,
+    "seq" : 277658
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269775083,
+    "seq" : 277824
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269775333,
+    "seq" : 278390
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269775584,
+    "seq" : 278802
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269775834,
+    "seq" : 279197
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269776084,
+    "seq" : 279440
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269776334,
+    "seq" : 279877
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269776584,
+    "seq" : 280304
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269776834,
+    "seq" : 280839
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269777085,
+    "seq" : 281475
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269777335,
+    "seq" : 281985
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269777585,
+    "seq" : 282581
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269777835,
+    "seq" : 283371
+  }, {
+    "at" : 1792269778086,
+    "id" : "qw0-recovery-9",
+    "reason" : "MAKER_REDUCTION",
+    "price" : 0.66,
+    "choice" : {
+      "action" : "WAIT",
+      "completeValue" : 0.152070000000000000,
+      "sellValue" : 0.15407
+    },
+    "seq" : 284168
+  }, {
+    "at" : 1792269778336,
+    "id" : "qw0-recovery-10",
+    "reason" : "MAKER_REDUCTION",
+    "price" : 0.48,
+    "choice" : {
+      "action" : "WAIT",
+      "completeValue" : -0.029440000000000000,
+      "sellValue" : -0.02744
+    },
+    "seq" : 285095
+  }, {
+    "at" : 1792269778586,
+    "id" : "qw0-recovery-11",
+    "reason" : "MAKER_REDUCTION",
+    "price" : 0.56,
+    "choice" : {
+      "action" : "WAIT",
+      "completeValue" : 0.030560000000000000,
+      "sellValue" : 0.03256
+    },
+    "seq" : 285835
+  }, {
+    "at" : 1792269778837,
+    "id" : "qw0-recovery-12",
+    "reason" : "MAKER_REDUCTION",
+    "price" : 0.60,
+    "choice" : {
+      "action" : "WAIT",
+      "completeValue" : 0.091070000000000000,
+      "sellValue" : 0.09307
+    },
+    "seq" : 286537
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269779087,
+    "seq" : 287075
+  }, {
+    "at" : 1792269779337,
+    "id" : "qw0-recovery-13",
+    "reason" : "MAKER_REDUCTION",
+    "price" : 0.53,
+    "choice" : {
+      "action" : "WAIT",
+      "completeValue" : 0.020530000000000000,
+      "sellValue" : 0.02253
+    },
+    "seq" : 287738
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269779587,
+    "seq" : 288144
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269779837,
+    "seq" : 288451
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269780087,
+    "seq" : 289258
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269780338,
+    "seq" : 290057
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269780589,
+    "seq" : 290517
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269780839,
+    "seq" : 291097
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269781089,
+    "seq" : 291613
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269781339,
+    "seq" : 292474
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269781590,
+    "seq" : 293042
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269781840,
+    "seq" : 293412
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269782091,
+    "seq" : 293743
+  }, {
+    "at" : 1792269782341,
+    "id" : "qw0-recovery-14",
+    "reason" : "MAKER_REDUCTION",
+    "price" : 0.46,
+    "choice" : {
+      "action" : "WAIT",
+      "completeValue" : -0.049330000000000000,
+      "sellValue" : -0.04733
+    },
+    "seq" : 294403
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269782591,
+    "seq" : 294801
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269782843,
+    "seq" : 295028
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269783093,
+    "seq" : 295320
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269783343,
+    "seq" : 295733
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269783593,
+    "seq" : 296099
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269783843,
+    "seq" : 296540
+  }, {
+    "reason" : "RESTING_REDUCTION",
+    "at" : 1792269784094,
+    "seq" : 296891
+  }, {
+    "reason" : "CANCEL_BEFORE_EXIT",
+    "at" : 1792269784344,
+    "seq" : 297374
+  }, {
+    "at" : 1792269784594,
+    "choice" : {
+      "action" : "RISK_SELL",
+      "completeValue" : -0.019470000000000000,
+      "sellValue" : -0.01747
+    },
+    "pending" : {
+      "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "buy" : false,
+      "due" : 1792269784844,
+      "limit" : 0.45,
+      "purpose" : "RISK_REDUCTION"
+    },
+    "seq" : 297739,
+    "reason" : "TAKER_PENDING"
+  } ],
+  "diagnostics" : [ {
+    "id" : "qw0-recovery-1",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : false,
+    "price" : 0.52,
+    "submittedMs" : 1792269761068,
+    "activationDueMs" : 1792269761318,
+    "activatedMs" : null,
+    "terminalMs" : 1792269761319,
+    "terminalReason" : "POST_ONLY_WOULD_CROSS",
+    "initialQueueAhead" : null,
+    "remainingQueueAhead" : null,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 0,
+    "printObservations" : { }
+  }, {
+    "id" : "qw0-recovery-2",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : false,
+    "price" : 0.53,
+    "submittedMs" : 1792269761319,
+    "activationDueMs" : 1792269761569,
+    "activatedMs" : 1792269761569,
+    "terminalMs" : 1792269764385,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 484,
+    "remainingQueueAhead" : 340.916269,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 2816,
+    "printObservations" : {
+      "SETTLEMENT_COMPONENT" : 18
+    }
+  }, {
+    "id" : "qw0-recovery-3",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : false,
+    "price" : 0.51,
+    "submittedMs" : 1792269764572,
+    "activationDueMs" : 1792269764822,
+    "activatedMs" : 1792269764822,
+    "terminalMs" : 1792269765042,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 220,
+    "printObservations" : { }
+  }, {
+    "id" : "qw0-recovery-4",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : false,
+    "price" : 0.57,
+    "submittedMs" : 1792269765073,
+    "activationDueMs" : 1792269765323,
+    "activatedMs" : null,
+    "terminalMs" : 1792269765285,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : null,
+    "remainingQueueAhead" : null,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 0,
+    "printObservations" : { }
+  }, {
+    "id" : "qw0-recovery-5",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : false,
+    "price" : 0.5,
+    "submittedMs" : 1792269765323,
+    "activationDueMs" : 1792269765573,
+    "activatedMs" : 1792269765573,
+    "terminalMs" : 1792269767813,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 41.6,
+    "remainingQueueAhead" : 10.288461,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 2240,
+    "printObservations" : {
+      "SETTLEMENT_COMPONENT" : 5
+    }
+  }, {
+    "id" : "qw0-recovery-6",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : false,
+    "price" : 0.66,
+    "submittedMs" : 1792269767825,
+    "activationDueMs" : 1792269768075,
+    "activatedMs" : 1792269768075,
+    "terminalMs" : 1792269768135,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 212,
+    "remainingQueueAhead" : 212,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 60,
+    "printObservations" : { }
+  }, {
+    "id" : "qw0-recovery-7",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : false,
+    "price" : 0.62,
+    "submittedMs" : 1792269768325,
+    "activationDueMs" : 1792269768575,
+    "activatedMs" : 1792269768575,
+    "terminalMs" : 1792269768691,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 5714.14,
+    "remainingQueueAhead" : 5714.14,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 116,
+    "printObservations" : { }
+  }, {
+    "id" : "qw0-recovery-8",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : false,
+    "price" : 0.54,
+    "submittedMs" : 1792269768825,
+    "activationDueMs" : 1792269769075,
+    "activatedMs" : 1792269769075,
+    "terminalMs" : 1792269777836,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 167.32,
+    "remainingQueueAhead" : 51.482952,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 8761,
+    "printObservations" : {
+      "SETTLEMENT_COMPONENT" : 15
+    }
+  }, {
+    "id" : "qw0-recovery-9",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : false,
+    "price" : 0.66,
+    "submittedMs" : 1792269778086,
+    "activationDueMs" : 1792269778336,
+    "activatedMs" : null,
+    "terminalMs" : 1792269778215,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : null,
+    "remainingQueueAhead" : null,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 0,
+    "printObservations" : { }
+  }, {
+    "id" : "qw0-recovery-10",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : false,
+    "price" : 0.48,
+    "submittedMs" : 1792269778336,
+    "activationDueMs" : 1792269778586,
+    "activatedMs" : null,
+    "terminalMs" : 1792269778586,
+    "terminalReason" : "POST_ONLY_WOULD_CROSS",
+    "initialQueueAhead" : null,
+    "remainingQueueAhead" : null,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 0,
+    "printObservations" : { }
+  }, {
+    "id" : "qw0-recovery-11",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : false,
+    "price" : 0.56,
+    "submittedMs" : 1792269778586,
+    "activationDueMs" : 1792269778836,
+    "activatedMs" : null,
+    "terminalMs" : 1792269778837,
+    "terminalReason" : "POST_ONLY_WOULD_CROSS",
+    "initialQueueAhead" : null,
+    "remainingQueueAhead" : null,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 0,
+    "printObservations" : { }
+  }, {
+    "id" : "qw0-recovery-12",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : false,
+    "price" : 0.6,
+    "submittedMs" : 1792269778837,
+    "activationDueMs" : 1792269779087,
+    "activatedMs" : 1792269779087,
+    "terminalMs" : 1792269779113,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 1674,
+    "remainingQueueAhead" : 1674,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 26,
+    "printObservations" : { }
+  }, {
+    "id" : "qw0-recovery-13",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : false,
+    "price" : 0.53,
+    "submittedMs" : 1792269779337,
+    "activationDueMs" : 1792269779587,
+    "activatedMs" : 1792269779587,
+    "terminalMs" : 1792269782272,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 86.08,
+    "remainingQueueAhead" : 42.350000,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 2685,
+    "printObservations" : {
+      "SETTLEMENT_COMPONENT" : 7
+    }
+  }, {
+    "id" : "qw0-recovery-14",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : false,
+    "price" : 0.46,
+    "submittedMs" : 1792269782341,
+    "activationDueMs" : 1792269782591,
+    "activatedMs" : 1792269782591,
+    "terminalMs" : 1792269784594,
+    "terminalReason" : "CANCEL_BEFORE_RISK_EXIT",
+    "initialQueueAhead" : 513.90,
+    "remainingQueueAhead" : 429.733694,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 2003,
+    "printObservations" : {
+      "SETTLEMENT_COMPONENT" : 14
+    }
+  } ],
+  "componentAllocationDiagnostics" : {
+    "uniqueMakerComponents" : 1013,
+    "queueAbsorbed" : 418.128624,
+    "unusedQuantity" : 16493.150763,
+    "hiddenLiquidityAndCrossPriceQueueUncertainty" : true,
+    "venueQuantity" : 16911.279387,
+    "allocatedQuantity" : 0
+  },
+  "consumedOriginalGroups" : 439,
+  "completeInputGroups" : 451,
+  "conditionalInitialQuantity" : 5,
+  "postAllocationInventoryAndMergeNotProcessed" : true,
+  "accountRiskAssumedAvailable" : true,
+  "otherMarketsAndFullAccountOmitted" : true,
+  "actualBotFillsCreated" : 0,
+  "candidateAccountSimulated" : false,
+  "netPnlRecomputed" : false,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false
+}
