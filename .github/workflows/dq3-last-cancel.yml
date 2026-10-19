@@ -1,0 +1,53 @@
+name: PAPER DQ3 cached final-start resting cancel check
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/dq3-last-cancel.yml'
+      - 'research/phase6/dq3-last-cancel-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-dq3-last-cancel-cached
+  cancel-in-progress: false
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: All offline phase6 evidence regressions
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: probe-engine
+      - name: Reuse immutable actual matcher and PairPolicy; no Maven build
+        run: |
+          mkdir -p "$RUNNER_TEMP/dq3-probe"
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/dq3-engine"
+          javac -cp "$RUNNER_TEMP/dq3-engine/BOOT-INF/lib/*" -d "$RUNNER_TEMP/dq3-probe" research/phase6/Dq3ActivationProbe.java research/phase6/Dq3LastCancelProbe.java
+          java -cp "$RUNNER_TEMP/dq3-probe:$RUNNER_TEMP/dq3-engine/BOOT-INF/lib/*" Dq3ActivationProbe --self-test
+      - name: Prepare exact already-archived context and witnesses; no public RPC or source rescan
+        run: python3 -m research.phase6.dq3_last_cancel --output research/output/dq3-last-cancel
+      - name: Actual engine cancel acknowledgement after conditional unchanged resting check
+        run: >-
+          java -cp "$RUNNER_TEMP/dq3-probe:$RUNNER_TEMP/dq3-engine/BOOT-INF/lib/*" Dq3LastCancelProbe
+          research/output/dq3-last-cancel/context.json.gz research/output/dq3-last-cancel/witness-report.json
+          research/output/dq3-last-cancel/cancel-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dq3-last-cancel-cached-proof
+          retention-days: 7
+          path: |
+            research/output/dq3-last-cancel/evidence.json
+            research/output/dq3-last-cancel/cancel-report.json

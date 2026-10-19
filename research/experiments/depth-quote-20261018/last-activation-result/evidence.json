@@ -1,0 +1,288 @@
+{
+  "scope": "CONDITIONAL_FIRST_SCHEDULED_RESTING_RISK_CANCEL_NOT_ACTUAL_ACCOUNT",
+  "state": {
+    "id": "dq3-0-299650",
+    "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "originalSequence": 299650,
+    "submitMs": 1792269785846,
+    "activationDueMs": 1792269786096,
+    "endMs": 1792269815846,
+    "quotes": [
+      {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      {
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "quantity": "5.00"
+      }
+    ],
+    "targetQuote": {
+      "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "price": "0.49",
+      "quantity": "5.00"
+    },
+    "actualPriceCompatibleUpperBoundSharesRaw": 639910619,
+    "terminalMs": 1792269807963
+  },
+  "entryWitness": {
+    "at": 1792269785846,
+    "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "market": {
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "first": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "second": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "startMs": 1792269000000,
+      "endMs": 1792269900000,
+      "tick": "0.01",
+      "minSize": 5,
+      "feeRate": "0.07",
+      "feeExponent": 1,
+      "accepting": true,
+      "observedMs": 1792269779565,
+      "evidence": "https://gamma-api.polymarket.com/markets?slug=btc-updown-15m-1792269000",
+      "negativeRisk": false
+    },
+    "originalSequence": 299650,
+    "originalEventIndex": 1,
+    "nextDecisionMs": 1792269786096,
+    "firstBook": {
+      "sourceMs": 1792269785777,
+      "receivedMs": 1792269785846,
+      "bids": [
+        {
+          "size": "88.98",
+          "price": "0.5"
+        },
+        {
+          "size": 100,
+          "price": "0.49"
+        },
+        {
+          "size": 35,
+          "price": "0.48"
+        }
+      ],
+      "asks": [
+        {
+          "size": "2152.84",
+          "price": "0.52"
+        },
+        {
+          "size": "394.97",
+          "price": "0.53"
+        },
+        {
+          "size": 35,
+          "price": "0.54"
+        }
+      ],
+      "projectedDepthNotQueueReconstruction": true
+    },
+    "secondBook": {
+      "sourceMs": 1792269785777,
+      "receivedMs": 1792269785846,
+      "bids": [
+        {
+          "size": "2152.84",
+          "price": "0.48"
+        },
+        {
+          "size": "394.97",
+          "price": "0.47"
+        },
+        {
+          "size": 35,
+          "price": "0.46"
+        }
+      ],
+      "asks": [
+        {
+          "size": "88.98",
+          "price": "0.5"
+        },
+        {
+          "size": 100,
+          "price": "0.51"
+        },
+        {
+          "size": 35,
+          "price": "0.52"
+        }
+      ],
+      "projectedDepthNotQueueReconstruction": true
+    },
+    "firstObservedVolatility": "0.000265741457813903",
+    "secondObservedVolatility": "0.000265741457813903",
+    "entryStopped": false,
+    "ledgerHalted": false,
+    "imbalance": 0,
+    "availableCash": "500.00",
+    "exitLossAvailable": "2.5",
+    "openOrderIds": [],
+    "gross": "0.00",
+    "resolved": false,
+    "lastFirstTakerSource": null,
+    "lastSecondTakerSource": null,
+    "firstBid": "0.51",
+    "secondBid": "0.49",
+    "depth": "88.98",
+    "quantity": "5.00",
+    "effectivePolicyVolatility": "0.000265741457813903",
+    "secondsToExpiry": 114,
+    "requiredEdge": "0.0313713607289069515",
+    "netEdgeTotal": "-0.0100",
+    "firstFresh": true,
+    "secondFresh": true,
+    "actualDecisionReasonDelta": {
+      "NET_EDGE": 1
+    }
+  },
+  "riskWitness": {
+    "at": 1792269786096,
+    "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "market": {
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "first": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "second": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "startMs": 1792269000000,
+      "endMs": 1792269900000,
+      "tick": "0.01",
+      "minSize": 5,
+      "feeRate": "0.07",
+      "feeExponent": 1,
+      "accepting": true,
+      "observedMs": 1792269779565,
+      "evidence": "https://gamma-api.polymarket.com/markets?slug=btc-updown-15m-1792269000",
+      "negativeRisk": false
+    },
+    "originalSequence": 299997,
+    "originalEventIndex": 0,
+    "nextDecisionMs": 1792269786346,
+    "firstBook": {
+      "sourceMs": 1792269785998,
+      "receivedMs": 1792269786067,
+      "bids": [
+        {
+          "size": 5,
+          "price": "0.51"
+        },
+        {
+          "size": "105.98",
+          "price": "0.5"
+        },
+        {
+          "size": 100,
+          "price": "0.49"
+        }
+      ],
+      "asks": [
+        {
+          "size": "49.3",
+          "price": "0.52"
+        },
+        {
+          "size": 430,
+          "price": "0.53"
+        },
+        {
+          "size": "539.97",
+          "price": "0.54"
+        }
+      ],
+      "projectedDepthNotQueueReconstruction": true
+    },
+    "secondBook": {
+      "sourceMs": 1792269785998,
+      "receivedMs": 1792269786067,
+      "bids": [
+        {
+          "size": "49.3",
+          "price": "0.48"
+        },
+        {
+          "size": 430,
+          "price": "0.47"
+        },
+        {
+          "size": "539.97",
+          "price": "0.46"
+        }
+      ],
+      "asks": [
+        {
+          "size": 5,
+          "price": "0.49"
+        },
+        {
+          "size": "105.98",
+          "price": "0.5"
+        },
+        {
+          "size": 100,
+          "price": "0.51"
+        }
+      ],
+      "projectedDepthNotQueueReconstruction": true
+    },
+    "firstObservedVolatility": "0.000001943999774096",
+    "secondObservedVolatility": "0.000001943999774096",
+    "entryStopped": false,
+    "ledgerHalted": false,
+    "imbalance": 0,
+    "availableCash": "500.00",
+    "exitLossAvailable": "2.5",
+    "openOrderIds": [],
+    "gross": "0.00",
+    "resolved": false,
+    "lastFirstTakerSource": null,
+    "lastSecondTakerSource": null,
+    "firstBid": "0.51",
+    "secondBid": "0.48",
+    "depth": 5,
+    "quantity": "0.50",
+    "effectivePolicyVolatility": "0.000001943999774096",
+    "secondsToExpiry": 113,
+    "requiredEdge": "0.0400009719998870480",
+    "netEdgeTotal": "-0.0050",
+    "firstFresh": true,
+    "secondFresh": true,
+    "actualDecisionReasonDelta": {
+      "MIN_SIZE_AND_NET_EDGE": 1
+    }
+  },
+  "config": {
+    "schema": 1,
+    "initialCash": "500",
+    "orderShares": "5",
+    "minimumEdge": "0.01",
+    "portfolioBudget": "100",
+    "activationMs": 250,
+    "cancelMs": 250,
+    "maxBookAgeMs": 2000,
+    "queueMultiplier": "2",
+    "mergeCost": "0.01",
+    "redemptionCost": "0.01",
+    "unhedgedMs": 30000,
+    "maxUnhedged": "25",
+    "maxExitLoss": "2.5",
+    "feeMultiplier": "1",
+    "decisionMillis": 250,
+    "metadataMaxAgeMs": 60000
+  },
+  "expectedCancelRequestMs": 1792269786096,
+  "expectedCancelDueMs": 1792269786346,
+  "firstPossibleTargetPrintArrivalMs": 1792269786398,
+  "restingQuantity": "5.00",
+  "netEdgeTotal": "0.1900",
+  "requiredEdge": "0.0400009719998870480",
+  "requiredEdgeTotal": "0.200004859999435240000",
+  "initialQueueAhead": "200",
+  "allTargetObservationsAfterCancelDue": true,
+  "candidateAccountSimulated": false,
+  "fillsCreated": 0,
+  "netPnlRecomputed": false,
+  "liveAllowed": false
+}

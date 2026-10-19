@@ -148,3 +148,16 @@ reuses actual unchanged matcher/observer, no Maven build. Source prefix/context
 decoded; full original hash/row count/clean end bind all remaining bytes, not a
 truncated tape. Wait for `dq3-last-activation-seed-context`; no duplicate jobs,
 queue changes, fill claims or independent qualification from volume alone.
+
+Last activation run39191408588 SUCCESS, artifact12160042036 retained in
+`last-activation-result/artifact.zip.b64`, SHA256
+9c16e42982477344f1c7e62fa3beda92c0533b4184dc3edb585b2a42a4489808.
+Queue200 at1792269786096 means639.910619 actual-priced upper bound is NOT
+excluded by initial queue. Cached actual first risk witness instead requires
+edge0.0400009719998870480 vs reserved0.038/share for5 RESTING shares (do not use
+legacy new-entry0.5). Conditional cancel due1792269786346 precedes first possible
+target print1792269786398. Source/witness arithmetic verified offline;190 tests.
+Frozen conditional actual-engine cancellation probe uses ONLY cached context,
+unchanged PairPolicy/matcher, no public RPC/full tape scan/Maven/account replay.
+Await `dq3-last-cancel-cached-proof` and exact acknowledgement. This is not an
+observed historical candidate cancellation or global policy rejection.

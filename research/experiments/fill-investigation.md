@@ -1964,3 +1964,43 @@ rejects; if queue lower/ambiguous, require actual source-time/resting-cancel and
 same-data account replay before any qualification. Do not infer fills or lower
 queue/fees/risk from either outcome. No fresh capture or extra receipt sweep.
 Net after costs unchanged control-$1.80, guard0/0fills; DQ3 economics unknown.
+
+## Last activation result and cached resting-check probe — 2026-10-19
+
+PR9 head5a8eb22 and run39191408588 verified complete SUCCESS before this work.
+Artifact12160042036 ZIP SHA256
+9c16e42982477344f1c7e62fa3beda92c0533b4184dc3edb585b2a42a4489808
+retained exactly in `depth-quote-20261018/last-activation-result/artifact.zip.b64`.
+Actual engine activates299650 at1792269786096 on original input299997/event0,
+queue200. Therefore639.910619 complete priced volume is NOT excluded by queue
+alone; do not report this start as rejected by the previous1292.48 queue result.
+
+Reused immutable actual entry witnesses299650 and299997 plus full original context,
+no public reads or tape rescan. Source pre-event depth100*2 reproduces queue200;
+post-frame full books match BOTH witness snapshots/top3/source timestamps exactly.
+Entry's actual nextDecisionMs equals witness at1792269786096. Unchanged resting
+pair quantity is5, NOT the legacy new-entry size0.5 at that later decision.
+With reserved0.49/0.47 prices and merge0.01, net total0.19 (0.038/share).
+Original measured volatility/thin top depth5/expiry require exact
+0.0400009719998870480/share (0.200004859999435240000 total), so the unchanged
+maintainResting RESTING_NET_EDGE predicate requires cancellation at that callback.
+250ms cancel due=1792269786346; first possible target-leg observation in COMPLETE
+upper-bound census arrives1792269786398,52ms later. All18 other observations later.
+No target-leg evidence can fill before cancel due; potential opposite-leg fills
+and a candidate account trajectory are NOT simulated or asserted.
+
+Freeze `dq3-last-cancel-freeze.json` before a small CONDITIONAL isolated pair
+probe. Actual production PairPolicy recomputes the witness threshold; actual
+PaperMatchingEngine replays cached source inputs and executes both CANCELs after
+the first scheduled post-frame risk check. All trade allocations remain suppressed.
+This is NOT invocation of a full candidate ResearchSession/account or an observed
+historical cancellation; report precise counterfactual/isolated scope. Require
+actual engine cancellation acknowledgement before first possible target print,
+not just the arithmetic due-time claim, before rejecting this selected A leg.
+190 phase6 tests pass locally, including immutable source/witness/queue/timing and
+resting-vs-entry quantity checks. Reuse existing verified engine artifact, compile
+only observer, no Maven build. No new capture, source scan, public RPC or fee/
+queue/risk/acceptance changes. Next inspect `dq3-last-cancel-cached-proof`, archive
+and validate actual acknowledgement, then close the eleven-selected-start gate.
+Do NOT infer global DQ3 impossibility or profitability from selected snapshots.
+Net economics remain control-$1.80, guarded0/0fills; DQ3 account unknown, NO_GO.
