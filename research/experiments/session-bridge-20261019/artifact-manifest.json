@@ -1,0 +1,43 @@
+{
+  "parentCommit": "e1f0fd3782e901a9605b9804354ff8b091ab8ee4",
+  "priorAdapterRun": 39314342475,
+  "priorAdapterTests": 265,
+  "priorAdapterConclusion": "SUCCESS",
+  "dependencyArtifact": 12151627900,
+  "dependencyArchiveSha256": "f051412b702c858952c6265b2bd73520471a699e19e165c0521964be255900fb",
+  "localJava": "17.0.20",
+  "compilation": "two complete94-source core builds, unchanged default and exact-patch research variant; no Maven build claim",
+  "members": {
+    "default-before.json": {
+      "bytes": 3291,
+      "sha256": "2701c80fe58b5e427ad089723d39f06987d9a8926eb430d651372a3731d6dbbf"
+    },
+    "default-after.json": {
+      "bytes": 3291,
+      "sha256": "7367351e5932c6bf3533e127bb53502e8ced7938b5ccc342bd41e05836ea9c90"
+    },
+    "bridge-proof.json": {
+      "bytes": 5381,
+      "sha256": "7e74295be48577884927a3ccfbd67a7df4d69c2bcde78cd50d13e9eb357b2c65"
+    },
+    "build-provenance.json": {
+      "bytes": 616,
+      "sha256": "57f4d2b8354cec5867ae2a93a3de19841c530dd666eee2f269189c2a51a19f01"
+    },
+    "verification.json": {
+      "bytes": 534,
+      "sha256": "859e9b9f3084210b0995c0ac0272ba623311e5e7ddc04581961260413ce6174f"
+    }
+  },
+  "supportingInputsSha256": {
+    "research/phase6/session-bridge-freeze.json": "6383f68fadafe81e4fc2f93901c8979969eee76339652700b3b22ce4d55e4b15",
+    "research/phase6/session_bridge_result.py": "e65698b0c2bcb7ef824ba37c667129dc1f47ba414df59a005ef8d0b9cc2e1c00",
+    ".github/workflows/session-label-bridge.yml": "ccc346de5a525a0200edcf82abd97e1745d2b5cee92d7f337ee8bf8377ef8cd8"
+  },
+  "scope": "SYNTHETIC_SOURCE_BUILT_CANONICAL_SESSION_BRIDGE_NOT_MARKET_PNL",
+  "defaultCoreFilesModified": 0,
+  "modelMarketFillsCreated": 0,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

@@ -1,0 +1,185 @@
+{
+  "scope" : "SYNTHETIC_CANONICAL_SESSION_BRIDGE_NOT_MARKET_OR_PROFIT_PROOF",
+  "syntheticEntryBookedThroughCanonicalStrategyMatcherLedger" : true,
+  "syntheticCashAfterOneMakerFill" : "497.95",
+  "syntheticShares" : "5",
+  "syntheticBasis" : "2.05",
+  "duplicateAggregateChangedLedger" : false,
+  "rejectionGuardsPassed" : 7,
+  "unknownSourceHaltsCancelsAndBlocksSubsequentInput" : true,
+  "modelMarketFillsCreated" : 0,
+  "marketNetPnlRecomputed" : false,
+  "fullAccountStrategyComparisonPerformed" : false,
+  "frozenQw0AndFeePositivePoliciesIntegrated" : false,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false,
+  "syntheticTerminalSessionReport" : {
+    "activeMarkets" : [ {
+      "condition" : "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "remainingMs" : 998410,
+      "accepting" : true,
+      "freshBooks" : true,
+      "oldestBookAgeMs" : 340,
+      "inventoryImbalance" : 5
+    } ],
+    "availableCash" : 497.9500,
+    "boughtShares" : 5,
+    "cash" : 497.95,
+    "configuration" : {
+      "schema" : 1,
+      "initialCash" : 500,
+      "orderShares" : 5,
+      "minimumEdge" : 0.01,
+      "portfolioBudget" : 100,
+      "activationMs" : 250,
+      "cancelMs" : 250,
+      "maxBookAgeMs" : 2000,
+      "queueMultiplier" : 2,
+      "mergeCost" : 0.01,
+      "redemptionCost" : 0.01,
+      "unhedgedMs" : 30000,
+      "maxUnhedged" : 25,
+      "maxExitLoss" : 2.5,
+      "feeMultiplier" : 1,
+      "decisionMillis" : 250,
+      "metadataMaxAgeMs" : 60000,
+      "latencyJitterMs" : 0,
+      "latencySeed" : 0,
+      "makerImprovementTicks" : 1
+    },
+    "dataGaps" : 1,
+    "decision" : "NO_GO",
+    "decisionReasons" : {
+      "BOOK_MISSING" : 1,
+      "PAIR_SUBMITTED" : 1,
+      "RESTING" : 1
+    },
+    "decisionToFillP50Ms" : 319,
+    "decisionToFillP95Ms" : 319,
+    "decisions" : 3,
+    "edgeDistribution" : {
+      "0.18" : 2
+    },
+    "executions" : [ {
+      "orderId" : "sim-research-1",
+      "at" : 1570,
+      "token" : "a",
+      "buy" : true,
+      "size" : 5,
+      "price" : 0.41,
+      "fee" : 0,
+      "liquidity" : "MAKER",
+      "condition" : "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "purpose" : "ENTRY",
+      "expectedEdge" : 0.18,
+      "decisionToFillMs" : 319
+    } ],
+    "exitLossUsed" : 0,
+    "expiredMarkets" : 0,
+    "feesAndSettlementCosts" : 0,
+    "filledOrders" : 1,
+    "fills" : 1,
+    "frozenQw0AndFeePositivePoliciesIntegrated" : false,
+    "fullOriginalTapeCoverageProven" : false,
+    "halted" : true,
+    "holdings" : {
+      "a" : {
+        "shares" : 5,
+        "basis" : 2.05
+      }
+    },
+    "incentives" : 0,
+    "independentPaperQualificationAllowed" : false,
+    "liveAllowed" : false,
+    "makerExecutionDiagnostics" : [ {
+      "id" : "sim-research-1",
+      "token" : "a",
+      "buy" : true,
+      "price" : 0.41,
+      "submittedMs" : 1251,
+      "activationDueMs" : 1501,
+      "activatedMs" : 1501,
+      "terminalMs" : 1570,
+      "terminalReason" : "LAB_SETTLEMENT_COMPONENT",
+      "initialQueueAhead" : 0,
+      "remainingQueueAhead" : 0,
+      "eligiblePrintVolume" : 0,
+      "remainingShares" : 0,
+      "activeMs" : 69,
+      "printObservations" : {
+        "SETTLEMENT_COMPONENT" : 1
+      }
+    }, {
+      "id" : "sim-research-2",
+      "token" : "b",
+      "buy" : true,
+      "price" : 0.41,
+      "submittedMs" : 1251,
+      "activationDueMs" : 1501,
+      "activatedMs" : 1501,
+      "terminalMs" : 1590,
+      "terminalReason" : "DATA_GAP:unknown",
+      "initialQueueAhead" : 0,
+      "remainingQueueAhead" : 0,
+      "eligiblePrintVolume" : 0,
+      "remainingShares" : 5,
+      "activeMs" : 89,
+      "printObservations" : { }
+    } ],
+    "markoutContinuityPolicy" : "NO_GAP_OR_STALE_DEPTH_BETWEEN_FILL_AND_OBSERVATION",
+    "markoutPnl" : { },
+    "markoutSamples" : { },
+    "maxDrawdown" : 0.05,
+    "missingMarkObservations" : 0,
+    "missingMarkoutsByReason" : {
+      "DATA_GAP" : {
+        "5000" : 1,
+        "1000" : 1,
+        "30000" : 1
+      }
+    },
+    "netRealizedPnl" : 0,
+    "openOrderCount" : 0,
+    "orderFillRate" : 0.50000000,
+    "orderTerminalReasons" : {
+      "DATA_GAP:unknown" : 1,
+      "LAB_SETTLEMENT_COMPONENT" : 1
+    },
+    "orderTerminalStatuses" : {
+      "CANCELED" : 1,
+      "FILLED" : 1
+    },
+    "pairCompletions" : [ ],
+    "pendingMarkouts" : 0,
+    "pendingTakers" : 0,
+    "quantityPairCompletion" : 0E-8,
+    "researchLabelBridgeOnly" : true,
+    "residualEntryRiskGuard" : false,
+    "residualEntryRiskRejectSamples" : [ ],
+    "residualExpiryWorstCaseNotional" : 0,
+    "resolvedMarkets" : 0,
+    "resolvedTradedMarkets" : 0,
+    "riskBreaches" : 0,
+    "settlementExperiment" : {
+      "consumedBindings" : 1,
+      "experiment" : "CONSERVED-MIXED-LAB0",
+      "bindings" : 1,
+      "duplicateAggregateSuppressed" : 1,
+      "actualComponents" : 1,
+      "adapterOnlyNotAccountReplay" : true,
+      "independentPaperQualificationAllowed" : false,
+      "liveAllowed" : false,
+      "candidateAccountSimulated" : false
+    },
+    "settlementVolumeConservation" : {
+      "uniqueMakerComponents" : 1,
+      "queueAbsorbed" : 0,
+      "unusedQuantity" : 25.000000,
+      "hiddenLiquidityAndCrossPriceQueueUncertainty" : true,
+      "venueQuantity" : 30.000000,
+      "allocatedQuantity" : 5
+    },
+    "soldShares" : 0,
+    "submittedOrders" : 2
+  }
+}

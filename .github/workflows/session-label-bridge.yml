@@ -1,0 +1,58 @@
+name: PAPER isolated canonical session label bridge
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/session-label-bridge.yml'
+      - 'research/phase6/session-bridge-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-isolated-session-label-bridge
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: Immutable acceptance and complete offline regressions
+        run: |
+          echo '7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503  research/phase2/acceptance.json' | sha256sum -c -
+          python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: probe-engine
+      - name: Materialize exact isolated source variant; default source untouched
+        run: |
+          python3 -m research.phase6.session_bridge_build --output "$RUNNER_TEMP/session-bridge-src"
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/session-bridge-deps"
+          mkdir -p "$RUNNER_TEMP/session-bridge-base-classes" "$RUNNER_TEMP/session-bridge-variant-classes" research/output/session-bridge-proof
+      - name: Compile unchanged canonical core and capture default behavior on synthetic feed
+        run: |
+          javac -cp "$RUNNER_TEMP/session-bridge-deps/BOOT-INF/lib/*" -d "$RUNNER_TEMP/session-bridge-base-classes" $(find polybot-core/src/main/java -name '*.java') research/phase6/ConservedMixedReplayLabels.java research/phase6/ConservedMixedReplayLabelsProbe.java research/phase6/CanonicalSessionParityProbe.java
+          java -cp "$RUNNER_TEMP/session-bridge-base-classes:$RUNNER_TEMP/session-bridge-deps/BOOT-INF/lib/*" com.polybot.hft.paper.CanonicalSessionParityProbe "$RUNNER_TEMP/session-bridge-before"
+      - name: Compile isolated session bridge; prove default parity and synthetic canonical account wiring
+        run: |
+          javac -cp "$RUNNER_TEMP/session-bridge-deps/BOOT-INF/lib/*" -d "$RUNNER_TEMP/session-bridge-variant-classes" $(find "$RUNNER_TEMP/session-bridge-src/polybot-core/src/main/java" -name '*.java') research/phase6/ConservedMixedReplayLabels.java research/phase6/ConservedMixedReplayLabelsProbe.java research/phase6/OfflineSessionLabels.java research/phase6/CanonicalSessionParityProbe.java research/phase6/MixedSessionBridgeProbe.java
+          java -cp "$RUNNER_TEMP/session-bridge-variant-classes:$RUNNER_TEMP/session-bridge-deps/BOOT-INF/lib/*" com.polybot.hft.paper.CanonicalSessionParityProbe "$RUNNER_TEMP/session-bridge-after"
+          java -cp "$RUNNER_TEMP/session-bridge-variant-classes:$RUNNER_TEMP/session-bridge-deps/BOOT-INF/lib/*" com.polybot.hft.paper.MixedSessionBridgeProbe "$RUNNER_TEMP/session-bridge-mixed"
+          cp "$RUNNER_TEMP/session-bridge-before/parity.json" research/output/session-bridge-proof/default-before.json
+          cp "$RUNNER_TEMP/session-bridge-after/parity.json" research/output/session-bridge-proof/default-after.json
+          cp "$RUNNER_TEMP/session-bridge-mixed/bridge-proof.json" research/output/session-bridge-proof/bridge-proof.json
+          cp "$RUNNER_TEMP/session-bridge-src/build-provenance.json" research/output/session-bridge-proof/build-provenance.json
+          python3 -m research.phase6.session_bridge_result --root research/output/session-bridge-proof > research/output/session-bridge-proof/verification.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: isolated-session-label-bridge-proof
+          retention-days: 7
+          path: research/output/session-bridge-proof/
+          if-no-files-found: error

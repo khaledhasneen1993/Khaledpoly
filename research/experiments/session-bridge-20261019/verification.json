@@ -1,0 +1,14 @@
+{
+  "scope": "VERIFIED_SYNTHETIC_SESSION_BRIDGE_AND_DEFAULT_PARITY_NOT_MARKET_PNL",
+  "completeDefaultReportParity": true,
+  "canonicalSyntheticEntryAndCashInventoryBooking": true,
+  "coveredAggregateCannotDoubleAllocate": true,
+  "unknownScopedSourceHaltsAndCancels": true,
+  "freshOfflineGuardCases": 7,
+  "defaultCoreFilesModified": 0,
+  "frozenQw0AndFeePositivePoliciesIntegrated": false,
+  "modelMarketFillsCreated": 0,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

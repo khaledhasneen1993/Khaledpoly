@@ -3020,3 +3020,51 @@ No new account PnL: selected conditional exit +0.11264 vs-0.03747; separate full
 control-$1.80 after costs, guard0/0fills, QW0 full account UNKNOWN. NO_GO, PAPER
 only, PR9 unmerged, monitoring continues. Unknown local activation archive left
 untouched. Full integration and independent acceptance remain unfinished.
+
+## Canonical session label bridge and default-path parity implemented — 2026-10-19
+
+Checked latest branch/PR9 e1f0fd3, prior adapter run39314342475 COMPLETE SUCCESS:
+265 tests,4 queue bridges,22 rejection cases,2 rounding boundaries. No active
+overlapping run. Continue next dependency, no repeat actual-data strategy trial.
+
+Mixed adapter now connects to the ACTUAL ResearchSession/AccountLedger in an
+explicit isolated source build. Preserve original core files/frozen evidence:
+small tracked patch applies only to a temporary generated ResearchSession after
+verifying ALL94 original core sources and build-input hashes. Check patch before
+applying, assert only declared generated source changed, refuse existing/output
+inside checkout. No reflection or injected ledger/position. All old constructor
+signatures and LEGACY/null delegation preserved; normal service remains untouched.
+
+Native tests run identical DEFAULT synthetic feeds against untouched core and
+isolated build, compare ALL parsed report fields: exact parity. Explicit mixed
+fixture obtains entry orders from the canonical strategy itself, then after
+normal250ms activation flows one conserved component through real matcher and
+ledger: SYNTHETIC cash497.95,5 shares A,basis2.05. Covered alternate aggregate
+does not change ANY ledger state. Volume30=5 allocated+0 queue+25 unused. These
+fixture fills do NOT count as market fills or evidence of profitability.
+
+Seven native session guards: unknown scoped source halts/cancels without changing
+booked inventory/cash; subsequent input rejected; external mode/existing state/
+nonempty ledger/wrong profile/missing labels rejected. Four build tests and four
+result/tamper tests pass. Both94-source local Java17 builds compile. Full native
+reports, independent verification and generated-source provenance saved under
+`session-bridge-20261019/`; new Java21 CI reproduces both builds and complete
+regressions. No fresh RPC/capture/source-tape scan or actual strategy replay.
+
+Initial DEFAULT fixture incorrectly expected crossing public price0.40 to match
+order0.41. Untouched engine correctly requires EXACT price, so corrected ONLY
+synthetic default print to0.41; model/queue untouched. Both default reports then
+match. Mixed conserved-component fixture remains distinct and uses existing
+component price eligibility. Preserve this distinction; never claim touch fills.
+
+Next: extend explicit isolated profile with frozen causal QW0 entry and fee-positive
+exit rule, preserving canonical cash/ledger/risk, cancellations and actual FOK net
+recheck. Full source-bound coverage must precede whole-account SAME-source
+baseline/candidate replay; selected451-window is not full coverage. Freeze full
+integrated executable/config before independent multi-market PAPER. No manual
+holding injection, no selected-snippet account, no retuning holdout/acceptance.
+
+No new market-account net PnL: selected conditional exit+0.11264 vs-0.03747;
+original full control-$1.80 after costs,guard0/0fills,QW0 full account UNKNOWN.
+NO_GO, PAPER only, PR9 unmerged. Acceptance and frozen strategy unchanged;
+follow-up continues. Unknown dirty old activation archive preserved untouched.
