@@ -93,3 +93,21 @@ Next preregistered batch: source-chronological next uncovered additional state
 One bounded public-read job only; retain raw receipts/blocks and exact component
 prices. Reuse across later windows only with exact original sample and quote
 binding. No account execution/PnL or independent-paper qualification inferred.
+
+Completed result: https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39181463387
+SUCCESS, source9b80a8e;39 new receipts,8 blocks, no errors; artifact12156695443.
+Exact ZIP in `overlap-result/artifact.zip.b64`, SHA256
+baade0bae80c97677a4a4109da1bbf153e8445631e936e47aa6fc563d6caa621.
+Offline180 phase6 tests pass, including exact RAW decode/conservation/reproduction
+and absent-receipt failure without zero fabrication. Ten complete A legs; three
+overlapping starts243583/245065/246180 each show960.720922 actual price-compatible
+BUY component shares at their original0.49 bid, NOT three independent volumes
+and NOT fills. Seven other complete A legs zero,12 remaining legs unknown.
+
+Next gate: original delayed activation book, unchanged2x initial queue, actual
+source-time eligibility and resting-risk cancellation for these three starts.
+Legacy state243583 quote depth840 would imply1680 queue if it were activation
+depth, but it is NOT proven activation depth: do not use that shortcut. Pause
+further receipt expansion until causal first-leg gate passes. No price/queue/
+fee/risk tuning, account profit claim or independent qualification. Fixed
+acceptance unchanged; corrected control-$1.80, guard0/0fills, DQ3 PnL unknown.

@@ -1795,3 +1795,48 @@ Preserve raw successes and errors if incomplete, do not expand scope or count
 partial missing coverage as zero. Next: inspect its full coverage/receipt report,
 archive and re-decode before any strategy adoption. Known economics unchanged:
 control-$1.80, guard0/0fills, undefined pair ratio, NO_GO; no profitability proof.
+
+## DQ3 overlapping complete-leg result — 2026-10-19 00:36 UTC
+
+Frozen preregistration9b80a8e4514c7a1c6d237db0a043360b3715358b preceded reads.
+https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39181463387 SUCCESS:
+178 phase6 CI regressions then exactly39 public receipt reads and8 block reads.
+All39 receipts conserved against exact original samples, no errors. Artifact
+12156695443 ZIP SHA256 baade0bae80c97677a4a4109da1bbf153e8445631e936e47aa6fc563d6caa621
+retained as `depth-quote-20261018/overlap-result/artifact.zip.b64` (42 members:
+39 original receipt/block files, selection, report, coverage). Full coverage
+also retained as JSON. No fresh market capture, full tape replay or Java build.
+
+Offline re-decode of all cached+new evidence gives10 completely covered A legs:
+173342,197690,198832,243583,245065,246180,258161,258635,259283,259597.
+Actual compatible target BUY component volume is960720922 raw (=960.720922
+shares) in EACH of243583/245065/246180 at their unchanged own bid0.49; all
+three share overlapping evidence, NEVER sum them as2882.162766 venue shares.
+The other7 complete legs have zero compatible actual components. Remaining
+12 legs are incomplete/unknown, not zero.49 unique cached receipts includes
+one original context receipt not fully closing the opposite leg's coverage.
+
+This passes only an actual-price necessary condition in three selected starts.
+It establishes neither observed activation, current book-source eligibility,
+queue depletion, actual resting-risk cancellation nor any candidate trajectory.
+Legacy proposal243583 displayed840 shares at its chosen A level; the unchanged
+2x queue model would imply1680 if seeded from THAT snapshot, exceeding960.720922.
+Do NOT use the decision snapshot instead of actual delayed activation book to
+claim either no-fill or fill: source-time and cancellation are still unproven.
+The volume is also actual route components, not a hypothetical new taker route.
+
+180 phase6 tests now pass locally. New immutable result regression re-decodes
+all39 RAW receipts and every covered observation, exact sums/overlap semantics;
+missing-receipt regression preserves39 errors/incomplete unknown coverage rather
+than fabricated zero. Original frozen source/tests/policy remain unchanged.
+
+Next justified gate is causal activation/book queue and resting-cancel lifetime
+for the THREE already price-supported starts, using original source data and
+unchanged250ms latency/2x queue/edge/risk. No further receipts for the opposite
+leg or last unexamined state until this cheaper-to-reject first-leg gate passes.
+If implementing a replay probe, keep research-only and defaultOFF, preregister
+source/context anchors and require original source SHA/chronology, then compare
+full-account baseline/candidate on same development data before independent
+PAPER. Do not tune prices/queue/risk to this result. Net after costs unchanged:
+control-$1.80; guarded0 with0fills, not profitable. DQ3 PnL not recomputed and
+independent acceptance unmet. No wallet, keys, live orders or default changes.
