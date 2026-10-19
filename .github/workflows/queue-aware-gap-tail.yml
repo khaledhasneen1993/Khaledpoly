@@ -1,0 +1,27 @@
+name: PAPER QW0 final14 original tail receipts
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/queue-aware-gap-tail.yml', 'research/phase6/queue-aware-gap-tail-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-qw0-original-tail14
+  cancel-in-progress: false
+jobs:
+  receipts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: All offline regressions before public reads
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - name: Only original final14 actual settlement groups, no source scan or capture
+        run: python3 -u -m research.phase6.queue_aware_gap_tail_receipts --output research/output/qw0-tail14
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qw0-original-tail14-receipts
+          retention-days: 7
+          path: research/output/qw0-tail14/

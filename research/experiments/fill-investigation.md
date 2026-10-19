@@ -2555,3 +2555,45 @@ empty/nonempty/standalone callback assertions run BEFORE gate evaluation, plus
 one Python exact original source-bound regression.228 phase6 tests total.
 First run checked COMPLETE before retry; no overlap, new receipts/source scan,
 parameter retuning or production strategy change. Preserve failed run history.
+
+## Corrected through-GAP gate safety stop and final14 freeze — 2026-10-19
+
+Corrected run39245925931/source54873a75ea6e1d90bee1fec95f97fd3706e2ba42
+passed228 offline CI tests, two actual matcher source/queue assertions and three
+empty/nonempty/standalone frame-order assertions. Complete148-group preparation
+passed. Actual replay progressed past the original cancel check and hedge
+construction, then hit its PREREGISTERED safety stop:
+`Hedge executable before GAP requires additional complete receipt/action evidence`.
+This is NOT a profitable/complete account replay or successful gate. Do not
+relax/remove the guard. Exact selected failure log lines and status are retained
+in `queue-aware-quote-20261019/through-gap-blocked/`; failed run history preserved.
+
+Source ACK1792269759566 + unchanged250ms = hedge due1792269759816. Original GAP
+1792269760873 is1057ms AFTER that potential activation, NOT before. Therefore
+no claim that the pending hedge was automatically canceled before activation.
+Independent exact original ACK-frame depth/fee calculation yields lead bid0.50,
+ask0.52, other ask0.50; complete value0.00050/share (<required0.01), sell value
+0.00250/share. Unchanged non-overdue rule chooses WAIT then maker reduction SELL
+A at0.51, quantity5. This derived quote is source-input evidence, NOT a fill,
+net profit or native successful complete-report claim. No parameter tuning.
+
+Necessary next cohort is ALL14 original B-target observations strictly after
+ACK and before ORIGINAL first GAP. They include possible DIRECT A maker SELL
+components relevant to the new reduction; do not infer their price from1-public
+aggregate. Original B census binding/new A SELL quote remain separate. Freeze
+selection/source/tests/config/acceptance BEFORE reading these new receipts.
+Reuse cached177 prior public transactions; no broad new scan/capture/build or
+duplicate earlier RPC batch. Strict max14 receipt requests; public chain/block reads, exact resume
+checkpoint, missing/ambiguous/non-conserved=UNKNOWN, never zero. Summarize actual
+integer maker components at exact frozen SELL rational predicate, NOT fills.
+Two new source-selection/request/unknown regressions pass locally;228 existing
+CI +2 new tests (230 suite) must pass in new workflow BEFORE public reads.
+Previous gate checked COMPLETE before starting this batch; no overlap.
+
+Next retain/reproduce all14 groups, giving complete39 A+123 B=162 source groups
+through first GAP. Only then freeze a complete active-reduction lifecycle gate
+with proper source-time queue, partial fills and post-fill decisions. Do not
+continue unchanged strategy state after a new fill or turn a prefix into account
+PnL. Full post-GAP/other-market/account/resolution path and SAME-development
+baseline/candidate comparison still required before independent PAPER. Known
+account net control-$1.80 after costs, guard0/0fills; QW0 unknown, NO_GO.

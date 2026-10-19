@@ -141,3 +141,15 @@ first GAP, unchanged resting/wait/cancel/FeeModel/hedge rules. Unknown executabl
 post-ACK prints fail; no imaginary hedge fill before activation/GAP. One new
 preparation regression (227 phase6 total). Account risk/other markets and post-
 GAP/resolution still omitted, no account/PnL/independent qualification inferred.
+
+Corrected through-GAP run39245925931/source54873a7 passed228 CI and five Java
+synthetic checks, then intentionally failed its predeclared safety guard: hedge
+due1792269759816 is1057ms BEFORE original GAP1792269760873. It cannot be treated
+as canceled-before-activation. Source ACK-frame fee calculation implies unchanged
+maker reduction SELL A0.51; execution remains UNKNOWN. Failure proof retained in
+`through-gap-blocked/`. Do not relax guard or claim successful account replay.
+Next source-bound ALL14 remaining original tail groups before GAP, strict public
+receipt budget14, frozen `gap-tail-selection.json`. They provide possible actual
+maker SELL components, not aggregate complements or automatic fills.228 existing
+CI +2 new local regressions; new230-test workflow gates public reads. No strategy,
+risk/fee/acceptance edits, new source scan or independent capture.
