@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "scope": "CONDITIONAL_RESTING_UNKNOWN_COUNTERPART_NOT_ACCOUNT",
+  "parentCommit": "1e47328f7352e53ae2c82f331edadaf11f01b7db",
+  "selectedOriginalSequence": 243583,
+  "fixedHorizonMs": 1792269754123,
+  "policyChanged": false,
+  "independentPaperQualificationAllowed": false,
+  "filesSha256": {
+    "research/phase6/queue_aware_resting.py": "17daa08452c918570081bd782948f7dd3cf6b935f914139c6c69dbb5c77c65e2",
+    "research/phase6/Qw0RestingProbe.java": "fdd638b1b0bc42af205f4fb864c295fe3150608009ba7465df9f756803f69ffa",
+    "research/phase6/tests/test_queue_aware_resting.py": "f56454a0c91889d434bfebb0b1d3cd445e11c96ffbaff0d203ef0f1b9ab2e559",
+    ".github/workflows/queue-aware-resting.yml": "ecb630319a87807e30b23d10d5bfa279508bde664551669487165509bd73d9c4",
+    "research/phase6/Qw0CausalProbe.java": "aedba6b3482f162d0e1d4dd690c6828839753e69539ff4063ea44c48c0e1f10f",
+    "research/phase6/queue_aware_causal_result.py": "efc13ee1f54bfad745866338dd4f8447c1c582fcccf3800ca9b938fc004358bd",
+    "research/phase6/queue_aware_causal.py": "885c59fb24b43e37f92e90956b4c27a0f62f32c0bc4232090055c5b1469a495b",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "polybot-core/src/main/java/com/polybot/hft/paper/PairPolicy.java": "041cfc590e08a28cbc3c0a9099b82d157441152acbb0d95ad14dbac928abde97",
+    "polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java": "2c5a97513e9ab1c261af7a9868f3b377c89e28e8cbb883800ee6d8aee87f9923",
+    "polybot-core/src/main/java/com/polybot/hft/paper/ResearchConfig.java": "9cf395e794ba6fcfaa87d7cf3f5ef22cdf5c93295fc0df6d59ea84c9ff72d520",
+    "polybot-core/src/main/java/com/polybot/hft/paper/PaperMatchingEngine.java": "12e89574023e0457d2066f8e50d660491a3ef182ae066bab4725cd40324fa84f",
+    "research/experiments/queue-aware-quote-20261019/causal-result/artifact.zip.b64": "22ab201d432d0390643814420e056fe61a05b388c35a1f5bdcf77aefbbd717d0"
+  }
+}

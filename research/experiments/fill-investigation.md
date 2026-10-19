@@ -2211,3 +2211,28 @@ still supported, obtain necessary actual counterpart receipt evidence and run
 a separately frozen SAME-development FULL-account baseline/candidate comparison
 before independent PAPER. Never retune QW0 on these observations or a holdout;
 no new independent capture, broad RPC batch or runtime promotion yet.
+
+## QW0 conditional resting-lifetime preregistration — 2026-10-19
+
+Checked PR9/head1e47328 and active Actions collection: no running experiment.
+Reuse exact retained causal artifact; NO complete-tape download/scan or public
+RPC. One selected start243583, unchanged pair0.48/0.40, quantity5. Horizon fixed
+at the PREVIOUS gate's first conditional target allocation1792269754123, not a
+new optimized stopping time. Reconstruct all post-frame decision callbacks from
+the exact original nextDecisionMs; initialize EWMA/mids using original flat-state
+entry witness. Every subsequent BOOK updates volatility with original scale18
+HALF_EVEN. Cross-check all available immutable original witnesses reached.
+
+Apply unchanged runtime RESTING_PRICE_INVALID/RESTING_NET_EDGE and existing
+REPRICE_VALIDATED_PAIR (including2000ms age, lawful replacement size/minimum,
+makerImprovementTicks default1, required edge and merge cost). No replacement
+orders, deferred hedge, counterpart fills or account imagined. Actual PairPolicy
+independently checks every planned callback and actual unchanged matcher applies
+250ms cancellation and conserved source-bound target components. The target
+can still fill in a genuine cancel race; do not stop at cancellation request.
+This explicitly CONDITIONAL test assumes counterpart stays untouched; unknown
+opposite-leg execution can change lifecycle and MUST be separately evidenced.
+Its output can neither prove actual bot fills/profit nor qualify independent
+PAPER. No runtime change and no QW0 policy tuning. Freeze files before evaluating
+this new gate;207 phase6 regression tests expected (204 prior +3 synthetic).
+Next retain all outcomes, then decide whether counterpart evidence is justified.
