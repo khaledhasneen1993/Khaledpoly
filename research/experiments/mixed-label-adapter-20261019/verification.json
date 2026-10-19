@@ -1,0 +1,16 @@
+{
+  "scope": "INDEPENDENT_ALL451_MIXED_ADAPTER_PARITY_NOT_ACCOUNT",
+  "bindings": 451,
+  "actualComponents": 1038,
+  "portionsLogicalSha256": "402d6f602110befe0b62fd06e34ee93e34e8e960c3c4f88bd5e3b1bf5969e849",
+  "routeComponentCounts": {
+    "DIRECT": 208,
+    "MINT": 821,
+    "MERGE": 9
+  },
+  "modelFillsCreated": 0,
+  "netPnlRecomputed": false,
+  "candidateAccountSimulated": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

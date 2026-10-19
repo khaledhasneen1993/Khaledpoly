@@ -1,0 +1,57 @@
+name: PAPER conserved mixed-side adapter proof
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/mixed-label-adapter.yml'
+      - 'research/phase6/ConservedMixedReplayLabels*.java'
+      - 'research/phase6/mixed_replay_labels*.py'
+      - 'research/phase6/tests/test_mixed_replay_labels.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-conserved-mixed-adapter
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: Immutable acceptance and all offline regressions
+        run: |
+          echo '7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503  research/phase2/acceptance.json' | sha256sum -c -
+          python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: probe-engine
+      - name: Compile only isolated adapter against retained canonical matcher
+        run: |
+          mkdir -p "$RUNNER_TEMP/mixed-adapter"
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/mixed-engine"
+          javac -proc:none -cp "$RUNNER_TEMP/mixed-engine/BOOT-INF/lib/*" -d "$RUNNER_TEMP/mixed-adapter" research/phase6/ConservedMixedReplayLabels.java research/phase6/ConservedMixedReplayLabelsProbe.java
+          java -cp "$RUNNER_TEMP/mixed-adapter:$RUNNER_TEMP/mixed-engine/BOOT-INF/lib/*" com.polybot.hft.paper.ConservedMixedReplayLabelsProbe --self-test
+      - name: Revalidate retained ALL451 receipts; no public requests or new capture
+        run: python3 -m research.phase6.mixed_replay_labels --output research/output/mixed-adapter/labels.json
+      - name: Validate every original binding; no strategy or account execution
+        run: >-
+          java -Xmx1g -cp "$RUNNER_TEMP/mixed-adapter:$RUNNER_TEMP/mixed-engine/BOOT-INF/lib/*"
+          com.polybot.hft.paper.ConservedMixedReplayLabelsProbe research/output/mixed-adapter/labels.json
+          research/experiments/queue-aware-quote-20261019/post-gap-result/context.records.jsonl.gz
+          research/output/mixed-adapter/report.json
+      - name: Independent Python parity for every identity, side, quantity and price
+        run: python3 -m research.phase6.mixed_replay_labels_proof research/output/mixed-adapter/report.json > research/output/mixed-adapter/verification.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: conserved-mixed-adapter-proof
+          retention-days: 7
+          path: research/output/mixed-adapter/
+          if-no-files-found: error

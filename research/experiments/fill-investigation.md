@@ -2970,3 +2970,53 @@ account UNKNOWN. Acceptance SHA unchanged, NO_GO, no independent qualification.
 PR9 remains unmerged, PAPER only. Continue justified integration work; monitoring
 remains enabled because independent acceptance has not passed. Unknown dirty old
 activation archive preserved untouched.
+
+## Separate conserved mixed-side adapter implemented and source-parity checked — 2026-10-19
+
+Reviewed latest PR9/branch4985428 and run39305626305: COMPLETE SUCCESS,261 Python
+tests and byte-identical retained proofs; no active overlapping Actions. Preserve
+all previous native strategy experiments and original frozen files. This step
+implements the first documented integration dependency, not a new strategy trial.
+
+New separate `ConservedMixedReplayLabels` consumes exporter-revalidated raw
+matched orders from ALL451 retained original receipts, both public sides and
+both pair tokens. Independently rechecks integer share/collateral conservation,
+DIRECT/MINT/MERGE routing, uint256 bounds, exchange/group/coordinate/component
+identities, exact original public trade hash/time/fields, complete consumption.
+BUY-UP/SELL-DOWN28 price rounding and exact microshare quantities. Unknown scoped
+observations fail closed; covered tx alternate aggregates emit empty bindings;
+exact binding reconsumption is rejected. Existing <=100 BUY-only legacy adapter,
+canonical session/matcher and all frozen policies remain unchanged.
+
+Native adapter consumes451 original coordinates /1038 conserved maker components:
+DIRECT208, MINT821, MERGE9. Independent Python digest matches EVERY coordinate,
+identity, token, side, quantity and rounded price:
+`402d6f602110befe0b62fd06e34ee93e34e8e960c3c4f88bd5e3b1bf5969e849`.
+Exact1556983-byte input SHA
+`682c0d599eb0beaae7b1717decabff09e69185ad483593f823e6a10b6875459a`
+is reconstructible, not duplicated. Retain native report/independent verification
+and provenance under `mixed-label-adapter-20261019/`. No fresh RPC, capture,
+full original source scan, strategy rerun, order/holding injection or market fill.
+
+Local Java17 successfully compiled ALL94 unchanged core sources plus two new
+adapter classes against verified retained executor libraries (ZIP SHA f051412b).
+Native tests pass four canonical queue bridge cases,22 invalid-input/scope/source/
+conservation rejection cases, two sub-28-digit BUY-UP/SELL-DOWN boundaries.
+All fixture fills are explicitly synthetic and never counted as market fills.
+Four new Python tests pass, including actual parity and exact old-adapter SHA.
+New CI validates the separate adapter against the retained canonical Java21
+engine after offline regressions; it does not run another strategy experiment.
+
+Next: explicit research-only resolver integration (current ResearchSession
+constructor takes concrete legacy labels), opt-in QW0 entry/frozen fee-positive
+exit with canonical ledger/risk/cash and execution-net check. Preserve reproducible
+frozen baseline binaries/reports when integrating new source. Full replay needs
+complete source-bound coverage; this451-observation recovery excerpt is NOT full
+account coverage. No injected5-share account or selected-snippet concatenation.
+Then SAME-source baseline/candidate full-account replay, freeze integrated code,
+independent multi-market PAPER under unchanged acceptance; no holdout tuning.
+
+No new account PnL: selected conditional exit +0.11264 vs-0.03747; separate full
+control-$1.80 after costs, guard0/0fills, QW0 full account UNKNOWN. NO_GO, PAPER
+only, PR9 unmerged, monitoring continues. Unknown local activation archive left
+untouched. Full integration and independent acceptance remain unfinished.
