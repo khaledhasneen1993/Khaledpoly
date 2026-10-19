@@ -2069,3 +2069,30 @@ First gate requires >=1 additional legal state vs actual legacy AND >=1 changed
 pair vs DQ3; otherwise reject with no further experiment. A pass remains only
 snapshot price feasibility, NOT account replay or independent qualification.
 No financial result yet; known control-$1.80/guard0 with0fills unchanged.
+
+## QW0 first same-data price result and cached-traffic freeze — 2026-10-19
+
+Implementation9cc30c57428b3095c7272bd7d67713a4cb06b28b committed BEFORE running
+the34-witness comparison. `queue-aware-quote-20261019/state-screen.json` retains
+all rows/choices. Legacy submitted1, DQ3 price-feasible11, QW0 price-feasible7;
+QW0 has6 additional lawful states vs legacy and6 different quote pairs vs DQ3.
+It passes ONLY the fixed price gate. Fewer price-feasible states is not a profit
+or fill metric; no claim of observed queue improvement from snapshot proxies.
+All19 actual size-rejected decisions remain blocked. Count20 in broader metric
+includes a below-size snapshot already RESTING; do not conflate branch counts.
+
+198 phase6 tests pass: exact real-state result reproduction plus all previous
+proofs and integer-price tests. No new market data, RPC, full source scan, Java
+build or strategy/account replay. Candidate/config frozen unchanged after result.
+Existing original full traffic census is quote-agnostic, and68 cached receipts
+completely cover ALL7 proposed A-leg windows. Freeze new quotes/windows/source
+bindings BEFORE re-evaluating actual components: `queue-aware-cached-traffic-freeze.json`.
+Never rewrite old observation targetBid to satisfy a new quote; re-decode the
+original sample and compare actual component integers to a SEPARATE QW0 bid.
+Missing/ambiguous coverage fails, never zero. Overlapping volumes not summed.
+
+Next run this offline cached necessary gate; no extra public reads/scans. Zero
+all7 legs rejects ONLY these starts, not global QW0 impossibility. Positive legs
+still need frozen source-time/activation/queue/resting-risk and full same-data
+baseline/candidate account proof before independent PAPER. Net remains corrected
+control-$1.80, guard0/0fills; QW0/DQ3 account performance unmeasured, NO_GO.
