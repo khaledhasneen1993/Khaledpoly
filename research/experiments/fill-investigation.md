@@ -1878,3 +1878,12 @@ not decision-book substitution. No additional receipt expansion/new capture.
 Run only the new dedicated workflow; inspect its context and activation report
 before changing policy. Hashes/spec in `dq3-activation-freeze.json`. Net unchanged
 control-$1.80, guard0/0fills, DQ3 unknown; no acceptance/defaults/risk/fee changes.
+
+Started ONE dedicated run39186480474 at frozen sourcec5660984bb6079547a24402aa21a01c19e505899:
+https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39186480474
+182 Python regressions passed on CI. Observer compiled against existing verified
+engine and BOTH actual-engine pre-event-book/paired-GAP assertions passed before
+original source download/extraction. Source download was in progress at this
+checkpoint; context/activation report not yet available, no queue result claimed.
+Await `dq3-activation-seed-context`; do not rerun/download another capture, launch
+another account replay, or infer final economic results while this job runs.
