@@ -1,0 +1,27 @@
+{
+  "experiment": "QW0",
+  "preregistrationCommit": "62c72e053e4ae29dc0e34fdff7e95174123212a1",
+  "status": "IMPLEMENTATION_FROZEN_BEFORE_REAL_WITNESS_SCREEN",
+  "maxVariants": 1,
+  "selectedDevelopmentWitnesses": 34,
+  "minimumAdditionalLawfulStatesVsLegacy": 1,
+  "minimumChangedPricedPairsVsDQ3": 1,
+  "requiredEdgeReserve": "Existing analytical thin premium cap0.02 minus original top-depth thin premium",
+  "queueObjective": "min max displayed size*unchanged multiplier, then sum, then max combined bid, then shallow indices, then higher first bid",
+  "runtimeOrServiceWiringAllowed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    "research/experiments/depth-quote-20261018/qw0-preregistration.md": "27fab6c1f6cbdde8b634f12a4d5f7cf66cc454941469c7c05a2e5f1435db1b7e",
+    "research/phase6/queue_aware_quote_lab.py": "8682816cbb585c1bc549e9e6c60a426de4014074cc671e6500b79e556ea642c9",
+    "research/phase6/queue_aware_quote_screen.py": "a4954561e35a00c95847b44e68aac8c43040c7a85b465396404f1324c5ce505b",
+    "research/phase6/tests/test_queue_aware_quote_lab.py": "435b08108f72a04a91ba6a9858a6465b8ec83e83ef2b1013def5fc2d215fba58",
+    "research/phase6/depth_quote_lab.py": "9cb867a19ddeb29ad5480ce37914c6fff6b2f0358616b524b96fd3a31002a2c0",
+    "research/phase6/entry_witness_result.py": "f2131177bc0205af9d1466b0171b05198f2dc0037e50574f5d2d52b5c9970cf8",
+    "research/experiments/entry-decision-witness-20261018/result/artifact.zip.b64": "15fb072bea3a4e755ae74952f7d0db3b0284ae389dc31d261cd5bf441f9a4549",
+    "research/experiments/depth-quote-20261018/state-screen.json": "8a922b1dfa25c41a9ff5173053ba449975da0aaeaf9088f149ef7a35c04ba839",
+    "research/experiments/depth-quote-20261018/selected-gate.json": "cf17ec93dfa8e276090dc0800515aafafc62d5c0bc8d2fa5df6306b1c89a3223",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  }
+}

@@ -2046,3 +2046,26 @@ pass remains price feasibility only and requires separate causal full-account
 evidence before independent PAPER. QW0 not yet implemented/evaluated, defaults
 unchanged. Fixed acceptance unpassed: control net-$1.80, guard0/0fills; DQ3/QW0
 account performance unmeasured. No live permissions or profitability claim.
+
+## QW0 implementation freeze before first witness screen — 2026-10-19
+
+PR9 head62c72e0 and all previous jobs verified complete before work. Implemented
+ONLY previously preregistered QW0 as pure `queue_aware_quote_lab.py`, no runtime/
+service flags or engine changes. Existing DQ3 admission supplies an unchanged
+size/freshness/flat-account/budget gate; enumerate its first3 lawful levels with
+the SAME original top-depth quantity, original edge plus analytical thin reserve,
+10x displayed participation, all costs/remaining-loss/cash/portfolio limits.
+Deterministic min-max queue proxy objective and tie order match preregistration.
+Queue proxy is NOT future activation depth, fill probability or available volume.
+
+196 phase6 tests pass locally BEFORE real witness evaluation, including stronger
+edge floor, no size increase, deterministic queue/price ties, participation and
+source/risk/budget guards, nonmutation and no deep-depth premium substitution.
+`queue-aware-quote-freeze.json` hashes implementation/tests, prior preregistration,
+original policy/witness evidence/config/acceptance. Commit this freeze BEFORE
+running `queue_aware_quote_screen` on the34 immutable development witnesses.
+One variant only; no public RPC, recording, full-tape scan or Java/Maven build.
+First gate requires >=1 additional legal state vs actual legacy AND >=1 changed
+pair vs DQ3; otherwise reject with no further experiment. A pass remains only
+snapshot price feasibility, NOT account replay or independent qualification.
+No financial result yet; known control-$1.80/guard0 with0fills unchanged.
