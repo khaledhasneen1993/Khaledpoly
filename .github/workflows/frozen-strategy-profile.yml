@@ -1,0 +1,55 @@
+name: PAPER frozen strategy profile integration
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/frozen-strategy-profile.yml'
+      - 'research/phase6/strategy-profile-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-frozen-strategy-profile
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: Unchanged acceptance and complete offline regressions
+        run: |
+          echo '7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503  research/phase2/acceptance.json' | sha256sum -c -
+          python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: probe-engine
+      - name: Compose exact isolated source profile; no default or frozen-reference edits
+        run: |
+          python3 -m research.phase6.strategy_profile_build --output "$RUNNER_TEMP/frozen-policy-src"
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/frozen-policy-deps"
+          mkdir -p "$RUNNER_TEMP/frozen-policy-classes" research/output/frozen-policy-proof
+          javac -cp "$RUNNER_TEMP/frozen-policy-deps/BOOT-INF/lib/*" -d "$RUNNER_TEMP/frozen-policy-classes" $(find "$RUNNER_TEMP/frozen-policy-src/polybot-core/src/main/java" -name '*.java') research/phase6/ConservedMixedReplayLabels.java research/phase6/ConservedMixedReplayLabelsProbe.java research/phase6/OfflineSessionLabels.java research/phase6/CanonicalSessionParityProbe.java research/phase6/FrozenResearchPolicies.java research/phase6/FrozenPolicyParityProbe.java research/phase6/FrozenStrategySessionProbe.java
+      - name: Exact frozen-rule parity and synthetic canonical-session execution guards
+        run: |
+          python3 -m research.phase6.frozen_policy_cases --output research/output/frozen-policy-proof/cases.json
+          java -cp "$RUNNER_TEMP/frozen-policy-classes:$RUNNER_TEMP/frozen-policy-deps/BOOT-INF/lib/*" com.polybot.hft.paper.FrozenPolicyParityProbe research/output/frozen-policy-proof/cases.json research/output/frozen-policy-proof/rule-parity.json
+          java -cp "$RUNNER_TEMP/frozen-policy-classes:$RUNNER_TEMP/frozen-policy-deps/BOOT-INF/lib/*" com.polybot.hft.paper.FrozenStrategySessionProbe "$RUNNER_TEMP/frozen-policy-session"
+          java -cp "$RUNNER_TEMP/frozen-policy-classes:$RUNNER_TEMP/frozen-policy-deps/BOOT-INF/lib/*" com.polybot.hft.paper.CanonicalSessionParityProbe "$RUNNER_TEMP/frozen-policy-default"
+          cp "$RUNNER_TEMP/frozen-policy-session/strategy-proof.json" research/output/frozen-policy-proof/strategy-proof.json
+          cp "$RUNNER_TEMP/frozen-policy-default/parity.json" research/output/frozen-policy-proof/default-after.json
+          cp "$RUNNER_TEMP/frozen-policy-src/strategy-build-provenance.json" research/output/frozen-policy-proof/build-provenance.json
+          python3 -m research.phase6.frozen_policy_result --root research/output/frozen-policy-proof > research/output/frozen-policy-proof/verification.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frozen-strategy-profile-proof
+          retention-days: 7
+          path: research/output/frozen-policy-proof/
+          if-no-files-found: error

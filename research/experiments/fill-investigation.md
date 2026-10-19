@@ -3068,3 +3068,56 @@ No new market-account net PnL: selected conditional exit+0.11264 vs-0.03747;
 original full control-$1.80 after costs,guard0/0fills,QW0 full account UNKNOWN.
 NO_GO, PAPER only, PR9 unmerged. Acceptance and frozen strategy unchanged;
 follow-up continues. Unknown dirty old activation archive preserved untouched.
+
+## Frozen causal entry and fee-positive exit wired into research session — 2026-10-20 Amman
+
+Checked latest branch/PR9 faa6407 and run39322057044 COMPLETE SUCCESS:273 tests,
+both source builds and synthetic session/default parity. No active overlapping
+Actions or repeated strategy experiment. This step ports the frozen rules, not
+new parameter selection or independent data evaluation.
+
+New FrozenResearchPolicies Java port matches ALL42 complete proposals/admissions
+against unchanged queue_aware_quote_lab: same34 old DEVELOPMENT witnesses and8
+synthetic cases. All18 frozen fee-positive/overdue choices match fixed reference.
+Exact QW0 top3-level eligibility, original top-depth quantity,8-decimal thin
+reserve, risk/cash/budget guards and queue objective/tie ordering preserved.
+No selected sequence/time/condition hardcoding. Nonnegative reserve implies
+QW0 candidates pass the otherwise-identical DQ3 existence floor; no extra gate
+was dropped to improve performance. Pure rule parity is not account evidence.
+
+Explicit pre-observation enablement in fresh mixed-label offline ResearchSession
+now routes entry through QW0, then canonical reservation/matching/ledger. Exits
+use frozen argmax rule; TAKER_SELL no longer falls into maker WAIT branch. Both
+POSITIVE_EDGE_COMPLETION and new POSITIVE_EDGE_EXIT recheck actual delayed FOK
+NET against unchanged minimumEdge*quantity. Preserve overdue risk behavior,
+loss/minimum-size/cash/data/depth checks and original resting/cancel lifecycle.
+Original core/default/frozen files remain untouched: second small tracked patch
+composes on immutable bridge copy and verifies every94-source hash. Default-off
+FULL canonical report still matches earlier untouched-core proof exactly.
+
+Synthetic canonical strategy tests: QW0 orders0.40/0.40,5 shares each; original
+2x100=200 entry queues;300 fixture shares=200 queue+5 allocated+95 unused.
+No holding injection. Keep books fresh, cancel unfilled peer at6571, ACK6821,
+plan fee-positive sell only after ACK, actual execution7071 after250ms. Actual
+synthetic fee0.08624, synthetic realized0.11376. THESE ARE TEST EXPECTATIONS,
+NOT market/account profits. Adverse actual execution0.42 remains within limit
+but net0.01474<original0.05 floor, so TAKER_NET_EDGE rejects, fees0, uncovered5
+shares/cash498 persist. No invented exit or inventory erasure.
+
+Five new Python regressions check exact ports, isolated build/default parity,
+reject altered queue/fees/risk, missing net guard and market/live scope promotion.
+Complete generated94-source Java17 compile succeeds. Native reports, independent
+verification and final source provenance retained in frozen-strategy-profile-20261020/.
+New Java21 CI repeats parity/synthetic integration, not a market capture/replay.
+
+Next whole-account dependency: fail-closed canonical full-tape runner and coverage
+audit.451 recovery labels are only one pair/window; missing full-source routes
+must be identified, not counted as zero or combined with aggregate volume.
+Establish complete coverage and transition parity before SAME-source full-account
+baseline/candidate comparison, then freeze executable/config BEFORE independent
+multi-market PAPER. No holdout tuning, acceptance edits or selected-snippet account.
+
+No new market PnL: old selected conditional exit+0.11264 vs-0.03747; original
+full control-$1.80 after costs,guard0/0fills,QW0 full market account UNKNOWN.
+NO_GO, PAPER only, PR9 unmerged; follow-up continues. Unknown local old activation
+archive preserved untouched. No new RPC, full original tape scan or market fill.

@@ -1,0 +1,39 @@
+{
+  "parentCommit": "faa6407d4787af5c5d1fd2e15dc094b5f4c391b9",
+  "previousBridgeRun": 39322057044,
+  "previousBridgeTests": 273,
+  "previousBridgeConclusion": "SUCCESS",
+  "dependencyArtifact": 12151627900,
+  "dependencyArchiveSha256": "f051412b702c858952c6265b2bd73520471a699e19e165c0521964be255900fb",
+  "localCompilation": "Java17 all94 generated core sources and research helpers; no Maven build claim",
+  "members": {
+    "rule-parity.json": {
+      "bytes": 6941,
+      "sha256": "82d468494e0bcbbbff36229e7da8cf85c0558fd344da045f51f57a3e7c2d3339"
+    },
+    "strategy-proof.json": {
+      "bytes": 14757,
+      "sha256": "84640d55fc706e6551d55451e646ec631ca5379a3a57023ad8f7871da34ea433"
+    },
+    "default-after.json": {
+      "bytes": 3291,
+      "sha256": "77e1a3bf9973a27cf650acae563f73610184b7760cccd11b1fe6878762b4c2fb"
+    },
+    "build-provenance.json": {
+      "bytes": 1028,
+      "sha256": "801e75c99cf54903ebb3a737baa1bc74a6cbedda535ac5375ccf1f73cff26429"
+    },
+    "verification.json": {
+      "bytes": 560,
+      "sha256": "9cf6f778a5ed94597f2b3244b7d031ba5424e0ade7f1e8b99fa59c97effd7112"
+    }
+  },
+  "integrationFreezeSha256": "203185a1b514d42ffc4d22ced30f60a45c06164230bfd26b18a029648744a219",
+  "scope": "FROZEN_CAUSAL_RULE_PARITY_AND_SYNTHETIC_INTEGRATION_NOT_MARKET_PNL",
+  "defaultCoreFilesModified": 0,
+  "modelMarketFillsCreated": 0,
+  "marketNetPnlRecomputed": false,
+  "fullAccountMarketComparisonPerformed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

@@ -1,0 +1,105 @@
+diff --git a/polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java b/polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java
+index 14487e5..7f56424 100644
+--- a/polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java
++++ b/polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java
+@@ -84,6 +84,17 @@ public final class ResearchSession implements AutoCloseable {
+   private BigDecimal exitLossUsed = ZERO;
+   private int riskBreaches;
+   private EntryDecisionWitness entryDecisionWitness;
++  private boolean frozenResearchPolicies;
++
++  synchronized void enableFrozenResearchPolicies() {
++    if(frozenResearchPolicies || now!=-1 || externalMode || settlementLabels==null
++        || settlementLabels.profile()!=OfflineSessionLabels.Profile.MIXED_BINDING_BRIDGE0
++        || !ledger.snapshot().orders().isEmpty() || !ledger.snapshot().holdings().isEmpty()
++        || !ledger.snapshot().executions().isEmpty() || ledger.snapshot().halted()
++        || ledger.snapshot().cash().compareTo(cfg.initialCash())!=0)
++      throw new IllegalArgumentException("Frozen policies require an explicit fresh mixed-label offline session");
++    frozenResearchPolicies=true;
++  }
+-
++
+   synchronized void enableDecisionWitness(EntryDecisionWitness witness) {
+     if (witness==null || entryDecisionWitness!=null || settlementLabels==null || externalMode || now!=-1)
+@@ -725,14 +736,6 @@ public final class ResearchSession implements AutoCloseable {
+           cfg.orderShares()
+               .min(depth.multiply(new BigDecimal("0.1")))
+               .setScale(2, RoundingMode.DOWN);
+-      if (ap.compareTo(m.tick()) < 0
+-          || bp.compareTo(m.tick()) < 0
+-          || ap.compareTo(ONE.subtract(m.tick())) > 0
+-          || bp.compareTo(ONE.subtract(m.tick())) > 0) {
+-        cancelAll(m, "PRICE_BOUND_OR_STALE_TICK");
+-        metrics.decision("PRICE_BOUND_OR_STALE_TICK", null);
+-        continue;
+-      }
+       BigDecimal edge = ONE.subtract(ap).subtract(bp),
+           required =
+               PairPolicy.requiredEdge(
+@@ -742,6 +745,16 @@ public final class ResearchSession implements AutoCloseable {
+                   depth,
+                   cfg.activationMs(),
+                   ZERO);
++      if(frozenResearchPolicies) {
++        var quote=FrozenResearchPolicies.propose(mapper.valueToTree(entryWitness(m)),cfg);
++        if(quote==null){metrics.decision("QW0_NO_LAWFUL_PAIR",null);continue;}
++        ap=quote.firstBid();bp=quote.secondBid();required=quote.requiredEdge();edge=ONE.subtract(ap).subtract(bp);
++        output.accept("QW0_DECISION",Map.of("condition",m.condition(),"at",now,"quote",quote));
++      }
++      if (ap.compareTo(m.tick()) < 0 || bp.compareTo(m.tick()) < 0
++          || ap.compareTo(ONE.subtract(m.tick())) > 0 || bp.compareTo(ONE.subtract(m.tick())) > 0) {
++        cancelAll(m, "PRICE_BOUND_OR_STALE_TICK");metrics.decision("PRICE_BOUND_OR_STALE_TICK", null);continue;
++      }
+       boolean small = q.compareTo(m.minSize()) < 0;
+       boolean insufficientEdge =
+           edge.multiply(q).subtract(cfg.mergeCost()).compareTo(required.multiply(q)) < 0;
+@@ -927,7 +940,10 @@ public final class ResearchSession implements AutoCloseable {
+         basis = holding(lead).basis().divide(holding(lead).shares(), 18, RoundingMode.HALF_EVEN);
+     FeeModel fee = new FeeModel(m.feeRate().multiply(cfg.feeMultiplier()), m.feeExponent());
+     var choice =
+-        PairPolicy.hedge(
++        frozenResearchPolicies ? FrozenResearchPolicies.choose(
++            basis,ob.asks.firstKey(),lb.bids.lastKey(),
++            fee.fee(ONE,ob.asks.firstKey(),false).add(cfg.mergeCost().divide(quantity,18,RoundingMode.UP)),
++            fee.fee(ONE,lb.bids.lastKey(),false),cfg.minimumEdge(),overdue) : PairPolicy.hedge(
+             basis,
+             ob.asks.firstKey(),
+             lb.bids.lastKey(),
+@@ -938,7 +954,7 @@ public final class ResearchSession implements AutoCloseable {
+             overdue);
+     output.accept(
+         "HEDGE_DECISION", Map.of("condition", m.condition(), "choice", choice, "at", now));
+-    if (!overdue && !choice.action().equals("COMPLETE")) {
++    if (!overdue && choice.action().equals("WAIT")) {
+       BigDecimal price = lb.asks.firstKey().subtract(m.tick()).max(lb.bids.lastKey().add(m.tick()));
+       if (price.compareTo(ONE) >= 0 || quantity.compareTo(m.minSize()) < 0) return;
+       if (price.subtract(basis).multiply(quantity).negate().max(ZERO).compareTo(exitLossAvailable())
+@@ -972,7 +988,7 @@ public final class ResearchSession implements AutoCloseable {
+             now
+                 + new LatencyProfile(cfg.activationMs(), cfg.latencyJitterMs(), cfg.latencySeed())
+                     .delay("taker", m.condition() + ":" + token + ":" + now),
+-            overdue ? "RISK_REDUCTION" : "POSITIVE_EDGE_COMPLETION",
++            overdue ? "RISK_REDUCTION" : frozenResearchPolicies ? "POSITIVE_EDGE_EXIT" : "POSITIVE_EDGE_COMPLETION",
+             choice.completeValue()));
+     metrics.decision("TAKER_PENDING", null);
+   }
+@@ -1026,7 +1042,7 @@ public final class ResearchSession implements AutoCloseable {
+                   .subtract(result.fee())
+                   .subtract(cfg.mergeCost())
+               : result.notional().subtract(result.fee()).subtract(basis);
+-      if (p.purpose.equals("POSITIVE_EDGE_COMPLETION")
++      if ((p.purpose.equals("POSITIVE_EDGE_COMPLETION") || p.purpose.equals("POSITIVE_EDGE_EXIT"))
+           && pnl.compareTo(cfg.minimumEdge().multiply(q)) < 0) {
+         metrics.decision("TAKER_NET_EDGE", pnl);
+         continue;
+@@ -1605,8 +1621,8 @@ public final class ResearchSession implements AutoCloseable {
+       r.put("settlementVolumeConservation",matching.settlementDiagnostics());
+       r.put("independentPaperQualificationAllowed",false);
+       if (settlementLabels.profile()==OfflineSessionLabels.Profile.MIXED_BINDING_BRIDGE0) {
+-        r.put("researchLabelBridgeOnly",true);
+-        r.put("frozenQw0AndFeePositivePoliciesIntegrated",false);
++        r.put("researchLabelBridgeOnly",!frozenResearchPolicies);
++        r.put("frozenQw0AndFeePositivePoliciesIntegrated",frozenResearchPolicies);
+         r.put("fullOriginalTapeCoverageProven",false);
+         r.put("liveAllowed",false);
+       }

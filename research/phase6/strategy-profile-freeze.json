@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "parentCommit": "faa6407d4787af5c5d1fd2e15dc094b5f4c391b9",
+  "scope": "FROZEN_POLICY_PORT_NOT_ACCOUNT_PERFORMANCE",
+  "prefixSessionSha256": "f483959b350a680d430d66465daf600b56386a0c6c5bcf0a13f9a8c4ca339fa5",
+  "integratedSessionSha256": "a57c2fd2efa14d7704a5c177e962e81855be9374687eec478faf368a72856251",
+  "inputsSha256": {
+    "research/phase6/session-bridge-freeze.json": "6383f68fadafe81e4fc2f93901c8979969eee76339652700b3b22ce4d55e4b15",
+    "research/phase6/session_bridge_build.py": "0c4d5e83a093fc2a9c9dec099ed50468e57e665f88172517c9a8a606fa2d8741",
+    "research/phase6/frozen-strategy-profile.patch": "d12250382ddeb947406db6c2bb0da8992a8e6697a17c66b18a3956306f3f8578",
+    "research/phase6/FrozenResearchPolicies.java": "21ac7602fa38b5515b2a5b052a02d9ea0226e52a13e8236b7657361a96f25944",
+    "research/phase6/strategy_profile_build.py": "e0b2cd82aef291d4576ef03451e43c185c0808fcb5dd7beb5e43b883294f7e12",
+    "research/phase6/queue_aware_quote_lab.py": "8682816cbb585c1bc549e9e6c60a426de4014074cc671e6500b79e556ea642c9",
+    "research/phase6/depth_quote_lab.py": "9cb867a19ddeb29ad5480ce37914c6fff6b2f0358616b524b96fd3a31002a2c0",
+    "research/phase6/Qw0FeePositiveExitProbe.java": "ee6e566a19715a5040bfffdf9afc4930bd05787eabd05fe4749f5c55224d6ddc",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase6/FrozenPolicyParityProbe.java": "69e7a040ea7fb7945275d5e1b9c3df7ded06390d6a36024d8020926464b9eb3b",
+    "research/phase6/FrozenStrategySessionProbe.java": "07d18cbaad5e53ec1aa83a299fb4fa9ef502ccb87e92105e661e1d2ada3b5765",
+    "research/phase6/frozen_policy_cases.py": "dd839be249b8016f4cc39edf38a0e23df35cfdba1dec13ddea17c69fc3ddbd0e",
+    "research/phase6/frozen_policy_result.py": "fd1f758dd350ef5ba635f51fb2383c80b227bcaecf01d67fe61b008cf000885d",
+    ".github/workflows/frozen-strategy-profile.yml": "ee29281a7739d05fb7da1823302c1096f92ae79d50802ed6530bd498939cfff0",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00"
+  },
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}
