@@ -10,7 +10,18 @@ import java.util.zip.GZIPInputStream;
 public final class Qw0UnhedgedTimingProbe {
   static final ObjectMapper M=Qw0CausalProbe.M;
   static JsonNode node(Object o){return M.valueToTree(o);}
+  static boolean sameAck(JsonNode a,JsonNode b) {
+    return a!=null&&b!=null&&a.path("originalSequence").asLong(-1)==b.path("originalSequence").asLong(-2)
+        &&a.path("eventIndex").asInt(-1)==b.path("eventIndex").asInt(-2)
+        &&a.path("at").asLong(-1)==b.path("at").asLong(-2)&&a.path("kind").asText().equals(b.path("kind").asText());
+  }
   public static void main(String[] args)throws Exception {
+    if(args.length==1&&args[0].equals("--self-test")) {
+      var ack=node(Map.of("originalSequence",1L,"eventIndex",0,"at",1792269759566L,"kind","BOOK"));
+      if(!sameAck(ack,M.readTree(M.writeValueAsString(ack)))||sameAck(ack,node(Map.of("originalSequence",2,"eventIndex",0,"at",1792269759566L,"kind","BOOK"))))
+        throw new AssertionError("Numeric source-anchor roundtrip/difference comparison failed");
+      System.out.println("2 source-anchor numeric representation regressions passed");return;
+    }
     if(args.length!=3)throw new IllegalArgumentException("context.gz evidence report");
     JsonNode context;try(var in=new GZIPInputStream(Files.newInputStream(Path.of(args[0])))){context=M.readTree(in);}
     var evidence=M.readTree(Files.readString(Path.of(args[1])));var s=evidence.path("state");
@@ -50,7 +61,7 @@ public final class Qw0UnhedgedTimingProbe {
         if(reason.equals("CANCEL_BEFORE_EXIT")){e.accept("CANCEL",at,node(Map.of("id","qw0-conditional-b","reason","CANCEL_BEFORE_RISK_EXIT")));requested=true;}
       }
     }
-    if(ack==null||!ack.equals(evidence.path("expectedFirstDueEngineEvent")))throw new AssertionError("Actual cancel acknowledgement differs");
+    if(!sameAck(ack,evidence.path("expectedFirstDueEngineEvent")))throw new AssertionError("Actual cancel acknowledgement differs");
     var diag=e.diagnostics().get(0);if(!diag.get("terminalReason").equals("CANCEL_BEFORE_RISK_EXIT"))throw new AssertionError("Wrong actual terminal reason");
     var out=new LinkedHashMap<String,Object>();out.put("scope","CONDITIONAL_NO_FURTHER_ALLOCATIONS_WAIT_CANCEL_NOT_ACCOUNT");
     out.put("originalSequence",243583);out.put("actualPairPolicyChecks",observed);out.put("actualCancelAck",ack);out.put("diagnostic",diag);

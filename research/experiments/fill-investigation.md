@@ -2446,3 +2446,15 @@ UNKNOWN and a possible earlier B fill can invalidate this conditional branch.
 Only after those groups are audited can actual unhedged lifecycle/account work
 advance. Three new synthetic wait-budget/volatility/input regressions added;
 no QW0 tuning, acceptance edits or independent PAPER qualification.
+
+Unhedged timing engineering correction: first frozenf1e17bf run39231292250
+passed220 CI regressions and both matcher synthetic gates, then stopped at
+`Actual cancel acknowledgement differs` (job117989605491). No successful timing
+report or financial result claimed from that run. Observer compared a constructed
+LongNode originalSequence with a parsed IntNode via JSON tree identity, although
+source sequence is an exact integer. Replace only anchor comparison with exact
+sequence/event/time/kind VALUE comparisons; add two synthetic numeric-roundtrip
+and changed-sequence regression assertions BEFORE gate evaluation. All original
+source anchors, wait/cancel clocks, quotes, config, risk and acceptance unchanged.
+First run checked complete before retry; preserve its failure history. This is
+an observer representation correction, NOT a fitted strategy or relaxed timing.
