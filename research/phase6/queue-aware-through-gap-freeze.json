@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "parentCommit": "2ec3d6daee919e167176fbd5a9594b9fd9e855ec",
+  "parentCommit": "5bcf13466df984a923f33e5e112186ec193cb308",
   "scope": "ACTUAL_COMPONENTS_WAIT_CANCEL_FIRST_REDUCTION_THROUGH_GAP_NOT_ACCOUNT",
   "originalSequence": 243583,
   "originalFirstGapMs": 1792269760873,
@@ -8,9 +8,9 @@
   "policyChanged": false,
   "filesSha256": {
     "research/phase6/queue_aware_through_gap.py": "abe5d98337e0297cb9fb5905d7539540cc3d7fa18208feaec22bbf37b98570b4",
-    "research/phase6/Qw0ThroughGapProbe.java": "26c0097d2d4a4145e4fe48a452d155d6c6500f4636e1140fd57a9699f6003a82",
-    "research/phase6/tests/test_queue_aware_through_gap.py": "ac50c9c2496c5375070aa3986657620638b84ef7eda7749df799864501c48e8c",
-    ".github/workflows/queue-aware-through-gap.yml": "edf7fad43ff230f80119708c425627e31e3f8470818c9a7a3befcc413f33161f",
+    "research/phase6/Qw0ThroughGapProbe.java": "1e9090766c9dab0f1aff772df0640239b5b9145a0eb3f0b70b88b37f6fbe2eb9",
+    "research/phase6/tests/test_queue_aware_through_gap.py": "701f121b53d4e66c2781cf56f2a67b7b49ecb00c6cd59b30b591879f720c2eec",
+    ".github/workflows/queue-aware-through-gap.yml": "c743ecdf84e5149904611ad286b868592ff85546f30baae02ee47fc4aaa4261e",
     "research/phase6/queue_aware_postfill_result.py": "b851ecefecc70c8e7813752b79352ee02d4d660683ca55e28f4918ce35fc6788",
     "research/phase6/queue_aware_postfill_receipts.py": "9102390d52dfdc10247dcdb0f09a89e821eea018dda1837990f68164a6d4f2a8",
     "research/phase6/Qw0CausalProbe.java": "aedba6b3482f162d0e1d4dd690c6828839753e69539ff4063ea44c48c0e1f10f",
@@ -22,5 +22,6 @@
     "polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java": "2c5a97513e9ab1c261af7a9868f3b377c89e28e8cbb883800ee6d8aee87f9923",
     "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
     "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
-  }
+  },
+  "engineeringCorrection": "Nonempty frame callback ordering, no source/policy/time changes"
 }

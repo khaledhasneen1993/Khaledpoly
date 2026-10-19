@@ -2540,3 +2540,18 @@ config/acceptance before new Java gate. One source-preparation regression added;
 QW0 account unknown, NO_GO. Wait for `qw0-actual-components-through-gap`, reproduce
 result, then bounded post-GAP true lifecycle/account evidence and frozen same-
 development full baseline/candidate comparison before any independent PAPER.
+
+Through-GAP gate engineering correction (2026-10-19): run39239960825/source
+5bcf134 failed at `Actual counterpart cancel differs` AFTER227 CI regressions,
+both matcher synthetic gates and complete148-group preparation. No successful
+hedge/account outcome claimed. Exact original source shows259279 at9565 and
+259281 at9566 are EMPTY RESEARCH_FRAMEs; actual ACK259283 at9566 contains two
+BOOK events. ResearchSession advances actions only after NONEMPTY frames.
+The separate observer incorrectly checked post-ACK hedge on any row with
+arrival>=9566, before the actual BOOK event at that same millisecond. Fix ONLY
+that callback guard to exclude empty frames; retain exact original sequence/
+event/timestamp and all clocks/quotes/risks/fees. Three new Java synthetic
+empty/nonempty/standalone callback assertions run BEFORE gate evaluation, plus
+one Python exact original source-bound regression.228 phase6 tests total.
+First run checked COMPLETE before retry; no overlap, new receipts/source scan,
+parameter retuning or production strategy change. Preserve failed run history.

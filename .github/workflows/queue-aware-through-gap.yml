@@ -32,6 +32,7 @@ jobs:
           unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/qw0-engine"
           javac -cp "$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" -d "$RUNNER_TEMP/qw0-gap" research/phase6/Qw0CausalProbe.java research/phase6/Qw0RestingProbe.java research/phase6/Qw0ThroughGapProbe.java
           java -cp "$RUNNER_TEMP/qw0-gap:$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" com.polybot.hft.paper.Qw0CausalProbe --self-test
+          java -cp "$RUNNER_TEMP/qw0-gap:$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" com.polybot.hft.paper.Qw0ThroughGapProbe --self-test
       - name: Reuse original context and all existing148 actual conserved groups
         run: python3 -m research.phase6.queue_aware_through_gap --output research/output/qw0-through-gap
       - name: Actual engine and unchanged wait/fee/hedge policy through original first GAP

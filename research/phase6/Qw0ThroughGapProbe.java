@@ -11,11 +11,17 @@ public final class Qw0ThroughGapProbe {
   static final ObjectMapper M=Qw0CausalProbe.M;
   static JsonNode node(Object x){return M.valueToTree(x);}
   static BigDecimal d(JsonNode x){return Qw0CausalProbe.dec(x);}
+  static boolean advances(String kind,JsonNode events){return !kind.equals("FRAME")||!events.isEmpty();}
   static BigDecimal best(JsonNode book,String side,boolean high) {
     BigDecimal result=null;for(var level:book.path(side)){var price=d(level.path("price"));result=result==null?price:high?result.max(price):result.min(price);}
     if(result==null)throw new AssertionError("Missing causal hedge depth");return result;
   }
   public static void main(String[] args)throws Exception {
+    if(args.length==1&&args[0].equals("--self-test")) {
+      var empty=node(List.of());var book=node(List.of(Map.of("kind","BOOK","data",Map.of())));
+      if(advances("FRAME",empty)||!advances("FRAME",book)||!advances("TICK",empty))throw new AssertionError("Empty-frame strategy callback ordering differs");
+      System.out.println("3 empty/nonempty frame and standalone callback ordering assertions passed");return;
+    }
     if(args.length!=4)throw new IllegalArgumentException("context.gz bindings evidence report");
     JsonNode context;try(var in=new GZIPInputStream(Files.newInputStream(Path.of(args[0])))){context=M.readTree(in);}
     var manifest=M.readTree(Files.readString(Path.of(args[1])));var evidence=M.readTree(Files.readString(Path.of(args[2])));
@@ -73,7 +79,7 @@ public final class Qw0ThroughGapProbe {
         decisions.add(Map.of("at",at,"seq",seq,"reason",reason));
         if(reason.equals("CANCEL_BEFORE_EXIT")){if(at!=request)throw new AssertionError("Changed actual cancel request");e.accept("CANCEL",at,node(Map.of("id","qw0-gap-1","reason","CANCEL_BEFORE_RISK_EXIT")));cancelSent=true;}
       }
-      if(cancelSent&&!hedged&&at>=ackAt&&!gap) {
+      if(cancelSent&&!hedged&&advances(kind,events)&&at>=ackAt&&!gap) {
         var b=e.diagnostics().get(1);if(!Objects.equals(b.get("terminalReason"),"CANCEL_BEFORE_RISK_EXIT")||((Number)b.get("terminalMs")).longValue()!=ackAt)throw new AssertionError("Actual counterpart cancel differs");
         if(at!=ackAt||seq!=timing.path("expectedFirstDueEngineEvent").path("originalSequence").asLong())throw new AssertionError("Wrong first post-ACK frame callback");
         var market=prefix.path("seedWitness").path("market");var fee=new FeeModel(d(market.path("feeRate")).multiply(d(cfg.path("feeMultiplier"))),market.path("feeExponent").asInt());
