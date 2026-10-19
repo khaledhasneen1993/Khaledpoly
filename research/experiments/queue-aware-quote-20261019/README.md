@@ -88,3 +88,15 @@ strategy trajectory. Exact report/evidence and byte-hash input reproduction in
 No account PnL computed, no real bot fills or independent acceptance. Next narrow
 counterpart coverage audit from cached receipts/census, then frozen SAME-data
 full-account comparison if supported. No QW0 tuning or source scan/capture repeat.
+
+Counterpart prefix freeze9ad014246912b3025aec1533b9a8cd009fbd9c5a;
+run39220158825/artifact12171277537 completed successfully. Exactly30 source-bound
+original counterpart receipts through1792269754123 (remaining93 after-horizon
+observations NOT audited). Complete actual B BUY components priced<=0.40:ZERO.
+`counterpart-result/` retains original ZIP SHA256
+c7fa33ad5faad12940cdeb11405253cd6c98b5a41118f2813758072befc1626a,
+raw30 receipts/blocks, exact component summary and offline independent decoding.
+212 CI tests before reads;2 added complete-result/missing/forgery regressions.
+No B activation or paired account/PnL inferred from zero component volume.
+Next both-order actual activation/remaining-prefix check, then complete actual
+hedge/exit/account evidence and frozen same-development comparison if supported.

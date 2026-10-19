@@ -2304,3 +2304,40 @@ request/resume bounds. Freeze source/tests/config/acceptance/selection before
 public receipt collection; new dedicated workflow performs regressions first.
 Next retain source-bound raw30 evidence and reproduce result offline. Do not
 retune QW0 or launch a full-account/independent capture from price volume alone.
+
+## QW0 counterpart30 completed and reproduced — 2026-10-19
+
+Freeze9ad014246912b3025aec1533b9a8cd009fbd9c5a BEFORE first public receipt
+read. Run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39220158825
+completed successfully:212 offline CI tests before collection, exactly30 receipt
+reads,3 original block reads and1 public chain check; no errors. Artifact
+12171277537 (`qw0-counterpart30-receipts`), ZIP SHA256
+c7fa33ad5faad12940cdeb11405253cd6c98b5a41118f2813758072befc1626a,
+retained byte-for-byte in `queue-aware-quote-20261019/counterpart-result/artifact.zip.b64`.
+All30 original counterpart observations through prior first-target-fill horizon
+are uniquely source-bound and have unique conserved actual settlement groups.
+Actual B maker BUY components at price<=0.40 sum ZERO integer microshares.
+No missing receipts interpreted as zero, no aggregate complement-price shortcut.
+
+`queue_aware_counterpart_result.py` re-decodes ALL retained raw receipts/blocks,
+rebinds original sample/seq/event/source/arrival, exact rational-price predicate
+and unique component identities, reproducing the complete original summary.
+Two new tests cover complete reproduction, missing receipt and fabricated volume
+rejection (214 phase6 regressions total). New raw evidence is only176KB ZIP;
+no extra tape extraction/market capture, Java build or production strategy change.
+
+This settles ONLY necessary pre-first-A-fill counterpart price-volume coverage.
+It does NOT prove B activation, any actual bot fill, completed pair, net profit
+or subsequent strategy lifecycle. The other93 B observations AFTER fixed horizon
+remain UNAUDITED. Known same-development financial results remain control-$1.80
+after costs and guard0 with0 fills; QW0 full account not simulated. Acceptance
+unchanged, PAPER only, NO_GO. Do not rename selected-prefix evidence as a general
+strategy performance result or tune QW0 on it.
+
+Next: reuse retained full-depth context and these conserved groups to check BOTH
+actual QW0 order activations and equal remaining quantities at each of the15
+original pre-fill resting callbacks (the previous target-only gate omitted B).
+If supported, continue actual hedge/cancel/exit and resolution accounting with
+separately bounded necessary after-horizon evidence, then frozen SAME-development
+full strategy baseline/candidate comparison. No independent PAPER qualification
+or new capture before account comparison; no repeated tape scan or receipt batch.
