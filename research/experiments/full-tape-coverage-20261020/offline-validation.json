@@ -1,0 +1,15 @@
+{
+  "command": "python3 -m unittest discover -s research/phase6/tests -q",
+  "tests": 285,
+  "durationSeconds": 280.195,
+  "result": "OK",
+  "newTargetedTests": 7,
+  "newTargetedDurationSeconds": 0.006,
+  "newTargetedResult": "OK",
+  "frozenDependencyHashesVerified": true,
+  "downloadedPriorCiProofReverified": true,
+  "fullOriginalTapeCensusPerformedLocally": false,
+  "modelFillsCreated": 0,
+  "netPnlRecomputed": false,
+  "liveAllowed": false
+}

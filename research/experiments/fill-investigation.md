@@ -3121,3 +3121,50 @@ No new market PnL: old selected conditional exit+0.11264 vs-0.03747; original
 full control-$1.80 after costs,guard0/0fills,QW0 full market account UNKNOWN.
 NO_GO, PAPER only, PR9 unmerged; follow-up continues. Unknown local old activation
 archive preserved untouched. No new RPC, full original tape scan or market fill.
+
+## Full-source label-coverage census prepared — 2026-10-20 Amman
+
+Preflight checked cff52ff/PR9 and latest Actions:39330038356 COMPLETE SUCCESS,
+278 offline tests350.063s, both native integrated source build/execution steps
+successful. Downloaded artifact12223933817,14623bytes, ZIP SHA
+a93fed68383898170d9faf05a40575e018880b5f14a5e698979f0780766628d0.
+Independently reverified42 quote proposals/18 choices, synthetic queue/ACK/FOK
+guards and default-off parity. All3 downloaded report contents equal retained
+evidence. No overlapping Action, no repeated conditional exit experiment.
+
+Next dependency implemented: streaming FULL original6,163,831-row tape coverage
+census with exact compressed/logical hashes and offline-revalidated451 receipt
+bindings/1,038 components. Census is NOT a full account or strategy replay.
+Checks ALL journal chronology/tail/frame boundaries and complete consumption of
+exact coordinate/arrival/source/token/side/price/quantity/public-hash/tx bindings.
+Classifies each public observation once: bound group, known-tx duplicate
+suppressed, scoped missing, other-market unbound, unknown-market unbound.
+Other markets are explicitly UNBOUND, not silently passed to aggregate matching.
+
+Persists EVERY missing identity in deterministic hashed compressed JSONL with
+original coordinates and available tx fingerprint. Per-condition totals and
+earliest blocker by reason; missing coverage never means zero volume/fills.
+Bounded memory/output; exceeding cap fails, never truncates. No RPC/receipt
+requests, orders, model fills or net PnL. Even zero missing cannot qualify the
+single-pair partial adapter or authorize whole-account/independent/live replay.
+Frozen code/workflow/config/acceptance hashes in full-tape-coverage-freeze.json.
+Seven targeted regressions pass: exact identities, scoped/other/unknown missing,
+duplicate-volume suppression, full tail/run/terminal integrity, unknown/unbound
+frame events, missing tx identity and ambiguous/duplicate binding rejection.
+
+Next: wait for coverage census output; independently verify count/digest/source
+evidence, inspect earliest missing routes, reuse already-retained receipts before
+new bounded requests. Establish fail-closed multi-market full-source runner and
+transition parity BEFORE same-source/config/coverage baseline/candidate account
+comparison. Freeze complete executable BEFORE independent PAPER; no holdout tuning.
+
+No new market-account net: original full control-$1.80 after costs; old selected
+conditional exit-$0.03747 vs+$0.11264, NOT full-account performance. Frozen QW0
+full account UNKNOWN. NO_GO, PAPER only, acceptance/queues/fees/risk unchanged,
+PR9 remains draft/unmerged; follow-up continues. Unknown dirty old activation
+archive preserved untouched.
+
+This census implementation's complete local regression:285 tests in280.195s, OK;
+separate7 targeted cases in0.006s, OK. Frozen dependency hashes verified. Next
+push launches ONE full-source coverage-only Action; actual coverage totals must
+be read from its completed artifact, not inferred from fixture test success.

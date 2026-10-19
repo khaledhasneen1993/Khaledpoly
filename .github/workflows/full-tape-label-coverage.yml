@@ -1,0 +1,39 @@
+name: PAPER full original tape label coverage census
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/full-tape-label-coverage.yml', 'research/phase6/full-tape-coverage-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-full-original-label-coverage
+  cancel-in-progress: false
+jobs:
+  coverage-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unchanged acceptance and complete offline regressions
+        run: |
+          echo '7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503  research/phase2/acceptance.json' | sha256sum -c -
+          python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: original-source
+      - name: Full source identity and route-coverage census; no orders or new RPC
+        run: >-
+          python3 -u -m research.phase6.full_tape_label_coverage
+          --input-root original-source --output research/output/full-tape-label-coverage
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: full-tape-label-coverage
+          retention-days: 7
+          path: research/output/full-tape-label-coverage/
+          if-no-files-found: error
