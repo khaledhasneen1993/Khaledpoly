@@ -1,0 +1,27 @@
+name: PAPER QW0 frozen30 counterpart receipt audit
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/queue-aware-counterpart.yml', 'research/phase6/queue-aware-counterpart-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-qw0-counterpart30
+  cancel-in-progress: false
+jobs:
+  receipts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: All offline regressions before public reads
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - name: Only thirty original public receipts through previous first conditional target fill
+        run: python3 -u -m research.phase6.queue_aware_counterpart --output research/output/qw0-counterpart30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qw0-counterpart30-receipts
+          retention-days: 7
+          path: research/output/qw0-counterpart30/

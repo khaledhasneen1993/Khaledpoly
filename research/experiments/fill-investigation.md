@@ -2276,3 +2276,31 @@ Do not infer counterpart price from aggregate1-price or invent unknown fills.
 Then freeze and run actual paired baseline/candidate FULL-account development
 comparison with unchanged risk/fees; only qualifying frozen candidate may reach
 independent PAPER. No holdout tuning, duplicate original extraction or broad scan.
+
+## QW0 counterpart30 source cohort freeze — 2026-10-19
+
+PR9/head506f2f2 and active Actions collection checked; no overlapping job. Full
+original counterpart census has123 observations through first scoped GAP, but
+only30 occur through the already-fixed prior A allocation horizon1792269754123.
+None of those30 transactions is in the existing68-receipt cache. Freeze ALL30
+original observations in that prefix, not a price-selected sample; other93 remain
+explicitly UNAUDITED. Exact normalized seq/event/arrival/source/sample tradeId
+bound to retained original full-depth context. Original census bid remains
+separate from QW0 evaluation bid0.40. No tape scan or new market capture.
+
+`queue_aware_counterpart.py`: fixed max30 receipt requests, public Polygon137
+chain/receipt/block reads only. Reuse immutable archived event topics and public
+decoder; no optional Crypto install, credentials or order calls. On resume keep
+exact frozen selection and successful raw receipts; no broader requests. Missing,
+ambiguous or non-conserved receipt is UNKNOWN, never zero. Compare actual maker
+integer collateral/shares against exact0.40 rational bid; no aggregate1-price.
+Scope only necessary counterpart price-volume coverage, NOT queue, fills,
+paired strategy/account/PnL. Actual source chronology/current pair book gates
+and original risk still required if positive. Even zero compatible components
+in this prefix does not qualify future hedge/exit, full account or holdout.
+
+Three new regressions cover complete original prefix, unknown receipts and
+request/resume bounds. Freeze source/tests/config/acceptance/selection before
+public receipt collection; new dedicated workflow performs regressions first.
+Next retain source-bound raw30 evidence and reproduce result offline. Do not
+retune QW0 or launch a full-account/independent capture from price volume alone.
