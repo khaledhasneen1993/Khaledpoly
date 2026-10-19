@@ -2651,3 +2651,61 @@ same original source. Full-account baseline/candidate development comparison
 and frozen independent PAPER acceptance still outstanding. Acceptance unchanged;
 known account net remains control-$1.80 after costs, guard0 with0fills;
 QW0 account net UNKNOWN, NO_GO. No independent/profitable/live claim.
+
+## Active reduction independently reproduced; original recovery context — 2026-10-19
+
+Latest branch/PR9 checked before work; run39257171885/source9897068 COMPLETE
+SUCCESS, no active overlapping run.234 phase6 tests passed BEFORE native gate;
+two matcher queue/source assertions plus three frame-order/four exact integer
+BUY-UP/SELL-DOWN boundary assertions passed. No new build or public receipt reads.
+Result artifact12189250158 ZIP SHA
+`fe6bc199ace655a72570e17f1570123987f85fb17e5a87eeb9f1af27b779e6ac`.
+Small exact native report and member SHA/byte counts retained under
+`queue-aware-quote-20261019/active-reduction-result/`. Do not duplicate the2.2MB
+context: reconstruct its EXACT bytes and both manifest/evidence members from
+prior retained source/receipts, compare all hashes, then verify report offline.
+
+Independent Python allocator reproduced all162 original groups/360 unique
+components, ALL THREE pre-event activation queues and complete venue-volume
+conservation. Native and independent results agree: BUY A queue160, BUY B30,
+SELL A reduction313.16. Reduction submitted1792269759566, due1792269759816,
+first actual activation1792269759818 (original259597/event0), using pre-event
+book source1792269759725. Of necessary SELL>=0.51 volume23,10 shares arrived
+at1792269759853 but had source1792269759782 BEFORE activation, so contribute
+ZERO queue credit. Remaining13 shares at1792269760853/source1792269760783
+consume13 queue, leaving300.16 and ZERO SELL allocations. Original GAP at
+1792269760873 cancels reduction (`DATA_GAP:invalid_depth`), leaves5 A shares
+uncovered. Five intervening native RESTING_REDUCTION callbacks; no new fill
+and no obsolete-state continuation. Conserved:6124.483887 venue=173 queue+
+5 allocated+5946.483887 unused. Existing BUY A5 allocation is NOT net profit.
+
+New regressions reject forged reduced queue, fabricated SELL fills, and attempts
+to promote this bounded result to account/PnL/independent/live qualification.
+All six new offline result/recovery-window regressions passed locally;240 tests
+are now collected for the new CI data-context gate (234 previously passed CI).
+No production strategy/queue/fees/risk/minimums/acceptance changed.
+
+Next frozen task is DATA ONLY, not another execution experiment: one source
+window from original first GAP minus unchanged2000ms book-age warmup through
+first BUY allocation+unchanged30000ms unhedged deadline+2000ms book-age allowance.
+Fixed range1792269758873..1792269786123 (27250ms), original first-GAP anchor
+260656. Horizon derives from original risk clock, NOT observed price/PnL or
+recovery outcome. Reuse source run39067539123, check all6163831 rows/logical
+SHA and complete RUN_END with existing bounded extractor; retain full original
+frames/depth and ALL pair trades in window, first fresh both-book nonempty
+callback and every scoped GAP. Missing recovery remains UNKNOWN. No model
+orders/fills, price-complement shortcuts, receipt requests, new market capture,
+holdout tuning or duplicate full scan. New workflow runs offline tests BEFORE
+one extraction; source/tests/config/previous native proof frozen before reading
+new recovery window. No need to rebuild the engine for data extraction.
+
+After context finishes, reproduce hashes/source anchor, determine original
+book recovery and next unchanged reduce/cancel/overdue actions; freeze necessary
+component-label cohort only if a new maker order can execute. Preserve source
+eligibility and all adverse outcomes, including any unresolved inventory. Do
+not label selected-prefix evidence a full-account or baseline/candidate trial.
+Full-account development comparison and independent PAPER acceptance remain
+outstanding. Known control net-$1.80 after costs; guard0 with0fills; QW0 account
+net UNKNOWN. NO_GO; automation continues, PAPER only, PR9 remains unmerged.
+Original unknown dirty activation archive remains untouched; isolated clean
+worktree uses committed/hash-verified evidence, never the truncated local file.
