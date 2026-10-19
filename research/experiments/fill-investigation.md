@@ -2458,3 +2458,46 @@ and changed-sequence regression assertions BEFORE gate evaluation. All original
 source anchors, wait/cancel clocks, quotes, config, risk and acceptance unchanged.
 First run checked complete before retry; preserve its failure history. This is
 an observer representation correction, NOT a fitted strategy or relaxed timing.
+
+## QW0 conditional unhedged wait/cancel result and next cohort — 2026-10-19
+
+Corrected observer frozenbb45d8fde18b44164fc21fbf637d4a2ed32a4f2e before retry;
+run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39231601645
+completed successfully.220 CI regressions, two original matcher source/queue
+checks and two numeric-anchor roundtrip/difference synthetic assertions passed.
+Actual PairPolicy agrees with all21 post-allocation callbacks: first cancel
+request1792269759315 (age5192ms, dynamic wait4999ms), due1792269759565, actual
+matching ACK on original259283/event0 BOOK at1792269759566. Conditional B order
+remains5/queue30 until this CANCEL_BEFORE_RISK_EXIT acknowledgement. Original
+scoped GAP1792269760873 is later. No source/fee/risk/latency parameter changed.
+
+Artifact12177141038 (`qw0-conditional-unhedged-timing`), ZIP SHA256
+faef3750818ab67934f726daa65b4244e69a6c4942b35d5726bbeabf17460cee.
+Exact evidence/report/member hashes in `queue-aware-quote-20261019/unhedged-timing-result/`.
+Original compressed context reproduces byte-for-byte from prior archived source;
+no duplicated2.2MB context. Independent Python reconstructs exact EWMA, witnesses,
+callback waits, conditional request/due and first due engine event; matches all
+21 actual-policy checks and unchanged actual B lifecycle through conditional ACK.
+Changed ACK/financial scope rejected. Two new result regressions added.
+
+IMPORTANT: all trades were SUPPRESSED in this isolated clock gate. No actual
+post-fill zero-execution conclusion, completed hedge/exit, strategy account/PnL
+or independent qualification. An intervening B fill can invalidate the branch;
+account risk/other markets omitted. Known full account net remains control-$1.80
+after costs, guard0 with0 fills; QW0 account unknown. Acceptance unchanged, NO_GO.
+
+Next cohort frozen BEFORE public receipt reading: ALL79 original quote-agnostic
+B observations strictly after prior A model fill through conditional actual ACK.
+These are neither price-filtered nor selected by profitability. Exact original
+sample/seq/event/arrival bind to retained source; original census bid separate
+from QW0 bid0.40. All79 currently uncached; reuse prior98 receipt cache anyway.
+`postfill-selection.json` plus source/test/config/acceptance hash freeze. Public
+Polygon chain/receipt/block reads only, max79; exact-selection checkpoint/resume,
+unknown/ambiguous/nonconserved input fails, never treated as zero. No extra
+capture/source scan/Java build. New collector preserves every raw success and
+actual integer component route; summary NOT a fill/account/profit simulation.
+Two new selection/budget/unknown regressions added (224 phase6 total).
+Wait for `qw0-postfill79-receipts`; no overlapping batch or independent capture.
+After complete offline reproduction, validate actual source-time queue allocation
+during this branch, then unchanged hedge/maker-reduction/exit/resolution and SAME-
+development full-account baseline/candidate comparison before independent PAPER.

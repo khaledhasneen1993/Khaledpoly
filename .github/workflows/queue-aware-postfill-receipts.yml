@@ -1,0 +1,27 @@
+name: PAPER QW0 frozen79 post-fill counterpart receipts
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/queue-aware-postfill-receipts.yml', 'research/phase6/queue-aware-postfill-receipts-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-qw0-postfill79
+  cancel-in-progress: false
+jobs:
+  receipts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: All offline regressions before public reads
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - name: Only original79 post-fill counterpart receipts through conditional cancel ACK
+        run: python3 -u -m research.phase6.queue_aware_postfill_receipts --output research/output/qw0-postfill79
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qw0-postfill79-receipts
+          retention-days: 7
+          path: research/output/qw0-postfill79/

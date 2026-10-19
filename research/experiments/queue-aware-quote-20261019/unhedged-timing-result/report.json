@@ -1,0 +1,141 @@
+{
+  "scope" : "CONDITIONAL_NO_FURTHER_ALLOCATIONS_WAIT_CANCEL_NOT_ACCOUNT",
+  "originalSequence" : 243583,
+  "actualPairPolicyChecks" : [ {
+    "originalSequence" : 250221,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4999,
+    "at" : 1792269754310
+  }, {
+    "originalSequence" : 250835,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4712,
+    "at" : 1792269754560
+  }, {
+    "originalSequence" : 251566,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4975,
+    "at" : 1792269754810
+  }, {
+    "originalSequence" : 252046,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4999,
+    "at" : 1792269755060
+  }, {
+    "originalSequence" : 252288,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4999,
+    "at" : 1792269755310
+  }, {
+    "originalSequence" : 252654,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4676,
+    "at" : 1792269755560
+  }, {
+    "originalSequence" : 253317,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4999,
+    "at" : 1792269755810
+  }, {
+    "originalSequence" : 253448,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4999,
+    "at" : 1792269756061
+  }, {
+    "originalSequence" : 253569,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4999,
+    "at" : 1792269756311
+  }, {
+    "originalSequence" : 253692,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4999,
+    "at" : 1792269756562
+  }, {
+    "originalSequence" : 253997,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4999,
+    "at" : 1792269756812
+  }, {
+    "originalSequence" : 254376,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4952,
+    "at" : 1792269757062
+  }, {
+    "originalSequence" : 254758,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4998,
+    "at" : 1792269757312
+  }, {
+    "originalSequence" : 255373,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4999,
+    "at" : 1792269757563
+  }, {
+    "originalSequence" : 256086,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4999,
+    "at" : 1792269757813
+  }, {
+    "originalSequence" : 256398,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4999,
+    "at" : 1792269758063
+  }, {
+    "originalSequence" : 256847,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4999,
+    "at" : 1792269758313
+  }, {
+    "originalSequence" : 257508,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4998,
+    "at" : 1792269758565
+  }, {
+    "originalSequence" : 258161,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4999,
+    "at" : 1792269758815
+  }, {
+    "originalSequence" : 258635,
+    "reason" : "WAIT_SECOND_LEG",
+    "waitMs" : 4999,
+    "at" : 1792269759065
+  }, {
+    "originalSequence" : 259054,
+    "reason" : "CANCEL_BEFORE_EXIT",
+    "waitMs" : 4999,
+    "at" : 1792269759315
+  } ],
+  "actualCancelAck" : {
+    "originalSequence" : 259283,
+    "eventIndex" : 0,
+    "kind" : "BOOK",
+    "at" : 1792269759566
+  },
+  "diagnostic" : {
+    "id" : "qw0-conditional-b",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : true,
+    "price" : 0.4,
+    "submittedMs" : 1792269750302,
+    "activationDueMs" : 1792269750552,
+    "activatedMs" : 1792269750554,
+    "terminalMs" : 1792269759566,
+    "terminalReason" : "CANCEL_BEFORE_RISK_EXIT",
+    "initialQueueAhead" : 30,
+    "remainingQueueAhead" : 30,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5.00,
+    "activeMs" : 9012,
+    "printObservations" : { }
+  },
+  "allTradeVolumeSuppressed" : true,
+  "furtherCounterpartAllocationsSuppressed" : true,
+  "accountRiskAndOtherMarketsOmitted" : true,
+  "fillsCreated" : 0,
+  "candidateAccountSimulated" : false,
+  "netPnlRecomputed" : false,
+  "liveAllowed" : false,
+  "independentPaperQualificationAllowed" : false
+}

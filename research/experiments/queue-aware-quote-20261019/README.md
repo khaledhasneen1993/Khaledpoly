@@ -114,3 +114,19 @@ reproduces both queues, per-source allocations, source gates and conservation.
 No full account/hedge/exit/resolution/PnL or independent qualification inferred.
 Next unchanged unhedged wait/cancel/reduction timing and minimally bounded
 post-fill receipt evidence using retained context; no prefix/capture repetition.
+
+Conditional unhedged clock: successful corrected run39231601645/sourcebb45d8f,
+artifact12177141038 ZIP SHA256
+faef3750818ab67934f726daa65b4244e69a6c4942b35d5726bbeabf17460cee.
+21 actual PairPolicy callbacks: conditional cancel request1792269759315,
+due1792269759565, actual ACK1792269759566 at original259283/event0 BOOK.
+`unhedged-timing-result/` retains exact evidence/report plus independent source,
+EWMA/wait/ACK reproduction. First run39231292250 failed observer numeric-node
+identity comparison; correction/regressions preserve exact timing values and
+all production parameters. Successful retry adds two numeric-anchor regressions.
+ALL trade allocations suppressed: not proof that B stayed unfilled or account
+profit. Next fixed ALL79 post-fill B receipts through conditional ACK, source-
+bound `postfill-selection.json`; no price sampling or extra capture.224 offline
+regressions include conditional result and bounded cohort/unknown/budget tests.
+Public-only frozen79 audit must finish/reproduce before any actual post-fill
+strategy/account claim. Known account net control-$1.80, guard0/0fills; NO_GO.
