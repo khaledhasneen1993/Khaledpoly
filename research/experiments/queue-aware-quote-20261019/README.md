@@ -26,3 +26,22 @@ target volumes are zero, reject these selected starts without another experiment
 Any positive start still requires actual delayed activation/current book-source
 eligibility/resting cancellations and SAME-development full account comparison
 before independent PAPER. Known control net-$1.80, guard0/0fills; QW0 unmeasured.
+
+Cached necessary gate frozen at8fcd13dd6d214cb0847a2f3655527f5d8303a535 BEFORE
+new-bid receipt evaluation. `cached-traffic.json`: all7 first legs have complete
+original observation/receipt coverage;6 have zero actual components at their QW0
+bids. Only243583/A at0.48 has positive actual component volume607.752076 shares
+across39 complete observations, censored at original GAP1792269760873. Original
+census bid0.49 remains explicitly separate. No missing receipt treated as zero,
+no synthetic complementary-price shortcut or rewritten observation binding.
+No new public reads, tape scans, builds or market capture.199 phase6 tests pass.
+
+This does NOT prove607.752076 shares available to an order or any fill/profit.
+Do not sum overlapping state volumes. Do not promote the other6 selected starts
+or tune this one. Next justified gate: one source-bound causal probe for243583
+with unchanged QW0 pair0.48/0.40 and original quantity5. Existing full-depth
+activation context covers pre-event seed; its5504ms window does not cover the
+whole candidate lifetime. Require original source through first GAP, exact
+current-book source eligibility and actual activation/cancel ordering, not just
+snapshot queue or lifetime-volume subtraction. Retain all adverse outcomes.
+No opposite-leg receipt expansion or independent capture before that gate.

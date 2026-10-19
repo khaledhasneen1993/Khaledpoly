@@ -1,0 +1,259 @@
+{
+  "experiment": "QW0",
+  "scope": "COMPLETE_CACHED_ACTUAL_COMPONENTS_AT_NEW_QUOTES_NOT_ACCOUNT_EXECUTION",
+  "states": [
+    {
+      "originalSequence": 173342,
+      "originalCensusQuotes": [
+        {
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "price": "0.45",
+          "quantity": "5.00"
+        },
+        {
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "price": "0.37",
+          "quantity": "5.00"
+        }
+      ],
+      "qw0TargetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.45",
+        "quantity": "5.00"
+      },
+      "completeTargetObservations": 1,
+      "completeActualPriceCompatibleSharesRaw": 0,
+      "transactionHashes": [
+        "0x410a752f186dc9c17f57e98e887fd238dd4fcef2614ebf5e72e6b9ba6e2bb7db"
+      ],
+      "originalPublicObservationBindingUnmodified": true
+    },
+    {
+      "originalSequence": 197690,
+      "originalCensusQuotes": [
+        {
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "price": "0.47",
+          "quantity": "5.00"
+        },
+        {
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "price": "0.49",
+          "quantity": "5.00"
+        }
+      ],
+      "qw0TargetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.46",
+        "quantity": "5.00"
+      },
+      "completeTargetObservations": 8,
+      "completeActualPriceCompatibleSharesRaw": 0,
+      "transactionHashes": [
+        "0x38f3a6d64e22cd524cd0aa1e1bab530674a29c9c3e460db4f0fab637506d95ed",
+        "0x110aefd3cb5bfc8f4ad06f277fa29bf2a9d9dcc43d57127c0a8d77fa7176930c",
+        "0x5af5f5d8a8acd4a044cd1c3351756d4e2e1dc0eadde045a4438d45e8f3b1adff",
+        "0x1ce854c6b45de0f4adfbf2b8042dbcd3da9f1298755b24b759f4434cd1194995",
+        "0x49cb8b8952f8c3f400464b51dcc8d119990238ec20c6f8e015b60a1c23613ee4",
+        "0xf38f61d271ba71997ff756c3468088bc6702e10c7d00f1dfcee02cd68e2fd76c",
+        "0x3be6b9f11c40c289b6e80722f7cbc0d5a5c8ac7500b78db540a6ba396be574ce",
+        "0x6c38a94fc2683ac8aac6fcf4e16c6a654fd0a5b909fad10408f3334e33b4895e"
+      ],
+      "originalPublicObservationBindingUnmodified": true
+    },
+    {
+      "originalSequence": 198832,
+      "originalCensusQuotes": [
+        {
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "price": "0.48",
+          "quantity": "5.00"
+        },
+        {
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "price": "0.48",
+          "quantity": "5.00"
+        }
+      ],
+      "qw0TargetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.47",
+        "quantity": "5.00"
+      },
+      "completeTargetObservations": 4,
+      "completeActualPriceCompatibleSharesRaw": 0,
+      "transactionHashes": [
+        "0x49cb8b8952f8c3f400464b51dcc8d119990238ec20c6f8e015b60a1c23613ee4",
+        "0xf38f61d271ba71997ff756c3468088bc6702e10c7d00f1dfcee02cd68e2fd76c",
+        "0x3be6b9f11c40c289b6e80722f7cbc0d5a5c8ac7500b78db540a6ba396be574ce",
+        "0x6c38a94fc2683ac8aac6fcf4e16c6a654fd0a5b909fad10408f3334e33b4895e"
+      ],
+      "originalPublicObservationBindingUnmodified": true
+    },
+    {
+      "originalSequence": 243583,
+      "originalCensusQuotes": [
+        {
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "price": "0.49",
+          "quantity": "5.00"
+        },
+        {
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "price": "0.47",
+          "quantity": "5.00"
+        }
+      ],
+      "qw0TargetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.48",
+        "quantity": "5.00"
+      },
+      "completeTargetObservations": 39,
+      "completeActualPriceCompatibleSharesRaw": 607752076,
+      "transactionHashes": [
+        "0x25a7c0a2397ea26891a679ecd5fd737d339929bf0dc641ac2611cd5a61d3efef",
+        "0xa02ce578c02eea13e0fa093336bc1681f03d875d33b8ad13f658ad52b307b15e",
+        "0x37269c074249ec529bdb4d18eb6e6aefd3013926cb9398f8ca84ce7e663598f1",
+        "0x2d35ad3acc76efb6140de19a456ad5f8b806634646eb7026f9ad7f961ef710fc",
+        "0x32dfc8776881470b3a12eac58eac7f899c8648c93d82ad729b5dd3a34dfc6820",
+        "0xd9e324784819b65dc7cdb38d31f98aaa91860a344dd8e7c9632d101bc4108531",
+        "0x081548a7b2b55492126292d32ab3698e8c58da186e4bc9e202b4d2270c7f0eb0",
+        "0x259757b0b7be40c60c05caaa5d959f64762d8644fca2e763617c2aa7cb4bb0d6",
+        "0xdec3671e7dc40dd33f37f3eacc43e824d72cc31823c0f03e2ee0677ec459a857",
+        "0x4f6e07ff674e4a1c63883116cf7a75237f2ba34c9e5b88c88bb2725a5d3c6241",
+        "0x5e7aa3734272fee433d72500c64eff02e9d2fab0fe7fa57c23f1edb0a4a73f76",
+        "0x9ec9eb50ee23d8578c35b20d295d0d434345b356ef89e4033fc66f86fc6213ff",
+        "0x2344b1e30d6836007d6f0ecc10a9b532621cf05795bb5ce99994069ee288cf3e",
+        "0x47b753069548590435b696ef3310a5e03540717accceeb8e49423436cc1e6b7b",
+        "0x6f35fdd1765963646c97861b6eee68b032d15332065e5bf0b1c8056802d734c3",
+        "0xf1f423ffcab661635f2196823beb067209fed2a459da76e3995a1d8d789527b1",
+        "0x25adb414f7a44b7d2a03f6e9e6cc56511988f4761453aa69d10746e7dbab0967",
+        "0x7a300f3119040536554c4b07b6f1c5fe3b303aa11ad9e969debea7080640ac30",
+        "0x9f92887c3db31d0097b7edee1233fcf83d51dd9da1b2473b75534e056dc149b0",
+        "0x7d34ed8cae9952542a569c5629774449d4f42e290f669677adb8bc55f6ffa512",
+        "0x5c3331db26987c47032c71b4b23c921c31c0ac40d2e6b24e64bd136b4dd2334e",
+        "0xb6a81033a8551f1ad4069447c0ca0b30e924c28a82b696ccc82e060c3f13b221",
+        "0xf6ee7f39dabdf10d682861f0517e8b3bc3df06aebc18e33a03fae18429822332",
+        "0xe6441df5c00acdb6f971e123e973782307d1d9c139634446e09d6da8d597f9cf",
+        "0xd037580e9929bbb09b8a0d2a45ffa91b68d9fbf92b4b5f5955bbeb75a6696266",
+        "0x112badc2bb7d4468517dd8de0e7df5ffd3e15ff45e484ed47b6bb29243f86a61",
+        "0xae9c3d00149efcde869554cb43b05e617fc6b401bc1cdf898303c767957a6cf2",
+        "0x7f16a96cf7574c3dea866abd60ad012352d64b3659cf675ed04d6d4b13d775a8",
+        "0x47be4348c5a22e43c89b40c16d6ebaa1a956847fafd653c3340ad77b72021d67",
+        "0x233596b796fdd6e7181d6a820c80a29b466ffb3f14e9e8b0709768f21298071a",
+        "0x845c5e0b38fb14509c54f1f2997328e03db3f84e0269372e05106f4f9a276e7e",
+        "0x5a8b3f7ad293a66a523eaa89a866cd1cacd8989a33dfdb6895e71c3fb077d921",
+        "0x73486aef753274784e3e2d25972a2bb667ee4db585685ca331fe80d82b766671",
+        "0x75788efeea99796f40315fbc11958eea748c3c1bedfe981c18459d545e3f6dfe",
+        "0x7377d4d2e425365692a3f5717e63125aaf468d7912be9a78eaf1da3d59476bf1",
+        "0x178f7dfb55bc5cda36c4db2afe9e809b048c7c8b0fc54e9e0f0890a65a8b7629",
+        "0xf1542dfb56b61f21a3083fea281a4156341234affab43d0ad6b0dc701be04ae6",
+        "0x8f22f808e4e8107f834a10e83e297e2ad17f3111780412927a63f65aa99ac95a",
+        "0x90a31fb92b3475849b60a5b49ad2fcb880ba368b4ae75257fba3ea84ffaa3a32"
+      ],
+      "originalPublicObservationBindingUnmodified": true
+    },
+    {
+      "originalSequence": 258635,
+      "originalCensusQuotes": [
+        {
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "price": "0.49",
+          "quantity": "5.00"
+        },
+        {
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "price": "0.47",
+          "quantity": "5.00"
+        }
+      ],
+      "qw0TargetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "completeTargetObservations": 7,
+      "completeActualPriceCompatibleSharesRaw": 0,
+      "transactionHashes": [
+        "0x73486aef753274784e3e2d25972a2bb667ee4db585685ca331fe80d82b766671",
+        "0x75788efeea99796f40315fbc11958eea748c3c1bedfe981c18459d545e3f6dfe",
+        "0x7377d4d2e425365692a3f5717e63125aaf468d7912be9a78eaf1da3d59476bf1",
+        "0x178f7dfb55bc5cda36c4db2afe9e809b048c7c8b0fc54e9e0f0890a65a8b7629",
+        "0xf1542dfb56b61f21a3083fea281a4156341234affab43d0ad6b0dc701be04ae6",
+        "0x8f22f808e4e8107f834a10e83e297e2ad17f3111780412927a63f65aa99ac95a",
+        "0x90a31fb92b3475849b60a5b49ad2fcb880ba368b4ae75257fba3ea84ffaa3a32"
+      ],
+      "originalPublicObservationBindingUnmodified": true
+    },
+    {
+      "originalSequence": 259283,
+      "originalCensusQuotes": [
+        {
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "price": "0.49",
+          "quantity": "5.00"
+        },
+        {
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "price": "0.48",
+          "quantity": "5.00"
+        }
+      ],
+      "qw0TargetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.48",
+        "quantity": "5.00"
+      },
+      "completeTargetObservations": 4,
+      "completeActualPriceCompatibleSharesRaw": 0,
+      "transactionHashes": [
+        "0x178f7dfb55bc5cda36c4db2afe9e809b048c7c8b0fc54e9e0f0890a65a8b7629",
+        "0xf1542dfb56b61f21a3083fea281a4156341234affab43d0ad6b0dc701be04ae6",
+        "0x8f22f808e4e8107f834a10e83e297e2ad17f3111780412927a63f65aa99ac95a",
+        "0x90a31fb92b3475849b60a5b49ad2fcb880ba368b4ae75257fba3ea84ffaa3a32"
+      ],
+      "originalPublicObservationBindingUnmodified": true
+    },
+    {
+      "originalSequence": 259597,
+      "originalCensusQuotes": [
+        {
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "price": "0.49",
+          "quantity": "5.00"
+        },
+        {
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "price": "0.48",
+          "quantity": "5.00"
+        }
+      ],
+      "qw0TargetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.47",
+        "quantity": "5.00"
+      },
+      "completeTargetObservations": 4,
+      "completeActualPriceCompatibleSharesRaw": 0,
+      "transactionHashes": [
+        "0x178f7dfb55bc5cda36c4db2afe9e809b048c7c8b0fc54e9e0f0890a65a8b7629",
+        "0xf1542dfb56b61f21a3083fea281a4156341234affab43d0ad6b0dc701be04ae6",
+        "0x8f22f808e4e8107f834a10e83e297e2ad17f3111780412927a63f65aa99ac95a",
+        "0x90a31fb92b3475849b60a5b49ad2fcb880ba368b4ae75257fba3ea84ffaa3a32"
+      ],
+      "originalPublicObservationBindingUnmodified": true
+    }
+  ],
+  "selectedStarts": 7,
+  "positiveActualPricedTargetLegs": 1,
+  "newPublicReads": 0,
+  "newTapeScans": 0,
+  "overlappingVolumesMustNotBeSummed": true,
+  "activationQueueOrRestingCancelProven": false,
+  "fillsCreated": 0,
+  "netPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "ONLY_POSITIVE_SELECTED_STARTS_NEED_FROZEN_CAUSAL_LIFETIME_GATE"
+}

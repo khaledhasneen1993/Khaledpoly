@@ -2096,3 +2096,32 @@ all7 legs rejects ONLY these starts, not global QW0 impossibility. Positive legs
 still need frozen source-time/activation/queue/resting-risk and full same-data
 baseline/candidate account proof before independent PAPER. Net remains corrected
 control-$1.80, guard0/0fills; QW0/DQ3 account performance unmeasured, NO_GO.
+
+## QW0 cached necessary-volume result — 2026-10-19
+
+Committed cached gate8fcd13dd6d214cb0847a2f3655527f5d8303a535 BEFORE evaluating
+the frozen new bids on original conserved receipt components. No further variant,
+price change, public request, source scan, Java build or market recording.
+All7 QW0 first-leg windows are completely covered by existing exact evidence.
+Six have zero actual BUY components at/below their new own bid. Only243583/A
+at0.48 has607752076 raw (=607.752076 shares) compatible components across the
+complete39-observation window ending original GAP1792269760873. Original census
+bid0.49 stays separately bound to its own observation; it was NOT rewritten.
+These are actual component prices, NOT aggregate1-price or allocated queue/fills.
+
+199 phase6 tests pass locally, including full result reproduction, exact integer
+comparison, all old evidence, all19 actual minimum-size rejection invariants and
+separation of new quote from original source identity. Exact report retained in
+`queue-aware-quote-20261019/cached-traffic.json`. Policy/tests/freeze unchanged.
+
+Next gate only for this ONE still-supported selected start: source-bound causal
+activation/queue/current-book eligibility/resting lifetime, original first-GAP
+censorship, QW0 unchanged pair0.48/0.40, quantity5. Reuse existing full-depth
+pre-activation source context, but do not pretend its5504ms window covers the
+entire10.571s order window; any extended extraction must bind original complete
+source hash and exact anchors. Use actual matcher and conserved actual component
+volume without altering queue2x/250ms/cancel/fees/risk. No opposite-leg RPC batch,
+full-account profitability claim or independent capture from this gate alone.
+If supported, then separately freeze same-development FULL account comparison
+with baseline before independent PAPER; never tune holdout. Known net after
+costs remains control-$1.80, guard0/0fills; QW0 account unmeasured, NO_GO.
