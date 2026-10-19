@@ -1887,3 +1887,46 @@ original source download/extraction. Source download was in progress at this
 checkpoint; context/activation report not yet available, no queue result claimed.
 Await `dq3-activation-seed-context`; do not rerun/download another capture, launch
 another account replay, or infer final economic results while this job runs.
+
+## Actual-engine isolated activation results — 2026-10-19
+
+Run39186480474 completed SUCCESS before this work. Artifact12158691088 ZIP
+SHA256 bb9a933dd12035eb1c46a08f60662e3c19150ad5ad137e54dc0df93f6124d1ae,
+original sourcec566098, retained exactly as `depth-quote-20261018/activation-result/artifact.zip.b64`.
+Contains activation.json5391 bytes and context.json.gz1028320 bytes. Full original
+source hash/6163831 rows verified by extraction;5051 unmodified normalized inputs,
+full depth and original RAW, retained34163132 bytes for the frozen5504ms window.
+
+Actual unchanged matcher seeded1292.48 queue at first eligible input for starts
+243583 and245065, not1680 from the decision snapshot. Original pre-event books
+seq244225/event0 and245661/event0 each display646.24 at own0.49 bid;2x gives
+1292.48. Activation at1792269750554 and1792269751306 respectively, on the first
+original input at/after due, no intervening tick changes. Whole actual-priced
+volume bound960.720922 cannot clear either queue, with331.759078 left even if
+ALL bound volume were eligible and NO resting-risk cancellation occurred.
+Third start246180 rejected at1792269751806: POST_ONLY_WOULD_CROSS; pre-event
+book seq246893/event1 has ask0.49 against own0.49 bid. It never activated.
+
+`dq3_activation_result.py` independently selects exact PRE-event source snapshots,
+validates warmup/frame/timestamps/freshness/price, compares actual-engine output
+to conserved full-window receipt bounds, and reproduces verification.json.
+No incoming/decision book substitution or inferred activation between callbacks.
+This rejects ONLY these three isolated no-cancel starts. Trades were suppressed
+in the probe, not simulated as fills. Resting cancellations/account trajectory
+remain unmodeled; no global-policy or live-profit claim. No further opposite-leg
+receipts/replay for these rejected starts. Seven other completely audited A legs
+already had zero actual compatible components. One distinct selected start299650
+still lacks its complete necessary leg; do not silently treat it as rejected.
+
+Freeze remaining state299650/A, unchanged0.49 bid, full19 unique observations,
+by continuing original chronological least-observed-leg rule after reusing all
+49 cached receipts. No fit/sweep/price change. `last-selected-leg.json` and
+`dq3-last-selected-leg-freeze.json` precede public reads;19-read hard budget,
+retained RAW/blocks, conserved components, unknown partial coverage on failure.
+This closes selected-state necessary evidence only, not an account/holdout test.
+185 phase6 tests pass locally, including immutable activation/source proof,
+queue/timing tamper failures, earlier49 receipts and exact remaining19 selection.
+One small dedicated receipt job; no additional tape scan/Maven/capture. Inspect
+its full report before deciding whether the LAST start needs a causal probe.
+Net economics unchanged: corrected control-$1.80, guard0/0fills, DQ3 not measured
+as an account, NO_GO. Fixed acceptance/fees/queue/risk/defaults remain unchanged.

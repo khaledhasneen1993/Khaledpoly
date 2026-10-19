@@ -122,3 +122,18 @@ resting cancellations. Ambiguous first-input timing/tick changes stay unknown.
 Queue >= complete960.720922 actual-price upper bound can reject isolated starts;
 queue below it proves no fill. Wait for `dq3-activation-seed-context`, do not
 duplicate scan/capture or lower queues/prices/risk thresholds.
+
+Activation result: run39186480474 SUCCESS, artifact12158691088, SHA256
+bb9a933dd12035eb1c46a08f60662e3c19150ad5ad137e54dc0df93f6124d1ae.
+Original ZIP/RAW context in `activation-result/artifact.zip.b64`; actual report
+and source-bound verification also retained. Actual initial queue1292.48 for
+243583/245065 exceeds entire compatible volume960.720922 by331.759078. Third
+start246180 rejected POST_ONLY_WOULD_CROSS (own bid=ask0.49). Thus no fills
+supported for these isolated starts even with cancellation omitted, NOT global
+strategy/account rejection. 185 phase6 tests pass locally. Do not re-audit their
+opposite legs or lower queue to create fills.
+
+One distinct last selected start299650 remains unexamined: freeze complete A leg
+19 receipts at unchanged0.49 (`last-selected-leg.json`, `dq3-last-selected-leg-freeze.json`).
+One small read-only job, no new source scan/account replay/capture. Await its
+report; positive actual volume would still need causal queue/lifecycle evidence.

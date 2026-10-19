@@ -1,0 +1,35 @@
+name: PAPER DQ3 last unexamined selected leg nineteen receipts
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/dq3-last-selected-leg.yml'
+      - 'research/phase6/dq3-last-selected-leg-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-dq3-last-selected-leg
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit-only Keccak decoder
+        run: |
+          python3 -m venv "$RUNNER_TEMP/dq3-last-env"
+          "$RUNNER_TEMP/dq3-last-env/bin/pip" install --only-binary=:all: --no-deps pycryptodome==3.23.0
+      - name: All offline phase6 evidence regressions before public reads
+        run: '"$RUNNER_TEMP/dq3-last-env/bin/python" -m unittest discover -s research/phase6/tests -q'
+      - name: Last selected complete-leg19 receipts, not an account replay or new capture
+        run: >-
+          "$RUNNER_TEMP/dq3-last-env/bin/python" -u -m research.phase6.dq3_last_selected_leg
+          --output research/output/dq3-last-selected-leg
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dq3-last-selected-leg-receipts
+          retention-days: 7
+          path: research/output/dq3-last-selected-leg/

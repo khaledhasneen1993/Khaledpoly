@@ -1,0 +1,59 @@
+{
+  "scope": "THREE_ISOLATED_NO_CANCEL_STARTS_REJECTED_NOT_GLOBAL_POLICY_OR_ACCOUNT",
+  "results": [
+    {
+      "originalSequence": 243583,
+      "price": "0.49",
+      "preEventBook": {
+        "originalSequence": 244225,
+        "eventIndex": 0,
+        "receivedMs": 1792269750550,
+        "sourceMs": 1792269750481
+      },
+      "outcomeMs": 1792269750554,
+      "outcomeSequence": 244228,
+      "completeActualPricedUpperBoundShares": "960.720922",
+      "reason": "INITIAL_QUEUE_EXCEEDS_COMPLETE_ACTUAL_PRICED_UPPER_BOUND",
+      "initialQueueAhead": "1292.48",
+      "minimumQueueNotCleared": "331.759078"
+    },
+    {
+      "originalSequence": 245065,
+      "price": "0.49",
+      "preEventBook": {
+        "originalSequence": 245661,
+        "eventIndex": 0,
+        "receivedMs": 1792269751303,
+        "sourceMs": 1792269751232
+      },
+      "outcomeMs": 1792269751306,
+      "outcomeSequence": 245662,
+      "completeActualPricedUpperBoundShares": "960.720922",
+      "reason": "INITIAL_QUEUE_EXCEEDS_COMPLETE_ACTUAL_PRICED_UPPER_BOUND",
+      "initialQueueAhead": "1292.48",
+      "minimumQueueNotCleared": "331.759078"
+    },
+    {
+      "originalSequence": 246180,
+      "price": "0.49",
+      "preEventBook": {
+        "originalSequence": 246893,
+        "eventIndex": 1,
+        "receivedMs": 1792269751797,
+        "sourceMs": 1792269751728
+      },
+      "outcomeMs": 1792269751806,
+      "outcomeSequence": 246897,
+      "completeActualPricedUpperBoundShares": "960.720922",
+      "reason": "POST_ONLY_WOULD_CROSS",
+      "initialQueueAhead": null
+    }
+  ],
+  "actualRestingCancellationSimulated": false,
+  "overlappingVolumeMustNotBeSummed": true,
+  "fillsCreated": 0,
+  "netPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "REJECT_THESE_THREE_ISOLATED_STARTS_UNCHANGED_QUEUE_AND_POST_ONLY"
+}
