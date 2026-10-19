@@ -2236,3 +2236,43 @@ Its output can neither prove actual bot fills/profit nor qualify independent
 PAPER. No runtime change and no QW0 policy tuning. Freeze files before evaluating
 this new gate;207 phase6 regression tests expected (204 prior +3 synthetic).
 Next retain all outcomes, then decide whether counterpart evidence is justified.
+
+## QW0 conditional resting result — 2026-10-19
+
+Frozen source38a112083acba1ed60b67ebd3087983fa6191ac0, run
+https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39211479096
+passed207 CI regressions, both prior actual-matcher source/queue assertions,
+compilation and bounded original resting gate. Artifact12167723023 ZIP SHA256
+d620f2f77ce53fd11307e297bd69a137de7c2b7fd86991ef19ca291fc55e6f43.
+Retained exact evidence/report plus original member hashes in
+`queue-aware-quote-20261019/resting-result/`. Original context already archived
+in prior causal ZIP; avoid duplicating2.2MB. Every workflow input (including
+compressed context) independently reproduced byte-for-byte against member hashes.
+
+15 original scheduled post-frame checks reached through fixed predeclared horizon;
+all RESTING, no price/risk/reprice cancellation. Five available immutable witness
+callbacks exactly match original times, EWMA volatility and required edges. Actual
+PairPolicy agrees on every check. Actual matcher consumes10 target-bound groups
+up to horizon and retains the prior conditional5-share A allocation at0.48 at
+1792269754123, initial actual queue160. This does NOT assume a new entry size on
+resting rechecks and does NOT ignore a cancellation race. No source download,
+new market capture, RPC, engine rebuild or production strategy change.
+
+`queue_aware_resting_result.py` independently reconstructs source callbacks and
+input member bytes, checks all actual engine diagnostics/allocations against the
+previous independently reproduced component result, rejects altered volatility
+and false financial scope.209 phase6 tests pass locally. Frozen gate unchanged.
+
+LIMIT: these checks assume the other QW0 leg remains entirely untouched. Unknown
+counterpart execution could alter holdings, reduce/hedge/cancel decisions BEFORE
+this A allocation. No actual bot fill, pair, account PnL or independent success
+claimed. Known full DEVELOPMENT account net remains control-$1.80 after costs;
+guard0 with0 fills. QW0 account unmeasured; acceptance immutable, NO_GO.
+
+Next justified task: freeze counterpart coverage over the SAME original selected
+state/window, reuse full traffic census and existing cached actual receipts,
+identify any missing conserved groups BEFORE a narrow public receipt request.
+Do not infer counterpart price from aggregate1-price or invent unknown fills.
+Then freeze and run actual paired baseline/candidate FULL-account development
+comparison with unchanged risk/fees; only qualifying frozen candidate may reach
+independent PAPER. No holdout tuning, duplicate original extraction or broad scan.

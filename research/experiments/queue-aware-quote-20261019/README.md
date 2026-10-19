@@ -75,3 +75,16 @@ simulated; no independent qualification or profitability claim. Next freeze the
 actual unchanged resting lifetime using this retained full context; only if
 supported proceed to counterpart evidence and same-data full account comparison.
 No duplicate tape scan/capture, rule retuning or weakened acceptance. NO_GO.
+
+Resting gate frozen at38a112083acba1ed60b67ebd3087983fa6191ac0 BEFORE evaluation.
+Successful run39211479096/artifact12167723023:15 scheduled callbacks, no unchanged
+price/risk/reprice cancellation before the conditional target allocation. Five
+original EWMA/edge/time witnesses match exactly. Actual PairPolicy/matcher
+confirms conditional5 shares at0.48, initial queue160,10 target-bound groups
+through fixed horizon. Counterpart assumed untouched, NOT an actual paired
+strategy trajectory. Exact report/evidence and byte-hash input reproduction in
+`resting-result/`; previous causal archive retains complete source context.
+209 local tests pass (207 CI before evaluation plus2 result regressions).
+No account PnL computed, no real bot fills or independent acceptance. Next narrow
+counterpart coverage audit from cached receipts/census, then frozen SAME-data
+full-account comparison if supported. No QW0 tuning or source scan/capture repeat.

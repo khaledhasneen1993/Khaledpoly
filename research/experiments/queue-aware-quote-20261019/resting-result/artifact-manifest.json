@@ -1,0 +1,27 @@
+{
+  "runId": 39211479096,
+  "artifactId": 12167723023,
+  "sourceCommit": "38a112083acba1ed60b67ebd3087983fa6191ac0",
+  "zipSha256": "d620f2f77ce53fd11307e297bd69a137de7c2b7fd86991ef19ca291fc55e6f43",
+  "members": {
+    "bindings.json": {
+      "bytes": 56486,
+      "sha256": "90bdad0890b2089cfd11a769a3c5612995235b4552ee11d491fb5714e1d6ae77"
+    },
+    "context.json.gz": {
+      "bytes": 2207296,
+      "sha256": "5eefcffd512465b286e00e061c642d8dd7cea0cc1ff7491dc5a39b733616fd57"
+    },
+    "evidence.json": {
+      "bytes": 98098,
+      "sha256": "7fa1a1db395505779421387b038c67cfaf8cc7c1ec5a7c5a099f1a85aa1b5035"
+    },
+    "report.json": {
+      "bytes": 1354,
+      "sha256": "6936a4d63af032e4f675fdfb9f1b4a33e7a4ddf3d29a42cb16c42256fbd557d5"
+    }
+  },
+  "contextAlreadyRetainedIn": "causal-result/artifact.zip.b64",
+  "inputsReproduction": "json.dumps(default=str,separators=(comma,colon))+LF; context gzip.compress(mtime=0)",
+  "duplicateSourceContextNotStored": true
+}

@@ -1,0 +1,42 @@
+{
+  "scope" : "CONDITIONAL_TARGET_RESTING_LIFETIME_UNKNOWN_COUNTERPART_NOT_ACCOUNT",
+  "originalSequence" : 243583,
+  "actualPairPolicyChecks" : 15,
+  "consumedTargetBindings" : 10,
+  "cancelRequestMs" : -1,
+  "cancelReason" : null,
+  "diagnostics" : [ {
+    "id" : "qw0-target-resting",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : true,
+    "price" : 0.48,
+    "submittedMs" : 1792269750302,
+    "activationDueMs" : 1792269750552,
+    "activatedMs" : 1792269750554,
+    "terminalMs" : 1792269754123,
+    "terminalReason" : "LAB_SETTLEMENT_COMPONENT",
+    "initialQueueAhead" : 160,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 0.00,
+    "activeMs" : 3569,
+    "printObservations" : {
+      "SETTLEMENT_COMPONENT" : 4
+    }
+  } ],
+  "conditionalTargetAllocations" : [ {
+    "id" : "qw0-target-resting",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : true,
+    "price" : 0.48,
+    "size" : 5.00,
+    "at" : 1792269754123
+  } ],
+  "counterpartExecutionOmitted" : true,
+  "counterpartRemainsUntouchedAssumed" : true,
+  "actualBotFillsCreated" : 0,
+  "candidateAccountSimulated" : false,
+  "netPnlRecomputed" : false,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false
+}
