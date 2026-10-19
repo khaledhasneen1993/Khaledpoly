@@ -57,3 +57,21 @@ positive CONDITIONAL model fill still CANNOT qualify account/strategy/PnL.
 202 offline phase6 tests pass. Reuse existing verified engine, no Maven build,
 no public RPC or new market capture. Wait for `qw0-single-supported-causal`;
 do not duplicate extraction, alter parameters or claim profits while pending.
+
+Completed result (2026-10-19): frozen source14f38101, successful run39205796353,
+artifact12166155247. See `causal-result/`: original ZIP retained with SHA256
+49ad5c66c74761d1a4be29645b77cccde784cc5d55ab08ab478ba5bf20351eea,
+exact report and independent verification. Full source identity/end verified;
+10657 records cover the complete12571ms original scoped window. Actual delayed
+activation queue160 (not decision proxy240), conditional A allocation5 at0.48
+at1792269754123. All39 original actual groups/121 unique components conserved.
+Independent Python source/queue/component reproduction matches;204 local tests
+pass, including forged allocation/queue rejection. Original202 CI tests plus
+two actual-matcher synthetic assertions passed before source extraction.
+
+This remains an OPTIMISTIC TARGET-ONLY diagnostic: resting-risk cancellation and
+counterpart execution omitted. Actual bot fills0; candidate account/PnL NOT
+simulated; no independent qualification or profitability claim. Next freeze the
+actual unchanged resting lifetime using this retained full context; only if
+supported proceed to counterpart evidence and same-data full account comparison.
+No duplicate tape scan/capture, rule retuning or weakened acceptance. NO_GO.

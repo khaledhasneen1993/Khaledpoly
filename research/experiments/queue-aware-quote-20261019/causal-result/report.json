@@ -1,0 +1,545 @@
+{
+  "scope" : "OPTIMISTIC_ISOLATED_QW0_TARGET_ONLY_NOT_STRATEGY_OR_ACCOUNT",
+  "state" : {
+    "id" : "dq3-0-243583",
+    "condition" : "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "originalSequence" : 243583,
+    "submitMs" : 1792269750302,
+    "activationDueMs" : 1792269750552,
+    "endMs" : 1792269780302,
+    "quotes" : [ {
+      "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "price" : "0.48",
+      "quantity" : "5.00"
+    }, {
+      "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "price" : "0.4",
+      "quantity" : "5.00"
+    } ],
+    "targetQuote" : {
+      "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "price" : "0.48",
+      "quantity" : "5.00"
+    },
+    "terminalMs" : 1792269760873
+  },
+  "consumedOriginalBindings" : 39,
+  "diagnostics" : [ {
+    "id" : "qw0-target-only",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : true,
+    "price" : 0.48,
+    "submittedMs" : 1792269750302,
+    "activationDueMs" : 1792269750552,
+    "activatedMs" : 1792269750554,
+    "terminalMs" : 1792269754123,
+    "terminalReason" : "LAB_SETTLEMENT_COMPONENT",
+    "initialQueueAhead" : 160,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 0.00,
+    "activeMs" : 3569,
+    "printObservations" : {
+      "SETTLEMENT_COMPONENT" : 4
+    }
+  } ],
+  "actualComponentAllocationDiagnostics" : {
+    "venueQuantity" : 2075.881286,
+    "hiddenLiquidityAndCrossPriceQueueUncertainty" : true,
+    "unusedQuantity" : 1910.881286,
+    "queueAbsorbed" : 160.000000,
+    "uniqueMakerComponents" : 121,
+    "allocatedQuantity" : 5.00
+  },
+  "bindingAudit" : [ {
+    "sourceMs" : 1792269750570,
+    "seq" : 244432,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269750568,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269750568
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269750641
+  }, {
+    "sourceMs" : 1792269751155,
+    "seq" : 245463,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269751154,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269751154
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269751224
+  }, {
+    "sourceMs" : 1792269752389,
+    "seq" : 248061,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269752380,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269752380
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269752457
+  }, {
+    "sourceMs" : 1792269752457,
+    "seq" : 248133,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269752457,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269752457
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269752529
+  }, {
+    "sourceMs" : 1792269753466,
+    "seq" : 248900,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269753464,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269753464
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269753538
+  }, {
+    "sourceMs" : 1792269753475,
+    "seq" : 248902,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269753464,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269753464
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 15.000000,
+    "at" : 1792269753545
+  }, {
+    "sourceMs" : 1792269753842,
+    "seq" : 249456,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269753825,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269753825
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269753911
+  }, {
+    "sourceMs" : 1792269753856,
+    "seq" : 249474,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269753856,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269753856
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269753926
+  }, {
+    "sourceMs" : 1792269753859,
+    "seq" : 249480,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269753857,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269753857
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269753928
+  }, {
+    "sourceMs" : 1792269754052,
+    "seq" : 249872,
+    "conditionalFills" : [ {
+      "id" : "qw0-target-only",
+      "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "buy" : true,
+      "price" : 0.48,
+      "size" : 5.00,
+      "at" : 1792269754123
+    } ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269754052,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269754052
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 190.000000,
+    "at" : 1792269754123
+  }, {
+    "sourceMs" : 1792269754272,
+    "seq" : 250257,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269754270,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269754270
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 15.000000,
+    "at" : 1792269754342
+  }, {
+    "sourceMs" : 1792269755216,
+    "seq" : 252255,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269755215,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269755215
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 48.000000,
+    "at" : 1792269755285
+  }, {
+    "sourceMs" : 1792269755644,
+    "seq" : 253073,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269755643,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269755643
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 15.000000,
+    "at" : 1792269755717
+  }, {
+    "sourceMs" : 1792269755672,
+    "seq" : 253157,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269755672,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269755672
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 9.000000,
+    "at" : 1792269755742
+  }, {
+    "sourceMs" : 1792269756066,
+    "seq" : 253478,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269756037,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269756037
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 18.867925,
+    "at" : 1792269756135
+  }, {
+    "sourceMs" : 1792269757262,
+    "seq" : 255036,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269757256,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269757256
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 37.735848,
+    "at" : 1792269757452
+  }, {
+    "sourceMs" : 1792269757602,
+    "seq" : 255809,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269757593,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269757593
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 140.924529,
+    "at" : 1792269757702
+  }, {
+    "sourceMs" : 1792269757720,
+    "seq" : 256067,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269757708,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269757708
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 43.000000,
+    "at" : 1792269757800
+  }, {
+    "sourceMs" : 1792269757742,
+    "seq" : 256107,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269757741,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269757741
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 9.000000,
+    "at" : 1792269757820
+  }, {
+    "sourceMs" : 1792269757770,
+    "seq" : 256163,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269757767,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269757767
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 38.453774,
+    "at" : 1792269757840
+  }, {
+    "sourceMs" : 1792269757989,
+    "seq" : 256388,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269757984,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269757984
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269758062
+  }, {
+    "sourceMs" : 1792269758010,
+    "seq" : 256409,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269758002,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269758002
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269758079
+  }, {
+    "sourceMs" : 1792269758098,
+    "seq" : 256489,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269758089,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269758089
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269758168
+  }, {
+    "sourceMs" : 1792269758196,
+    "seq" : 256695,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269758195,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269758195
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 27.770000,
+    "at" : 1792269758265
+  }, {
+    "sourceMs" : 1792269758273,
+    "seq" : 256940,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269758272,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269758272
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269758357
+  }, {
+    "sourceMs" : 1792269758640,
+    "seq" : 257887,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269758634,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269758634
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269758709
+  }, {
+    "sourceMs" : 1792269758657,
+    "seq" : 257925,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269758656,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269758656
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269758727
+  }, {
+    "sourceMs" : 1792269758841,
+    "seq" : 258356,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269758841,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269758841
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269758911
+  }, {
+    "sourceMs" : 1792269759045,
+    "seq" : 258724,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269759043,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269759043
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269759113
+  }, {
+    "sourceMs" : 1792269759093,
+    "seq" : 258784,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269759089,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269759089
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269759162
+  }, {
+    "sourceMs" : 1792269759222,
+    "seq" : 258982,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269759221,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269759221
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269759291
+  }, {
+    "sourceMs" : 1792269759267,
+    "seq" : 259079,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269759266,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269759266
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269759336
+  }, {
+    "sourceMs" : 1792269759470,
+    "seq" : 259259,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269759459,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269759459
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269759539
+  }, {
+    "sourceMs" : 1792269759522,
+    "seq" : 259338,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269759521,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269759521
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269759591
+  }, {
+    "sourceMs" : 1792269759603,
+    "seq" : 259498,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269759599,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269759599
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269759673
+  }, {
+    "sourceMs" : 1792269760301,
+    "seq" : 260120,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269760287,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269760287
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269760370
+  }, {
+    "sourceMs" : 1792269760339,
+    "seq" : 260162,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269760328,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269760328
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269760412
+  }, {
+    "sourceMs" : 1792269760778,
+    "seq" : 260604,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269760777,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269760777
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269760847
+  }, {
+    "sourceMs" : 1792269760798,
+    "seq" : 260642,
+    "conditionalFills" : [ ],
+    "sourceNotOlderThanBothFreshBooks" : true,
+    "pairBookSourcesBeforePrint" : {
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268" : 1792269760795,
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334" : 1792269760795
+    },
+    "eventIndex" : 0,
+    "targetPriceCompatibleQuantity" : 0,
+    "at" : 1792269760869
+  } ],
+  "conditionalModelFills" : [ {
+    "id" : "qw0-target-only",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : true,
+    "price" : 0.48,
+    "size" : 5.00,
+    "at" : 1792269754123
+  } ],
+  "restingRiskCancellationOmitted" : true,
+  "counterpartExecutionOmitted" : true,
+  "actualBotFillsCreated" : 0,
+  "netPnlRecomputed" : false,
+  "candidateAccountSimulated" : false,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false
+}

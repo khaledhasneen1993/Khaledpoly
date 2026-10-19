@@ -2170,3 +2170,44 @@ assertions pending CI BEFORE source download/extraction. One dedicated workflow
 only; no new market capture, wallet, keys, order API or independent PAPER.
 Next inspect `qw0-single-supported-causal`, preserve all outcomes, never tune to
 this result. Known control net-$1.80, guard0/0fills; QW0 account unknown, NO_GO.
+
+## QW0 causal result and independent reproduction — 2026-10-19
+
+Frozen implementation14f38101efde7fa5910145bfffdbcff09e42179a;
+run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39205796353
+completed successfully.202 CI phase6 tests and two actual-matcher synthetic
+queue/source-time assertions passed BEFORE original source extraction. Artifact
+12166155247 (`qw0-single-supported-causal`), ZIP SHA256
+49ad5c66c74761d1a4be29645b77cccde784cc5d55ab08ab478ba5bf20351eea,
+is retained byte-for-byte as `queue-aware-quote-20261019/causal-result/artifact.zip.b64`.
+Original complete source SHA,6163831 rows and clean end verified; bounded full
+depth/RAW context contains10657 records across12571ms through the original GAP.
+
+Actual isolated target matcher activates at1792269750554 with queue160, NOT the
+decision-snapshot proxy240. Its conditional allocation is5 shares at0.48 at
+1792269754123 after absorbing160 queue shares. All39 receipt-bound observations
+(37 BUY and2 SELL takers) consumed;121 unique actual maker components conserve
+2075.881286 total venue shares =160 queue +5 allocated +1910.881286 unused.
+This total spans ALL components and is NOT target-price available volume.
+Both current book source gates hold for all39 observed groups.
+
+`queue_aware_causal_result.py` independently reproduces original source binding,
+pre-event activation queue/post-only eligibility, both book-source gates, integer
+component prices rounded upward, scoped GAP and every allocation/conservation
+total using the separate Python allocator. Changed fill quantity or queue fails
+the verifier.204 phase6 tests pass locally. Exact Java report and independent
+verification are retained alongside the original ZIP. Frozen policy unchanged.
+
+IMPORTANT: resting strategy cancellation and counterpart execution were OMITTED
+in this explicit optimistic necessary test. These5 shares are NOT actual bot
+fills, a completed pair, net profit or an independently qualified candidate.
+No fee/PnL account simulation occurred. Known same-development account results
+remain control net-$1.80 and guard net0 with0 fills. Acceptance unchanged; NO_GO.
+
+Next: reuse this COMPLETE retained context (no duplicate full-source extraction)
+to freeze and check actual unchanged resting-risk lifetime/cancel ordering for
+the same QW0 quote. Unknown counterpart behavior cannot be assumed benign. If
+still supported, obtain necessary actual counterpart receipt evidence and run
+a separately frozen SAME-development FULL-account baseline/candidate comparison
+before independent PAPER. Never retune QW0 on these observations or a holdout;
+no new independent capture, broad RPC batch or runtime promotion yet.
