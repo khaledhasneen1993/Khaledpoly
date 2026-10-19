@@ -49,7 +49,37 @@ and frozen QW0/exit rules unchanged. No RPC or order submission.
 
 ## Next
 
-Local complete offline regression:285 tests in280.195s, OK; separate new targeted
+### First census stopped safely; standalone timer correction
+
+Run39336641679 failed AFTER285 tests passed in322.708s and the complete original
+artifact download digest matched. It produced only a201-byte partial artifact,
+not coverage.json. The census whitelist omitted RESEARCH_TICK. This is a known
+canonical scheduler input (ResearchSession.accept), not a new trade route.
+Original independent capture-inspection.json already counts28,743 such rows;
+its event counts total exactly6,163,831 journal rows and16,317 normalized trades.
+The retained original recovery context contains109 TICKs, first at original
+sequence258642 /1792269759067, payload{}. Regression uses that actual row.
+
+Correction counts standalone TICK without adding observation liquidity and
+keeps TICK forbidden INSIDE a frame, like the canonical engine. Unknown research
+input still fails, now with kind + original sequence in the exception. Added
+post-scan equality checks against the pinned pre-existing independent inspector:
+ALL journal kind counts, all four normalized market-event counts, total rows,
+trade count and scheduler count. No tape/labels/QW0/exit/account config changes.
+Revised census-only freeze pins corrected parser/tests and existing inspection;
+this is NOT strategy selection, acceptance relaxation or a holdout retune.
+
+Ten targeted tests pass, including real timer, no timer volume/market fills,
+forbidden framed timer, unknown-kind coordinates and inspector-count tampering.
+Re-run ONLY this failed census workflow with the corrected source; do not repeat
+any strategy experiment or launch overlapping capture.
+
+Corrected-parser complete local regression:288 tests in275.584s, OK; separate
+final10 targeted cases (including original inspector vocabulary) in0.006s, OK.
+Frozen corrected source/test/inspector dependency hashes verified. Original
+acceptance/account config remain unchanged. Full census totals remain PENDING.
+
+Initial implementation local offline regression:285 tests in280.195s, OK; separate new targeted
 seven tests in0.006s, OK. Frozen dependency hashes, downloaded prior GitHub proof
 and unchanged acceptance/config verified. Full source scan runs once on GitHub;
 no coverage totals are asserted before its output exists.

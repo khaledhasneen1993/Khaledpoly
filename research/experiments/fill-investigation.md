@@ -3168,3 +3168,49 @@ This census implementation's complete local regression:285 tests in280.195s, OK;
 separate7 targeted cases in0.006s, OK. Frozen dependency hashes verified. Next
 push launches ONE full-source coverage-only Action; actual coverage totals must
 be read from its completed artifact, not inferred from fixture test success.
+
+## Census protocol correction: preserve original scheduler TICK — 2026-10-20 Amman
+
+Preflight current0f7dd3a / draftPR9, no overlapping Action. Run39336641679
+FAILED at coverage parser after285 tests PASSED in322.708s, source download
+digest correct. Only201-byte partial artifact12227265901 produced, no complete
+coverage.json. Failure is parser contract, NOT new strategy/market performance.
+
+Exact cause: census standalone INPUT_KINDS omitted canonical TICK. Existing
+ResearchSession.accept explicitly supports standalone TICK but frame envelope
+allows only BOOK/TRADE/TICK_SIZE/GAP. Pre-existing immutable capture-inspection
+already lists28,743 RESEARCH_TICK, total6,163,831 journal rows and16,317 trades.
+Retained original recovery context has109 timers; first original seq258642 at
+1792269759067, data{}. All research kinds in original inspector now supported.
+No guessed market/receipt data, new RPC or modified execution semantics.
+
+Corrected census explicitly COUNTS standalone TICK, creates NO volume/fill from
+timer, still rejects TICK inside frame, all unknown/unframed observations and
+invalid original chronology. Unknown-kind errors now identify kind/sequence.
+Added final equality to pinned ORIGINAL independent inspector for every journal
+kind/count, total rows, four normalized market-event counts, trade and timer
+counts. No full report/renamed missing artifact if source/count validation fails.
+
+Ten targeted tests PASS, including ACTUAL retained timer and original inspector
+vocabulary, no timer trade credit, framed-timer/unknown-type rejection and
+tampered inspector-count failures. Corrected census-only source/test freeze
+also pins original inspector hash. Original tape/451 bindings/1,038 actual
+components unchanged; QW0/fee-positive rules, account config, queues/fees/risk
+and acceptance unchanged. This is not a strategy retune or independent data use.
+
+Next publish corrected census, run ONE replacement coverage-only Action, wait
+for successful complete artifact before making coverage or whole-account net
+claims. Reuse existing receipts; no duplicate captures/strategy experiments.
+Then inspect missing routes and implement fail-closed multi-market full-source
+runner before same-source baseline/candidate account replay, freeze executable
+before independent PAPER. No manual holding, no zero-credit unknown liquidity.
+
+No new market-account PnL: original control-$1.80 after costs; selected conditional
+exit-$0.03747 vs+$0.11264 remains NOT whole-account performance. Full candidate
+UNKNOWN, NO_GO. PAPER only, PR9 unmerged, follow-up continues. Unknown dirty
+old activation archive preserved untouched.
+
+Corrected census complete local regression:288 tests in275.584s, OK; final10
+targeted cases in0.006s, OK, also check all original inspector research kinds.
+Corrected freeze dependencies and unchanged acceptance/account config verified.
+No completed source scan or new financial result asserted before replacement CI.

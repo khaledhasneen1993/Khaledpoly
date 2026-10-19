@@ -9,9 +9,11 @@
   "labelsSha256": "682c0d599eb0beaae7b1717decabff09e69185ad483593f823e6a10b6875459a",
   "existingLabels": 451,
   "existingConservedComponents": 1038,
+  "referenceInspection": "research/experiments/fresh-paper-20261018/capture-inspection.json",
   "filesSha256": {
-    "research/phase6/full_tape_label_coverage.py": "aca6e2287067f17f30f54275307468cc15f0cec7e174fccfbb3345f22e4fc59a",
-    "research/phase6/tests/test_full_tape_label_coverage.py": "7590d0d3c0e611d7c346326df11cf120e50d2b4997f43df5a8d892e90ca09845",
+    "research/phase6/full_tape_label_coverage.py": "4feb754c5ff06827d4c4a647b6fffc00e5ac2355760ab23a99e6174a05845375",
+    "research/phase6/tests/test_full_tape_label_coverage.py": "553cd8208e209e19695aa63d5cd23dd0c1800374a2ae8e6f3662ae00730371b5",
+    "research/experiments/fresh-paper-20261018/capture-inspection.json": "1c9fcb5c0e0b98bc96c94bd8cc985bbf0c8241ca9d1b22c58ceb2f9171cc8479",
     ".github/workflows/full-tape-label-coverage.yml": "e4005f991f4af050db111a839e20e6ac5e6ddc96fca80fa5ed09c9d6081b32c0",
     "research/phase6/mixed_replay_labels.py": "9165a5fb688c27bf9b31fdd82e85abbfeb5e8b5f25b37d61b7959557978ccc31",
     "research/phase6/ConservedMixedReplayLabels.java": "b4e3bf6d498b250e6cfae7f2f867cb42ff0849794d72aab907e1727d1cc9924b",

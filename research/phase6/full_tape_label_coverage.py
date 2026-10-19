@@ -20,7 +20,7 @@ MAX_MARKETS = 10000
 MAX_MISSING_BYTES = 256 * 1024 * 1024
 FRAME_KINDS = {'BOOK', 'TRADE', 'TICK_SIZE', 'GAP'}
 INPUT_KINDS = FRAME_KINDS | {'FRAME', 'META', 'GROUP_META', 'GROUP_SETTLEMENT',
-                           'RESOLUTION', 'FEED_ERROR', 'MARKET_UNAVAILABLE', 'EXTERNAL_PROPOSAL'}
+                           'RESOLUTION', 'FEED_ERROR', 'MARKET_UNAVAILABLE', 'EXTERNAL_PROPOSAL', 'TICK'}
 
 
 def _integer(value):
@@ -141,7 +141,7 @@ def census(stream, labels, emit_missing, *, expected_sha, expected_rows):
         elif kind.startswith('RESEARCH_'):
             inp = kind[9:]
             if inp not in INPUT_KINDS or inp in {'BOOK', 'TRADE', 'TICK_SIZE'}:
-                raise ValueError('Unsupported/unframed research input; never omit')
+                raise ValueError(f'Unsupported/unframed research input {kind} at seq={rows}; never omit')
             if inp == 'META':
                 condition = data['condition']; a = data['first']; b = data['second']
                 if not all(isinstance(v, str) and v for v in (condition, a, b)) or a == b:
@@ -179,6 +179,17 @@ def census(stream, labels, emit_missing, *, expected_sha, expected_rows):
         independentPaperQualificationAllowed=False, liveAllowed=False, decision='NO_GO')
 
 
+def validate_reference_counts(result, inspection):
+    """Cross-check the pre-existing inspector, not a newly selected market subset."""
+    if (result['journalKinds'] != inspection['events']
+            or result['sourceRows'] != sum(inspection['events'].values())
+            or {k:result['normalizedEvents'].get(k, 0) for k in FRAME_KINDS} != inspection['normalizedEvents']
+            or result['normalizedTradeObservations'] != inspection['normalizedEvents'].get('TRADE', 0)
+            or result['normalizedEvents'].get('TICK', 0) != inspection['events'].get('RESEARCH_TICK', 0)
+            or inspection['recordingClosedCleanly'] is not True):
+        raise ValueError('Complete original inspector event/timer counts differ')
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--input-root', type=Path, required=True)
@@ -203,9 +214,10 @@ def main():
             with open_tape(tapes[0]) as stream:
                 result = census(stream, labels, saved.write,
                     expected_sha=frozen['logicalTapeSha256'], expected_rows=frozen['sourceRows'])
+    validate_reference_counts(result, json.loads(Path(frozen['referenceInspection']).read_text()))
     final = args.output / 'missing-observations.jsonl.gz'; partial.rename(final)
     result.update(labelsSha256=frozen['labelsSha256'], missingObservationsCompressedSha256=stored_sha256(final),
-                  coverageFreezeSha256=stored_sha256(ROOT))
+                  coverageFreezeSha256=stored_sha256(ROOT), originalInspectorCountsReproduced=True)
     (args.output / 'coverage.json').write_text(json.dumps(result, indent=2) + '\n')
     print(json.dumps({k:v for k,v in result.items() if k not in ('coverageByCondition', 'firstMissingByReason')}), flush=True)
 

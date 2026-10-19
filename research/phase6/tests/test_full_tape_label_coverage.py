@@ -1,9 +1,10 @@
 import copy
+import gzip
 import hashlib
 import io
 import json
 import unittest
-from research.phase6.full_tape_label_coverage import census
+from research.phase6.full_tape_label_coverage import census, validate_reference_counts, INPUT_KINDS
 
 
 class FullTapeCoverageTest(unittest.TestCase):
@@ -93,6 +94,45 @@ class FullTapeCoverageTest(unittest.TestCase):
         rows,labels=self.fixture();row=copy.deepcopy(rows[1]);row['data']['second']='c';rows.insert(2,row)
         for i,row in enumerate(rows):row['seq']=i+1
         with self.assertRaisesRegex(ValueError,'pair identity changed'):self.run_case(rows,labels)
+
+    def test_original_recorded_timer_is_counted_without_trade_credit(self):
+        with open('research/experiments/fresh-paper-20261018/capture-inspection.json') as source:
+            inspection=json.load(source)
+        self.assertEqual(sum(inspection['events'].values()),6163831)
+        self.assertEqual(inspection['events']['RESEARCH_TICK'],28743)
+        self.assertTrue(all(kind[9:] in INPUT_KINDS for kind in inspection['events'] if kind.startswith('RESEARCH_')))
+        # Use an actually retained original scheduler row, not a guessed event name.
+        with gzip.open('research/experiments/queue-aware-quote-20261019/post-gap-result/context.records.jsonl.gz','rt') as stream:
+            original=next(json.loads(line)['input'] for line in stream if 'RESEARCH_TICK' in line)
+        self.assertEqual(original['seq'],258642);self.assertEqual(original['arrivalMs'],1792269759067)
+        self.assertEqual(original['data'],{})
+        rows,labels=self.fixture();timer=copy.deepcopy(original)
+        timer.update(runId='r',arrivalMs=1);rows.insert(2,timer)
+        for i,row in enumerate(rows):row['seq']=i+1
+        labels['bindings'][0]['seq']=5
+        report,emitted=self.run_case(rows,labels)
+        self.assertEqual(report['journalKinds']['RESEARCH_TICK'],1);self.assertEqual(report['normalizedEvents']['TICK'],1)
+        self.assertEqual(report['normalizedTradeObservations'],1);self.assertEqual(report['consumedBindings'],1)
+        self.assertEqual(emitted,[]);self.assertEqual(report['modelFillsCreated'],0)
+
+    def test_timer_never_allowed_in_frame_and_unknown_still_fails_with_coordinate(self):
+        rows,labels=self.fixture();rows[3]['data']['events'].append(dict(kind='TICK',data={}))
+        with self.assertRaisesRegex(ValueError,'Unsupported frame event'):self.run_case(rows,labels)
+        rows,labels=self.fixture();rows[1]['kind']='RESEARCH_FUTURE_UNKNOWN'
+        with self.assertRaisesRegex(ValueError,'RESEARCH_FUTURE_UNKNOWN at seq=2'):self.run_case(rows,labels)
+
+    def test_independent_existing_inspector_counts_cannot_be_changed(self):
+        report,_=self.run_case(*self.fixture())
+        inspection=dict(events=copy.deepcopy(report['journalKinds']),recordingClosedCleanly=True,
+            normalizedEvents={k:report['normalizedEvents'].get(k,0) for k in ('BOOK','TRADE','TICK_SIZE','GAP')})
+        validate_reference_counts(report,inspection)
+        for mutate in [lambda r:r['journalKinds'].update(RESEARCH_TICK=1),
+                       lambda r:r['normalizedEvents'].update(TRADE=2),
+                       lambda r:r['normalizedEvents'].update(TICK=1),
+                       lambda r:r.update(sourceRows=6),
+                       lambda r:r.update(normalizedTradeObservations=2)]:
+            bad=copy.deepcopy(report);mutate(bad)
+            with self.assertRaisesRegex(ValueError,'inspector event/timer'):validate_reference_counts(bad,inspection)
 
 
 if __name__=='__main__':unittest.main()
