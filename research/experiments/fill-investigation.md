@@ -2501,3 +2501,42 @@ Wait for `qw0-postfill79-receipts`; no overlapping batch or independent capture.
 After complete offline reproduction, validate actual source-time queue allocation
 during this branch, then unchanged hedge/maker-reduction/exit/resolution and SAME-
 development full-account baseline/candidate comparison before independent PAPER.
+
+## QW0 post-fill79 actual receipts completed — 2026-10-19
+
+Checked PR9/head2ec3d6d and run39232300522 COMPLETE/SUCCESS before new work;
+no overlapping Actions.224 CI regressions passed BEFORE public reads. Frozen
+source2ec3d6daee919e167176fbd5a9594b9fd9e855ec, artifact12177132107
+(`qw0-postfill79-receipts`), ZIP SHA256
+81a680473c83a641fcb3a5df36a334853cf6a0e78bc817a01c29770b36e8bfae.
+Exactly79 public receipt reads,5 block reads,1 chain check; complete/no errors.
+All79 original actual B maker BUY components priced<=0.40 sum ZERO integer
+microshares through conditional cancel ACK1792269759566. Unknown never counted
+as zero. Original ZIP/raw79 receipts+blocks and full summary retained in
+`queue-aware-quote-20261019/postfill-result/`. Offline verifier rebinds exact
+selected source window, re-decodes and conserves all groups, reproducing original
+summary; missing receipt/fabricated volume fails. Two new result regressions.
+This is price-component coverage, NOT a queue/account/PnL claim.
+
+Next gate frozen BEFORE new causal replay: actual BOTH original orders plus all
+39 A/109 B =148 disjoint conserved source groups, original post-frame resting
+and unhedged wait callbacks, actual cancel250ms and first post-ACK frame hedge
+choice using unchanged PairPolicy/FeeModel/minimum5/maxExitLoss2.5. Reuse complete
+retained full-depth source through the ORIGINAL first scoped GAP1792269760873.
+No new public calls, complete source scan/capture or Maven/production rebuild.
+Unknown pair trades before ACK fail. After ACK unknown trades may only be TICK
+when no potentially executable order exists. Any hedge action executable BEFORE
+GAP fails this bounded gate and requires additional complete execution evidence;
+never invent a maker-reduction sale or taker completion. Both fee/hedge books
+must be fresh/causal; use maximum bid/minimum ask independent of input array order.
+No source-GAP suppression or activation/queue/fee/risk relaxation.
+
+Scope still bounded research prefix, NOT full ResearchSession/account: account
+risk/other markets and post-GAP/resolution omitted explicitly. Simulated initial
+A5 inventory is from prior actual-component prefix, not fake external funding.
+Preserve all adverse outcomes. Freeze source/tests/actual engine+policy+fee/
+config/acceptance before new Java gate. One source-preparation regression added;
+227 phase6 total. Known net remains control-$1.80 after costs, guard0/0 fills;
+QW0 account unknown, NO_GO. Wait for `qw0-actual-components-through-gap`, reproduce
+result, then bounded post-GAP true lifecycle/account evidence and frozen same-
+development full baseline/candidate comparison before any independent PAPER.

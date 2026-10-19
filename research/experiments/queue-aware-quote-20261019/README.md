@@ -130,3 +130,14 @@ bound `postfill-selection.json`; no price sampling or extra capture.224 offline
 regressions include conditional result and bounded cohort/unknown/budget tests.
 Public-only frozen79 audit must finish/reproduce before any actual post-fill
 strategy/account claim. Known account net control-$1.80, guard0/0fills; NO_GO.
+
+Completed post-fill79: run39232300522/artifact12177132107, original ZIP SHA256
+81a680473c83a641fcb3a5df36a334853cf6a0e78bc817a01c29770b36e8bfae.
+All79 actual B BUY components<=0.40 sum ZERO; raw receipt/block evidence and
+offline complete reproduction retained in `postfill-result/`.224 pre-read CI
+tests plus2 new result regressions. No synthetic opposite price or missing-as-zero.
+Next frozen actual both-order replay with148 original groups through original
+first GAP, unchanged resting/wait/cancel/FeeModel/hedge rules. Unknown executable
+post-ACK prints fail; no imaginary hedge fill before activation/GAP. One new
+preparation regression (227 phase6 total). Account risk/other markets and post-
+GAP/resolution still omitted, no account/PnL/independent qualification inferred.

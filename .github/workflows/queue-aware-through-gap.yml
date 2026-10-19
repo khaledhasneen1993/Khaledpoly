@@ -1,0 +1,47 @@
+name: PAPER QW0 actual components through first GAP
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/queue-aware-through-gap.yml', 'research/phase6/queue-aware-through-gap-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-qw0-through-first-gap
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: All offline regressions before new gate evaluation
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: probe-engine
+      - name: Compile observers only and synthetic queue/source tests
+        run: |
+          mkdir -p "$RUNNER_TEMP/qw0-gap"
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/qw0-engine"
+          javac -cp "$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" -d "$RUNNER_TEMP/qw0-gap" research/phase6/Qw0CausalProbe.java research/phase6/Qw0RestingProbe.java research/phase6/Qw0ThroughGapProbe.java
+          java -cp "$RUNNER_TEMP/qw0-gap:$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" com.polybot.hft.paper.Qw0CausalProbe --self-test
+      - name: Reuse original context and all existing148 actual conserved groups
+        run: python3 -m research.phase6.queue_aware_through_gap --output research/output/qw0-through-gap
+      - name: Actual engine and unchanged wait/fee/hedge policy through original first GAP
+        run: >-
+          java -Xmx2g -cp "$RUNNER_TEMP/qw0-gap:$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*"
+          com.polybot.hft.paper.Qw0ThroughGapProbe research/output/qw0-through-gap/context.json.gz
+          research/output/qw0-through-gap/bindings.json research/output/qw0-through-gap/evidence.json research/output/qw0-through-gap/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qw0-actual-components-through-gap
+          retention-days: 7
+          path: research/output/qw0-through-gap/

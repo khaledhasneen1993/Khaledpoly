@@ -1,0 +1,13 @@
+{
+  "scope": "CONDITIONAL_POST_FILL_COUNTERPART79_ACTUAL_COMPONENTS_NOT_ACCOUNT",
+  "completeOriginalObservations": 79,
+  "actualPriceCompatibleSharesRaw": 0,
+  "sourceWindowStartExclusiveMs": 1792269754123,
+  "sourceWindowEndInclusiveMs": 1792269759566,
+  "causalAllocationAndAccountNotSimulated": true,
+  "fillsCreated": 0,
+  "netPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "REPLAY_ACTUAL_BOTH_ORDER_WAIT_CANCEL_WITH_ALL_RECORDED_GROUPS_THEN_HEDGE_EXIT"
+}
