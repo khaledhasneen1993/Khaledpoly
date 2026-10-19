@@ -2918,3 +2918,55 @@ holdout. Full-account baseline/candidate comparison and frozen independent
 PAPER acceptance remain outstanding; control net-$1.80 after costs, guard0/0fills,
 QW0 full account UNKNOWN, NO_GO. Acceptance unchanged, no new RPC/capture/tape
 scan/build. PR9 unmerged, PAPER only; unknown dirty local archive untouched.
+
+## Fee-positive exit independently confirmed; full-account integration gap — 2026-10-19
+
+Checked latest branch/PR9 and completed run39296060855/source1b1ae2b before new
+work; no overlapping native experiment started. CI passed255 Python tests,
+three callback/four BUY-UP/SELL-DOWN assertions, five risk/FOK assertions and
+six candidate selection/threshold assertions. Exact native artifact12208620560
+ZIP SHA `e7c69f6981476402b20ee7479f73acf4e26bd01892603b43e01789fde36967e6`.
+Retain report/member hashes under `queue-aware-quote-20261019/fee-positive-result/`;
+reconstruct exact700843-byte input SHA
+`32ad0ed4dda649ca6dc8c0170a6f29c525bc897b203fd72a5e157de8fb984c51`.
+
+Separate Python verifier, with original frozen baseline verifier UNCHANGED,
+independently reproduces original source decisions and actual callback/depth/fee:
+TAKER_SELL5 A pending at1792269761068/original260911, due1792269761318,
+actually executes1792269761319/original261117 at0.52, proceeds2.60, fee0.08736,
+conditional entry basis2.40, conditional net+0.11264, remaining shares0.
+Six groups/11 conserved actual maker components before stop; venue103.29 all
+unused, zero queue absorption, zero maker fills, zero maker orders. No generated
+maker fills or live orders. No merge required for this SELL; BUY completion is
+explicitly ineligible for this profit proof without actual merge/account evidence.
+
+Same-state comparison checks frozen file hashes and EXACT equality of source,
+config/costs, state and horizon, except named candidate-rule/scope fields. It
+independently replays BOTH retained reports: baseline conditional net-0.03747,
+candidate+0.11264, improvement+0.15011. This is ONE SELECTED DEVELOPMENT EXIT,
+not an unbiased full-strategy/account result. No new parameter fitting, holdout,
+RPC, full original tape scan or repeat native experiment. Six additional tests
+cover exact net/clock/fees, fake fee/price/clock/source/choice rejection, scope
+escalation, native report hash and identical-input comparison/NO_GO boundaries.
+New offline-only proof workflow regenerates and compares retained JSON proofs;
+it does not capture data, request receipts, rebuild or rerun the native experiment.
+
+Important implementation boundary confirmed by code inspection: QW0 entry and
+fee-positive exit are still research probes, NOT canonical ResearchSession
+policies. Canonical reduce() still treats non-COMPLETE as maker, and its positive
+execution-net guard recognizes POSITIVE_EDGE_COMPLETION only. Its existing
+CS-MINT-LAB0 label adapter accepts <=100 public BUY observations with DIRECT/MINT
+routes/HALF_EVEN portion prices; blindly feeding451 mixed-side groups would be
+unsafe. Neither a green observer run nor injecting5 shares can replace canonical
+account integration and conserved mixed-side coverage. Detailed dependency-ordered
+next implementation is saved in `fee-positive-result/README.md`: separate bounded
+mixed-side adapter, explicit research-only QW0+exit policy, transition parity and
+full-account SAME-source baseline/candidate replay, then freeze integrated code
+BEFORE independent multi-market PAPER. Do not rerun selected exit merely for
+additional positive samples. Preserve default/production and original evidence.
+
+Full-account baseline control remains-$1.80 after costs; guard0/0fills; QW0 full
+account UNKNOWN. Acceptance SHA unchanged, NO_GO, no independent qualification.
+PR9 remains unmerged, PAPER only. Continue justified integration work; monitoring
+remains enabled because independent acceptance has not passed. Unknown dirty old
+activation archive preserved untouched.

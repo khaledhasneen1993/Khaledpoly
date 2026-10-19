@@ -1,0 +1,64 @@
+{
+  "scope" : "CONDITIONAL_FEE_POSITIVE_FIRST_EXIT_CANDIDATE_NOT_FULL_ACCOUNT",
+  "stopReason" : "FIRST_NEW_ATOMIC_TAKER_FOK_STOP_BEFORE_MERGE_OR_STRATEGY",
+  "stopAt" : 1792269761319,
+  "stopSequence" : 261117,
+  "stopEventIndex" : -1,
+  "stoppedOnNewAllocation" : true,
+  "modelExitAllocations" : [ {
+    "purpose" : "POSITIVE_EDGE_EXIT",
+    "buy" : false,
+    "seq" : 261117,
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "quantity" : 5,
+    "result" : {
+      "size" : 5,
+      "notional" : 2.60,
+      "fee" : 0.08736,
+      "average" : 0.520000000000000000,
+      "legs" : [ {
+        "size" : 5,
+        "price" : 0.52,
+        "fee" : 0.08736
+      } ]
+    },
+    "at" : 1792269761319
+  } ],
+  "decisions" : [ {
+    "pending" : {
+      "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "buy" : false,
+      "due" : 1792269761318,
+      "limit" : 0.48,
+      "purpose" : "POSITIVE_EDGE_EXIT"
+    },
+    "choice" : {
+      "action" : "TAKER_SELL",
+      "completeValue" : 0.010510000000000000,
+      "sellValue" : 0.01251
+    },
+    "at" : 1792269761068,
+    "reason" : "TAKER_PENDING",
+    "seq" : 260911
+  } ],
+  "diagnostics" : [ ],
+  "componentAllocationDiagnostics" : {
+    "venueQuantity" : 103.290000,
+    "hiddenLiquidityAndCrossPriceQueueUncertainty" : true,
+    "unusedQuantity" : 103.290000,
+    "queueAbsorbed" : 0,
+    "uniqueMakerComponents" : 11,
+    "allocatedQuantity" : 0
+  },
+  "consumedOriginalGroups" : 6,
+  "completeInputGroups" : 451,
+  "conditionalInitialQuantity" : 5,
+  "postAllocationInventoryAndMergeNotProcessed" : true,
+  "accountRiskAssumedAvailable" : true,
+  "otherMarketsAndFullAccountOmitted" : true,
+  "actualBotFillsCreated" : 0,
+  "candidateAccountSimulated" : false,
+  "netPnlRecomputed" : false,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false
+}

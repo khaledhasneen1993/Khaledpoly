@@ -1,0 +1,13 @@
+{
+  "scope": "OFFLINE_REGRESSION_VALIDATION_NOT_PROFITABILITY_QUALIFICATION",
+  "dateUtc": "2026-10-19",
+  "testedTreeBeforeAddingThisRecord": "40d958acbc33e8875b6d1fd9c82448abd86894bb",
+  "command": "python3 -m unittest discover -s research/phase6/tests -q",
+  "tests": 261,
+  "durationSeconds": 295.479,
+  "exitCode": 0,
+  "result": "OK",
+  "acceptanceSha256": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

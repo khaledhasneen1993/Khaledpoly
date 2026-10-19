@@ -1,0 +1,18 @@
+{
+  "scope": "INDEPENDENT_CONDITIONAL_FEE_POSITIVE_EXIT_NOT_FULL_ACCOUNT",
+  "makerOrders": 0,
+  "makerFills": 0,
+  "consumedOriginalGroups": 6,
+  "uniqueActualComponents": 11,
+  "exitAt": 1792269761319,
+  "exitOriginalSequence": 261117,
+  "conditionalExitShares": "5",
+  "conditionalGrossBeforeExitFee": "0.20",
+  "conditionalExitFee": "0.08736",
+  "conditionalRoundTripNetAfterCosts": "0.11264",
+  "conditionalRemainingShares": "0",
+  "fullAccountOtherMarketsAndFurtherStrategyOmitted": true,
+  "candidateAccountSimulated": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}
