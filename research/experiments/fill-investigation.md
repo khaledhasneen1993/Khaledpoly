@@ -2341,3 +2341,29 @@ If supported, continue actual hedge/cancel/exit and resolution accounting with
 separately bounded necessary after-horizon evidence, then frozen SAME-development
 full strategy baseline/candidate comparison. No independent PAPER qualification
 or new capture before account comparison; no repeated tape scan or receipt batch.
+
+## QW0 both-order prefix preregistration — 2026-10-19
+
+Checked PR9/head1833c3c and active Actions collection: no overlapping experiment.
+New gate submits BOTH unchanged QW0 quotes0.48/0.40, original quantity5 and same
+flat source anchor243583, using actual unchanged matcher,250ms/2x/current-source
+gates. Horizon stays prior1792269754123. Reuse retained original context,10 prior
+A receipt labels plus ALL30 new B-prefix actual conserved groups. Their40 groups
+are source/seq/event/arrival/sample-bound and disjoint. No receipt call/tape scan.
+Unknown pair TRADE with source>=activation due in prefix FAILS, never aggregate
+fallback. All40 source groups must be consumed even after a cancellation request.
+
+After each original full frame, before a fill, require both actual orders active,
+nonterminal and equal original remaining quantity; check unchanged actual
+PairPolicy and existing resting price/risk/reprice rules on the15 reconstructed
+source callbacks. Incomplete/rejected counterpart triggers original incomplete-
+pair cancellation, NOT an assumed intact opposite leg. Preserve adverse results
+and real250ms cancellation races. Exact diagnostics, per-receipt allocations and
+conserved component totals retained; no touch fills or extra liquidity credit.
+This is bounded BOTH-order PREFIX, still NOT full ResearchSession/account:
+hedge/exit/resolution/fees after first model allocation intentionally omitted.
+No completed pair, profit, financial or independent qualification inferred.
+Freeze observer/preparation/tests/actual engine+policy/config/acceptance before
+new Java gate evaluation. Existing strategy rule unchanged; no holdout tuning.
+Next retain result and independent reproduction; if prefix survives, advance
+actual hedge/exit/account evidence rather than repeating source/receipt batches.
