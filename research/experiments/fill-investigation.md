@@ -1930,3 +1930,37 @@ One small dedicated receipt job; no additional tape scan/Maven/capture. Inspect
 its full report before deciding whether the LAST start needs a causal probe.
 Net economics unchanged: corrected control-$1.80, guard0/0fills, DQ3 not measured
 as an account, NO_GO. Fixed acceptance/fees/queue/risk/defaults remain unchanged.
+
+## Final selected leg result and last isolated activation freeze — 2026-10-19
+
+Run39191105555/sourcee24279d5a146cb9c54024e3f0d0bd51c46876553 completed its
+full19 public receipts after185 phase6 regressions. All receipts conserved, no
+errors;19 receipt and10 block reads. Artifact12160440418 ZIP SHA256
+3da8eced1b9824d1b2e86641fad7754c2a1fad817d6a45a4d4094bd534c9fabd
+retained as `depth-quote-20261018/last-leg-result/artifact.zip.b64` (23 members).
+Coverage re-decoded offline from all68 cached receipts; all11 selected A legs
+now completely audited, opposite legs still unknown. Last start299650 has
+639910619 raw (=639.910619 shares) actual target BUY components at/below its
+unchanged0.49 bid in the relaxed complete window. This is not available queue
+volume, no fill or candidate profit. Earlier7 zero legs and3 isolated activation
+rejections remain unchanged; do not sum overlapping state volumes.
+
+Freeze ONE final selected-start activation probe,299650,4250ms original window
+including2000ms fresh-book warmup. Same already-built production matcher and
+unchanged observer/queue250ms/2x/post-only, all trade allocation suppressed.
+No full account replay or policy change. New extractor parses the causal prefix
+and full original window, then hashes/counts EVERY remaining original byte/row
+and checks RUN_END. Exact complete logical SHA is the already-validated source
+identity; tail parsing is not repeated, NOT permission to truncate/alter tape.
+This reduces redundant JSON decoding without weakening identity/anchor proof.
+188 phase6 tests pass locally including exact19 RAW re-decode, full-depth window,
+tail change detection, missing anchor/terminal/warmup/frame/cap fail-closed tests.
+
+`dq3-last-activation-freeze.json` binds source/tests, original matcher, same
+observer, receipt evidence and unchanged acceptance before source extraction.
+Next inspect `dq3-last-activation-seed-context`: verify pre-event book and first
+due input. Reject only isolated start if initial queue>=639.910619 or post-only
+rejects; if queue lower/ambiguous, require actual source-time/resting-cancel and
+same-data account replay before any qualification. Do not infer fills or lower
+queue/fees/risk from either outcome. No fresh capture or extra receipt sweep.
+Net after costs unchanged control-$1.80, guard0/0fills; DQ3 economics unknown.

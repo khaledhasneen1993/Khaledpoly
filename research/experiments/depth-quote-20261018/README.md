@@ -137,3 +137,14 @@ One distinct last selected start299650 remains unexamined: freeze complete A leg
 19 receipts at unchanged0.49 (`last-selected-leg.json`, `dq3-last-selected-leg-freeze.json`).
 One small read-only job, no new source scan/account replay/capture. Await its
 report; positive actual volume would still need causal queue/lifecycle evidence.
+
+Last leg completed: run39191105555, artifact12160440418, exact ZIP retained in
+`last-leg-result/artifact.zip.b64`, SHA256
+3da8eced1b9824d1b2e86641fad7754c2a1fad817d6a45a4d4094bd534c9fabd.
+All19 conserved; actual compatible component volume639.910619 at own0.49.
+All11 necessary A legs now complete; no opposite-leg/account conclusions.
+188 offline phase6 tests pass. Final frozen4250ms activation probe for299650
+reuses actual unchanged matcher/observer, no Maven build. Source prefix/context
+decoded; full original hash/row count/clean end bind all remaining bytes, not a
+truncated tape. Wait for `dq3-last-activation-seed-context`; no duplicate jobs,
+queue changes, fill claims or independent qualification from volume alone.
