@@ -2709,3 +2709,45 @@ outstanding. Known control net-$1.80 after costs; guard0 with0fills; QW0 account
 net UNKNOWN. NO_GO; automation continues, PAPER only, PR9 remains unmerged.
 Original unknown dirty activation archive remains untouched; isolated clean
 worktree uses committed/hash-verified evidence, never the truncated local file.
+
+## Post-GAP extraction resource failure corrected without changing evidence — 2026-10-19
+
+Checked latest branch/PR9 and no active overlapping run. Run39262607976/source
+fce2354 passed240 offline CI tests and downloaded the original tape, then FAILED
+at `Bounded evidence cap exceeded` in the old in-memory extractor. Its128MB
+retained-context limit was exceeded BEFORE complete-source validation/output;
+no artifact/recovery report or model/account result was produced. Selected
+exact failure log lines retained in `post-gap-context-blocked/failure-lines.txt`.
+This is an engineering/resource failure, not evidence of recovery or no recovery.
+
+Correction is a separate streaming extractor; old archived extractor remains
+unchanged. Writes EVERY selected normalized record and its original RAW frame
+directly to `context.records.jsonl.gz`, preserving complete depth/event/source
+fields, fixed ordering and empty frames. Holds only the current input/frame,
+never a context list. Checks the same full6163831-row source SHA, exact first
+GAP anchor, original framing, terminal complete RUN_END and chronology. Final
+context is promoted from `.partial` ONLY after complete source validation;
+missing/truncated/changed/oversized input or cap exhaustion fails closed, never
+truncates output or promotes partial evidence. Logical retained SHA/bytes/row
+count and compressed SHA are persisted in `context-manifest.json`.
+
+Storage safety cap512MiB applies to streamed retained bytes, not financial risk.
+No market observations were removed to fit memory. Source horizon/anchor,
+27250ms window, warmup, risk deadline, fees/queue/minimums/acceptance, summary
+semantics and all PAPER-only boundaries are UNCHANGED. Re-read only retained
+bounded JSONL to produce summary; full original tape scanned ONCE, no new
+market capture/receipt read/build. New source/format/resource contract frozen
+before retry, no recovery results seen. Four new streaming regressions prove
+record-for-record equivalence including49-level original depth, preserved RAW,
+hash/size, caps/partial-evidence rejection, source/anchor/frame failure and no
+overwrite. Those4 plus3 existing recovery tests passed locally;244 total CI
+tests must pass before one corrected extraction. Original failed run preserved.
+
+Next WAIT for corrected `qw0-original-post-gap-context`, validate complete
+manifest and all context hashes, reproduce summary from retained records, then
+derive next original recovery/unchanged hedge actions before freezing necessary
+receipt/lifecycle evidence. No repeated same experiment while running. The
+prior independent reduction result remains0 SELL fills,5 uncovered A shares;
+no new account PnL. Control-$1.80 after costs, guard0/0fills, QW0 net UNKNOWN,
+NO_GO; PR9 unmerged, PAPER only, automation continues. Unknown dirty old local
+archive remains untouched; work uses isolated clean committed evidence.

@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "parentCommit": "9897068fdd384ab4af1f0c37168a88e975b01236",
+  "parentCommit": "fce2354b12751648a3e96daab3327ee7f0d4d4bd",
   "scope": "DATA_ONLY_ORIGINAL_POST_GAP_RECOVERY_TO_UNCHANGED_RISK_DEADLINE_PLUS_BOOK_AGE",
   "spec": {
     "startMs": 1792269758873,
@@ -45,17 +45,22 @@
     "research/phase6/Qw0RestingProbe.java": "fdd638b1b0bc42af205f4fb864c295fe3150608009ba7465df9f756803f69ffa",
     "research/phase6/Qw0ThroughGapProbe.java": "1e9090766c9dab0f1aff772df0640239b5b9145a0eb3f0b70b88b37f6fbe2eb9",
     "research/phase6/dq3_last_activation.py": "33f07538be6ca425548c5bd75d79bf88c456cd868045f0981ee9d3d3da838799",
+    "research/phase6/original_window_stream.py": "083a8e979626c6b85cca5bf8f82ce22f71ef4089901399b632f802bcdaf26b99",
     "research/phase6/queue_aware_active_reduction_result.py": "7545127d01b318fb4b6c05e838e73c1be39c1b7b881280bb75c9444e55a4ccd0",
     "research/phase6/queue_aware_gap_tail_receipts.py": "c8f229237091c64a40a6f2df0741253df0c6d0ba76b0c7b2c8501d7ee26b0add",
     "research/phase6/queue_aware_gap_tail_result.py": "939de899696e0db4aa788d1a817b23561dbba740496e232dc7f937253c87f0df",
-    "research/phase6/queue_aware_post_gap_context.py": "9ebbfee7ede8b0b00e73761a66d321a43643dce222ab88aaaf115506a0de7800",
+    "research/phase6/queue_aware_post_gap_context.py": "db81b956d5c0d0954da7b7d080c1dc8615b6e822593e1194a3fb34ab4f92a4a0",
     "research/phase6/queue_aware_postfill_receipts.py": "9102390d52dfdc10247dcdb0f09a89e821eea018dda1837990f68164a6d4f2a8",
     "research/phase6/queue_aware_postfill_result.py": "b851ecefecc70c8e7813752b79352ee02d4d660683ca55e28f4918ce35fc6788",
     "research/phase6/queue_aware_reduction_context.py": "8b168f32c200cc36e46d2bbd6ca9a9dd91d3dd02933075f043b406239e903823",
     "research/phase6/queue_aware_through_gap.py": "abe5d98337e0297cb9fb5905d7539540cc3d7fa18208feaec22bbf37b98570b4",
+    "research/phase6/tests/test_original_window_stream.py": "b071d696db2ca6265a19ebcd63b60009b5f3ea46bfba6901eb0dd32b6f6ad3f4",
     "research/phase6/tests/test_queue_aware_active_reduction_result.py": "ff88edc36bbadb91846850adb9d3dfee8cb57357729615984f78c694d1d5afd2",
     "research/phase6/tests/test_queue_aware_gap_tail_result.py": "d47538b0f6d67dd4432a9d745b6b5e3598da1a1b56244a4fc99f4303e85ddb2b",
     "research/phase6/tests/test_queue_aware_post_gap_context.py": "11fe3a544c0dec35c6e4d752f55614b89f408fef1f27c858c3aed23b9f9e8f0d",
     "research/phase6/tests/test_queue_aware_through_gap.py": "701f121b53d4e66c2781cf56f2a67b7b49ecb00c6cd59b30b591879f720c2eec"
-  }
+  },
+  "engineeringCorrection": "Stream exact original records as JSONL gzip; no list accumulation, no record deletion, same immutable source/window/anchor/risk deadline",
+  "retainedFormat": "original-research-records-jsonl-gzip-v1",
+  "maxRetainedBytes": 536870912
 }

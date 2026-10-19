@@ -5,7 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 from research.phase3.polybot_sdk.tapes import open_tape
-from research.phase6.dq3_last_activation import extract
+from research.phase6.original_window_stream import extract_to
 from research.phase6.queue_aware_causal import QROOT
 
 
@@ -55,10 +55,13 @@ def main():
     if s!=f['spec']:raise ValueError('Changed original window/risk deadline')
     tapes=[*Path(a.input_root).rglob('events.jsonl.gz'),*Path(a.input_root).rglob('events.jsonl')]
     if len(tapes)!=1:raise ValueError('Require one complete original tape')
-    with open_tape(tapes[0]) as stream:context=extract(stream,s,max_bytes=128000000)
-    pair=set(json.loads((QROOT/'causal-bindings.json').read_text())['pair']);summary=summarize(context,pair)
     out=Path(a.output);out.mkdir(parents=True,exist_ok=True)
-    raw=(json.dumps(context,separators=(',',':'))+'\n').encode();(out/'context.json.gz').write_bytes(gzip.compress(raw,mtime=0))
+    retained=out/'context.records.jsonl.gz'
+    with open_tape(tapes[0]) as stream:manifest=extract_to(stream,s,retained,lambda record:None)
+    (out/'context-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+    pair=set(json.loads((QROOT/'causal-bindings.json').read_text())['pair'])
+    # Re-read ONLY the bounded retained context, never the full source a second time.
+    with gzip.open(retained,'rt') as records:summary=summarize(dict(spec=s,records=(json.loads(line) for line in records)),pair)
     (out/'data-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
     print(json.dumps({k:v for k,v in summary.items() if k not in ['allOriginalPairTradesAfterGap','firstFreshBothBookCallback','scopedGaps']}))
 

@@ -1,0 +1,9 @@
+2026-10-19T13:48:16.9913945Z Ran 240 tests in 267.432s
+2026-10-19T13:48:58.1743079Z Traceback (most recent call last):
+2026-10-19T13:48:58.1743920Z   File "<frozen runpy>", line 198, in _run_module_as_main
+2026-10-19T13:48:58.1744590Z   File "<frozen runpy>", line 88, in _run_code
+2026-10-19T13:48:58.1745631Z   File "/home/runner/work/Khaledpoly/Khaledpoly/research/phase6/queue_aware_post_gap_context.py", line 66, in <module>
+2026-10-19T13:48:58.1748108Z   File "/home/runner/work/Khaledpoly/Khaledpoly/research/phase6/queue_aware_post_gap_context.py", line 58, in main
+2026-10-19T13:48:58.1752173Z   File "/home/runner/work/Khaledpoly/Khaledpoly/research/phase6/dq3_last_activation.py", line 40, in extract
+2026-10-19T13:48:58.1753278Z     if size>max_bytes:raise ValueError('Bounded evidence cap exceeded')
+2026-10-19T13:48:58.1754470Z ValueError: Bounded evidence cap exceeded
