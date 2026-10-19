@@ -1,0 +1,30 @@
+{
+  "runId": 39224168557,
+  "artifactId": 12172599060,
+  "sourceCommit": "fefce0fd9cbcdc9c328941b159ea6d47366347a3",
+  "zipSha256": "d7143dbf305875b08ac048e64b0f72905c7177e1e2700b040837e385f39c7d04",
+  "members": {
+    "bindings.json": {
+      "bytes": 53387,
+      "sha256": "10ed70f5a7c3747ac75133ef22062a4b2184ca695e2f4efd5e1d42a1bef39f29"
+    },
+    "evidence.json": {
+      "bytes": 98098,
+      "sha256": "7fa1a1db395505779421387b038c67cfaf8cc7c1ec5a7c5a099f1a85aa1b5035"
+    },
+    "context.json.gz": {
+      "bytes": 2207296,
+      "sha256": "5eefcffd512465b286e00e061c642d8dd7cea0cc1ff7491dc5a39b733616fd57"
+    },
+    "report.json": {
+      "bytes": 9391,
+      "sha256": "1245e45040b9c6ca2f04137d573afabd04cbaf7e54b7f694025b3e4b91f8436f"
+    }
+  },
+  "duplicateOriginalContextNotStored": true,
+  "originalContextRetainedIn": "causal-result/artifact.zip.b64",
+  "bothConservedGroupsReconstructedFrom": [
+    "causal-result/artifact.zip.b64",
+    "counterpart-result/artifact.zip.b64"
+  ]
+}

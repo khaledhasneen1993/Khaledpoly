@@ -2367,3 +2367,51 @@ Freeze observer/preparation/tests/actual engine+policy/config/acceptance before
 new Java gate evaluation. Existing strategy rule unchanged; no holdout tuning.
 Next retain result and independent reproduction; if prefix survives, advance
 actual hedge/exit/account evidence rather than repeating source/receipt batches.
+
+## QW0 both-order prefix completed — 2026-10-19
+
+Source frozenfefce0fd9cbcdc9c328941b159ea6d47366347a3 before new gate;
+run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39224168557
+successful.215 CI regressions and two actual-matcher source/queue assertions
+passed. Reused retained context/actual groups and already-verified engine;
+no public RPC, new capture, full-source scan or Maven/runtime rebuild.
+Artifact12172599060 (`qw0-both-order-prefix`), ZIP SHA256
+d7143dbf305875b08ac048e64b0f72905c7177e1e2700b040837e385f39c7d04.
+Exact engine report and member byte hashes retained in
+`queue-aware-quote-20261019/pair-prefix-result/`. Context/40 bindings/evidence
+reproduce byte-for-byte from already archived original source/receipts; avoid
+duplicating2.2MB context again. Both-order receipt handling complete, no aggregate
+fallback, future labels or extra liquidity credit.
+
+Both actual engine orders activate at1792269750554 after original250ms delay:
+A0.48 queue160; B0.40 queue30 (NOT decision proxy132). All15 original scheduled
+callbacks see BOTH active/nonterminal with equal5-share remaining quantities;
+unchanged actual price/risk/reprice policy returns RESTING throughout. No prefix
+rejection.40 actual groups/108 unique maker components consumed. Model allocates
+only A5 at0.48 at1792269754123; B remains OPEN,5 shares and queue30. Components
+conserve1964.696564 shares =160 queue absorbed +5 allocated +1799.696564 unused;
+these totals span all actual components, NOT available target/both-price volume.
+
+Independent Python verifier reconstructs BOTH pre-event queues/post-only checks,
+full causal source/current-book gates and exact integer-priced conserved
+allocations for every receipt, as well as final order quantities/queues. Same15
+resting callback results; altered B queue or false financial scope rejected.
+217 phase6 tests pass locally (215 pre-gate CI plus2 new result regressions).
+Production strategy, risk/fees and acceptance unchanged.
+
+This is one ORIGINAL selected DEVELOPMENT prefix, not a general strategy
+trajectory or a full ResearchSession account replay. It ends with5 unhedged A
+shares and an untouched B order; hedge/exit/resolution/fees afterwards are NOT
+simulated. No completed pair, actual bot fill, profit or independent success.
+Known full-account net remains control-$1.80 after costs, guard0 with0 fills;
+QW0 full-account PnL unknown, NO_GO. Never promote this prefix allocation to a
+profitable strategy or tune QW0/acceptance on the result.
+
+Next freeze unchanged unhedged reduction timing from first allocation, original
+EWMA/source callbacks and actual PairPolicy.secondLegWaitMs. Bound the next
+counterpart receipt cohort by original actual cancel acknowledgement/first GAP,
+not an optimized outcome window. Reuse all existing raw groups; missing post-fill
+receipts remain UNKNOWN. Then trace bounded actual cancel/hedge/maker-reduction
+execution and resolution with correct fees/minimums before full SAME-development
+baseline/candidate account comparison and independent PAPER. No duplicate prefix
+run, broad receipt batch, holdout tuning or new capture justified yet.

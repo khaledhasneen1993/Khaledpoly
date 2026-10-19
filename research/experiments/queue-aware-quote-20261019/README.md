@@ -100,3 +100,17 @@ raw30 receipts/blocks, exact component summary and offline independent decoding.
 No B activation or paired account/PnL inferred from zero component volume.
 Next both-order actual activation/remaining-prefix check, then complete actual
 hedge/exit/account evidence and frozen same-development comparison if supported.
+
+Both-order prefix freeze fefce0fd9cbcdc9c328941b159ea6d47366347a3; successful
+run39224168557/artifact12172599060, ZIP SHA256
+d7143dbf305875b08ac048e64b0f72905c7177e1e2700b040837e385f39c7d04.
+Both actual orders activate1792269750554; measured queues160/30. All15 unchanged
+resting checks have two active/equal5-share orders; no cancellation.40 original
+groups/108 unique actual maker components conserve. Model A5 allocated0.48 at
+1792269754123, B remains OPEN5/queue30: unhedged inventory, NOT a completed pair.
+`pair-prefix-result/` preserves report/hash provenance and independently
+reproduces both queues, per-source allocations, source gates and conservation.
+217 local regressions pass (215 CI before gate plus2 result regressions).
+No full account/hedge/exit/resolution/PnL or independent qualification inferred.
+Next unchanged unhedged wait/cancel/reduction timing and minimally bounded
+post-fill receipt evidence using retained context; no prefix/capture repetition.
