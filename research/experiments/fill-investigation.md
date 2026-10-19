@@ -1840,3 +1840,41 @@ full-account baseline/candidate on same development data before independent
 PAPER. Do not tune prices/queue/risk to this result. Net after costs unchanged:
 control-$1.80; guarded0 with0fills, not profitable. DQ3 PnL not recomputed and
 independent acceptance unmet. No wallet, keys, live orders or default changes.
+
+## Three-start activation-seed probe preregistration — 2026-10-19
+
+PR9 headb87d944 and preceding receipt jobs checked complete SUCCESS before work.
+Freeze182 phase6 regressions and one5504ms original full-depth input window for
+states243583/245065/246180 BEFORE extraction. Warmup begins2000ms before earliest
+submit, covering every potentially fresh source book at activation (source<=arrival
+and unchanged max age2000ms). Preserve full normalized BOOK arrays, every original
+RESEARCH input and associated unchanged RAW frames, exact three source anchors;
+validate full6163831-row source SHA/clean end, frame binding and chronology.
+Unlike earlier GAP projection, this evidence is NOT truncated to top3 depth.
+
+Isolated Java observer uses the actual already-verified PaperMatchingEngine from
+artifact12151627900/run39168798844/source6dc5f25, not a Python queue approximation.
+Current matching source hash12e89574023e0457d2066f8e50d660491a3ef182ae066bab4725cd40324fa84f
+equals that compiled source. No Maven rebuild; compile ONLY a research observer
+against those existing nested dependency jars. Run actual-engine assertions first:
+activation uses the PRE-event book (840*2=1680 despite incoming size1), paired GAP
+wins activation. Extractor182 offline tests pass locally; Java assertions pending CI.
+
+At each independent original anchor inject one hypothetical BUY in an isolated
+matcher;250ms activation/cancel,2000ms max age,2x queue unchanged. Suppress EVERY
+TRADE allocation using its identical pre-event TICK path: no prints/fills/PnL
+are simulated. Stop at initial activation/rejection; retain original input/event
+index and whether activation occurred on FIRST input at/after due. Tick changes
+or ambiguous first-input timing must remain inconclusive, not treated as proof.
+This is a NO-CANCEL isolated seed probe, NOT actual candidate account activation,
+resting-risk lifetime, portfolio behavior or a same-data account comparison.
+
+Predeclared next interpretation: compare supported initial queue to the COMPLETE
+actual-price volume upper bound already frozen960.720922 per selected window.
+If initial queue is >= all that volume, it cannot clear in this isolated model
+even before source-time filtering/resting cancellation; never turn the converse
+into a fill claim. Unknown/ambiguous seeds require actual lifecycle integration,
+not decision-book substitution. No additional receipt expansion/new capture.
+Run only the new dedicated workflow; inspect its context and activation report
+before changing policy. Hashes/spec in `dq3-activation-freeze.json`. Net unchanged
+control-$1.80, guard0/0fills, DQ3 unknown; no acceptance/defaults/risk/fee changes.

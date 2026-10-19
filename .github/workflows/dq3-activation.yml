@@ -1,0 +1,58 @@
+name: PAPER DQ3 original activation queue seed probe
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/dq3-activation.yml'
+      - 'research/phase6/dq3-activation-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-dq3-activation-seed
+  cancel-in-progress: false
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: All offline phase6 regressions before source reading
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: probe-engine
+      - name: Compile isolated observer against already-verified immutable engine; no Maven rebuild
+        run: |
+          mkdir -p "$RUNNER_TEMP/dq3-probe"
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/dq3-engine"
+          javac -cp "$RUNNER_TEMP/dq3-engine/BOOT-INF/lib/*" -d "$RUNNER_TEMP/dq3-probe" research/phase6/Dq3ActivationProbe.java
+          java -cp "$RUNNER_TEMP/dq3-probe:$RUNNER_TEMP/dq3-engine/BOOT-INF/lib/*" Dq3ActivationProbe --self-test
+      - uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: activation-input
+      - name: Extract one frozen full-depth window, verify complete original source hash and anchors
+        run: >-
+          python3 -u -m research.phase6.dq3_activation_context --input-root activation-input
+          --output research/output/dq3-activation/context.json.gz
+      - name: Isolated no-cancel engine activation; suppress all trade allocation, no PnL
+        run: >-
+          java -cp "$RUNNER_TEMP/dq3-probe:$RUNNER_TEMP/dq3-engine/BOOT-INF/lib/*" Dq3ActivationProbe
+          research/output/dq3-activation/context.json.gz research/output/dq3-activation/activation.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dq3-activation-seed-context
+          retention-days: 7
+          path: research/output/dq3-activation/

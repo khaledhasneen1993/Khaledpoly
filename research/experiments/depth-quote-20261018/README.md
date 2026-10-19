@@ -111,3 +111,14 @@ depth, but it is NOT proven activation depth: do not use that shortcut. Pause
 further receipt expansion until causal first-leg gate passes. No price/queue/
 fee/risk tuning, account profit claim or independent qualification. Fixed
 acceptance unchanged; corrected control-$1.80, guard0/0fills, DQ3 PnL unknown.
+
+Next frozen observer `dq3-activation-freeze.json`: one5504ms full-depth original
+input window (2000ms causal warmup), anchors243583/245065/246180. Actual unchanged
+PaperMatchingEngine from existing verified artifact, no Maven build.182 Python
+tests pass locally; Java pre-event book/GAP assertions run before source reading.
+Suppress all trade allocation; measure only isolated no-cancel initial queue,
+record actual input/event timing. This does NOT simulate candidate account or
+resting cancellations. Ambiguous first-input timing/tick changes stay unknown.
+Queue >= complete960.720922 actual-price upper bound can reject isolated starts;
+queue below it proves no fill. Wait for `dq3-activation-seed-context`, do not
+duplicate scan/capture or lower queues/prices/risk thresholds.
