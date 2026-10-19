@@ -1,0 +1,74 @@
+{
+  "experiment": "QW0-ONLY-SUPPORTED-A-LEG-CAUSAL-UPPER-BOUND-0",
+  "frozenBeforeExtendedSourceRead": true,
+  "sourceScope": "One independent original decision anchor through first scoped invalid_depth GAP, full128MB max evidence cap, complete original hash/row count/clean end, no truncation",
+  "spec": {
+    "startMs": 1792269748302,
+    "endMs": 1792269760873,
+    "maxBookAgeMs": 2000,
+    "sourceRows": 6163831,
+    "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+    "states": [
+      {
+        "id": "dq3-0-243583",
+        "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "originalSequence": 243583,
+        "submitMs": 1792269750302,
+        "activationDueMs": 1792269750552,
+        "endMs": 1792269780302,
+        "quotes": [
+          {
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "price": "0.48",
+            "quantity": "5.00"
+          },
+          {
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "price": "0.4",
+            "quantity": "5.00"
+          }
+        ],
+        "targetQuote": {
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "price": "0.48",
+          "quantity": "5.00"
+        },
+        "terminalMs": 1792269760873
+      }
+    ]
+  },
+  "maxEvidenceBytes": 128000000,
+  "matcherSourceCommit": "6dc5f25aec764ae55ecf0610a617baba77b7a6f7",
+  "matcherArtifactRun": 39168798844,
+  "matcherArtifactId": 12151627900,
+  "componentScope": "39 complete actual conserved maker groups,37 BUY and2 SELL takers. Actual private Binding/Portion constructors in separate package-local research observer, NOT old BUY-only CS-MINT loader; no public aggregate fallback.",
+  "restingRiskCancellationOmitted": true,
+  "counterpartExecutionOmitted": true,
+  "positiveOutcomeCannotQualify": true,
+  "newPublicRpcAllowed": false,
+  "newMarketCaptureAllowed": false,
+  "fullCandidateAccountSimulated": false,
+  "netPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    "research/phase6/queue_aware_causal.py": "885c59fb24b43e37f92e90956b4c27a0f62f32c0bc4232090055c5b1469a495b",
+    "research/phase6/Qw0CausalProbe.java": "aedba6b3482f162d0e1d4dd690c6828839753e69539ff4063ea44c48c0e1f10f",
+    "research/phase6/tests/test_queue_aware_causal.py": "e9806db5429ef44cbd2a8553beedcdd03ada9c3a9c960621ab0b120f35dafc45",
+    ".github/workflows/queue-aware-causal.yml": "2ec26582b9bd41549e1b4f79c03b4ed8e3e98d0bd55a999beaa2b78972fceaf4",
+    "research/phase6/dq3_last_activation.py": "33f07538be6ca425548c5bd75d79bf88c456cd868045f0981ee9d3d3da838799",
+    "research/phase6/queue_aware_quote_lab.py": "8682816cbb585c1bc549e9e6c60a426de4014074cc671e6500b79e556ea642c9",
+    "research/phase6/queue-aware-quote-freeze.json": "c25b24f6f16c93a3751db0803e84dadd694feb0d00893e3c03af26f5b1dc2724",
+    "research/phase6/queue-aware-cached-traffic-freeze.json": "83a1948d54efed0c665bd788a5898352b6e6c60741949566690030df10d9aacd",
+    "research/experiments/queue-aware-quote-20261019/state-screen.json": "6e83b55dd4176fde49b8cbeccfd9ca3f5e218c28c28f29c41f36d85ed19112d4",
+    "research/experiments/queue-aware-quote-20261019/cached-traffic.json": "35e30fb109a5ca544d0165682200fb42b6a051ad547ddf34c8e2cd93e7e7be33",
+    "research/experiments/queue-aware-quote-20261019/causal-bindings.json": "19dd149d60f75729edafb511637a9604b3444596dc0931e1e7b8262bce6901a9",
+    "research/phase6/queue_aware_cached_traffic.py": "c0eb05e454a15eaeedf59037f472c9f43e081c27eba3c8a017803f4fe7c46b70",
+    "research/phase6/receipt_audit.py": "4337ac09ca5b5364e5f23a15359e44695e283a99584acdbafbf4c9c4fbcc21c4",
+    "research/phase6/route_coverage_audit.py": "4febb1dc81e3e6077c5bd2cd3d87c126900dc24cc0316a24e5fcaaad1a8350fb",
+    "polybot-core/src/main/java/com/polybot/hft/paper/PaperMatchingEngine.java": "12e89574023e0457d2066f8e50d660491a3ef182ae066bab4725cd40324fa84f",
+    "polybot-core/src/main/java/com/polybot/hft/paper/SettlementReplayLabels.java": "1715071b6caa5171fd482a612f07cde9eb385479d13203ee09f9e9f245adf052",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  }
+}

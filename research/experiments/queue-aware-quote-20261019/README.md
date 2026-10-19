@@ -45,3 +45,15 @@ whole candidate lifetime. Require original source through first GAP, exact
 current-book source eligibility and actual activation/cancel ordering, not just
 snapshot queue or lifetime-volume subtraction. Retain all adverse outcomes.
 No opposite-leg receipt expansion or independent capture before that gate.
+
+Frozen next gate `queue-aware-causal-freeze.json`:12571ms original full-depth
+context through original first scoped GAP, all39 actual conserved groups (37 BUY,
+2 SELL takers). Generic research-only exact-source component bindings, no old
+BUY-only-loader assumption or aggregate fallback. Actual unchanged matcher,
+250ms/2x/current BOTH book sources, no cancellation credit or touch fills.
+One isolated A order; resting-risk cancellation/counterpart execution omitted as
+an explicit optimistic necessary upper bound. Zero allocation can reject; any
+positive CONDITIONAL model fill still CANNOT qualify account/strategy/PnL.
+202 offline phase6 tests pass. Reuse existing verified engine, no Maven build,
+no public RPC or new market capture. Wait for `qw0-single-supported-causal`;
+do not duplicate extraction, alter parameters or claim profits while pending.

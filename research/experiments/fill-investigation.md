@@ -2125,3 +2125,48 @@ full-account profitability claim or independent capture from this gate alone.
 If supported, then separately freeze same-development FULL account comparison
 with baseline before independent PAPER; never tune holdout. Known net after
 costs remains control-$1.80, guard0/0fills; QW0 account unmeasured, NO_GO.
+
+## QW0 single supported target causal upper-bound freeze — 2026-10-19
+
+PR9 head73b9b44 and all previous jobs checked complete before work. No overlapping
+experiment pending. Freeze one selected original start243583, unchanged QW0 pair
+0.48/0.40, quantity5; original due1792269750552 and first scoped invalid_depth
+GAP1792269760873. Window12571ms includes2000ms fresh-book warmup. Use full original
+depth/RAW/input order through GAP, original complete6163831-row logical hash and
+clean end. Extend context once; do not mislabel old5504ms context as full lifetime.
+Maximum evidence128MB is a technical bounded-output cap, NOT execution relaxation.
+No truncate-on-cap behavior. Tail identity remains exact full-source SHA bound.
+
+`queue_aware_causal.py` reproduces39 COMPLETE observations and actual conserved
+maker groups from cached receipts:37 public BUY,2 SELL. No public RPC. Retain
+integer shares/collateral and exchange/tx/group/log component identities, not
+aggregate price or synthetic complementary price. `causal-bindings.json` binds
+exact original seq/event/sample/source/arrival. Every component unique. Missing
+or ambiguous receipts/source labels fail closed. Do not pretend the old BUY-only
+CS-MINT loader validates SELL groups: new separate package-local research observer
+constructs generic bindings from these independently conserved actual groups.
+BUY eligibility prices rounded UP at28 decimals to prevent optimistic rounding.
+
+Actual already-verified matcher from run39168798844/source6dc5f25; matching and
+label class sources unchanged. Compile only `Qw0CausalProbe`, no Maven rebuild.
+One hypothetical A BUY only; actual source-time/current BOTH book freshness,
+pre-event activation,2x queue,250ms and original scoped GAP all preserved. Every
+covered aggregate replaced by its actual components, never supplemented; unknown
+candidate-relevant trade inside the complete window fails, never fallback fill.
+Unrelated aggregates only trigger no-allocation TICK ordering. Full39 label
+consumption required. Report pair book source timestamps, price-compatible
+quantity, source eligibility, conservative queue conservation and any CONDITIONAL
+model allocations with their exact source bindings.
+
+This is an OPTIMISTIC NECESSARY target-leg test: resting strategy cancellations
+and counterpart execution intentionally OMITTED, not weakened in production.
+Zero conditional allocation may reject this selected start; positive allocation
+CANNOT qualify strategy/account profitability and still needs real resting checks,
+counterpart evidence and frozen same-data full account comparison. No PnL/fees
+computed by this diagnostic, no actual bot fills or live permissions. `queue-aware-causal-freeze.json`
+committed before extended source reading; source/spec/tests/config/acceptance
+hashed.202 phase6 tests pass locally; actual Java queue/source-gate synthetic
+assertions pending CI BEFORE source download/extraction. One dedicated workflow
+only; no new market capture, wallet, keys, order API or independent PAPER.
+Next inspect `qw0-single-supported-causal`, preserve all outcomes, never tune to
+this result. Known control net-$1.80, guard0/0fills; QW0 account unknown, NO_GO.
