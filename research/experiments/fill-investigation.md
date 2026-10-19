@@ -2752,6 +2752,62 @@ no new account PnL. Control-$1.80 after costs, guard0/0fills, QW0 net UNKNOWN,
 NO_GO; PR9 unmerged, PAPER only, automation continues. Unknown dirty old local
 archive remains untouched; work uses isolated clean committed evidence.
 
+## All451 receipts independently reproduced; bounded first recovery exit frozen — 2026-10-19
+
+Checked latest branch/PR9 and run39280218661/sourceef924f8 COMPLETE SUCCESS;
+no active overlapping workflow.247 phase6 CI tests passed before public reads.
+All451 original receipts and17 original blocks collected,0 errors,0 reused
+(the191 prior cached transactions were disjoint). One public chain137 check,
+no wallet/key/order operations. Artifact12199654519 ZIP SHA
+`329c0cb43e316a30c61a78d0ae976a05a248d09fb50e7ea5ac103578cde1fcb5`.
+Retain exact binary ZIP (not another base64 copy), member hashes and offline
+verification under `queue-aware-quote-20261019/recovery-result/`.
+
+Independent verification re-corroborates ALL451 original public samples against
+raw transaction/block logs, reconstructs BOTH maker sides/tokens and conserved
+integer component identities/amounts, and matches exact1038-component summary.
+No aggregate-price complements, hypothetical fills, queue credit or PnL are
+inferred by receipt verification. Three new tests pass locally: complete451,
+missing/raw-count manipulation rejection, and exact recovery-gate initial
+state/clock/stop contract.250 tests collected in new CI before native evaluation.
+
+New SEPARATE first-exit probe frozen BEFORE evaluating new model allocations.
+Initial5 A at basis0.48 are CONDITIONAL prior verified native-model inventory,
+not actual bot holdings or injected free funds. First GAP cancels all earlier
+orders. Original last strategy callback1792269760818 +250 means next decision
+1792269761068; data recovery frame0875 does NOT advance that decision clock.
+Age already6750ms at first GAP exceeds unchanged PairPolicy MAXIMUM wait5000ms,
+so no invented volatility seed is needed: every future no-fill wait branch is
+mathematically exhausted regardless of nonnegative original volatility.
+
+Probe replays original full retained frames/depth and451 source-bound conserved
+labels. Native unchanged matching/PairPolicy/FeeModel/DepthExecution handle
+250ms activation/cancel/taker delay,2x measured queue, exact BUY-UP/SELL-DOWN
+prices, source eligibility, gaps, source metadata freshness, min size and bounded
+exit loss. Supports source re-submission and cancel-before-exit while inventory
+is unchanged; original scoped GAP cancels pending actions. Taker uses actual
+multi-level FOK depth, native fees, positive-net-edge and exit-loss checks,
+conditional available cash; never imaginary top depth or funding. New Java
+synthetic risk-clock boundaries, multi-level fees/depth and insufficient-depth
+rejection run BEFORE native gate, along with prior side-rounding/callback tests.
+
+STOP IMMEDIATELY at first new maker allocation, including partial/intra-frame,
+or first atomic taker FOK. Do not process remaining frame, changed inventory,
+merge, resolution or further strategy after that allocation. If none, retain
+original fixed horizon and unresolved conditional inventory. Explicitly assumes
+account risk availability/omits other markets and full account; no full QW0
+account net, fair development comparison or independent qualification claimed.
+Old archived probes/safety stops and production code remain unchanged.
+
+Next WAIT for `qw0-bounded-first-recovery-exit`; reproduce exact native clock,
+pre-event queue/source/volume conservation or multi-level FOK fees from original
+data, then handle actual changed inventory/merge/resolution before full-account
+SAME-development baseline/candidate comparison and frozen independent PAPER.
+No new RPC/capture/source scan/build for this gate; reuse previously verified
+engine artifact. Net remains control-$1.80 after costs, guard0/0fills, QW0 account
+UNKNOWN, NO_GO. Acceptance unchanged; PR9 unmerged, PAPER only. Unknown dirty
+local activation archive remains untouched; committed isolated evidence used.
+
 ## Complete post-GAP context verified; all451 generic labels frozen — 2026-10-19
 
 Latest branch/PR9 and run39272171582/source7ec5a5d checked COMPLETE SUCCESS;

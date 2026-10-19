@@ -1,0 +1,48 @@
+name: PAPER QW0 bounded first recovery exit
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/queue-aware-recovery-exit.yml', 'research/phase6/queue-aware-recovery-exit-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-qw0-bounded-recovery-exit
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: All offline regressions before new native gate
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: probe-engine
+      - name: Compile observers only; exact boundary and native FOK fee/depth tests
+        run: |
+          mkdir -p "$RUNNER_TEMP/qw0-recovery"
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/qw0-engine"
+          javac -cp "$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" -d "$RUNNER_TEMP/qw0-recovery" research/phase6/Qw0CausalProbe.java research/phase6/Qw0RestingProbe.java research/phase6/Qw0ActiveReductionProbe.java research/phase6/Qw0RecoveryExitProbe.java
+          java -cp "$RUNNER_TEMP/qw0-recovery:$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" com.polybot.hft.paper.Qw0ActiveReductionProbe --self-test
+          java -cp "$RUNNER_TEMP/qw0-recovery:$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" com.polybot.hft.paper.Qw0RecoveryExitProbe --self-test
+      - name: All451 labels verified from retained original receipts; no RPC or source scan
+        run: python3 -m research.phase6.queue_aware_recovery_exit --output research/output/qw0-recovery-exit/input.json
+      - name: Native conditional first exit allocation; stop before changed inventory/merge/strategy
+        run: >-
+          java -Xmx2g -cp "$RUNNER_TEMP/qw0-recovery:$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*"
+          com.polybot.hft.paper.Qw0RecoveryExitProbe research/experiments/queue-aware-quote-20261019/post-gap-result/context.records.jsonl.gz
+          research/output/qw0-recovery-exit/input.json research/output/qw0-recovery-exit/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qw0-bounded-first-recovery-exit
+          retention-days: 7
+          path: research/output/qw0-recovery-exit/

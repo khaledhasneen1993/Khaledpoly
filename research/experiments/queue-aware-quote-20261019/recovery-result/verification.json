@@ -1,0 +1,12 @@
+{
+  "scope": "ALL451_ORIGINAL_RECOVERY_PAIR_COMPONENTS_NOT_EXECUTION",
+  "completeOriginalGroups": 451,
+  "uniqueActualMakerComponents": 1038,
+  "bothSidesAndTokensDecoded": true,
+  "queueAndLifecycleNotSimulated": true,
+  "fillsCreated": 0,
+  "netPnlRecomputed": false,
+  "candidateAccountSimulated": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}
