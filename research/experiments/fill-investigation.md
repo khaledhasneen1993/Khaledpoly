@@ -2415,3 +2415,34 @@ receipts remain UNKNOWN. Then trace bounded actual cancel/hedge/maker-reduction
 execution and resolution with correct fees/minimums before full SAME-development
 baseline/candidate account comparison and independent PAPER. No duplicate prefix
 run, broad receipt batch, holdout tuning or new capture justified yet.
+
+## QW0 conditional unhedged timing freeze — 2026-10-19
+
+Checked PR9/head3dd96be and active Actions collection: no running experiment.
+Freeze original post-allocation waiting/cancel CLOCK, not another candidate or
+financial replay. Reuse prior verified both-order prefix, first A model allocation
+1792269754123, B OPEN5/queue30, complete retained source through first scoped GAP.
+Reconstruct exact original post-frame decision schedule and seeded scale18
+HALF_EVEN EWMA; compare all reached original witness callbacks/volatility. Apply
+unchanged PairPolicy.secondLegWaitMs integer budgets, volatility divisor/floor,
+unhedged30000ms/max25-share conditions. First non-WAIT callback with resting BUY
+requests CANCEL_BEFORE_RISK_EXIT; actual matcher must acknowledge after250ms on
+the first original due engine event, before scoped GAP. Missing/stale/source-
+regressed books, metadata changes or early terminal state fail closed.
+
+Explicit CONDITION: no further counterpart allocations and no intervening account
+risk/other-market effects. ALL trade volume is suppressed in the isolated B
+cancel clock; this does NOT establish zero actual post-fill B allocations and
+does not weaken production matching. Account/hedge/exit/resolution/PnL omitted.
+Actual unchanged PairPolicy and matcher validate timing only. No RPC or new tape
+scan/capture/build; compile small observer against verified engine. Never count
+suppressed trades as evidence of no fills/profit. Freeze sources/tests/actual
+engine/config/acceptance BEFORE evaluating this future source segment.
+
+Selection for next evidence step is deterministic ALL quote-agnostic original B
+observations after first A allocation through actual conditional cancel ack, not
+a fitted favorable-time/price sample. Reuse any cached receipts; missing remains
+UNKNOWN and a possible earlier B fill can invalidate this conditional branch.
+Only after those groups are audited can actual unhedged lifecycle/account work
+advance. Three new synthetic wait-budget/volatility/input regressions added;
+no QW0 tuning, acceptance edits or independent PAPER qualification.
