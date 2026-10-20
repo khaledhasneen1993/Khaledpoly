@@ -3833,3 +3833,52 @@ available only in isolated generated sources, NOT yet a clock-only runtime
 operation. Original628 still strict stop; full net UNKNOWN. Next frozen exact
 identity+witness+separate unknown venue accounting integration, no fake labels,
 no independent qualification or changed criteria. PAPER/NO_GO, follow-up continues.
+
+### Frozen indexed atomic execution integration — 2026-10-20 Amman
+
+Reviewed latest5d05875/PR9 and completed39424638964/39417026089/39410095950,
+no active source replay/capture. Integrated complete full-sequence source index,
+exact643/1532 real pool and scoped atomic witness ONLY in generated research
+session plus explicit IndexedReplaySupport CLI. No original core/parser/helper/
+policy/fee/queue/risk/acceptance edit. Original frame/advanceActions positions
+remain byte-identical outside exact new TRADE branch and explicit opt-in.
+
+Every original TRADE identity now validates BEFORE expiry/filter; execution uses
+owned input copies. Known nonexpired observations use REAL conserved bindings.
+Known expired observations still consume actual pool binding but use canonical
+TICK, with known-expired component quantity reported separately, not as matching
+venue volume. Old pool.requireConsumed remains intact; wrapper additionally
+requires COMPLETE16,317 original index consumption. No missing/duplicate/frame
+identity allowed, and failures halt/cancel/block session continuation.
+
+Unknown observations use explicit Unbound route, never empty/null Binding or
+public aggregate TRADE. Exact canonical TICK is permitted only inside healthy
+GLOBAL empty-exposure atomic witness. Counts/public observation sizes recorded
+separately; unknownVenueQuantity=UNKNOWN_NOT_ZERO. Matching conservation carries
+explicit KNOWN_NONEXPIRED_COMPONENTS_ONLY scope, never misleading total volume.
+Source-wide transaction uniqueness prevents skipped component reuse; prior
+required counterexamples remain mandatory. Failed wrapper cannot continue.
+
+Local generated96-source Java17 compile+helpers PASS;41 targeted Python tests
+in32.124s OK,4 new integration/source/scope/expiry methods. Whole DEFAULT oracle
+JSON unchanged.9 integration checks PASS over exact original97/628 raw preimages
+but SYNTHETIC surrounding session/frame envelopes:97 real binding applied then
+628 atomic clock when empty; exposure rejects628 and cancels; expiry validates
+both identities and consumes known97 without settlement application; mutation
+after expiry, duplicate, missing prefix, wrong actual frame index all halt and
+block continuation. All fixture accounts remain500/no executions/holdings.
+These are NOT market replay/PnL evidence; original full source frontier not yet
+recomputed in this commit. Prefix raw SHA2842d45d1fc041fd7c1af8a6ed44403e9c0914e59eaf9c8e4b0515b504c6de8c.
+
+Frozen indexed-execution-freeze.json pins new generated session/runner and all
+runtime helpers/config BEFORE original source testing. New workflow first runs
+unit/Java21 integration/22 atomic guards/default parity/2572 no-order differential
+counterexamples; ONLY after success downloads existing original DEVELOPMENT
+source ONCE and runs baseline then unchanged frozen candidate on SAME bytes.
+CLI checks exact source gzip/config; incomplete run retains frontier, causes,
+ledger and full queue/cancel audit, without financial result promotion. Complete
+run must consume source16,317 and realpool643, with venue scope still explicit.
+No independent/holdout/new capture/RPC data or strategy tuning. Next inspect
+these actual reports, diagnose first execution-relevant failure before any new
+bounded receipt read. Do NOT launch duplicate workflow. Full net UNKNOWN;
+PAPER/NO_GO, PR9 draft/unmerged; user dirty archive untouched, follow-up continues.
