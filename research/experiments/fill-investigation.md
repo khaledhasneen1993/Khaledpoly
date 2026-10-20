@@ -3952,3 +3952,10 @@ No whole-account net result yet, no independent acceptance claim. Next inspect
 that run instead of rerunning; retain actual frontier and queue/cancel audit.
 If active/due/cancel-pending blocks, collect exact evidence, not weaker guards.
 PAPER/NO_GO, PR9 draft/unmerged, acceptance/config hashes unchanged.
+
+Published PRE_ACTIVATION0 freeze at886ee0ce0f3416ff394c85baca7b41f351f6986a;
+new Actions39443362971/job118698743149 is RUNNING. No previous active run was
+overlapped. Prior9 indexed integration/expiry/identity rejection tests also pass
+on this generated profile. Check/await39443362971 reports before another replay;
+no complete result or net claim while running. This status-only commit does not
+touch workflow/freeze and must not trigger another comparison.

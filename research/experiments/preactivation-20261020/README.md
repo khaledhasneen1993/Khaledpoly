@@ -31,6 +31,15 @@ proofs on Java21 BEFORE downloading the existing original development tape ONCE
 and replaying baseline plus unchanged frozen QW0 candidate on that SAME tape.
 No fresh capture, RPC, holdout, parameter search, or financial promotion.
 
+The9 prior indexed integration checks also PASS under this generated profile,
+including expiry, duplicate/mutated/missing identity, original frame-index and
+unreserved-order rejection. Retained indexed-execution-proof.json is their new
+output; old frozen helper/source and verifier files are unchanged.
+
+Published freeze/source commit886ee0ce0f3416ff394c85baca7b41f351f6986a.
+Actions run39443362971 (job118698743149) is the SINGLE new proof-gated comparison
+in progress. Check this run before any further execution. Do not duplicate it.
+
 Next: inspect the new proof-gated Actions run and actual original failure or
 completion reports. Do not launch a duplicate. If a new frontier is active/due/
 cancel-pending, retain exact identity and queue/cancellation audit; do not weaken
