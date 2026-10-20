@@ -1,0 +1,11 @@
+{
+  "scope": "INDEPENDENTLY_VERIFIED_NATIVE_SOURCE_IDENTITY_PARITY_ONLY",
+  "originalIndexIdentities": 16317,
+  "actualPreimagesMatched": 643,
+  "rejectionGuards": 23,
+  "original628ExecutionStillUnresolved": true,
+  "runtimeSkipAuthorized": false,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

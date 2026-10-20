@@ -3710,3 +3710,44 @@ joint identities unique;643 actual preimages matched only as subset. No source
 replay, no execution/no-order skip, no account net or qualification promotion.
 Next native index consumer + atomic healthy-session witness; original628 remains
 the strict execution coverage stop. No new market/RPC job or changed criteria.
+
+### Native complete source identity consumer — 2026-10-20 Amman
+
+Reviewed latest864a50b/draftPR9 and completed39410095950/39403569864/39395096777
+before work; no active overlapping capture/replay. Added standalone research
+CompleteSourceIdentityIndex.java, NOT registered as a label adapter/runtime
+policy. Requires exact COMPLETE8,364,298-byte original canonical census SHA
+1f8d1d953f3755b8244c7ac11f7a3f72ccd8d73b1c9807b7cec417b6b710c1c2.
+All16,317 rows/coordinates/clock/schema/global transaction+public-ID uniqueness
+checked before use. Immutable identity records/maps, synchronized consumption;
+original seq/index/arrival/source/token/side/decimal price/size/exact UTF8 raw
+tradeId hash/parsed transaction checked. Every consumption/finalization failure
+poisons instance. Constructor rejects changed source before a reader exists.
+
+Explicit diagnostic subset mode matched ALL643 exact retained original raw
+preimages, then rejected completion and continuation. Default full mode matched
+original97 but rejected jumping to next retained known receipt preimage across
+the missing628 observation. It did NOT replay628 or reject it as invalid data.
+No other15,674 raw preimages fabricated/consumed; source index is not settlement
+coverage.23 rejection guards PASS:21 input/finalization cases plus poisoned
+continuation and changed complete source bytes. No synthetic orders/fills.
+
+Standalone two-file Java17 compile+native probe PASS; independent Python proof
+verifier PASS;33 targeted Python tests in60.244s OK (4 new no-promotion/source/
+subset/guard methods). Added bounded Java21 GitHub workflow with pinned existing
+dependency JAR SHA bfc7bef081927f774374f92e5443c197e308e4828983dd9c19ac0ef280c45963,
+no complete core compile/capture/source rescan/receipt requests/repeated market
+replay. Freeze+local native proof+verification in native-source-index-20261020.
+
+Actual strict baseline/candidate still stop628; full candidate account net
+UNKNOWN. No original core/session/parser/helper/receipt pool/frozen policy/fee/
+queue/risk/acceptance changes. Native identity reader complete as standalone
+research only; runtime skip/atomic guard/session integration all still FALSE.
+Next explicit no-order witness and atomic synchronized healthy empty-session
+guard INCLUDING persistence health, all orders/pending actions/reservations/
+holdings and per-trade identity check before expiry/filter; separate honest
+unknown venue volume counters. Never null/empty labels or public fallback.
+Keep repeated-component and public-TRADE-vs-TICK counterexamples. Freeze and
+validate before SAME original source advances to execution-relevant unknown.
+PAPER/NO_GO, independent acceptance unmet; no new net PnL. Unknown user dirty
+archive preserved, PR9 draft/unmerged; follow-up continues.

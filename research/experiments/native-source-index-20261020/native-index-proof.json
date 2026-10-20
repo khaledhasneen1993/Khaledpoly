@@ -1,0 +1,30 @@
+{
+  "scope" : "NATIVE_COMPLETE_INDEX_WITH643_PREIMAGE_PARITY_NOT_EXECUTION",
+  "indexLogicalSha256" : "1f8d1d953f3755b8244c7ac11f7a3f72ccd8d73b1c9807b7cec417b6b710c1c2",
+  "sourceIdentitiesSha256" : "27ac545988149c87bdfd4caee963100b7d10eb2808e6a74d82ae4b8321c65423",
+  "originalIdentities" : 16317,
+  "actualRawPreimagesMatched" : 643,
+  "unconsumedOriginalPreimages" : 15674,
+  "preimageSubsetBeforeRejectedFinalization" : {
+    "identitiesSha256" : "1f8d1d953f3755b8244c7ac11f7a3f72ccd8d73b1c9807b7cec417b6b710c1c2",
+    "subsetPreimageTestOnly" : true,
+    "originalIdentities" : 16317,
+    "failed" : false,
+    "settlementRoutesValidatedByIndex" : false,
+    "completeOriginalConsumption" : false,
+    "consumedOriginalPreimages" : 643,
+    "runtimeSkipAuthorized" : false
+  },
+  "rejectionGuards" : [ "SUBSET_CANNOT_CERTIFY_COMPLETE", "FAILED_FINALIZATION_NO_CONTINUATION", "WRONG_SEQUENCE", "WRONG_FRAME_INDEX", "WRONG_ARRIVAL", "WRONG_SOURCE", "WRONG_TOKEN", "WRONG_SIDE", "WRONG_PRICE", "WRONG_SIZE", "PRICE_NAN", "SIZE_BOOLEAN", "SOURCE_BOOLEAN", "SOURCE_FRACTIONAL", "RAW_BYTES_WHITESPACE", "RAW_TRANSACTION_MUTATION", "RAW_MISSING", "RAW_OVERSIZED", "DUPLICATE_CONSUMPTION", "REVERSED_CONSUMPTION", "FULL_MODE_NO_MISSING_OBSERVATION", "EMPTY_CANNOT_CERTIFY_COMPLETE", "CHANGED_FULL_CENSUS_BYTES" ],
+  "allRejectionsPoisonConsumption" : true,
+  "fullModeFirstOriginal97Matched" : true,
+  "fullModeMissing628Rejected" : true,
+  "runtimeOptimizationImplemented" : false,
+  "atomicSessionGuardImplemented" : false,
+  "originalTapeReplayed" : false,
+  "modelFillsCreated" : false,
+  "marketNetPnlRecomputed" : false,
+  "fullAccountReplayAuthorized" : false,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false
+}

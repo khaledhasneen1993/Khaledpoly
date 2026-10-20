@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "scope": "NATIVE_COMPLETE_ORIGINAL_INDEX_WITH_PARTIAL_PREIMAGE_PROOF_NOT_RUNTIME",
+  "sourceParentCommit": "864a50b0a47f6bd87810e66b128008dd83f029fa",
+  "expectedOriginalIdentities": 16317,
+  "expectedAvailableRawPreimages": 643,
+  "expectedRejectionGuards": 23,
+  "indexLogicalSha256": "1f8d1d953f3755b8244c7ac11f7a3f72ccd8d73b1c9807b7cec417b6b710c1c2",
+  "sourceIdentitiesSha256": "27ac545988149c87bdfd4caee963100b7d10eb2808e6a74d82ae4b8321c65423",
+  "dependencyArtifactId": 12151627900,
+  "dependencyJarSha256": "bfc7bef081927f774374f92e5443c197e308e4828983dd9c19ac0ef280c45963",
+  "filesSha256": {
+    "research/phase6/CompleteSourceIdentityIndex.java": "1cb280859fd232d3e418a26cc39b72368047a604b4a805a8b603cc77b40252c3",
+    "research/phase6/CompleteSourceIdentityProbe.java": "c98b7f9d9d6a36f00aae731a086dc3a05b0729d4e4e68c0e3a934a25be51ec16",
+    "research/phase6/native_source_index.py": "37c8b02eee5f79acef6a81d3687944e7b85b908a581686e9106a7a00d6e94217",
+    "research/phase6/tests/test_native_source_index.py": "fac4cb5ef596a4b0927b40829433cfd53f24a88012e708cdc4daa4eb6592b815",
+    "research/experiments/native-source-index-20261020/native-index-proof.json": "f41454c2e6b8f9a1be5b33e96971a3ab98bd034f2737a7af5a44384ee379b0f8",
+    "research/phase6/complete_source_index.py": "b9a7d48152057208e31fe37d6db44d8d08bdb4114ee8c749f5274a7ba3d829e5",
+    "research/phase6/complete-source-index-freeze.json": "108e8dfbb5a58aa33b307f4c15be8298734b0774bedd6537157db1d7ac200f85",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00"
+  },
+  "nativeIdentityConsumerImplemented": true,
+  "runtimeOptimizationImplemented": false,
+  "atomicSessionGuardImplemented": false,
+  "fullAccountReplayAuthorized": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO"
+}

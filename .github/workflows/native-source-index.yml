@@ -1,0 +1,46 @@
+name: PAPER native complete identity index proof only
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/native-source-index.yml', 'research/phase6/native-source-index-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-native-source-index-proof
+  cancel-in-progress: false
+jobs:
+  native-identity-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: Frozen evidence and bounded regression; no source capture/RPC/execution
+        run: |
+          python3 -c 'import json,hashlib;from pathlib import Path;f=json.loads(Path("research/phase6/native-source-index-freeze.json").read_text());assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in f["filesSha256"].items())'
+          python3 -m unittest research.phase6.tests.test_native_source_index research.phase6.tests.test_complete_source_index research.phase6.tests.test_no_order_result research.phase6.tests.test_expanded_receipt_pool research.phase6.tests.test_expanded_pool_result research.phase6.tests.test_full_runner_build research.phase6.tests.test_full_runner_diagnosis -q
+          python3 -m research.phase6.native_source_index --prepare "$RUNNER_TEMP/identity-inputs"
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: proof-engine
+      - name: Compile standalone research reader and test all643 actual preimages; no engine changes
+        run: |
+          python3 -c 'import hashlib;from pathlib import Path;assert hashlib.sha256(Path("proof-engine/executor-service-0.6.0.jar").read_bytes()).hexdigest()=="bfc7bef081927f774374f92e5443c197e308e4828983dd9c19ac0ef280c45963"'
+          unzip -q proof-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/jackson-*.jar' -d "$RUNNER_TEMP/identity-deps"
+          mkdir -p "$RUNNER_TEMP/identity-classes"
+          javac -cp "$RUNNER_TEMP/identity-deps/BOOT-INF/lib/*" -d "$RUNNER_TEMP/identity-classes" research/phase6/CompleteSourceIdentityIndex.java research/phase6/CompleteSourceIdentityProbe.java
+          java -Xmx1g -cp "$RUNNER_TEMP/identity-classes:$RUNNER_TEMP/identity-deps/BOOT-INF/lib/*" com.polybot.hft.paper.CompleteSourceIdentityProbe "$RUNNER_TEMP/identity-inputs/complete-index.jsonl" "$RUNNER_TEMP/identity-inputs/source-identities.json" research/output/native-source-index
+          python3 -m research.phase6.native_source_index --verify research/output/native-source-index/native-index-proof.json > research/output/native-source-index/verification.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-source-index-proof-only
+          retention-days: 7
+          path: research/output/native-source-index/
+          if-no-files-found: error
