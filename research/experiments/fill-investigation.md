@@ -4247,3 +4247,30 @@ NEXT obtain and verify ONLY the two exact new receipt targets above, then extend
 the separately frozen pool again before any further same-source replay. Do not
 rerun exact645 unchanged, widen receipt selection, infer fills from public size,
 or alter queue/fees/risk/strategy/holdout. PAPER/NO_GO, PR9 draft/unmerged.
+
+### Exact645 next two receipts verified — 2026-10-20
+
+Run39481141401/job118829716023 COMPLETE SUCCESS on9402131. Frozen source checks
+and18 tests passed before exactly1 chain-ID/2 receipt/2 block public read-only
+calls. No tape replay, capture, wallet/key/order, holdout or parameter change.
+
+Candidate9060 is ONE DIRECT maker SELL tokenB component:38.461539 shares,
+20 collateral, maker price0.5199999927200001019199985731. Baseline82986 is ONE
+DIRECT maker SELL tokenA component:40 shares,12.8 collateral, maker price0.32.
+Both recorded PAPER orders are BUY, so both actual components fail the necessary
+side predicate. They are conserved public venue routes, NOT bot fills; queue
+allocation remains unproven and model fills remain0.
+
+Artifact12290764619,14356 bytes,SHA256
+bfc9043ca0ca851914b90aa388967d7eba7c7b6db0f906927b16356f04a2dcf1,
+retained under next-postactivation-receipts-20261020 with4 bounded members.
+The result verifier re-decodes raw receipts/blocks, exact retained source
+preimages and conservation, checks recorded-order necessary eligibility, and
+rejects report promotion/mutation;3 tests PASS34.288s.
+
+NEXT extend a separately frozen647-binding/1536-component pool while preserving
+all645 prior bindings; verify native/source parity before any further original
+same-source baseline/QW0 replay. Do not repeat exact645, infer fills, weaken
+queue/fees/risk, retune strategy, or inspect holdout. Complete net after costs
+remains UNKNOWN; independent acceptance not passed; PAPER/NO_GO, PR9 draft and
+unmerged. Retention does not touch the workflow/freeze, so it triggers no read.
