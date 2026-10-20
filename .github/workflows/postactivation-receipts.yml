@@ -1,0 +1,31 @@
+name: PAPER two exact post-activation receipts ONLY
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/postactivation-receipts.yml', 'research/phase6/postactivation-receipts-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-two-postactivation-receipts
+  cancel-in-progress: false
+jobs:
+  two-public-readonly-receipts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Frozen exact two-target provenance and offline regressions before reads
+        run: |
+          python3 -c 'import json,hashlib;from pathlib import Path;f=json.loads(Path("research/phase6/postactivation-receipts-freeze.json").read_bytes());assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in f["filesSha256"].items())'
+          python3 -m unittest research.phase6.tests.test_postactivation_receipts research.phase6.tests.test_first_blocker_receipt research.phase6.tests.test_receipt_audit research.phase6.tests.test_route_coverage_audit research.phase6.tests.test_source_lag_guard_diagnosis -q
+          python3 -m research.phase6.postactivation_receipts
+      - name: At most two public receipts and two matching blocks; checkpoint successes
+        run: python3 -u -m research.phase6.postactivation_receipts --output research/output/postactivation-receipts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: two-exact-postactivation-receipts
+          retention-days: 7
+          path: research/output/postactivation-receipts/
+          if-no-files-found: error

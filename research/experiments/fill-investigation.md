@@ -4129,3 +4129,29 @@ proof parity;2 local tests include3 mutation subcases. original-diagnosis.json
 is authoritative current frontier; older bounded proof flags remain historical.
 Retention commit does not touch workflow/freeze. PAPER/NO_GO, no independent
 acceptance pass, PR9 draft/unmerged; both pre-existing dirty archives preserved.
+
+### TWO bounded post-activation receipt targets frozen — 2026-10-20
+
+Remoteefe9b09/PR9 draft checked; previous39459692699 COMPLETE SUCCESS and no
+active workflow. Only exact candidate9035/baseline82964 post-activation receipts
+selected from validated original artifact, never outcome/price-picked or widened.
+New postactivation_receipts.py checkpoints every successful public response,
+uses chain137 and read-only3-method allowlist, max2 receipt/2 block requests,
+deduplicates shared blocks and never refetches successful receipts on resume.
+
+Reviewed ABI/exchange decoder and conserved route checks reused. Unique original
+token/side/size group required, rounded public price difference<=.005 and block
+timestamp within120s of exact source; ambiguity/failed/duplicate/removed logs
+fail closed, never zero. Public RPC corroboration is not cryptographic finality
+or bot fills. All new scope flags prohibit simulated fills/PnL/qualification.
+
+Local19 targeted tests PASS14.839s, synthetic2-route/conservation/checkpoint/
+resume/budget and bad identity/chain/status/hash/time cases plus prior receipt/
+route/source checks. Freeze postactivation-receipts-freeze.json and exact source
+selection/evidence folder postactivation-receipts-20261020. New workflow ONLY
+reads these2 receipts and matching blocks, NO original replay/capture/holdout.
+
+NEXT inspect/await new read-only run and re-derive real components offline, then
+separately freeze expanded pool/native consumer before any new same-source
+comparison. Current pool643/1532, SOURCE_LAG0, config/acceptance/fees/queue/risk
+and strategy unchanged; net UNKNOWN, PAPER/NO_GO, PR9 draft/unmerged.
