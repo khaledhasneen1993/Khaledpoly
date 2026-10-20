@@ -4183,3 +4183,26 @@ verify native/source parity before ONE new baseline/QW0 replay. Existing pool
 and SOURCE_LAG0 unchanged; no broader reads or unchanged replay. Full net after
 costs UNKNOWN, no independent acceptance pass; PAPER/NO_GO, PR9 draft/unmerged.
 Retention commit does not alter workflow/freeze or trigger repeated reads.
+
+### Exact645 receipt pool frozen before replay — 2026-10-20 21:34 Asia/Amman
+
+The two exact post-activation receipts were added to a new, separately frozen
+pool without changing any of the prior643 bindings. The canonical result has
+645 original source bindings and1534 actual maker components: DIRECT355,
+MINT1162 and MERGE17. Pool logical SHA256:
+16dab5fa70b908ccb5c7aeaaba803f2c5ac4f66b0efa50de6b2d1b82c0d662c7;
+exact645 identity SHA256:
+221cd9a9e7f6fe1cbc280e964a9db25018ed46f0bf7e81722a74b7049b75c016.
+
+A generated-only SOURCE_LAG0 helper pins that pool hash, and the new replay
+orchestrator requires full consumption of645 bindings plus the unchanged16317-
+identity source index. Local native parity matched all645 preimages and1534
+conservative component tuples and passed39 fail-closed reader guards. This is
+identity/reader evidence only: the original tape was not replayed, no queue
+allocation/model fill was created, and no account PnL was recomputed.
+
+NEXT retain the independent Java21 native-parity workflow report. Only after it
+passes, run one same-original-development-source baseline and unchanged QW0
+comparison. Do not repeat completed643/source-lag diagnostics, retune either
+profile, or change queue/fees/latency/risk/acceptance/holdout. Complete net after
+costs remains UNKNOWN; PAPER/NO_GO, PR9 draft/unmerged.

@@ -1,0 +1,20 @@
+{
+  "scope": "OFFLINE645_PARTIAL_POOL_NOT_ACCOUNT",
+  "bindings": 645,
+  "components": 1534,
+  "parent643Unchanged": true,
+  "addedReceiptBindings": 2,
+  "poolLogicalSha256": "16dab5fa70b908ccb5c7aeaaba803f2c5ac4f66b0efa50de6b2d1b82c0d662c7",
+  "sourceIdentitiesSha256": "221cd9a9e7f6fe1cbc280e964a9db25018ed46f0bf7e81722a74b7049b75c016",
+  "portionsLogicalSha256": "3cbc56241d00623bef3825837e26b48c328f04e9fc13a4806169810d4dc4fac7",
+  "routeComponentCounts": {
+    "DIRECT": 355,
+    "MINT": 1162,
+    "MERGE": 17
+  },
+  "generatedHelperRequired": true,
+  "originalTapeReplayed": false,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}
