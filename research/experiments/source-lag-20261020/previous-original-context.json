@@ -1,0 +1,37 @@
+{
+  "scope": "REVALIDATED_PREVIOUS_ORIGINAL_FRONTIERS_NOT_NEW_REPLAY",
+  "previousRun": 39443362971,
+  "results": {
+    "baseline": {
+      "sequence": 82880,
+      "arrivalMs": 1792269639606,
+      "sourceMs": 1792269639536,
+      "actualActivatedMs": [
+        1792269639585,
+        1792269639585
+      ],
+      "actualInitialQueues": [
+        0,
+        0
+      ],
+      "runtimeShortcutStillBlocked": true
+    },
+    "candidate": {
+      "sequence": 8739,
+      "arrivalMs": 1792269594507,
+      "sourceMs": 1792269594437,
+      "actualActivatedMs": [
+        1792269594503,
+        1792269594503
+      ],
+      "actualInitialQueues": [
+        1182.3,
+        180
+      ],
+      "runtimeShortcutStillBlocked": true
+    }
+  },
+  "originalTapeReplayed": false,
+  "marketNetPnlRecomputed": false,
+  "liveAllowed": false
+}

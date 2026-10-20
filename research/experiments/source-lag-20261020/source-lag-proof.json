@@ -1,0 +1,27 @@
+{
+  "scope" : "SYNTHETIC_SOURCE_LAG_DIFFERENTIAL_OVER_ACTUAL643_COMPONENTS_NOT_RUNTIME_AUTHORIZATION",
+  "originalIdentities" : 643,
+  "matcherDifferentials" : 5144,
+  "distinctFutureContinuations" : 5144,
+  "syntheticFutureFillEvents" : 111,
+  "contexts" : [ "ACTIVE_SOURCE_MINUS66", "ACTIVE_SOURCE_EQUAL", "DUE_AT_ARRIVAL_EQUAL", "DELAYED_ACTIVATION_EQUAL", "TWO_ORDERS_OLDEST_CUTOFF", "CANCEL_DUE_ACTIVATION_TIE", "CANCEL_PENDING", "STALE_ACTIVE_BOOK" ],
+  "proofPredicateRejections" : [ "SOURCE_AFTER_ACTUAL_ACTIVATION", "FUTURE_SOURCE", "NEGATIVE_SOURCE", "CLOCK_REGRESSION", "OLDER_ORDER_ELIGIBLE_DESPITE_NEWER_ORDER", "CANCEL_PENDING", "CANCEL_DUE", "SELL_EXPOSURE", "EMPTY_NOT_TEMPORAL_EXPOSURE" ],
+  "counterexamples" : {
+    "newestOrderCutoffWouldMissOlderEligibleOrder" : true,
+    "afterActivationOneMillisecondProducesSyntheticFill" : true,
+    "repeatedComponentFutureDivergenceVerified" : true
+  },
+  "allNonSettlementPrivateMatchingFieldsCompared" : true,
+  "activationMsUnchanged" : 250,
+  "queueMultiplierUnchanged" : 2,
+  "runtimeRequiresAllOrdersActualActivationCutoff" : true,
+  "globalComponentUniquenessStillRequired" : true,
+  "fullMatchingStateEquivalent" : false,
+  "newAtomicSessionGuardImplemented" : false,
+  "newRuntimeShortcutEnabled" : false,
+  "originalTapeReplayed" : false,
+  "completeAccountComparisonPerformed" : false,
+  "marketNetPnlRecomputed" : false,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false
+}

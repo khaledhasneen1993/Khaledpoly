@@ -3990,3 +3990,44 @@ cancel/frame/queue semantics and required unsafe counterexamples, before ANY
 new separately frozen guard; otherwise collect bounded exact frontier receipts.
 Do not weaken active/cancel/health guards or tune QW0/holdout/acceptance. PAPER/
 NO_GO; acceptance/config unchanged, PR9 draft/unmerged, follow-up continues.
+
+### SOURCE-LAG bounded differential proof ONLY — 2026-10-20
+
+Checked remote8f21e30/PR9 still draft and previous39443362971 COMPLETE SUCCESS;
+no active workflow, no overlapping experiment. New proof targets source-time
+at/before actual activation, not new strategy/queue/fee/risk parameters.
+
+SourceLagDifferentialProof.java compares actual643 conserved component tuples
+in8 SYNTHETIC matcher contexts:early66ms/equal source on active order, due-at-
+arrival, delayed actual activation, different-age own orders, cancel/activation
+tie, pending cancel, stale book.5144 exact Update/non-settlement-private-state
+differentials and5144 distinct future continuations PASS locally. Synthetic
+futurefill111 is ONLY test coverage, not market/account PnL. All5 settlement
+bookkeeping fields remain explicitly different/unknown, not zero venue quantity.
+
+Required unsafe counterexamples PASS:source+1ms after actual activation CAN
+fill; using newest/max activation misses an older eligible order; repeated
+components change future fills. All orders must satisfy their OWN ACTUAL
+activated times, with full-source global component uniqueness still mandatory.
+Queue200 from displayed100 times2 and own-second-order205 remain intact;
+cancel wins activation tie and stale book cancels canonically.9 reflected
+proof-predicate rejection cases; NO atomic session guard implemented/authorized.
+
+The new source-lag-proof workflow repeats proof+unchanged old guards/default/
+indexed integration on Java21. It performs NO original-source download/replay,
+RPC, market capture or holdout use. Existing runtime remains PRE_ACTIVATION0,
+actual frontier82880/8739 unchanged, full net UNKNOWN. New proof is not a fix
+installed in execution. Evidence/freeze/verifier under source-lag-20261020 and
+research/phase6/source-lag-proof-freeze.json; no original core/helper changes.
+
+NEXT: separately generated atomic source-lag witness with exact OPEN ledger
+reservations,4 monitors, flat/healthy state, no cancels/FOK/unhedged/recovery/
+external mode; actual-frontier synthetic-envelope integration and unsafe older-
+order/source+1ms tests BEFORE one new frozen same-source baseline/QW0 replay.
+Do not rerun unchanged PRE_ACTIVATION0. Strategy and fixed acceptance/config
+unchanged, PAPER/NO_GO, PR9 draft/unmerged, user dirty archive untouched.
+
+Local checks:50 Python tests PASS in32.735s (new verifier includes13 mutation
+subcases), complete96-source generated Java17 build, old5144 preactivation
+differentials/22 atomic guards and DEFAULT before oracle parity PASS. Await new
+proof-only Java21 run after publication; no original source replay scheduled.
