@@ -31,3 +31,33 @@ NEXT inspect this run/artifact and re-derive both routes offline before a
 separately frozen expanded real pool/native reader. Existing pool643/components
 1532 and SOURCE_LAG0 remain unchanged. Do not rerun the original tape unchanged.
 Full net after costs UNKNOWN, PAPER/NO_GO, no independent acceptance passed.
+
+## Actual public receipt run39468514569 COMPLETE SUCCESS
+
+Frozen source1f2c7e9d0f1897ace68c0665b943663fd883f381,job118786128207.
+19 targeted tests PASS14.733s before reads. EXACTLY1 chain-ID,2 receipt and2
+block requests; both original identities uniquely conserved and corroborated.
+
+Candidate9035:ONE DIRECT maker SELL on tokenB,3.846154 shares,2.000000 collateral,
+price0.5199999792000008319999667200. Recorded orders were BUYs, so this component
+fails their necessary side/token matching conditions; no eligible recorded order.
+
+Baseline82964:ONE MINT maker BUY on tokenA,9.000000 shares,2.610000 maker
+collateral,price0.29 (taker collateral6.390000). Recorded tokenA BUY bid0.24 is
+below0.29; tokenB BUY differs in token. No recorded order passes necessary
+token/side/price/source conditions. This is a receipt-specific comparison,
+NOT original native replay, queue allocation, or a new runtime shortcut.
+
+Artifact12286053123,15018 bytes,SHA256
+b18b80b960a5de5273197fc04460f4a70224ead77d0307827c494ba5a4337e79
+retained ci-artifact.zip (4 bounded members including both raw receipt/blocks).
+postactivation_receipts_result.py independently re-decodes raw data and exact
+source identity, rejects report/hash/volume/profit promotion, compares necessary
+matching conditions to retained original orders. verification.json records real
+parts2 and model fills0, no native pool extension, no account/PnL/qualification.
+
+NEXT freeze a NEW645-binding/1534-component real pool preserving all643 old
+bindings byte/logically unchanged, then native reader/source parity tests BEFORE
+one new same-source baseline/QW0 comparison. Do not widen receipt reads or rerun
+the unchanged source. No strategy/holdout/queue/fee/risk/acceptance adjustment.
+This retention-only commit does not touch workflow/freeze or start another read.

@@ -4155,3 +4155,31 @@ NEXT inspect/await new read-only run and re-derive real components offline, then
 separately freeze expanded pool/native consumer before any new same-source
 comparison. Current pool643/1532, SOURCE_LAG0, config/acceptance/fees/queue/risk
 and strategy unchanged; net UNKNOWN, PAPER/NO_GO, PR9 draft/unmerged.
+
+### TWO actual post-activation receipts verified — 2026-10-20
+
+39468514569/job118786128207 COMPLETE SUCCESS on1f2c7e9d0f1897ace68c0665b943663fd883f381.
+19 targeted tests PASS14.733s, then exactly1 chain-ID/2 receipt/2 block public
+read-only calls. No tape replay, market capture, wallet/keys/orders or holdout.
+
+Actual9035:ONE DIRECT maker SELL tokenB,shares3846154 raw,collateral2000000 raw,
+price0.5199999792000008319999667200; recorded bot orders BUY. Actual82964:ONE
+MINT maker BUY tokenA,shares9000000 raw,maker collateral2610000 raw,price0.29;
+taker collateral6390000 raw. Recorded tokenA bid0.24 is below maker0.29; tokenB
+order differs in token. Necessary token/side/price/source predicates reject all
+recorded orders for BOTH selected real components. This is receipt-specific,
+NOT whole native/account replay or queue allocation; model bot fills0.
+
+Artifact12286053123,15018 bytes,SHA256
+b18b80b960a5de5273197fc04460f4a70224ead77d0307827c494ba5a4337e79
+retained postactivation-receipts-20261020/ci-artifact.zip,4 bounded members.
+New postactivation_receipts_result.py re-decodes raw receipt/block, exact original
+identities/conservation and original quote necessary eligibility, compares report
+and raw hashes, rejects financial/native-pool promotion;3 additional local tests.
+verification.json preserves2 real maker parts, NOT bot fills or profit.
+
+NEXT separately freeze645 real bindings/1534 parts preserving643 old bindings,
+verify native/source parity before ONE new baseline/QW0 replay. Existing pool
+and SOURCE_LAG0 unchanged; no broader reads or unchanged replay. Full net after
+costs UNKNOWN, no independent acceptance pass; PAPER/NO_GO, PR9 draft/unmerged.
+Retention commit does not alter workflow/freeze or trigger repeated reads.
