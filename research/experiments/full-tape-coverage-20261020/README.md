@@ -56,6 +56,12 @@ observations and191 reviewed-cache receipt candidates are retained in
 scan or new receipt request in this result verification. Historical preparation
 and failure notes below are preserved for provenance, not current run status.
 
+FOLLOW-UP: all191 reviewed cached candidates are now rebound to conserved
+source groups:642 bindings /1,516 components in the explicitly PARTIAL
+[cached receipt pool](../cached-receipt-pool-20261020/README.md).299 local tests
+pass. Original census/artifact/counts remain immutable; native consumer and
+full-account baseline/candidate comparison are still pending. No new RPC/PnL.
+
 ### First census stopped safely; standalone timer correction
 
 Run39336641679 failed AFTER285 tests passed in322.708s and the complete original

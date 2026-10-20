@@ -3267,3 +3267,58 @@ Local complete result-verifier regression:293 tests in295.910s, OK; separate
 five new targeted tests in7.313s, OK. ZIP SHA/blob identity and unchanged
 acceptance/account config verified. Next push runs retained-proof-only CI,
 not original source scan or market capture; wait for its proof artifact.
+
+## ALL191 reviewed cached observations rebound offline — 2026-10-20 Amman
+
+Preflight62d2233/draftPR9 and run39349192223 COMPLETE SUCCESS:293 GitHub tests
+in336.566s; full retained source/cache proof outputs match. No active overlap.
+No source rescan, capture, RPC or strategy/account experiment in this step.
+
+Revalidated static original binary-pair metadata/causal lineage,451 old bindings,
+all16,317 original trade identities and reviewed raw receipt cache. ALL191
+previous missing/cached candidates re-decoded against exact source coordinate,
+receive/source clock, public hash, token/side/price/size/tx facts. Exactly one
+matching group per receipt, integer shares AND collateral conservation; no
+new market pair guesses, failed-receipt skipping or outcome/price filtering.
+Static later metadata identity NEVER substitutes for executable early metadata
+freshness/fees/strategy decisions; no account execution performed.
+
+Preserve451 original bindings/raw matches unchanged. Combined642 unique original
+coordinates/txs,1,516 unique conserved maker components:1,150MINT+349DIRECT+
+17MERGE. Additional191 groups contribute478 components:329MINT+141DIRECT+8MERGE.
+BUY prices UP/SELL DOWN28-digit parity digest
+3fd8f2d4ce916cd2a70919431e81ec878cb26e94ad7e293ff81e515f6bce092c.
+Deterministic compressed pool201,377bytes/logical1,735,935bytes, retained in git
+with frozen source/test/metadata/evidence/config hashes. No duplicated raw
+receipt archive or new public read.15,675 observations STILL missing (4,028
+first pair+11,647 others); earliest missing originalseq97 unchanged.
+
+New pool is explicitly PARTIAL, NOT legacy CONSERVED-MIXED-LAB0 execution
+manifest. allOriginalPairObservationsWithinWindow=false, native consumer=false,
+fullAccountReplayAuthorized=false. Never forge completeness to reuse old adapter.
+Read-only Python identity lookup checks actual original tradeId bytes and exact
+coordinate/time/token/side/price/size/tx; unknown/duplicate observations FAIL,
+never aggregate/zero volume. Not a consumption/queue allocator. Future native
+consumer must enforce one-time observation/component consumption independently.
+
+Six targeted tests PASS:all191/no selection, original451 exact preservation,
+raw status/duplicate logs, unproven metadata rejection, saved pool/digest parity,
+actual-source byte lookup and unknown/duplicate/scope failures. Default/native
+strategy, matching engine, old adapter/451 manifest and acceptance unchanged.
+
+Next strict native PARTIAL-pool consumer; verify ALL642/1,516 component tuples
+and duplicate/unknown guards, then complete native original-frame/timer runner
+and execution-relevance coverage proof before blind collection. No-order fast
+path requires explicit canonical equivalence with no active/reserved/due/cancel-
+pending order, not implemented here. SAME-source/config/coverage full baseline/
+candidate comparison pending; freeze full executable BEFORE independent PAPER.
+
+No new market/account net or simulated bot fills. Prior control-$1.80 after
+costs and conditional-$0.03747 vs+$0.11264 remain prior DEVELOPMENT evidence,
+not expanded-label account replay. Candidate full net UNKNOWN, NO_GO. PAPER
+only, strategy/queue/fees/risk/acceptance unchanged, PR9 unmerged; follow-up
+continues. Unknown dirty old activation archive preserved untouched.
+
+Complete local cached-pool regression:299 tests in314.337s, OK; six targeted
+cases in22.729s, OK. Frozen source/test/evidence/config hashes verified. Next
+push runs one offline pool-proof CI, not source capture/scan or account replay.

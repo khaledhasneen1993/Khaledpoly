@@ -1,0 +1,22 @@
+{
+  "command": "python3 -m unittest discover -s research/phase6/tests -q",
+  "tests": 299,
+  "durationSeconds": 314.337,
+  "result": "OK",
+  "targetedTests": 6,
+  "targetedDurationSeconds": 22.729,
+  "targetedResult": "OK",
+  "allReviewedCachedCandidatesRebound": 191,
+  "combinedBindings": 642,
+  "conservedMakerComponents": 1516,
+  "remainingUnboundObservations": 15675,
+  "frozenProofSourceEvidenceHashesVerified": true,
+  "newPublicReads": 0,
+  "newOriginalTapeScans": 0,
+  "modelFillsCreated": 0,
+  "netPnlRecomputed": false,
+  "nativePoolConsumerImplemented": false,
+  "fullAccountReplayAuthorized": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}
