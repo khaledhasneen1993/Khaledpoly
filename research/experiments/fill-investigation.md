@@ -4216,3 +4216,34 @@ is retained with native-proof/verification. The next workflow is separately
 frozen to download the unchanged original development source only after this
 retained proof, then run exactly baseline and unchanged QW0 once. Still no new
 capture/public reads/parameter tuning; complete net remains UNKNOWN.
+
+### Exact645 one same-source replay stops at next receipts — 2026-10-20
+
+Run39479346181/job118823518285 COMPLETE SUCCESS onf54e88c. The retained native645
+gate and18 tests passed, then the unchanged original development source was
+downloaded once. Baseline and unchanged QW0 each ran once with SOURCE_LAG0,
+fixed config, complete16317 identity index and exact645 pool. No new capture,
+RPC, strategy/queue/fee/latency/risk/acceptance/holdout change.
+
+Both profiles consumed the newly added receipt and stopped fail-closed at the
+next source-after-activation unknown. Baseline consumed839 source identities/
+3 known bindings, then stopped at seq82986, tx
+0xc9b48a2f8ed8998a334469807f4fa141b82e7848e10f86f27f2495e0bcf27621,
+tokenA BUY .32 size40, source1792269639627,42ms after activation. It had18 known
+components/212.846154 shares, all unused; queues0/0 and active112ms. QW0 consumed
+100 identities/2 known bindings, then stopped at seq9060, tx
+0x1e466a61b791aaf8b510dcf9ebc8a53c24efd67e866ab994a2044da81a02f651,
+tokenB BUY .52 size38.461539, source1792269594522,19ms after activation. It had
+17 known components/203.846154 shares, all unused; actual queues1182.3/180 and
+active88ms.
+
+Both stopped prefixes have executions0,holdings0,allocated0,queueAbsorbed0;
+paper orders canceled, halted safely. cash500/realized0/fees0 are INCOMPLETE
+PREFIX state, NOT net performance. Artifact12290241861,13708 bytes,SHA256
+ae76233de5e1ec7f209508aca9499afa2cf98184f173c4d398f8424d837b40a3.
+Complete account comparison false, full net UNKNOWN, acceptance not evaluated.
+
+NEXT obtain and verify ONLY the two exact new receipt targets above, then extend
+the separately frozen pool again before any further same-source replay. Do not
+rerun exact645 unchanged, widen receipt selection, infer fills from public size,
+or alter queue/fees/risk/strategy/holdout. PAPER/NO_GO, PR9 draft/unmerged.

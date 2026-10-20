@@ -1,0 +1,61 @@
+{
+  "scope": "VERIFIED_EXACT645_NEXT_TWO_RECEIPT_BLOCKERS_NOT_ACCOUNT_RESULT",
+  "runId": 39479346181,
+  "jobId": 118823518285,
+  "artifactId": 12290241861,
+  "artifactSha256": "ae76233de5e1ec7f209508aca9499afa2cf98184f173c4d398f8424d837b40a3",
+  "results": {
+    "candidate": {
+      "sourceConsumed": 100,
+      "knownReceiptBindingsConsumed": 2,
+      "knownComponents": 17,
+      "knownVenueQuantity": "203.846154",
+      "activeMs": 88,
+      "actualQueues": [
+        "1182.3",
+        "180"
+      ]
+    },
+    "baseline": {
+      "sourceConsumed": 839,
+      "knownReceiptBindingsConsumed": 3,
+      "knownComponents": 18,
+      "knownVenueQuantity": "212.846154",
+      "activeMs": 112,
+      "actualQueues": [
+        "0",
+        "0"
+      ]
+    }
+  },
+  "nextReceiptTargets": {
+    "candidate": {
+      "seq": 9060,
+      "eventIndex": 0,
+      "at": 1792269594591,
+      "sourceMs": 1792269594522,
+      "transactionHash": "0x1e466a61b791aaf8b510dcf9ebc8a53c24efd67e866ab994a2044da81a02f651",
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "side": "BUY",
+      "price": "0.52",
+      "size": "38.461539"
+    },
+    "baseline": {
+      "seq": 82986,
+      "eventIndex": 0,
+      "at": 1792269639697,
+      "sourceMs": 1792269639627,
+      "transactionHash": "0xc9b48a2f8ed8998a334469807f4fa141b82e7848e10f86f27f2495e0bcf27621",
+      "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "side": "BUY",
+      "price": "0.32",
+      "size": "40"
+    }
+  },
+  "modelFills": 0,
+  "completeAccountComparisonPerformed": false,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO"
+}
