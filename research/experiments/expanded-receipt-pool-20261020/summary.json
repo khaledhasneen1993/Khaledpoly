@@ -1,0 +1,31 @@
+{
+  "scope": "OFFLINE643_PARTIAL_POOL_NOT_ACCOUNT",
+  "bindings": 643,
+  "components": 1532,
+  "parent642Unchanged": true,
+  "poolLogicalSha256": "c41eda69ffe03ed06835a9fac403401f0d68aa3fa92b019bf37d410a212ee231",
+  "sourceIdentitiesSha256": "27ac545988149c87bdfd4caee963100b7d10eb2808e6a74d82ae4b8321c65423",
+  "portionsLogicalSha256": "f9a1bfd580ee26211d7b627407b428846d062967b379b42f253a4d640f198c29",
+  "routeComponentCounts": {
+    "DIRECT": 354,
+    "MINT": 1161,
+    "MERGE": 17
+  },
+  "nextMissing": {
+    "at": 1792269588894,
+    "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "coverage": "MISSING_SCOPED_PAIR_LABEL",
+    "eventIndex": 0,
+    "price": "0.57",
+    "publicTradeIdSha256": "48905bb6950c0add3371a402d116f580272b25a3b17abf17b4206d2e2cda49bd",
+    "seq": 628,
+    "side": "BUY",
+    "size": "12",
+    "sourceMs": 1792269588824,
+    "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "transactionHash": "0xab04630289f70e9cff07206d4ee31f5d291d73ba79bd4dd0c9281f0427d9ba90"
+  },
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

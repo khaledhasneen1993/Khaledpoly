@@ -3518,3 +3518,51 @@ freeze new manifest before native identity/tuple checks and original replay.
 Do not relabel this selected receipt as full-source/independent account proof.
 Acceptance, risk, fees, queue/frozen strategy unchanged; PAPER/NO_GO, PR9
 unmerged, full candidate net UNKNOWN and follow-up continues.
+
+## Expanded643 strict pool / native parity / next original stop — 2026-10-20 Amman
+
+Preflight latestb1acb18/PR9, all prior runs completed; no active overlap. Added
+ONLY proven original97 receipt to ALL642 parent bindings; parent artifact and
+each prior binding unchanged. New separately frozen PARTIAL pool643/1532 actual
+components (DIRECT354/MINT1161/MERGE17), native-unbound15,674. Zero new RPC reads,
+no guessed metadata pairs/window completeness or legacy-adapter changes.
+
+New expanded_receipt_pool reconstructs source-bound binding from retained raw
+receipt+block and existing corroborate decoder, preserves original sort/identity,
+rechecks global component uniqueness/integer tuples, and recovers ALL643 EXACT
+original tradeId bytes. Native UNCHANGED strict pool consumes643/643; ALL1532
+conservative28-digit BUY-UP/SELL-DOWN tuples match Python. Pool logical SHA
+c41eda69ffe03ed06835a9fac403401f0d68aa3fa92b019bf37d410a212ee231,
+source identity SHA27ac545988149c87bdfd4caee963100b7d10eb2808e6a74d82ae4b8321c65423,
+tuple SHA f9a1bfd580ee26211d7b627407b428846d062967b379b42f253a4d640f198c29.
+All39 original strict reader/session guards and2 rounding cases pass (37 pool
+guards plus2 separate SYNTHETIC session guards; none omitted). Entire94-source
+core plus research runner compileJava17; whole default-off report still EXACT
+original oracle. Separate synthetic cash498/A5 fixture is NOT market profit.
+
+29 targeted local tests in0.597s OK, including5 new exact parent preservation,
+native643 parity, next-original identity/count/config/volume and no-promotion
+checks. Prior full313 GitHub suite already passed; unchanged expensive suite
+not repeated. Core/native reader/old manifests/frozen strategy/parser/queues/
+fees/risks/config/acceptance untouched. New pool/summary/native proof/default
+oracle comparison retained under expanded-receipt-pool-20261020.
+
+Frozen expanded-pool-freeze ties exact new code/artifact/config BEFORE native
+same-source replay. One CI rebuilds Java21 proof, then loads SAME unchanged
+compressed original source and SAME643 pool/config for both policies. No new
+capture/census/RPC. Processes original97 once, expects conserved200 venue shares
+across16 components, strict halt at next missing original628/index0, source
+1792269588824/arrival1792269588894, tx
+0xab04630289f70e9cff07206d4ee31f5d291d73ba79bd4dd0c9281f0427d9ba90.
+Original628 source-based identity chosen from existing full census, not tuning
+on outcomes. Driver rejects wrong hash/clocks/count/config/volume, unrelated
+failure, non-halt or financial/qualification promotion. Actual628 diagnostic
+PENDING this CI; not inferred from local synthetic verifier tests.
+
+Next retain actual next-stop account/exposure evidence, then prioritize explicit
+canonical no-order transition equivalence rather than blindly/sequentially
+requesting thousands of receipts. No such shortcut implemented/authorized yet.
+Full SAME-source/config/coverage account comparison still pending; current
+candidate full net UNKNOWN. Prior-$1.80 control and selected exit-.03747/+ .11264
+remain OLD development evidence only. PAPER/NO_GO, acceptance unchanged, PR9
+draft/unmerged, follow-up continues; user dirty activation archive untouched.
