@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "scope": "ISOLATED_ATOMIC_NO_EXPOSURE_GUARD_NOT_EXECUTION_SKIP",
+  "parentCommit": "852fea4cdab573ef97e4b0a5076ff3e17867ead6",
+  "inputsSha256": {
+    "research/phase6/AtomicNoOrderGuardProbe.java": "031e4e0b7fb73731f497c2c3864472aab133f756052545593b4f83ca0156d6b1",
+    "research/phase6/atomic_guard_result.py": "da6c0e81d4a1153228efe5adf5eb08f8392687d86d094773ffd9199928e542f3",
+    "research/phase6/tests/test_atomic_guard.py": "b8e7896fba7c4d279818359598c6a24685573a6bca7a34f99a04c9edf3817af3",
+    "research/phase6/atomic_guard_build.py": "7fbe7a6377d32d5d657e9205e8b8011320072feae2a42ff1ece39a388bd8d5d8",
+    "research/phase6/full_runner_build.py": "271e333f9b1cfd25d2ca8a9442e31affba5a1228bf942accf6bb1a504479b25f",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00"
+  },
+  "prefixSourcesSha256": {
+    "polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java": "a57c2fd2efa14d7704a5c177e962e81855be9374687eec478faf368a72856251",
+    "polybot-core/src/main/java/com/polybot/hft/paper/PaperMatchingEngine.java": "12e89574023e0457d2066f8e50d660491a3ef182ae066bab4725cd40324fa84f",
+    "polybot-core/src/main/java/com/polybot/hft/risk/AccountLedger.java": "60b0cf31d1bbde7730168623c820704958e741a93860814a550371f8e3beccf7",
+    "polybot-core/src/main/java/com/polybot/hft/state/AtomicJsonState.java": "e0107e9b97e41ed0fcf8ca2507266f57b2067e47777eccd3c1bd7da55834f891"
+  },
+  "generatedSourcesSha256": {
+    "polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java": "f0187fc9382e294c337e0d9ed3e6094dca3b21a8896781d407cc9ff7f485f3bb",
+    "polybot-core/src/main/java/com/polybot/hft/paper/PaperMatchingEngine.java": "9680a2f4d326274ad9f0ffa9f42a9555140ab49d84b274f2fc41dcb4a0f74a48",
+    "polybot-core/src/main/java/com/polybot/hft/risk/AccountLedger.java": "d318c9896159119e201c4e665869fbd0449552e0ca7249438f79d6077712de5e",
+    "polybot-core/src/main/java/com/polybot/hft/state/AtomicJsonState.java": "11dd32c567c740b0713d44db0c9a8e28fa87425d88585ae68a2436bcb8770996"
+  },
+  "runtimeExecutionSkipImplemented": false,
+  "identityConsumerIntegrated": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

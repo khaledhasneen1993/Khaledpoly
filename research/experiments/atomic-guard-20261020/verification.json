@@ -1,0 +1,11 @@
+{
+  "scope": "VERIFIED_SYNTHETIC_ATOMIC_GUARD_NOT_RUNTIME",
+  "rejectionGuards": 22,
+  "atomicGuardImplementedInIsolatedBuild": true,
+  "identityConsumerIntegrated": false,
+  "original628StillUnresolved": true,
+  "runtimeExecutionSkipImplemented": false,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

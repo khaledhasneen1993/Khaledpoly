@@ -3766,3 +3766,47 @@ No capture/RPC/full source replay/account simulation. Current actual original
 integration before expiry/filter, not more early receipt collection; never skip
 exposure, null/empty bindings, aggregate fallback or unknown venue volume as0.
 PAPER/NO_GO. No new net result/independent qualification or acceptance change.
+
+### Atomic healthy-empty-session witness — 2026-10-20 Amman
+
+Reviewed latest852fea4/draftPR9 and completed Actions39417026089/39410095950/
+39403569864 before work. No overlapping market capture/source replay. Added
+EXACT copied-source atomic_guard_build.py, changing only FOUR generated classes,
+not original core or frozen policy/fees/queue/risk. Guard callback holds locks in
+session→ledger→matcher→checkpoint order for eligibility AND callback. Generated
+ledger/state close use owner monitors; persistence health rejects closed locks,
+channels, failed writes, restored ledger and recovered session checkpoint.
+
+Package-private callback witness cannot survive callback return/exception,
+another thread, or lost monitor ownership. Refuses any matcher order (including
+submitted/due/cancel pending/due/another token), pending FOK, residual unhedged
+timer, ledger reservation, nonzero shares OR basis, external/failed/stopped/
+halted state and unhealthy persistence. Due cancellation/activation is NOT
+advanced to manufacture eligibility.22 rejection fixtures PASS without changing
+matcher/account state; actual temporary-path write failures exercised, not just
+mock healthy booleans. Four competing monitor threads blocked then released;
+cross-thread and escaped/exception witness reuse rejected. Tests SYNTHETIC only.
+
+Local complete95-source generated Java17 build+helpers PASS.37 targeted Python
+tests in20.585s OK (4 new source-integrity/lifetime/scope/health tests). Whole
+DEFAULT oracle JSON unchanged. Existing2572 no-order execution differentials +
+2572 distinct future continuations,12 prototype unsafe contexts,3 synthetic
+whole session checkpoints and required repeated-component/public-print
+counterexamples rechecked under new generated guard build: PASS. No fabricated
+market fills/net; earlier synthetic expected fill counts remain fixture-only.
+
+Proof/freeze/README retained in atomic-guard-20261020; bounded Java21 workflow
+compiles same isolated sources and repeats proof/default/counterexamples, not
+market replay/RPC. Callback is NOT a registered execution path or generic runtime
+optimization permission. Native identity reader still NOT integrated with this
+callback. No unknown observation skipped, no null/empty labels/public aggregate
+fallback, no unknown venue volume assumed zero; original628 stop unchanged.
+
+Next bind EVERY original trade identity before expiry/filter, use scoped witness
+only for exact clock-only operation, preserve original frame/advance-action
+order and honest separate unknown-unallocatable venue counters. Freeze/test
+that integrated path before same-source replay advances to execution-relevant
+unknown; do not repeat captures or collect each early no-exposure receipt.
+Full candidate account net UNKNOWN; no new financial result/independent pass.
+PAPER/NO_GO. Acceptance unchanged; PR9 draft/unmerged, follow-up continues;
+unknown user dirty archive preserved.
