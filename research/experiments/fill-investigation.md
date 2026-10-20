@@ -3493,3 +3493,28 @@ new financial result: previous control-$1.80 and conditional exit-$0.03747 vs
 +$0.11264 remain OLD development evidence, NOT full candidate/independent net.
 PAPER only, NO_GO, criteria unchanged, PR9 unmerged; follow-up continues.
 Unknown dirty activation archive preserved untouched.
+
+### One-receipt follow-up completed and retained — 2026-10-20 Amman
+
+Run39388172877 SUCCESS on57e227d. Exact artifact12247259858,8160 bytes,
+SHA5d8bf1e09bd0a5ed2210a43e256e90b0122c36dc48aeac36427f9ee528c956aa,
+retained in first-blocker-receipt-20261020/artifact.zip. Exactly ONE public
+chain ID/receipt/block call each, no original-source rerun or capture.
+
+Independent first_blocker_result reads raw.json/report.json/selection.json from
+the hash-checked bounded archive, revalidates exact original selection and raw
+hash, re-decodes both ABI events and unique group with existing corroborate/
+routes, checks EVERY reported integer part, and rejects financial/qualification
+promotion or expanded request budget. Actual first missing transaction has16
+maker components:200 venue shares and114 USDC taker collateral; DIRECT55 shares,
+MINT145 shares. Original first-token SELL makers vs complementary BUY makers,
+not doubled public aggregate volume. Counterfactual queue allocation UNPROVEN.
+
+24 targeted local tests in0.589s OK, including3 new actual-artifact checks.
+No model bot fills or market/account net created. Native642 pool UNCHANGED;
+still15,675 native-unbound observations, now ONE more original raw receipt
+available. Next derive explicit643 pool preserving ALL642 prior bindings,
+freeze new manifest before native identity/tuple checks and original replay.
+Do not relabel this selected receipt as full-source/independent account proof.
+Acceptance, risk, fees, queue/frozen strategy unchanged; PAPER/NO_GO, PR9
+unmerged, full candidate net UNKNOWN and follow-up continues.
