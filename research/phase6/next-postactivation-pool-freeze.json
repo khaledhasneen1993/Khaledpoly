@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "experiment": "POSTACTIVATION-EXACT647-POOL0",
+  "scope": "DEVELOPMENT_NATIVE_PARITY_ONLY_NOT_REPLAY_OR_QUALIFICATION",
+  "poolLogicalSha256": "aa3f42e1cfff24fd5c9f3750136f56a4e23d7cd333a9d949e4224b176c4a4da4",
+  "sourceIdentitiesSha256": "fa34002142b3a0570217f6bd902f007963f82384d2cbd964a0e4e4151edf6a5b",
+  "portionsLogicalSha256": "e764d3ece8e79271f242edbfafe862f68aac87407068a0f67b4be3cfa31ee4f5",
+  "parent645PoolLogicalSha256": "16dab5fa70b908ccb5c7aeaaba803f2c5ac4f66b0efa50de6b2d1b82c0d662c7",
+  "originalBindings": 647,
+  "priorBindingsPreserved": 645,
+  "addedReceiptBindings": 2,
+  "actualComponents": 1536,
+  "routeComponentCounts": {"DIRECT": 357, "MINT": 1162, "MERGE": 17},
+  "originalTapeReplayed": false,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    ".github/workflows/next-postactivation-receipt-pool.yml": "b15ab5275bc610904f09f70d488092ce1ff636b0c872476f4f2563b8d8142a55",
+    "research/phase6/next_postactivation_receipt_pool.py": "6c966016fd6304458dc666e1574899f5869f950e25567c5ed0dc4f84e38926fc",
+    "research/phase6/NextPostActivationReceiptPoolProbe.java": "d716c101c07223267ad7d09de1e95d107a4da7c5c5955a29b39c8d46bcadbafe",
+    "research/phase6/tests/test_next_postactivation_receipt_pool.py": "12bb9505886c65ce3190c5b4b8a4020e7000f2a3fa97a666571ff6016f659a69",
+    "research/phase6/postactivation_receipt_pool.py": "2de2e390040a98078aeac205e9c106151551223c9539edba712d398274a19e12",
+    "research/phase6/next_postactivation_receipts.py": "f2a004d443803451dd27a0a7d5626bc3593f3428c5df2dc7f4e9521a62d3c63c",
+    "research/phase6/next_postactivation_receipts_result.py": "c7e044e3af728ed39eeaeb10d9441d9add1681fcfd0152619b6e72a7a292527c",
+    "research/experiments/next-postactivation-receipts-20261020/ci-artifact.zip": "bfc9043ca0ca851914b90aa388967d7eba7c7b6db0f906927b16356f04a2dcf1",
+    "research/phase6/ConservedReceiptPool.java": "c04ab462f829cda982d023c61a00036ccc1fcd7eec1bb25d114d91095886edc3",
+    "research/phase6/ConservedReceiptPoolProbe.java": "a5bdc10239baf3878cd2510c8f3f65a2424166d43077d68e36b2c7e90fdabbb5",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00"
+  }
+}
