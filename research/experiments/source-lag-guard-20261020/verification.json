@@ -1,0 +1,12 @@
+{
+  "scope": "VERIFIED_GENERATED_SOURCE_LAG0_ATOMIC_SYNTHETIC_INTEGRATION_NOT_ORIGINAL_REPLAY",
+  "rejectionGuards": 29,
+  "integrationChecks": 7,
+  "nativePredicateCorrespondenceCases": 1929,
+  "originalFrontierSyntheticEnvelopes": 2,
+  "atomicSessionWitnessImplementedInGeneratedBuild": true,
+  "originalTapeReplayed": false,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

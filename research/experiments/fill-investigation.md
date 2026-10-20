@@ -4054,3 +4054,38 @@ frontier preimages in synthetic envelope plus unsafe older-order/source+1ms.
 Only then justify ONE new same-source development comparison. No unchanged
 replay/proof repeat; full net UNKNOWN, no independent acceptance, PAPER/NO_GO.
 No workflow/freeze changes in evidence-retention commit; PR9 remains draft.
+
+### SOURCE_LAG0 generated atomic guard/integration — 2026-10-20
+
+Remotee7be0ae/PR9 draft checked, previous39450218277 and39443362971 COMPLETE
+SUCCESS, no active jobs. Implemented NEW separately generated matcher/session/
+helper profile; original/default code and old witness methods unchanged.
+Each already-active BUY checks source<=its OWN ACTUAL activated timestamp;
+no newest/max/nominal cutoff. No cancel pending, exact OPEN reservations,
+zero prior fills, flat holdings/basis, no FOK/unhedged, healthy fresh persistence,
+no recovery/external mode, nonnegative available cash;4 monitors hold through
+callback with thread/lifetime invalidation. No queue/fee/risk/latency tuning.
+
+Local native proof29 refusals (write failures/restored ledger included),4-monitor
+contention/lifetime checks,1929 native predicate/math correspondences,7 original
+97/628 indexed wrapper integration checks PASS. Both exact frontier preimages
+8739/82880 pass guard in EXPLICIT SYNTHETIC sessions with subset identity check,
+NOT full replay. Synthetic books use retained queues1182.30/180 and0/0; not
+original book reconstruction evidence. Full indexed runtime mode remains strict
+sequential16317 identities; subset mode still cannot attach or certify replay.
+Unknown volume remains UNKNOWN_NOT_ZERO and known97 quantity200 unchanged.
+
+Freeze:research/phase6/source-lag-guard-freeze.json; retained proof under
+research/experiments/source-lag-guard-20261020. New profile's clock counters
+separate nonempty-order and active-order cases; legacy preactivation counter
+unused. New workflow repeats proofs on Java21 BEFORE ONE original-development
+baseline/QW0 comparison. No market capture/RPC/holdout or strategy retune.
+
+NEXT await that new run, not duplicate it. If source>actual activation blocks,
+retain exact identity and queue/cancel audit, then obtain bounded settlement
+evidence; never weaken safety to manufacture fills/profit. Full net UNKNOWN,
+independent acceptance not passed; PAPER/NO_GO, PR9 draft/unmerged.
+
+Local55 targeted Python tests PASS31.080s; complete96-source Java17 generated
+build/new native proof, unchanged5144 source-lag math and DEFAULT before oracle,
+old22 atomic guards/prior9 indexed wrapper checks PASS. No source replay locally.
