@@ -3591,3 +3591,56 @@ canonical no-order transition equivalence deserves priority over thousands of
 blind/sequential receipt requests; still NOT implemented or authorized. Full
 account comparison and independent PAPER criteria remain unmet, candidate net
 UNKNOWN. PAPER/NO_GO, queues/fees/risk/acceptance unchanged; PR9 unmerged.
+
+## No-order execution differential / required counterexamples — 2026-10-20 Amman
+
+Preflight latest3cc0cdb/PR9 draft;39395096777 and all previous runs completed,
+no active overlap. Instead of blind/sequential receipt requests, implemented
+BOUNDED PROOF ONLY. No original core/reader/policy/parser/default/runtime edits,
+no original-source replay/census/capture/RPC. Strict original628 remains unresolved.
+
+New NoOrderDifferentialProbe resolves ALL643 exact original byte identities with
+unchanged strict pool and uses their1532 actual component tuples in4 explicit
+SYNTHETIC book contexts each (missing books/fresh pair/stale pair/missing member).
+2572 canonical acceptSettlement vs clock-only DIFFERENTIALS PASS with no matcher
+orders: exact Update plus ALL private matcher fields compared EXCEPT precisely
+settlementComponents/settlementVenue/settlementAllocated/settlementQueue/
+settlementUnused. Reflection read-only, bounded test processes only. Full
+matching-state equivalence is FALSE: known venue volume remains UNUSED, while
+clock-only does not know it; unknown volume must NEVER be claimed zero.
+
+For each case add later SYNTHETIC order with original250ms activation,2x queue
+and DISTINCT future component IDs:2572 future continuations PASS, exact updates
+and all non-settlement private matching fields. Test future fill-event counts
+are SYNTHETIC expected events, NOT bot market fills/performance. Required negative
+counterexample also PASS: SAME component reused later diverges because only
+original path recorded consumed component ID. Therefore full source identity
+index/global transaction uniqueness MUST precede any no-order witness. Legacy
+public TRADE vs TICK also demonstrably differs through tradeIds/duplicates;
+public aggregate fallback is NOT equivalent.
+
+Read-only prototype predicate rejects12 unsafe contexts (submitted/due/active,
+cancel pending/due, other-token order, ledger reservation, holdings, pending FOK,
+failed/stopped session, halted ledger). This is not a production guard: future
+implementation must be atomic in synchronized session/ledger/matcher execution
+and include persistence-health checks and exact original identity validation.
+
+Separate SYNTHETIC no-order session comparison passes3 checkpoints: whole ledger,
+whole audit, whole session report except exactly2 explicit label/volume metrics,
+all remaining private matcher fields. Later SAME two QW0 entries activate with
+same reservation/queue state, and predicate refuses further optimization. No
+general session-level equivalence claim or runtime authorization: flags FALSE.
+
+Java17 complete95-source research build+helpers PASS;21 targeted Python tests
+in0.282s OK,4 new no-promotion/counterexample/guard/source integrity cases.
+New frozen Java21 CI repeats only bounded offline proof. No repeated market
+data replay or receipt collection. Strict pool643/1532 and real628 blocker
+unchanged; full candidate net UNKNOWN, no new account result.
+
+Next full16,317 original identity index (frozen census+bound observations), raw
+byte/coordinate/transaction validation with duplicate rejection on EVERY trade;
+then explicit no-order witness (not null/empty label), atomic health/exposure
+guard and separate unknown-unallocatable venue counters. Only then freeze and
+advance SAME-source original replay to first execution-relevant unknown. No
+shortcut currently enabled. PAPER/NO_GO, fee/queue/risk/acceptance unchanged;
+PR9 draft/unmerged, follow-up continues; unknown user dirty archive untouched.
