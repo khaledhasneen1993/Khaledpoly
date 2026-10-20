@@ -55,3 +55,15 @@ failure or unhealthy session. Only after exact source/continuation testing and
 freeze may original SAME-source replay advance to execution-relevant unknowns.
 No shortcut is authorized by this commit. Candidate net UNKNOWN, PAPER/NO_GO;
 fees/queues/risk/acceptance unchanged, PR9 draft/unmerged.
+
+## Java21 CI independently completed
+
+Run39403569864 SUCCESS on613971e. Artifact12256497429 retained losslessly as
+ci-artifact.zip,1580 bytes, SHA256
+e67795d44525b07945d51d9c434138845db743d3644f6b4ccfef5fca6bcd5d27.
+Downloaded proof is independently passed through no_order_result.verify; exact
+output equals the producer verification.json. All2572 matcher/continuation
+cases,12 guards, three synthetic session checkpoints AND required divergence
+counterexamples reproduced. No runtime/source replay/receipt/account-PnL claim
+is promoted by CI success. Next step remains full identity index + atomic,
+healthy-session witness design with honest unknown-volume accounting.

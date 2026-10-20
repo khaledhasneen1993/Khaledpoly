@@ -3644,3 +3644,16 @@ guard and separate unknown-unallocatable venue counters. Only then freeze and
 advance SAME-source original replay to first execution-relevant unknown. No
 shortcut currently enabled. PAPER/NO_GO, fee/queue/risk/acceptance unchanged;
 PR9 draft/unmerged, follow-up continues; unknown user dirty archive untouched.
+
+### Java21 bounded differential CI retained — 2026-10-20 Amman
+
+39403569864 COMPLETE SUCCESS on613971e. Exact artifact12256497429,1580 bytes,
+SHAe67795d44525b07945d51d9c434138845db743d3644f6b4ccfef5fca6bcd5d27,
+retained in no-order-differential-20261020/ci-artifact.zip. Independent local
+verification of DOWNLOADED Java21 proof equals retained verification.json:
+2572 no-order matcher differentials +2572 distinct future continuations,
+12 conservative predicate rejections,3 synthetic whole session/ledger/audit
+checkpoints AND repeated-component/public-print divergence counterexamples.
+No runtime optimization/source replay/RPC/account comparison was introduced;
+original628 still unresolved. Next full identity index + atomic healthy-session
+witness, never empty labels/zero unknown venue volume or acceptance changes.
