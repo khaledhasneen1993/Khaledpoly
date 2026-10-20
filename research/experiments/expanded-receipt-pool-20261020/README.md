@@ -41,3 +41,21 @@ proven exposure-aware no-order equivalence to avoid blindly/sequentially fetchin
 thousands of irrelevant receipts. It is NOT implemented/authorized here. Full
 SAME-source/config/coverage account comparison remains pending; freeze executable
 before independent multi-market PAPER. Do not tune holdout/acceptance. PR9 draft.
+
+## CI completed and independently retained
+
+Run39395096777 SUCCESS on3e66649:Java21 ALL643/1532 parity,39 original guards,
+2 rounding boundaries, whole default-off parity and actual same-source628 stop
+PASS. Artifact12251716484 retained as ci-artifact.zip,15,048 bytes, SHA256
+37f62ac28456837a107eb021c7f7716e57fb9662f05902dcab89d253e685513e.
+expanded_pool_result independently checks retained native/source summaries,
+original oracle, BOTH exact628 failure identities/clocks, one consumed binding,
+16 unique/200 conserved venue shares, unchanged config, halt/open0 and no scope
+promotion. Original97 now processed ONCE in canonical matching; no public volume
+duplicated. Both prefix ledger histories/holdings/executions remain empty.
+No general no-order shortcut is proven/authorized; this is not zero full PnL.
+32 targeted tests in0.756s OK, including3 new actual-CI artifact revalidation
+cases. No repeated original replay/capture/RPC for this result-retention commit.
+Next prioritize canonical no-order transition proof using retained exposure and
+source chronology before thousands of sequential receipt requests. Account-
+complete comparison and independent PAPER acceptance remain pending, NO_GO.

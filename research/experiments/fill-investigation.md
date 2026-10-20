@@ -3566,3 +3566,28 @@ Full SAME-source/config/coverage account comparison still pending; current
 candidate full net UNKNOWN. Prior-$1.80 control and selected exit-.03747/+ .11264
 remain OLD development evidence only. PAPER/NO_GO, acceptance unchanged, PR9
 draft/unmerged, follow-up continues; user dirty activation archive untouched.
+
+### Expanded643 CI completed / actual original628 retained — 2026-10-20 Amman
+
+Run39395096777 SUCCESS on3e66649. Java21 ALL643 original identity/1532 tuple
+parity,39 strict pool/session guards,2 rounding cases, full default-off parity
+AND actual SAME-source baseline/candidate prefix all PASS. Artifact12251716484
+15,048 bytes retained in expanded-receipt-pool-20261020/ci-artifact.zip,
+SHA37f62ac28456837a107eb021c7f7716e57fb9662f05902dcab89d253e685513e.
+
+New expanded_pool_result independently checks the retained archive and exact
+643 source/native summaries against frozen source digests/default oracle,
+recomputes next-original missing identity from full census, runs strict
+verify_stop on BOTH native failures and compares saved same-source result.
+Original97 consumed ONCE;16 unique components/200 venue shares conserve across
+queue/allocated/unused. Both halt at ORIGINAL628/index0 with exact source/
+arrival/tradeId bytes/transaction, same643 coverage and unchanged config.
+Both prefix order histories/holdings/executions empty. No general no-order
+optimization, full account zero net or market profitability inferred.
+
+32 targeted local tests in0.756s OK, including3 new actual-CI retained proof
+checks. No duplicate replay/capture/RPC launched for retention. Next explicit
+canonical no-order transition equivalence deserves priority over thousands of
+blind/sequential receipt requests; still NOT implemented or authorized. Full
+account comparison and independent PAPER criteria remain unmet, candidate net
+UNKNOWN. PAPER/NO_GO, queues/fees/risk/acceptance unchanged; PR9 unmerged.
