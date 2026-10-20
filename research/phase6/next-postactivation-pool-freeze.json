@@ -16,7 +16,7 @@
   "independentPaperQualificationAllowed": false,
   "liveAllowed": false,
   "filesSha256": {
-    ".github/workflows/next-postactivation-receipt-pool.yml": "b15ab5275bc610904f09f70d488092ce1ff636b0c872476f4f2563b8d8142a55",
+    ".github/workflows/next-postactivation-receipt-pool.yml": "a89cbd96e4a886a735263f6782767edbb37c4daab2484aff7d9f322f0628137f",
     "research/phase6/next_postactivation_receipt_pool.py": "6c966016fd6304458dc666e1574899f5869f950e25567c5ed0dc4f84e38926fc",
     "research/phase6/NextPostActivationReceiptPoolProbe.java": "d716c101c07223267ad7d09de1e95d107a4da7c5c5955a29b39c8d46bcadbafe",
     "research/phase6/tests/test_next_postactivation_receipt_pool.py": "12bb9505886c65ce3190c5b4b8a4020e7000f2a3fa97a666571ff6016f659a69",
