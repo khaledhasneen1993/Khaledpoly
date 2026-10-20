@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "scope": "COMPLETE_ORIGINAL_CENSUS_INDEX_NOT_EXECUTION_AUTHORITY",
+  "sourceParentCommit": "f708a948de08e60222cedd584109eae82bbfb775",
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "allObservationIdentitiesSha256": "1f8d1d953f3755b8244c7ac11f7a3f72ccd8d73b1c9807b7cec417b6b710c1c2",
+  "expectedOriginalObservations": 16317,
+  "expectedAvailableRawPreimages": 643,
+  "filesSha256": {
+    "research/phase6/complete_source_index.py": "b9a7d48152057208e31fe37d6db44d8d08bdb4114ee8c749f5274a7ba3d829e5",
+    "research/phase6/tests/test_complete_source_index.py": "19528ee48f0fce2e6d0ef267a89b9125d2d28fc83eded4cb19a40ec5344fa308",
+    "research/experiments/complete-source-index-20261020/proof.json": "8ac973519fb45642810569e8c2c08b4b6ea76cdccf778a9b907e85b8fc1ddc95",
+    "research/phase6/full-tape-coverage-freeze.json": "60fd2d3307b4fce9e01facd1cbbeabcb5950ef79bc20b004a353697bc3edcd6e",
+    "research/phase6/full_tape_coverage_result.py": "2f7d7ca12768fe94c9746920d553a07a24c2b2bfc1ce2ebfce6091d54ef20f07",
+    "research/phase6/mixed_replay_labels.py": "9165a5fb688c27bf9b31fdd82e85abbfeb5e8b5f25b37d61b7959557978ccc31",
+    "research/phase6/expanded_receipt_pool.py": "c816c18c32b1e06a4bff34e26caa60537050524ba3eb4e606c8ec6db5c727b14",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00"
+  },
+  "runtimeOptimizationImplemented": false,
+  "nativeIdentityConsumerImplemented": false,
+  "atomicSessionGuardImplemented": false,
+  "fullAccountReplayAuthorized": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO"
+}

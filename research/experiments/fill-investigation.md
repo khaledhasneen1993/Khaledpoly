@@ -3657,3 +3657,43 @@ checkpoints AND repeated-component/public-print divergence counterexamples.
 No runtime optimization/source replay/RPC/account comparison was introduced;
 original628 still unresolved. Next full identity index + atomic healthy-session
 witness, never empty labels/zero unknown venue volume or acceptance changes.
+
+### Complete original identity index foundation — 2026-10-20 Amman
+
+Checked current branch f708a94 / draft PR9 and completed Actions39403569864 and
+39395096777 before work. No overlapping source replay, capture or receipt job.
+Reconstructed ALL16,317 original canonical identities from the retained complete
+census missing stream plus451 original conserved bindings. Exact logical digest
+1f8d1d953f3755b8244c7ac11f7a3f72ccd8d73b1c9807b7cec417b6b710c1c2
+reproduced. Joint global checks find16,317 distinct transaction hashes AND16,317
+distinct public identity hashes, including the previously bound451; none absent
+or repeated. Historical coverage classification is preserved, not promoted.
+
+New complete_source_index.py provides a fail-closed PYTHON REFERENCE consumer:
+immutable owned identities; seq/frame index/arrival/source/token/side/decimal
+price/quantity/exact original tradeId UTF8 hash/transaction validation; strictly
+ordered single consumption. Unknown/duplicate/reverse/mutated/missing input
+poisons the reader. Full mode cannot skip observations. Separate explicit subset
+mode validates ALL643 retained actual raw preimages but MUST reject complete
+consumption; it does. Other15,674 raw preimages were NOT fabricated or consumed.
+Index facts are bound to exact previous full source digest, not a new source scan.
+
+Local29 targeted tests PASS in18.378s (8 new test methods, including12 index
+mutation subcases and exact-byte/normalized/clock/coordinate/poisoning guards).
+An initial test assumed the earliest retained preimage was later than census
+start; actual original97 IS the first row. Corrected the assertion to a later
+observation; implementation unchanged, final full targeted run PASS. Frozen
+bounded offline GitHub workflow adds no engine dependency/capture/RPC/replay.
+Proof retained in complete-source-index-20261020/proof.json and reproducible.
+
+This step is NOT a native Java identity consumer, no-order witness, atomic
+session/exposure/persistence-health guard or runtime optimization. Strict real
+baseline/candidate remain stopped at628; full account net remains UNKNOWN.
+No new economic result, no aggregate fallback, empty bindings or zero unknown
+venue volume. No original core/helper/policy/fee/queue/risk/acceptance change.
+Next: native complete-index consumer with the same poisoned consumption rules;
+then atomic synchronized healthy-empty-account witness plus separate unknown
+unallocatable venue counters, with counterexample regressions retained. Freeze
+before advancing same original source; stop on first execution-relevant unknown.
+PAPER/NO_GO. Independent acceptance not met, follow-up continues; user dirty
+activation-result/artifact.zip.b64 untouched. No new market capture or RPC.
