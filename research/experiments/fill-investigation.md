@@ -4031,3 +4031,26 @@ Local checks:50 Python tests PASS in32.735s (new verifier includes13 mutation
 subcases), complete96-source generated Java17 build, old5144 preactivation
 differentials/22 atomic guards and DEFAULT before oracle parity PASS. Await new
 proof-only Java21 run after publication; no original source replay scheduled.
+
+### Source-lag Java21 evidence retained — 2026-10-20
+
+39450218277/job118722737363 COMPLETE SUCCESS on7d88f0655bb9c794937c9c0548f26ff21256930e.
+50 targeted Python tests PASS37.346s, native5144 source-lag differential/future
+cases and all prior preactivation/atomic/indexed/no-order/default proofs PASS.
+No recording replay, capture, RPC, holdout or strategy parameter search.
+
+Artifact12277499794,10611 bytes, SHA256
+ca77279140a0d98592ced523556446e71c4ff941012b95e024ca3ed0ce1fb76e
+retained source-lag-20261020/ci-artifact.zip. New source_lag_ci_result.py checks
+exact13 bounded members, native/local equality and unchanged prior verifiers/
+DEFAULT oracle;2 local retention tests. ci-verification.json records scoped
+proof, NEVER runtime authorization or financial result. Whole matcher state
+still differs in5 settlement bookkeeping fields. Synthetic111 future fills
+are test coverage ONLY. Current actual baseline82880/candidate8739 stops remain.
+
+NEXT separately implement+freeze atomic source-lag session witness preserving
+exact ledger/monitor/health/cancel/holding constraints, then test original actual
+frontier preimages in synthetic envelope plus unsafe older-order/source+1ms.
+Only then justify ONE new same-source development comparison. No unchanged
+replay/proof repeat; full net UNKNOWN, no independent acceptance, PAPER/NO_GO.
+No workflow/freeze changes in evidence-retention commit; PR9 remains draft.

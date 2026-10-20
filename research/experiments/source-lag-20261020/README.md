@@ -49,3 +49,22 @@ Local verification:50 targeted Python tests PASS (32.735s), including13 evidence
 mutation cases. Java17 complete96 generated source/helper compile PASS; prior
 5144 PRE_ACTIVATION0 differentials and22 atomic guard cases PASS unchanged;
 DEFAULT report equals frozen before oracle. New workflow repeats on Java21.
+
+## Java21 proof COMPLETE SUCCESS — run39450218277
+
+Source freeze commit7d88f0655bb9c794937c9c0548f26ff21256930e;
+job118722737363 completed2026-10-20T15:39Z.50 targeted Python tests PASS in
+37.346s, all native source-lag/prior proofs and default oracle PASS. No original
+recording download/replay step exists in this workflow, no new capture/RPC.
+
+Artifact12277499794,10611 bytes, SHA256
+ca77279140a0d98592ced523556446e71c4ff941012b95e024ca3ed0ce1fb76e
+retained as ci-artifact.zip. source_lag_ci_result.py validates exact bounded13
+members, native/local proof equality, unchanged prior temporal/indexed/atomic/
+counterexample/default verifications and scope. Two new retention tests included.
+ci-verification.json is proof preservation, not authorization for new execution.
+
+NEXT remains the separate atomic session witness plus actual-frontier synthetic
+integration tests described above. Current runtime/source frontier and full net
+unchanged. Do not rerun this frozen proof or original tape without a new reason.
+This retention-only commit does not alter workflow/freeze or trigger a new run.
