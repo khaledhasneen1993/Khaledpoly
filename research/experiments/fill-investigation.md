@@ -3751,3 +3751,18 @@ Keep repeated-component and public-TRADE-vs-TICK counterexamples. Freeze and
 validate before SAME original source advances to execution-relevant unknown.
 PAPER/NO_GO, independent acceptance unmet; no new net PnL. Unknown user dirty
 archive preserved, PR9 draft/unmerged; follow-up continues.
+
+### Java21 native source index CI retained — 2026-10-20 Amman
+
+39417026089 COMPLETE SUCCESS on603f287:33 targeted tests in12.449s, standalone
+Java21 compile and643 exact original preimages/23 guard cases PASS. Downloaded
+artifact12262047950,1358 bytes, SHA256
+d55fe31207cac39b926604fa6c2615cc2392e0db0b5206c7380865869f699daa
+retained in native-source-index-20261020/ci-artifact.zip with manifest. Bounded
+two-member ZIP verified; independent Python verifier reproduces CI verification,
+and parsed Java21 proof equals local Java17 proof (JSON field order may differ).
+No capture/RPC/full source replay/account simulation. Current actual original
+628 stop remains. Next atomic synchronized healthy-empty-session witness and
+integration before expiry/filter, not more early receipt collection; never skip
+exposure, null/empty bindings, aggregate fallback or unknown venue volume as0.
+PAPER/NO_GO. No new net result/independent qualification or acceptance change.
