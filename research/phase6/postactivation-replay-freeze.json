@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "experiment": "EXACT645-ONE-SAME-SOURCE-BASELINE-QW0",
+  "scope": "ORIGINAL_DEVELOPMENT_COMPARISON_NOT_INDEPENDENT_QUALIFICATION",
+  "sourceRunId": 39067539123,
+  "sourceStoredSha256": "9363443ae9287016ab7c63d3cf11d6b1ae33d814d9e3ad340bb99b33e7285074",
+  "sourceLogicalSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "poolLogicalSha256": "16dab5fa70b908ccb5c7aeaaba803f2c5ac4f66b0efa50de6b2d1b82c0d662c7",
+  "expectedReceiptBindings": 645,
+  "expectedActualComponents": 1534,
+  "profiles": ["baseline", "candidate"],
+  "candidate": "UNCHANGED_QW0",
+  "newPublicReads": 0,
+  "newMarketCapture": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    ".github/workflows/postactivation-pool-replay.yml": "098db503697227b00ed5463f21f0aa18a4dc59e3af295e79b704442be0eaebcf",
+    "research/phase6/postactivation_pool_replay.py": "132b5c234d27e88ae3b71cc173c98ea1b721565329506e0cace91f8754149c7c",
+    "research/phase6/postactivation_pool_inputs.py": "83966e530bce9b6317b402e9b1df468c5d528ee24692cfc84017e500936b4d08",
+    "research/phase6/postactivation_pool_build.py": "bdeed26c36619c45a240c380b0641598f22df9b0bfcf46ffa38a4d31d4f38be7",
+    "research/phase6/postactivation-pool-freeze.json": "081709dd00df1eb079c09790b4a74cdf052cfd38d693164f0d36973d3482f579",
+    "research/experiments/postactivation-receipt-pool-20261020/ci-artifact.zip": "279ef3b0a279c8dfc6ca0b722fcfaffcd8dc0a9c792374d7fd266712a34034bf",
+    "research/experiments/postactivation-receipt-pool-20261020/native-proof.json": "b75aee62a7de3059bfe721565b5dcb6abcff4eaa4c48d364349633854c69acc1",
+    "research/experiments/postactivation-receipt-pool-20261020/summary.json": "df58fef9dfa22c023e37543bd4807d9c55de3f2b5fc4a9d8781b3d64c19bc627",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00"
+  }
+}

@@ -4206,3 +4206,13 @@ passes, run one same-original-development-source baseline and unchanged QW0
 comparison. Do not repeat completed643/source-lag diagnostics, retune either
 profile, or change queue/fees/latency/risk/acceptance/holdout. Complete net after
 costs remains UNKNOWN; PAPER/NO_GO, PR9 draft/unmerged.
+
+GitHub run39478398235/job118820264563 COMPLETE SUCCESS on87ab3be. 29 Python
+tests PASS62.421s, then Java21 matched all645 identities/all1534 component tuples
+and39 fail-closed reader guards. No tape artifact was downloaded by this run.
+Artifact12291405729, SHA256
+279ef3b0a279c8dfc6ca0b722fcfaffcd8dc0a9c792374d7fd266712a34034bf,
+is retained with native-proof/verification. The next workflow is separately
+frozen to download the unchanged original development source only after this
+retained proof, then run exactly baseline and unchanged QW0 once. Still no new
+capture/public reads/parameter tuning; complete net remains UNKNOWN.

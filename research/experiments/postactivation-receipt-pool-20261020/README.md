@@ -19,3 +19,9 @@ same-source baseline/QW0 replay can run.
 No model fill, queue allocation, account comparison, PnL, or independent PAPER
 qualification is asserted here. Queue, fees, latency, risk, strategy and fixed
 acceptance criteria are unchanged. LIVE remains disabled.
+
+GitHub run `39478398235`, job `118820264563`, passed on Java 21: 29 Python
+tests in 62.421 seconds plus all645/all1534 native parity and the39 reader
+guards. Artifact `12291405729` has SHA-256
+`279ef3b0a279c8dfc6ca0b722fcfaffcd8dc0a9c792374d7fd266712a34034bf`.
+`native-proof.json` and `verification.json` retain the bounded result.
