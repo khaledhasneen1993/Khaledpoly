@@ -1,0 +1,60 @@
+name: PAPER original native replay first blocker
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/full-native-runner.yml', 'research/phase6/full-runner-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-original-native-runner
+  cancel-in-progress: false
+jobs:
+  strict-first-blocker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: Frozen source and complete offline regressions
+        run: |
+          python3 -c 'import json,hashlib; from pathlib import Path; f=json.loads(Path("research/phase6/full-runner-freeze.json").read_text()); assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in f["filesSha256"].items())'
+          python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: probe-engine
+      - name: Source-derived full parser build and synthetic differential; no market capture
+        run: |
+          python3 -m research.phase6.native_pool_inputs --output "$RUNNER_TEMP/runner-inputs"
+          python3 -m research.phase6.full_runner_build --output "$RUNNER_TEMP/runner-src"
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/runner-deps"
+          mkdir -p "$RUNNER_TEMP/runner-classes" research/output/full-native-runner
+          javac -cp "$RUNNER_TEMP/runner-deps/BOOT-INF/lib/*" -d "$RUNNER_TEMP/runner-classes" $(find "$RUNNER_TEMP/runner-src/polybot-core/src/main/java" -name '*.java') research/phase6/ConservedMixedReplayLabels.java research/phase6/ConservedMixedReplayLabelsProbe.java research/phase6/OfflineSessionLabels.java research/phase6/CanonicalSessionParityProbe.java research/phase6/FrozenResearchPolicies.java research/phase6/FrozenStrategySessionProbe.java research/phase6/ConservedReceiptPool.java research/phase6/ConservedReceiptPoolProbe.java research/phase6/NativeReplaySupport.java research/phase6/NativeFullTapeReplayProbe.java
+          java -cp "$RUNNER_TEMP/runner-classes:$RUNNER_TEMP/runner-deps/BOOT-INF/lib/*" com.polybot.hft.paper.NativeFullTapeReplayProbe "$RUNNER_TEMP/runner-synthetic"
+          cp "$RUNNER_TEMP/runner-synthetic/runner-proof.json" research/output/full-native-runner/synthetic-proof.json
+          cp "$RUNNER_TEMP/runner-src/full-runner-provenance.json" research/output/full-native-runner/build-provenance.json
+      - uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: original-source
+      - name: SAME original source baseline and frozen candidate; stop on first unknown
+        run: >-
+          python3 -u -m research.phase6.full_runner_diagnosis
+          --input-root original-source
+          --output research/output/full-native-runner/original-diagnosis
+          --classpath "$RUNNER_TEMP/runner-classes:$RUNNER_TEMP/runner-deps/BOOT-INF/lib/*"
+          --pool "$RUNNER_TEMP/runner-inputs/pool.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-native-first-blocker
+          retention-days: 7
+          path: research/output/full-native-runner/
+          if-no-files-found: error

@@ -1,0 +1,13 @@
+{
+  "scope" : "SYNTHETIC_FULL_PARSER_DIFFERENTIAL_NOT_MARKET_ACCOUNT",
+  "fullDefaultReportParity" : true,
+  "fullDefaultAuditParity" : true,
+  "interleavedTimerPreserved" : true,
+  "strictSyntheticCompleteTape" : true,
+  "sameFrameUnknownIndexHalts" : true,
+  "parserFrameMismatchHalts" : true,
+  "previousFixtureFillPreserved" : true,
+  "originalRows" : 12,
+  "originalReplaySha256" : "046d30999a763d2735fa114562dae66c9bfd2e1f7bcbfac0953094938b3b466f",
+  "marketNetPnlRecomputed" : false
+}

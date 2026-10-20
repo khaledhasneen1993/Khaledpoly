@@ -3384,3 +3384,68 @@ cases in1.432s, OK. Complete94-source Java17 native compile,642 identities/1516
 tuples,39 rejection guards,2 conservative rounding boundaries and default-off
 oracle pass. Frozen code/source/evidence/config hashes verified. Next push
 runs one Java21 native-proof CI; no repeated original scan/capture/account run.
+
+## Strict original-frame native runner and first-blocker diagnosis — 2026-10-20 Amman
+
+Preflight bad4738/draftPR9:run39361402048 COMPLETE SUCCESS,304 GitHub tests
+in355.498s;642 native original identities/1516 tuples,39 guards,2 rounding
+boundaries, full default-off report parity. Exact4766-byte proof artifact retained
+in full-native-runner-20261020/prior-native-proof.zip, SHA
+47f99be2086583949100ca001de47ba753512f9b4484f1973edccd03d5109d7d.
+Independent offline verifier also accepts the downloaded CI artifact. No active
+overlapping run, no new capture/RPC or original coverage-census rescan.
+
+New full_runner_build derives isolated NativeFullTapeReplay from EXACT original
+ClosedLoopReplay.java046d30999a763d2735fa114562dae66c9bfd2e1f7bcbfac0953094938b3b466f,
+using unique checked source anchors. Preserves the original parser/chronology:
+seq/runId, arrival/source clocks, raw/frame envelope and original event indexes,
+interleaved standalone timers, metadata, resolutions, gaps, recorded strategy
+decision scheduling and original reservation/activation/cancel/FOK/risk paths.
+No snippets/manual holdings/timer synthesis or unknown-as-zero/public aggregate
+fallback. Adds explicit partial-pool session construction and frozen policy
+enablement only. Original core untouched; generated session stays exact a57c2fd
+frozen policy source; generated runner SHA
+605407cb95ef0550fcc6d4ceac2c20cf31fe2f29cda3b7bb5eaf6d15dd80fde7.
+
+Every parser/label failure suspends/cancels, writes diagnostic full ledger/session,
+last attempted original observation+coordinate, cause chain and audit, then
+RETHROWS. No completed report or net-PnL/qualification claim on failed prefix.
+AuditedLabels delegates every resolve directly to strict pool; no null/empty
+binding suppression, post-hoc fill or no-order optimization.
+
+Complete local synthetic differential passes: WHOLE default report AND audit
+identical to original ClosedLoopReplay;12-row fixture includes standalone timer
+INSIDE raw/frame boundary. That timer correctly delays entry/activation; test
+trade timing was corrected to follow canonical activation, NOT altering the
+engine/recorded scheduling. Strict valid fixture consumes its label. Unknown
+index1 after valid index0 in SAME frame halts/cancels, preserves fixture cash498/
+A5; invalid frame ID also halts and writes failure. These are SYNTHETIC ONLY,
+not market fills/account results. Nine targeted Python build/diagnosis tests OK.
+
+Frozen full-runner-freeze.json ties code/tests/workflow, exact old compressed
+source, immutable642 pool, full census, strategy/config/acceptance. One new CI
+will check all regressions, compile source and repeat synthetic differential,
+then download SAME unchanged original compressed tape (no new market capture),
+verify its COMPRESSED hash and stream ORIGINAL prefix through both baseline and
+frozen QW0+exit candidate. Expected first unbound seq97/index0. Verifier requires
+EXACT tradeId byte hash/transaction/normalized facts/receive+source clocks from
+the retained full census, strict reader failure, ledger halt/open0 and unchanged
+configuration. JVM/parser/timeout errors cannot count as coverage evidence.
+
+This is first-blocker diagnosis only, NOT full 6,163,831-row account comparison;
+remaining15,675 unknown observations are not skipped or invented. No new market
+account net; old control-$1.80 and conditional-$0.03747 vs+$0.11264 remain prior
+DEVELOPMENT evidence. Full candidate net UNKNOWN, NO_GO. PAPER only, fee/queue/
+risk/acceptance unchanged, PR9 draft/unmerged; hourly follow-up continues.
+
+Next inspect first-blocker actual account/order state, then bound next receipt
+request OR prove canonical no-order transition equivalence before optimization.
+Blind collection15,675 not justified. Full SAME-source/config/coverage baseline
+and candidate replay still pending; freeze executable BEFORE independent PAPER.
+Unknown dirty original activation archive preserved untouched.
+
+Complete local native-runner regression:313 tests in450.356s OK;9 targeted
+new tests in0.048s OK. Complete Java17 frozen-source build and whole default
+report/audit parity plus synthetic frame/timer/halt preservation pass. Frozen
+files and generated runner hash verified. Original-source first-blocker
+diagnosis PENDING CI; no actual-source account result inferred from fixtures.
