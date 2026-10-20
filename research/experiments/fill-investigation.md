@@ -3810,3 +3810,26 @@ unknown; do not repeat captures or collect each early no-exposure receipt.
 Full candidate account net UNKNOWN; no new financial result/independent pass.
 PAPER/NO_GO. Acceptance unchanged; PR9 draft/unmerged, follow-up continues;
 unknown user dirty archive preserved.
+
+### Java21 atomic guard proof retained — 2026-10-20 Amman
+
+39424638964 COMPLETE SUCCESS oncdcffc6:37 targeted Python tests in22.406s,
+Java21 complete isolated core/helper compile,22 actual synthetic guard refusals,
+four monitor contention/lifetime checks, whole DEFAULT parity,2572 no-order
+differentials/continuations plus required reuse/public-print counterexamples.
+Downloaded artifact12264504808,3927 bytes, SHA256
+92ea7aab6c79ca8caca73157e1fed917843bd5dd8fa863c4b32783ace066fe20,
+retained in atomic-guard-20261020/ci-artifact.zip with provenance. Bounded five
+members verified independently: guard proof equals local Java17; guard and
+differential verifiers reproduce downloaded verification; DEFAULT JSON equals
+original oracle. No original market source replay/RPC/new account economics.
+
+Integration caution confirmed by source inspection: original TRADE becomes
+TICK on expiry BEFORE old pool resolve. Future complete identity consumption
+must occur before this branch; do not silently bypass identity or relax old
+pool.requireConsumed. Specify/prove expired-known binding accounting separately
+while preserving original expiry/clock/frame behavior. The atomic callback is
+available only in isolated generated sources, NOT yet a clock-only runtime
+operation. Original628 still strict stop; full net UNKNOWN. Next frozen exact
+identity+witness+separate unknown venue accounting integration, no fake labels,
+no independent qualification or changed criteria. PAPER/NO_GO, follow-up continues.
