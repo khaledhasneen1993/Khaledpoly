@@ -3882,3 +3882,48 @@ No independent/holdout/new capture/RPC data or strategy tuning. Next inspect
 these actual reports, diagnose first execution-relevant failure before any new
 bounded receipt read. Do NOT launch duplicate workflow. Full net UNKNOWN;
 PAPER/NO_GO, PR9 draft/unmerged; user dirty archive untouched, follow-up continues.
+
+### ACTUAL original replay advanced beyond628; pending-order frontier — 2026-10-20 Amman
+
+39433713918 COMPLETE SUCCESS on frozen3d5310a:41 targeted tests in22.407s,
+Java21 complete96-source/helper compile,9 integration checks,22 atomic guards,
+whole DEFAULT parity and2572 no-order differential/counterexamples PASS BEFORE
+original source download. Existing DEVELOPMENT recording downloaded ONCE, both
+profiles replayed SAME source/config, no capture/RPC/holdout/fresh-paper launch.
+
+Exact artifact12269456647,19375 bytes, SHA256
+1eee8b222b52ecc49c21d4deebecc98b16a7530f614ce5978421071df26509d9
+retained as ci-artifact.zip with all failure/ledger/queue-cancel audits. Offline
+indexed_replay_diagnosis.py independently checks bounded22 members, local/Java21
+proof equality, old default/atomic/differential verifiers, ALL original identity
+facts at source census position, frozen config, known component volume and exact
+submit/cancel chronology. New original-diagnosis.json is current frontier state;
+older differential proof flags are historical bounded-proof scope only.
+
+BOTH actual source executions pass628. Baseline consumes828 original identities,
+826 unknown atomic clock observations +1 real known97; stops at original82652.
+Candidate consumes87 identities,85 unknown clocks +1 known97; stops at8018.
+The final observation identity is consumed but its unknown execution NOT applied.
+Only known97 settlement volume200/16 components, entirely unused, is counted;
+unknown venue volume remains UNKNOWN_NOT_ZERO, not public size or zero.
+
+Important diagnosis: these are conservative PENDING-order stops, NOT evidence
+that the frontier print could fill an active order. Baseline submits pair5@.24/
+.71 at1792269639335, stops54ms later. Candidate QW0 submits pair5@.47/.48 at
+1792269594252, stops20ms later. Activation remains250ms; BOTH recorded trade
+source timestamps PRECEDE both order submissions. Actual audit confirms both
+orders canceled at halt, no fills/executions/holdings, ledger cash500/fees0.
+These stopped-prefix account values are NOT full net results or profitability.
+
+Baseline frontier tx0xabb9930366c096c65dfc936150f834b0232419ce46ef4d2f7fccfe23135bd60f;
+candidate tx0x9e0dfd50b48b5638e7ea9ab4ceba42d40e8fb680acdb2801498c1393af9a906d.
+Do not blindly collect every early waiting-order receipt. Next prove the narrow
+pre-activation/source-before-submit irrelevance case while preserving EXACT
+activation/cancel/frame/action/queue semantics and persistence locks; retain all
+unsafe active/due/cancel-due cases. Only after frozen differential proof may a
+new generated guard accept that case. Otherwise collect bounded exact frontier
+receipts. Existing strict atomic guard and frozen strategy remain unchanged.
+
+No complete account comparison/independent acceptance pass/new net PnL. No
+strategy retune, no relaxed risk/fee/queue/activation or criteria. PAPER/NO_GO;
+follow-up continues; unknown user dirty archive untouched, PR9 draft/unmerged.
