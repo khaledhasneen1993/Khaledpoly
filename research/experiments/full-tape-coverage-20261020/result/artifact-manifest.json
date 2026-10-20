@@ -1,0 +1,22 @@
+{
+  "sourceCommit": "2328229a352b54c68fa0b4fa6a142c9d2157e76c",
+  "runId": 39342821835,
+  "jobId": 118368228365,
+  "artifactId": 12228709938,
+  "artifactBytes": 1594521,
+  "artifactZipSha256": "882112d70db3b1926e235ebfd0a150fa5a3d6ffc40d0aac657358c9a2ed9a46e",
+  "members": {
+    "coverage.json": {
+      "bytes": 6363,
+      "sha256": "61a9546a098ca84baa2a95f7e4a5bdca4b9e40010b3355d3b38c16beab353ee1"
+    },
+    "missing-observations.jsonl.gz": {
+      "bytes": 1591157,
+      "sha256": "a386a36b1e353fb68124adb36b6eeaabc5b65f9e7196092e899a10fd2f0a84b8"
+    }
+  },
+  "githubOfflineTests": 288,
+  "githubOfflineTestSeconds": 296.068,
+  "githubConclusion": "success",
+  "liveAllowed": false
+}

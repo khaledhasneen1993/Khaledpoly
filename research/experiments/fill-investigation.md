@@ -3214,3 +3214,56 @@ Corrected census complete local regression:288 tests in275.584s, OK; final10
 targeted cases in0.006s, OK, also check all original inspector research kinds.
 Corrected freeze dependencies and unchanged acceptance/account config verified.
 No completed source scan or new financial result asserted before replacement CI.
+
+## Complete original coverage result independently reconstructed — 2026-10-20 Amman
+
+Preflight2328229/draftPR9 and run39342821835 COMPLETE SUCCESS:288 GitHub tests
+in296.068s, full census succeeded. No active overlapping Action. Downloaded
+artifact12228709938,1,594,521bytes, SHA256
+882112d70db3b1926e235ebfd0a150fa5a3d6ffc40d0aac657358c9a2ed9a46e.
+Retained exact2-member ZIP losslessly under full-tape-coverage-20261020/result/.
+No repeated full-source scan, capture, strategy experiment or RPC in this step.
+
+All6,163,831 original journal rows,3,000,583 RAW/frame pairs,20 metadata markets,
+18 with trades;16,317 trade observations:BUY15,024/SELL1,293. Existing451
+bindings/1,038 conserved components. Missing15,866 observations:4,219 scoped
+pair +11,647 other markets. ALL missing tx hashes present and distinct; zero
+known-tx aggregate suppression. Earliest missing at original seq97/event0,
+arrival1792269588213/source1792269588056,BUY200@0.57. Unknown is NOT zero.
+
+New independent verifier revalidates451 original receipt bindings offline and
+every missing identity/coordinate/receive clock/pair-side-price-size/hash;
+merges both original-coordinate streams to reproduce digest of ALL16,317 trades:
+1f8d1d953f3755b8244c7ac11f7a3f72ccd8d73b1c9807b7cec417b6b710c1c2.
+Not just matching counts or producer's coverage flag. Every journal/normalized
+count incl28,743 TICKs equals immutable pre-existing original inspector. Actual
+missing gzip logical/compressed hashes, first blockers and per-condition counts
+reproduced; fails altered rows even if caller updates their local gzip hashes.
+
+Indexed642 receipts from reviewed prior caches.191 MISSING observations have
+an existing cached receipt CANDIDATE;15,675 missing tx outside THIS reviewed
+cache. Presence is NOT new receipt corroboration, new labels, metadata pair
+proof, queue allocation or PnL. No exhaustive all-repository cache claim.
+Five new targeted regressions pass; new CI revalidates retained proof only,
+without rescanning original20GB source or calling public RPC.
+
+Next: rebind191 retained candidates where original metadata pair is proven;
+establish native multi-market full-source runner/exposure coverage contract and
+first execution-relevant missing route BEFORE blind bulk receipt collection.
+Any no-order-irrelevance shortcut must prove canonical transition equivalence
+and fail closed with any active/reserved/due/cancel-pending order, not silently
+zero unknown volume; not implemented/authorized here. Preserve source frames,
+timers, all cash/reservation/cancel/FOK/risk transitions. SAME-source/config/
+coverage baseline/candidate full account comparison still pending; freeze full
+executable BEFORE independent PAPER. Old control-$1.80 is prior-label baseline,
+not expanded-coverage replay; never force matching it after coverage improves.
+
+No new market-account net: selected conditional-$0.03747 vs+$0.11264 remains
+not whole-account performance. Candidate full account UNKNOWN, NO_GO. PAPER
+only, acceptance/strategy/queue/fees/risk unchanged, PR9 unmerged, follow-up
+continues. Unknown local old activation archive preserved untouched.
+
+Local complete result-verifier regression:293 tests in295.910s, OK; separate
+five new targeted tests in7.313s, OK. ZIP SHA/blob identity and unchanged
+acceptance/account config verified. Next push runs retained-proof-only CI,
+not original source scan or market capture; wait for its proof artifact.

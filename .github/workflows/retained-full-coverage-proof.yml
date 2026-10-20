@@ -1,0 +1,40 @@
+name: PAPER retained full-tape coverage proof
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/retained-full-coverage-proof.yml'
+      - 'research/phase6/full_tape_coverage_result.py'
+      - 'research/phase6/tests/test_full_tape_coverage_result.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-retained-full-coverage-proof
+  cancel-in-progress: false
+jobs:
+  offline-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unchanged acceptance and complete offline regressions
+        run: |
+          echo '7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503  research/phase2/acceptance.json' | sha256sum -c -
+          python3 -m unittest discover -s research/phase6/tests -q
+      - name: Reconstruct all original trade identities and reviewed cache index; no source rescan or RPC
+        run: |
+          python3 -m research.phase6.full_tape_coverage_result --output "$RUNNER_TEMP/full-coverage-proof"
+          cmp research/experiments/full-tape-coverage-20261020/result/verification.json "$RUNNER_TEMP/full-coverage-proof/verification.json"
+          cmp research/experiments/full-tape-coverage-20261020/result/reviewed-cache-inventory.json "$RUNNER_TEMP/full-coverage-proof/reviewed-cache-inventory.json"
+          cmp research/experiments/full-tape-coverage-20261020/result/artifact-manifest.json "$RUNNER_TEMP/full-coverage-proof/artifact-manifest.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: retained-full-coverage-proof
+          retention-days: 7
+          path: |
+            ${{ runner.temp }}/full-coverage-proof/verification.json
+            ${{ runner.temp }}/full-coverage-proof/reviewed-cache-inventory.json
+            ${{ runner.temp }}/full-coverage-proof/artifact-manifest.json
+          if-no-files-found: error

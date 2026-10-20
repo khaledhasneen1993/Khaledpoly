@@ -49,6 +49,13 @@ and frozen QW0/exit rules unchanged. No RPC or order submission.
 
 ## Next
 
+LATEST: corrected run39342821835 completed SUCCESS. Exact complete artifact,
+independent reconstruction of ALL16,317 trade identities,15,866 missing
+observations and191 reviewed-cache receipt candidates are retained in
+[result/README.md](result/README.md).293 local tests pass. No further full-source
+scan or new receipt request in this result verification. Historical preparation
+and failure notes below are preserved for provenance, not current run status.
+
 ### First census stopped safely; standalone timer correction
 
 Run39336641679 failed AFTER285 tests passed in322.708s and the complete original
@@ -84,10 +91,10 @@ seven tests in0.006s, OK. Frozen dependency hashes, downloaded prior GitHub proo
 and unchanged acceptance/config verified. Full source scan runs once on GitHub;
 no coverage totals are asserted before its output exists.
 
-Wait for this census instead of launching another source scan. Revalidate its
-original hashes, count conservation and missing-stream digest. Inspect missing
-routes / earliest blocker and reuse retained receipts before requesting any
-new bounded evidence. Build a fail-closed multi-market full-tape route/runner
+The completed census hashes/counts/full-identity digest are verified; do not
+launch another source scan. Rebind retained receipt candidates and inspect
+execution-relevant missing routes before requesting new bounded evidence.
+Build a fail-closed multi-market full-tape route/runner
 contract; only then compare baseline and frozen candidate on exactly the same
 complete source/config/coverage and freeze before independent PAPER.
 
