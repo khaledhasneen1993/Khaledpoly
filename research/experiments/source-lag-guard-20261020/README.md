@@ -44,3 +44,42 @@ Local checks:55 targeted Python tests PASS31.080s, complete96 generated source/
 helper Java17 compile, new native proof and unchanged5144 source-lag math proof,
 old22 atomic guards, prior9 indexed integration checks, DEFAULT before oracle
 equality PASS. These are bounded safety checks, not market-performance evidence.
+
+## ACTUAL original DEVELOPMENT run39459692699 — COMPLETE SUCCESS
+
+Frozen source commitda1211f2eccca29e865994f4090f8df55edb0000,job118755614423.
+Java21 preflight55 tests PASS20.938s, new29 guards/1929 correspondences/7 wrapper
+checks and both synthetic frontier envelopes PASS; unchanged old math/atomic/
+indexed/default proofs PASS before ONE original recording download/comparison.
+
+The actual source passes previous82880/8739 frontiers. Baseline now consumes838
+identities with836 unknown clocks (10 nonempty,2 already-active); stops82964.
+QW0 consumes99 identities,97 unknown clocks (12 nonempty,5 already-active);
+stops9035. Final identity consumed; unknown execution NOT applied. Both incomplete.
+
+Crucial change in evidence:source time is now AFTER actual activation, baseline
+18ms and candidate8ms. Arrival sees orders active86ms and79ms respectively.
+The proven temporal shortcut DOES NOT APPLY. Actual activation queues remain
+baseline0/0, candidate1182.30/180; unchanged at fail-closed cancellation. No bot
+executions/holdings before stop. Known original97 components16/quantity200 wholly
+unused; unknown venue quantity remains UNKNOWN_NOT_ZERO. Prefixcash500/fees0/
+realized0 is NOT full net after costs, which remains UNKNOWN; NO_GO.
+
+Bounded next receipt targets ONLY:
+- Baseline82964:0x6fb0a9218d26394ca3ce7f6874218e38ed8f886ca60e1dd3a6b44f1f43446590
+- Candidate9035:0x740e975da87f07493fd104e7a8aecead4727eb365955e732c8bc3ff4f5972a1c
+
+Do not infer maker components or fills from public BUY/price/size; obtain and
+independently verify these2 real settlement receipts before expanding the
+frozen real pool. No weaker temporal predicate or strategy/holdout tuning.
+Do not repeat this unchanged source run.
+
+Artifact12281674124,24788 bytes, SHA256
+74765c9e6b019b029b7dc2297b4087a368b02092aec179ff06db92102fe55b7c
+retained ci-artifact.zip with27 members and complete failure/queue/cancel audits.
+source_lag_guard_diagnosis.py independently rechecks actual source raw hash/tx,
+config, route counts, known volume, exact submit/activate/cancel chronology and
+queues; compares Java21 proof to local frozen math/guard/default evidence.
+Two additional local diagnosis tests include3 queue/temporal/volume mutations.
+No public RPC/new capture or second source replay during result diagnosis.
+This retention-only commit does not alter workflow/freeze or trigger another run.

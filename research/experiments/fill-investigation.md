@@ -4089,3 +4089,43 @@ independent acceptance not passed; PAPER/NO_GO, PR9 draft/unmerged.
 Local55 targeted Python tests PASS31.080s; complete96-source Java17 generated
 build/new native proof, unchanged5144 source-lag math and DEFAULT before oracle,
 old22 atomic guards/prior9 indexed wrapper checks PASS. No source replay locally.
+
+### SOURCE_LAG0 actual original frontier AFTER activation — 2026-10-20
+
+39459692699/job118755614423 COMPLETE SUCCESS, frozen sourceda1211f2eccca29e865994f4090f8df55edb0000.
+Java21 preflight55 Python tests PASS20.938s, new29 refusal/1929 correspondence/
+7 indexed integration checks and2 exact-frontier SYNTHETIC envelopes PASS;
+old source-lag/preactivation/atomic/indexed/no-order/default proofs unchanged.
+Then existing ORIGINAL DEVELOPMENT recording downloaded ONCE for baseline and
+unchanged QW0 candidate, same config, no capture/RPC/holdout/retuning.
+
+Actual previous82880/8739 passed. Baseline now838 identities/836 unknown clocks,
+10 nonempty-order/2 already-active; stops82964. Candidate99 identities/97 unknown
+clocks,12 nonempty-order/5 already-active; stops9035. Last identity consumed but
+unknown execution not applied. Both fail-closed, no complete account comparison.
+
+This new frontier has source AFTER actual activation:baseline18ms/candidate8ms.
+Orders active86ms/79ms at arrival. The proven temporal shortcut no longer
+applies; DO NOT weaken it. Actual queues baseline0/0,QW01182.30/180 unchanged
+before halt cancellation; executions/holdings0. Known original97 quantity200/
+16 components whollyunused; unknown venue volume remains UNKNOWN_NOT_ZERO.
+Prefixcash500/fees0/realized0 is not a full net result. Full net remains UNKNOWN.
+
+Exact next receipt targets:baseline82964 transaction
+0x6fb0a9218d26394ca3ce7f6874218e38ed8f886ca60e1dd3a6b44f1f43446590;
+candidate9035 transaction
+0x740e975da87f07493fd104e7a8aecead4727eb365955e732c8bc3ff4f5972a1c.
+Obtain/independently verify ONLY these2 actual receipts, parse conserved maker
+components and preserve raw original preimages BEFORE separately frozen expanded
+pool/new same-source comparison. Public aggregate BUY/price/size is NOT venue
+quantity or a bot fill. No unchanged replay; no new strategy/holdout tuning.
+
+Artifact12281674124,24788 bytes,SHA256
+74765c9e6b019b029b7dc2297b4087a368b02092aec179ff06db92102fe55b7c
+retained source-lag-guard-20261020/ci-artifact.zip. New diagnosis checks27 members,
+raw original source identity/tx, unchanged config, known volume, submit/actual-
+activation/queue/cancel audits, incomplete financial scope and local/Java21
+proof parity;2 local tests include3 mutation subcases. original-diagnosis.json
+is authoritative current frontier; older bounded proof flags remain historical.
+Retention commit does not touch workflow/freeze. PAPER/NO_GO, no independent
+acceptance pass, PR9 draft/unmerged; both pre-existing dirty archives preserved.
