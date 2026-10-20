@@ -1,0 +1,52 @@
+name: PAPER strict native partial receipt pool
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/native-receipt-pool.yml', 'research/phase6/native-receipt-pool-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-native-partial-pool
+  cancel-in-progress: false
+jobs:
+  native-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: Frozen proof dependencies and complete offline regressions
+        run: |
+          python3 -c 'import json,hashlib; from pathlib import Path; f=json.loads(Path("research/phase6/native-receipt-pool-freeze.json").read_text()); assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in f["filesSha256"].items())'
+          python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: probe-engine
+      - name: Exact native source build and actual original identity inputs; no public RPC
+        run: |
+          python3 -m research.phase6.native_pool_inputs --output "$RUNNER_TEMP/native-pool-inputs"
+          python3 -m research.phase6.strategy_profile_build --output "$RUNNER_TEMP/native-pool-src"
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/native-pool-deps"
+          mkdir -p "$RUNNER_TEMP/native-pool-classes" research/output/native-pool-proof
+          javac -cp "$RUNNER_TEMP/native-pool-deps/BOOT-INF/lib/*" -d "$RUNNER_TEMP/native-pool-classes" $(find "$RUNNER_TEMP/native-pool-src/polybot-core/src/main/java" -name '*.java') research/phase6/ConservedMixedReplayLabels.java research/phase6/ConservedMixedReplayLabelsProbe.java research/phase6/OfflineSessionLabels.java research/phase6/CanonicalSessionParityProbe.java research/phase6/FrozenResearchPolicies.java research/phase6/FrozenStrategySessionProbe.java research/phase6/ConservedReceiptPool.java research/phase6/ConservedReceiptPoolProbe.java
+      - name: ALL642 native identities and1516 tuples; synthetic unknown halts; unchanged default
+        run: |
+          java -cp "$RUNNER_TEMP/native-pool-classes:$RUNNER_TEMP/native-pool-deps/BOOT-INF/lib/*" com.polybot.hft.paper.ConservedReceiptPoolProbe "$RUNNER_TEMP/native-pool-inputs/pool.json" "$RUNNER_TEMP/native-pool-inputs/source-identities.json" "$RUNNER_TEMP/native-pool-proof"
+          java -cp "$RUNNER_TEMP/native-pool-classes:$RUNNER_TEMP/native-pool-deps/BOOT-INF/lib/*" com.polybot.hft.paper.CanonicalSessionParityProbe "$RUNNER_TEMP/native-pool-default"
+          cp "$RUNNER_TEMP/native-pool-proof/native-pool-proof.json" research/output/native-pool-proof/native-pool-proof.json
+          cp "$RUNNER_TEMP/native-pool-default/parity.json" research/output/native-pool-proof/default-after.json
+          cp "$RUNNER_TEMP/native-pool-src/strategy-build-provenance.json" research/output/native-pool-proof/build-provenance.json
+          python3 -m research.phase6.native_pool_result --root research/output/native-pool-proof > research/output/native-pool-proof/verification.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-partial-pool-proof
+          retention-days: 7
+          path: research/output/native-pool-proof/
+          if-no-files-found: error

@@ -3322,3 +3322,65 @@ continues. Unknown dirty old activation archive preserved untouched.
 Complete local cached-pool regression:299 tests in314.337s, OK; six targeted
 cases in22.729s, OK. Frozen source/test/evidence/config hashes verified. Next
 push runs one offline pool-proof CI, not source capture/scan or account replay.
+
+## Strict native PARTIAL pool and isolated session hook — 2026-10-20 Amman
+
+Preflight be81835/draftPR9; run39354913586 COMPLETE SUCCESS:299 GitHub tests
+in372.989s, all191 cached candidates re-derived byte-exactly. No active overlap.
+This step no original-tape rescan, market capture, receipt read or account replay.
+
+Recovered EXACT original tradeId byte preimages for ALL642 pool observations
+from retained source samples, each matching its source SHA256 AND normalized
+token/side/price/quantity/source facts. Not tx-only substitution or invented
+public print. Exact source-identity input SHA
+2c849a88837b0724e71bfc02bcddbbfa28da238a5ee2fe4c7f325236b3501056.
+
+New ConservedReceiptPool independent of frozen legacy adapters validates explicit
+PARTIAL envelope, static metadata pair/condition, allowed exchanges, uint256 raw
+amounts, unique sorted coords/tx/components, one DIRECT/MINT/MERGE group and BOTH
+share+collateral conservation. Reuses unchanged canonical Binding/Portion record
+types. Native actual consumption642/642 and ALL1,516 conservative BUY-UP/SELL-DOWN
+28-digit tuples match Python digest
+3fd8f2d4ce916cd2a70919431e81ec878cb26e94ad7e293ff81e515f6bce092c.
+requireConsumed rejects incomplete/failed consumption. Every successful binding
+consumes ONCE; ANY resolve failure poisons reader. Unknown ANY-token observation
+throws, including covered tx at wrong coordinate; NEVER null/empty/suppressed
+aggregate fallback.39 native rejection guards and2 extreme rounding boundaries.
+
+New reader implements EXISTING generic OfflineSessionLabels research protocol;
+no interface/window-adapter/core/frozen-policy edits, forged completeness or
+service flag. Compiled ALL94 frozen research core sources plus helpers onJava17.
+Uses unchanged a57c2fd integrated session variant. Full default-off native report
+equals untouched-core oracle. Source-built session hook proven SYNTHETIC ONLY:
+fresh500 ledger,QW0 0.4/0.4 q5, original250ms activation,2x100=200 queue;
+300 fixture shares =200 queue+5 allocated+95 unused. Cash498,A5/basis2 WITHOUT
+holding injection. Next known tx WRONG coordinate: ledger halt, cancel orders,
+reader poison, further input rejection, already-booked cash/inventory unchanged.
+These are fixture expectations, NOT market fills/profits/account evidence.
+
+Independent verifier checks source+component digests, complete consumption,
+partial/synthetic scopes, all original risk/fee/queue settings, synthetic volume
+and halt/inventory guards, complete default-off parity and source provenance.
+Five new targeted tests pass. New Java21 CI repeats native proof from retained
+data, not a source scan/capture/RPC. Original producer artifact (consumer=false)
+remains immutable historical claim; new proof separately attests native reader.
+
+Next complete original-frame/timer native runner and exposure-aware coverage
+proof, stopping at execution-relevant unknown before bounded receipt requests.
+No-order optimization requires explicit canonical equivalence, no active/
+reserved/due/cancel-pending orders, and no unknown-as-zero venue claim. Not yet
+implemented.15,675 original observations still unbound;642 adapter consumption
+is NOT selected-snippet account simulation. SAME-source/config/coverage full
+baseline/candidate replay pending; freeze executable BEFORE independent PAPER.
+
+No new market account net. Prior control-$1.80 after costs and conditional
+exit-$0.03747 vs+$0.11264 remain prior DEVELOPMENT, not expanded-coverage account
+results. Full candidate net UNKNOWN, NO_GO. PAPER only, acceptance/risk/queues/
+fees/frozen strategy unchanged, PR9 draft/unmerged, follow-up continues. Unknown
+dirty old activation archive preserved untouched.
+
+Complete local native-pool regression:304 tests in310.135s, OK; five targeted
+cases in1.432s, OK. Complete94-source Java17 native compile,642 identities/1516
+tuples,39 rejection guards,2 conservative rounding boundaries and default-off
+oracle pass. Frozen code/source/evidence/config hashes verified. Next push
+runs one Java21 native-proof CI; no repeated original scan/capture/account run.

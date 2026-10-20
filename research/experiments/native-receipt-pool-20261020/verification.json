@@ -1,0 +1,17 @@
+{
+  "scope": "VERIFIED_NATIVE_PARTIAL_POOL_AND_SYNTHETIC_SESSION_NOT_MARKET_ACCOUNT",
+  "originalIdentities": 642,
+  "conservedComponentTuples": 1516,
+  "rejectionGuards": 39,
+  "conservativeRoundingBoundaryCases": 2,
+  "allSourceIdentitiesAndTuplesMatchPython": true,
+  "completeDefaultOffParity": true,
+  "unknownAnyMarketFailsWithoutAggregateFallback": true,
+  "syntheticUnknownHaltsCancelsPreservesInventory": true,
+  "fullOriginalTapeCoverageProven": false,
+  "fullAccountMarketComparisonPerformed": false,
+  "marketNetPnlRecomputed": false,
+  "modelMarketFillsCreated": 0,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

@@ -1,0 +1,15 @@
+{
+  "sourceCommit": "be818359c3be9f9981261e0e9b1745c65794a856",
+  "runId": 39354913586,
+  "jobId": 118407384894,
+  "status": "completed",
+  "conclusion": "success",
+  "offlineTests": 299,
+  "testDurationSeconds": 372.989,
+  "all191CachedCandidatesReboundByteExactly": true,
+  "newPublicReads": 0,
+  "newSourceScans": 0,
+  "modelFillsCreated": 0,
+  "netPnlRecomputed": false,
+  "liveAllowed": false
+}

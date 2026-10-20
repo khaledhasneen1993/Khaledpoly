@@ -71,3 +71,12 @@ PAPER only, acceptance/strategy/queue/fee/risk unchanged, PR9 unmerged.
 Complete local regression:299 tests in314.337s, OK. Separate six targeted
 cases in22.729s, OK. All frozen code/test/source/evidence hashes verified.
 Next CI repeats offline pool derivation byte-for-byte, not a market experiment.
+
+FOLLOW-UP: run39354913586 SUCCESS. A strict native partial-pool reader now
+validates/consumes all642 actual identities and1,516 tuples, rejects unknown
+observations in ANY market and connects to the existing fresh offline session
+bridge. Its39 rejection guards, synthetic halt/cancel test and unchanged-default
+proof are retained in [native result](../native-receipt-pool-20261020/README.md).
+The frozen producer report's historical consumer=false flag stays immutable;
+new consumer status belongs to that newer proof. Full market runner/account
+comparison/independent acceptance remain pending; no new account PnL.
