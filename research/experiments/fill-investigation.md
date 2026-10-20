@@ -3697,3 +3697,16 @@ unallocatable venue counters, with counterexample regressions retained. Freeze
 before advancing same original source; stop on first execution-relevant unknown.
 PAPER/NO_GO. Independent acceptance not met, follow-up continues; user dirty
 activation-result/artifact.zip.b64 untouched. No new market capture or RPC.
+
+### Complete source identity CI retained — 2026-10-20 Amman
+
+39410095950 COMPLETE SUCCESS onfdb3f97:29 targeted offline tests in12.713s;
+independently rebuilt proof matches retained local proof byte-for-byte.
+Downloaded artifact12259190881,724 bytes, SHA256
+68f841a1c2a703a8cdfeb86516f8c153fb4e902182b9a74772d2941d38ca8b6c
+retained in complete-source-index-20261020/ci-artifact.zip with provenance.
+Exact downloaded proof.json again matches local reconstruction. Original16,317
+joint identities unique;643 actual preimages matched only as subset. No source
+replay, no execution/no-order skip, no account net or qualification promotion.
+Next native index consumer + atomic healthy-session witness; original628 remains
+the strict execution coverage stop. No new market/RPC job or changed criteria.
