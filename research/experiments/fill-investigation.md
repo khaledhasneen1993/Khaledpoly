@@ -3959,3 +3959,34 @@ overlapped. Prior9 indexed integration/expiry/identity rejection tests also pass
 on this generated profile. Check/await39443362971 reports before another replay;
 no complete result or net claim while running. This status-only commit does not
 touch workflow/freeze and must not trigger another comparison.
+
+### PRE_ACTIVATION0 actual original result retained — 2026-10-20
+
+39443362971 COMPLETE SUCCESS:44 targeted tests and all new/old Java21 proofs
+pass before ONE reuse of original DEVELOPMENT tape. Both profiles STOPPED again
+fail-closed:baseline original82880/836 identities/834 unknown clocks (8 new
+pre-activation), candidate8739/94 identities/92 unknown clocks (7 pre-activation).
+Previous frontiers82652/8018 passed. No complete account/PnL comparison.
+
+New frontier is ACTIVE at arrival, but source time still precedes activation:
+baseline active21ms, source49ms before activation; QW0 active4ms, source66ms
+before activation. Baseline actual activation queues0/0; candidate1182.30/180,
+unchanged at halt. QW0 decision-time proxies160/240 are NOT actual activation
+queues. Both pairs canceled at halt, executions/holdings0; prefixcash500/fees0/
+realized0 are NOT net results. Known original97 volume200 whollyunused; unknown
+venue volume remains UNKNOWN_NOT_ZERO. No fabricated fills/financial claims.
+
+Retained artifact12275333120,22389 bytes, SHA256
+f8dd0c2754b5ee15d6f78240d63dfdaf1aed7617537e5836139f0d029d0a0902
+at preactivation-20261020/ci-artifact.zip. preactivation_diagnosis.py reconstructs
+exact source identities and checks raw hash/tx, config, queues, activation/cancel
+audits, incomplete account scope and Java21/local proof parity. Two new tests
+include3 mutations rejecting queue/activation/print changes. original-diagnosis
+is the latest actual frontier; historical proof unresolved flags stay scoped.
+
+NEXT: no unchanged replay. Prove narrowly source-time at/before activation
+irrelevance even when arrival sees active orders, with canonical activation/
+cancel/frame/queue semantics and required unsafe counterexamples, before ANY
+new separately frozen guard; otherwise collect bounded exact frontier receipts.
+Do not weaken active/cancel/health guards or tune QW0/holdout/acceptance. PAPER/
+NO_GO; acceptance/config unchanged, PR9 draft/unmerged, follow-up continues.

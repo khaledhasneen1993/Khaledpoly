@@ -45,3 +45,34 @@ completion reports. Do not launch a duplicate. If a new frontier is active/due/
 cancel-pending, retain exact identity and queue/cancellation audit; do not weaken
 the temporal predicate. A complete source/account comparison is still required
 before any independent PAPER qualification. Full net remains UNKNOWN. NO_GO.
+
+## Actual original DEVELOPMENT result — run39443362971 COMPLETE SUCCESS
+
+All Java21 preflight proofs PASS. Both actual profiles advanced but again
+STOPPED FAIL-CLOSED. Baseline:836 source identities,834 unknown clocks including
+8 pre-activation clocks; stop82880 (previous82652). Candidate:94 identities,
+92 unknown clocks including7 pre-activation clocks; stop8739 (previous8018).
+The final identity was consumed; its unknown execution was NOT applied.
+
+Baseline pair becomes active1792269639585; stop arrives1792269639606,21ms later;
+trade source1792269639536 is49ms BEFORE activation. Actual queue0/0.
+QW0 pair activates1792269594503 (due4502); stop arrives1792269594507,4ms later;
+trade source1792269594437 is66ms BEFORE activation. Actual queues at activation
+are1182.30 and180, unchanged at stop, NOT the decision-time proxies160/240.
+Both pairs are canceled at halt, with no executions or holdings. Prefixcash500,
+fees0, realized0 are NOT complete net results. Only original97 known volume200
+is accounted, whollyunused; unknown venue quantity remains UNKNOWN_NOT_ZERO.
+
+Exact original source identity, transaction/raw hash, config, submit/activate/
+cancel chronology, queue, cost/account scope and Java21 proof parity are checked
+offline by preactivation_diagnosis.py and two additional tests (with3 mutation
+subcases). ci-artifact.zip is22389 bytes, SHA256
+f8dd0c2754b5ee15d6f78240d63dfdaf1aed7617537e5836139f0d029d0a0902,
+artifact12275333120. No original tape download or RPC in this offline diagnosis.
+
+Latest next step supersedes the running status above: do NOT repeat unchanged
+replay or collect every early receipt blindly. Prove the narrow source-time at/
+before activation case (including active arrival, exact activation/cancellation/
+queue ordering and unsafe counterexamples) before any SEPARATELY frozen guard;
+otherwise obtain only bounded exact frontier receipts. No strategy/holdout tune.
+No complete account comparison or independent acceptance; PAPER/NO_GO continues.
