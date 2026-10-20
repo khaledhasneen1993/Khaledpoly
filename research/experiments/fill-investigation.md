@@ -3449,3 +3449,47 @@ new tests in0.048s OK. Complete Java17 frozen-source build and whole default
 report/audit parity plus synthetic frame/timer/halt preservation pass. Frozen
 files and generated runner hash verified. Original-source first-blocker
 diagnosis PENDING CI; no actual-source account result inferred from fixtures.
+
+## Original first blocker retained and one-receipt bounded follow-up — 2026-10-20 Amman
+
+Preflight latest6e2dc1d/PR9 draft; no active overlap. Run39366694662 COMPLETE
+SUCCESS:313 GitHub tests in364.806s, native whole default report/audit parity,
+synthetic guards AND same original-source first-blocker diagnosis all pass.
+Retained exact12,202-byte original-native-first-blocker artifact12239219391 in
+full-native-runner-20261020/original-diagnosis.zip, SHA
+5a251717de06ad26c2920180fcc5fa8ec4fad72d725f64f02f85d742833e74a4.
+New independent verifier rechecks actual failure identities against frozen
+full-census first-missing row, pool/config/freeze lineage, both strict error
+chains, halted/open0, original config and SAME source for baseline/candidate.
+
+BOTH policies stop seq97/index0, arrival1792269588213/source1792269588056,
+original first-market BUY200@.57, transaction
+0x12251c3fc5cc98f770892d16a115904cec18f729ffb7f15d2f8558beeea196fc.
+Both retained ledger order histories, holdings, executions AND audit EMPTY;
+cash500,fees0,realized0. This proves the first prefix created no orders, NOT
+whole-account zero net, general no-order transition equivalence or permission
+to skip this/other unknown observations. Full account result still UNKNOWN.
+
+Added first_blocker_receipt: exact one-observation source/pair/condition-bound
+selection derived from retained original tradeId BYTES. Frozen budget1 receipt
+and1 matching block plus public chain ID. Read-only existing RPC whitelist,
+no live/client/wallet paths. Raw receipt saved BEFORE block request/decoding;
+resume reuses successful receipt, no silent fallback or fabricated labels.
+Same existing corroborate/routes decoder must find a UNIQUE shares+collateral
+conserved original group. Missing/failed/ambiguous data remains unresolved and
+saved; cannot become model fill/account/qualification evidence. No642-pool,
+core, matching, strategy, queue, fee, risk or acceptance edits.
+
+Five new targeted tests PASS;21 relevant original-parser/receipt/route regression
+tests in0.371s OK. ABI route fixture explicitly SYNTHETIC ONLY. Changed source/
+selection, bad chain/status/duplicate logs, public-write exclusion and block-
+failure receipt-resume guards covered. Unchanged full313 suite already passed
+on GitHub; no repeated heavy replay/capture/census. New one-receipt CI pending.
+
+Next retain returned raw receipt+block and independently decode/conserve it,
+then explicitly freeze any expanded partial pool before advancing native replay.
+General no-order equivalence still unproven; do not blindly fetch15,675. No
+new financial result: previous control-$1.80 and conditional exit-$0.03747 vs
++$0.11264 remain OLD development evidence, NOT full candidate/independent net.
+PAPER only, NO_GO, criteria unchanged, PR9 unmerged; follow-up continues.
+Unknown dirty activation archive preserved untouched.

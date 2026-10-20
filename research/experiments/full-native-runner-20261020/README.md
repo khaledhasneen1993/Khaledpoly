@@ -4,6 +4,26 @@ Local verification:313 Python regressions in450.356s OK;9 new targeted tests
 in0.048s OK; complete Java17 source compile and synthetic differential PASS.
 Original-source first-blocker diagnosis pending new CI, NOT run locally.
 
+Update:run39366694662 COMPLETE SUCCESS (313 tests in364.806s). Exact12,202-byte
+original-source diagnosis is retained in original-diagnosis.zip, SHA256
+5a251717de06ad26c2920180fcc5fa8ec4fad72d725f64f02f85d742833e74a4.
+Independent re-verification confirms BOTH policies stopped at original97/index0
+with exact identity and unchanged source/config. Both have EMPTY order history,
+holdings, executions AND audit, cash500/fees0/realized0; this is only a short
+failed prefix, not full-account zero PnL or profitability evidence. It does NOT
+prove a general no-order shortcut: strict rejection remains unchanged.
+
+One new, separately frozen experiment requests ONLY that exact public receipt
+and its block (at most1 each, plus public chain ID); no source replay/capture.
+Raw receipt is checkpointed BEFORE block lookup/decoding, so a later block
+failure cannot cause refetch of a successful receipt on resume. Selection is
+byte/source/condition/pair bound, never price/outcome selected. Original642
+pool/native matching/strategy/fees/risk/acceptance remain unchanged. Five new
+tests and21 targeted regressions pass in0.371s; previous full313 CI passed.
+Receipt collection and any subsequent pool extension remain pending this CI.
+Next retain/revalidate returned raw data, uniquely conserve the original route,
+then explicitly freeze any new partial-pool manifest before further replay.
+
 The previous partial-pool CI39361402048 succeeded on bad4738 (304 Python tests,
 642 original identities /1516 component tuples,39 guards). Its exact4766-byte
 artifact is retained as prior-native-proof.zip, SHA256
