@@ -1,0 +1,18 @@
+{
+  "scope" : "SYNTHETIC_ATOMIC_EMPTY_EXPOSURE_GUARD_NOT_EXECUTION",
+  "rejectionGuards" : [ "SUBMITTED", "ACTIVATION_DUE", "ACTIVE", "CANCEL_PENDING", "CANCEL_DUE", "OTHER_TOKEN", "LEDGER_RESERVATION", "HOLDING", "NONZERO_BASIS", "PENDING_FOK", "UNHEDGED_TIMER", "SESSION_FAILED", "ENTRY_STOPPED", "EXTERNAL_MODE", "RECOVERED_CHECKPOINT", "LEDGER_HALTED", "LEDGER_FAILED", "LEDGER_CLOSED", "CHECKPOINT_CLOSED", "CHECKPOINT_WRITE_FAILED", "LEDGER_WRITE_FAILED", "RESTORED_LEDGER" ],
+  "sessionLedgerMatcherCheckpointLocksHeld" : true,
+  "fourConcurrentMonitorUsersBlockedThenReleased" : true,
+  "witnessInvalidAfterReturnOrException" : true,
+  "crossThreadWitnessRejected" : true,
+  "guardDoesNotAdvanceMatcherOrAccount" : true,
+  "persistentWriteFailuresAndClosedStateRejected" : true,
+  "atomicGuardImplementedInIsolatedBuild" : true,
+  "defaultCoreModified" : false,
+  "identityConsumerIntegrated" : false,
+  "runtimeExecutionSkipImplemented" : false,
+  "originalTapeReplayed" : false,
+  "marketNetPnlRecomputed" : false,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false
+}

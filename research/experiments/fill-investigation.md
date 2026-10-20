@@ -3927,3 +3927,28 @@ receipts. Existing strict atomic guard and frozen strategy remain unchanged.
 No complete account comparison/independent acceptance pass/new net PnL. No
 strategy retune, no relaxed risk/fee/queue/activation or criteria. PAPER/NO_GO;
 follow-up continues; unknown user dirty archive untouched, PR9 draft/unmerged.
+
+### PRE_ACTIVATION0 frozen bounded proof — 2026-10-20
+
+Implemented a NEW generated-only temporal witness for healthy, flat sessions
+with strictly pre-activation BUY orders and exact OPEN ledger reservations.
+No pending cancellation, active/due order, SELL, inventory/FOK/unhedged exposure,
+failed persistence, external mode or recovered checkpoint can use it. Selection
+and callback hold session/ledger/matcher/checkpoint monitors; witness expires.
+Old empty-order guard and all original core/helper files remain unchanged.
+
+Local Java17 full96-source build,44 Python tests,5144 pending differential cases
+and5144 future continuations,23 temporal rejection guards,8 integrated exact
+original97/628 preimage checks, old22 atomic guards,2572 old empty differentials
+and DEFAULT oracle equality PASS. Synthetic future fills128 are test evidence
+ONLY, never market fills or profits. Queue200 from displayed100 times2 is checked
+at unchanged250ms activation. Repeated-component divergence stays negative.
+
+Freeze and evidence: research/phase6/preactivation-freeze.json and
+research/experiments/preactivation-20261020/. New workflow repeats proofs on
+Java21 before ONE reuse of existing original DEVELOPMENT tape for baseline and
+unchanged frozen QW0 candidate. No new source capture/RPC/holdout/retuning.
+No whole-account net result yet, no independent acceptance claim. Next inspect
+that run instead of rerunning; retain actual frontier and queue/cancel audit.
+If active/due/cancel-pending blocks, collect exact evidence, not weaker guards.
+PAPER/NO_GO, PR9 draft/unmerged, acceptance/config hashes unchanged.
