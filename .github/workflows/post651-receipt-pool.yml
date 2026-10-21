@@ -22,6 +22,15 @@ jobs:
           python3 -c 'import json,hashlib;from pathlib import Path;f=json.loads(Path("research/phase6/post651-pool-freeze.json").read_bytes());assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in f["filesSha256"].items())'
           python3 -m unittest research.phase6.tests.test_post651_receipt_pool research.phase6.tests.test_post651_next_receipts_result -q
           python3 -m research.phase6.post651_receipt_pool --output "$RUNNER_TEMP/pool653"
+      - name: Checkout frozen exact651 source-builder inputs only
+        uses: actions/checkout@v4
+        with:
+          ref: 2f47b7110908bd9311d410be75dd0173b14f04d7
+          path: frozen-source651
+          persist-credentials: false
+      - name: Generate the unchanged exact651 source bridge
+        working-directory: frozen-source651
+        run: |
           python3 -m research.phase6.next_postactivation_pool_build --output "$RUNNER_TEMP/source653"
       - uses: actions/download-artifact@v4
         with:
