@@ -4492,3 +4492,28 @@ NEXT extend a separately frozen653-binding/1553-component pool while preserving
 all651 prior bindings; prove native/source parity before any further replay. Do
 not repeat exact651, infer fills, weaken queue/fees/risk, retune, or inspect
 holdout. Complete net remains UNKNOWN; PAPER/NO_GO, PR9 draft/unmerged.
+
+### Exact653 multi-market native/source parity — 2026-10-21
+
+Run39645215982/job119378862118 COMPLETE SUCCESS on frozen commit394ceaf. The
+separate pool preserves all651 prior bindings byte-for-byte and adds only the
+two already verified post651 receipts:3 MINT components. Totals are653
+bindings/1553 components: DIRECT359, MINT1177, MERGE17.
+
+The Java reader consumed653/653 original identities and reproduced all1553
+component tuples while passing39 rejection guards. Frozen pool/source/portion
+SHA256 values are respectively a6faa2118ba0fdc721a6eb83876886169f0c68980c0c88e04c1cb82ce6835f3c,
+46b89213753fb0aa770aafac5899ba6bac170c647d177722571742a5981067d3,
+and 7d51c46cd5059d906bbd9cdd95d2311896112a3ef18bb1ee0f1451a31c913d94.
+Artifact12366354781,1234 bytes,SHA256
+b5fa03262248f0115006c776f798f4f590c7dc0bb1e50e8f98ee3c02fd39a338.
+
+The source bridge was generated separately from pinned exact651 commit2f47b71;
+no historical freeze was rewritten. This was offline native parity only: no tape
+replay, market RPC/capture, wallet/key/order, account PnL, acceptance evaluation,
+parameter or holdout change. No fills or profitability are claimed; complete net
+remains UNKNOWN.
+
+NEXT freeze exactly one same-source baseline/QW0 replay against exact653. Do not
+repeat parity, retune, inspect holdout, infer fills, or weaken queue/fees/latency/
+risk. PAPER/NO_GO, PR9 draft/unmerged.
