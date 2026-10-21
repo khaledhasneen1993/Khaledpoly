@@ -4517,3 +4517,32 @@ remains UNKNOWN.
 NEXT freeze exactly one same-source baseline/QW0 replay against exact653. Do not
 repeat parity, retune, inspect holdout, infer fills, or weaken queue/fees/latency/
 risk. PAPER/NO_GO, PR9 draft/unmerged.
+
+### Exact653 same-source baseline/QW0 replay — 2026-10-21
+
+Run39654814359/job119412159026 COMPLETE SUCCESS on frozen commit84ff7ae. The
+retained native653 gate and exact tests passed, then the unchanged original
+development source was used once per profile. No public read, capture, wallet,
+key, real order, retuning, or queue/fee/latency/risk/acceptance/holdout change.
+
+Baseline consumed843 source identities/11 known bindings and stopped at
+seq83158, tx
+0xbb752799ecb1eb8c8ca56909384fafb61ed8db5bbfee91e15e775311087d0307,
+tokenB BUY .70 size28.52857, source1792269639717. It conserved37 known maker
+components/486.071859 shares, all unused; actual queues0/0 and active201ms.
+QW0 consumed104 identities/6 known bindings and stopped at seq9379, tx
+0xc37adc86b7c52b5c6a910c1e3e37b089988c5c262060ce6bfe73efed55827629,
+tokenB BUY .52 size10.773585, source1792269594644. It conserved29 known maker
+components/353.424617 shares, all unused; actual queues1182.30/180 and active210ms.
+
+Both stopped prefixes have executions0,fills0,holdings0,allocated0 and
+queueAbsorbed0; all four PAPER orders were canceled and both sessions halted
+safely. cash500/realized0/fees0 are incomplete prefix state, NOT net
+performance. Artifact12371311452,13703 bytes,SHA256
+46eb57490c0b64e2f21ed89d3ee04fcf827100a679972e28ca5a8f91b754e142.
+Complete comparison false, full net UNKNOWN, acceptance not evaluated.
+
+NEXT obtain and verify ONLY the two exact receipt targets above, then extend a
+separately frozen pool before any further replay. Do not repeat exact653, infer
+fills, weaken queue/fees/risk, retune strategy, or inspect holdout. PAPER/NO_GO,
+PR9 draft/unmerged.
