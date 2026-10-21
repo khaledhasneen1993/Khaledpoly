@@ -4362,3 +4362,33 @@ No tape, RPC, replay, fill or PnL computation occurred. NEXT separately freeze
 ONE exact649 same-source baseline/unchanged-QW0 replay. Do not repeat parity,
 retune, weaken queue/fees/risk, or inspect holdout. Complete net remains
 UNKNOWN; independent acceptance not passed; PAPER/NO_GO, PR9 draft/unmerged.
+
+### Exact649 one same-source replay stops at next receipts — 2026-10-21
+
+Run39558018680/job119082298879 COMPLETE SUCCESS on138daeaa. The retained native649
+gate and5 targeted tests passed, then the unchanged original development source
+was downloaded once. Baseline and unchanged QW0 each ran once with SOURCE_LAG0,
+the complete16317-identity index and exact649 pool. No capture/RPC, retuning, or
+queue/fee/latency/risk/acceptance/holdout change occurred.
+
+Baseline consumed841 source identities/7 known bindings and stopped fail-closed
+at seq83130, tx
+0x172abaae63ece7822e54e3f6c2366f3dfd592fc2ed30e704ed5920e8849b0c0a,
+tokenB BUY .69 size31.37, source1792269639704. It conserved24 known maker
+components/358.529232 shares, all unused; actual queues0/0 and active189ms.
+QW0 consumed102 identities/4 known bindings and stopped at seq9227, tx
+0x94a8d9be925c766f49a620ee72ce3ba072c15ed87653d868dd9c3616ea6d2226,
+tokenB BUY .52 size66.79, source1792269594594. It conserved20 known maker
+components/280.769232 shares, all unused; actual queues1182.30/180 and active166ms.
+
+Both stopped prefixes have executions0,fills0,holdings0,allocated0 and
+queueAbsorbed0; all four PAPER orders were canceled and both sessions halted
+safely. cash500/realized0/fees0 are incomplete prefix state, NOT net
+performance. Artifact12327320316,13739 bytes,SHA256
+ad53ff83b0015613368875b46fff651c37b646c439ad35e4f769e2138f95e4e1.
+Complete comparison false, full net UNKNOWN, acceptance not evaluated.
+
+NEXT obtain and verify ONLY the two exact receipt targets above, then extend a
+separately frozen pool before any further replay. Do not repeat exact649, infer
+fills, weaken queue/fees/risk, retune strategy, or inspect holdout. PAPER/NO_GO,
+PR9 draft/unmerged.
