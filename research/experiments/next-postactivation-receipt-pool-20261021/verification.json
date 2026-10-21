@@ -1,0 +1,27 @@
+{
+  "scope": "VERIFIED_ALL647_NATIVE_PARITY_NOT_ACCOUNT",
+  "originalIdentities": 647,
+  "componentTuples": 1536,
+  "priorBindingsPreserved": 645,
+  "addedBindings": 2,
+  "readerRejectionGuards": 39,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "runId": 39518124376,
+  "jobId": 118955093214,
+  "artifactId": 12308562731,
+  "artifactSha256": "6c854c25ea475c9a97e5d62972858ccabf9982e37a218c94a81070c6b26ea975",
+  "poolLogicalSha256": "aa3f42e1cfff24fd5c9f3750136f56a4e23d7cd333a9d949e4224b176c4a4da4",
+  "sourceIdentitiesSha256": "fa34002142b3a0570217f6bd902f007963f82384d2cbd964a0e4e4151edf6a5b",
+  "portionsLogicalSha256": "e764d3ece8e79271f242edbfafe862f68aac87407068a0f67b4be3cfa31ee4f5",
+  "routeComponentCounts": {
+    "DIRECT": 357,
+    "MINT": 1162,
+    "MERGE": 17
+  },
+  "originalTapeReplayed": false,
+  "completeAccountComparisonPerformed": false,
+  "decision": "NO_GO",
+  "nextStep": "Freeze one exact647 same-source baseline/QW0 replay; do not retune, change holdout, weaken queue/fees/risk, or repeat parity."
+}

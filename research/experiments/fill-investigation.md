@@ -4274,3 +4274,22 @@ same-source baseline/QW0 replay. Do not repeat exact645, infer fills, weaken
 queue/fees/risk, retune strategy, or inspect holdout. Complete net after costs
 remains UNKNOWN; independent acceptance not passed; PAPER/NO_GO, PR9 draft and
 unmerged. Retention does not touch the workflow/freeze, so it triggers no read.
+
+### Exact647 native receipt-pool parity — 2026-10-21
+
+Run39518124376/job118955093214 COMPLETE SUCCESS on3434b05 after two compile-only
+dependency corrections; the data/regression step passed on every attempt and no
+market tape/RPC/replay was used. Java consumed all647 exact original identities
+and matched all1536 conservative component tuples with39 reader rejection
+guards. All645 prior bindings remain byte-for-byte equal; the two new bindings
+are DIRECT, yielding DIRECT357/MINT1162/MERGE17.
+
+Pool SHA256 aa3f42e1cfff24fd5c9f3750136f56a4e23d7cd333a9d949e4224b176c4a4da4;
+source identities fa34002142b3a0570217f6bd902f007963f82384d2cbd964a0e4e4151edf6a5b;
+component tuples e764d3ece8e79271f242edbfafe862f68aac87407068a0f67b4be3cfa31ee4f5.
+Artifact12308562731,1233 bytes,SHA256
+6c854c25ea475c9a97e5d62972858ccabf9982e37a218c94a81070c6b26ea975.
+
+NEXT separately freeze ONE exact647 same-source baseline/unchanged-QW0 replay.
+No strategy/queue/fee/risk/latency/acceptance/holdout change or parity rerun.
+Complete net remains UNKNOWN; independent acceptance not passed; PAPER/NO_GO.
