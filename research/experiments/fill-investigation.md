@@ -4392,3 +4392,27 @@ NEXT obtain and verify ONLY the two exact receipt targets above, then extend a
 separately frozen pool before any further replay. Do not repeat exact649, infer
 fills, weaken queue/fees/risk, retune strategy, or inspect holdout. PAPER/NO_GO,
 PR9 draft/unmerged.
+
+### Exact649 next two receipts verified — 2026-10-21
+
+Run39562983382/job119098396467 COMPLETE SUCCESS on91e0b30c. Thirteen offline
+tests passed before exactly1 chain-ID,2 receipt and2 matching-block public
+read-only calls. No tape replay, market capture, wallet/key/order, native pool
+extension, parameter, acceptance or holdout change.
+
+Candidate seq9227 is one conserved MINT group with8 maker BUY tokenA components,
+all at price.48 and totaling66.79 shares. Its recorded tokenA PAPER bid was.47,
+so none passes the necessary price condition. Baseline seq83130 is one conserved
+MINT group with2 maker BUY tokenA components at prices.32 and.30, totaling31.37
+shares. Its recorded tokenA PAPER bid was.24, so neither passes the necessary
+price condition.
+
+These10 public venue maker components are NOT bot fills. Queue allocation is
+unproven; model fills remain0 and account PnL was not recomputed. Artifact
+12328971016,16658 bytes,SHA256
+19634d571efb8ab38b34518a7371a781990c5082343b91d82bb1eb8f8786cbfc.
+
+NEXT extend a separately frozen651-binding/1550-component pool while preserving
+all649 prior bindings; prove native/source parity before any further replay. Do
+not repeat exact649, infer fills, weaken queue/fees/risk, retune, or inspect
+holdout. Complete net remains UNKNOWN; PAPER/NO_GO, PR9 draft/unmerged.
