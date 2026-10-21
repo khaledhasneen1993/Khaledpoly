@@ -4344,3 +4344,21 @@ NEXT extend a separately frozen649-binding/1540-component pool while preserving
 all647 prior bindings; prove native/source parity before another replay. Do not
 repeat exact647, infer fills, weaken queue/fees/risk, retune, or inspect holdout.
 Complete net remains UNKNOWN; PAPER/NO_GO, PR9 draft/unmerged.
+
+### Exact649 native receipt-pool parity — 2026-10-21
+
+Run39534147635/job119006749423 COMPLETE SUCCESS on84bddb8. Java consumed all649
+exact original identities and all1540 conservative maker-component tuples, and
+passed39 fail-closed reader guards. All647 prior bindings are unchanged. The
+four added components yield DIRECT359/MINT1164/MERGE17.
+
+Pool SHA256 377a4394ec3542dfa085f33771a238e030142303b327ef8a14caf3b93de6481a;
+source identities 3b6f19acbead128c23258057cf42feac6221d3489812bf1ef4480b38f9a630bf;
+component tuples 9187611be4eb2ad8d536d8b6176e609e551600c090cd26a33dff9854855fe20d.
+Artifact12317191472,1235 bytes,SHA256
+178d32559cbfff83689f85fbba608e491155a034b3f60b0270fc1c89292a03a7.
+
+No tape, RPC, replay, fill or PnL computation occurred. NEXT separately freeze
+ONE exact649 same-source baseline/unchanged-QW0 replay. Do not repeat parity,
+retune, weaken queue/fees/risk, or inspect holdout. Complete net remains
+UNKNOWN; independent acceptance not passed; PAPER/NO_GO, PR9 draft/unmerged.
