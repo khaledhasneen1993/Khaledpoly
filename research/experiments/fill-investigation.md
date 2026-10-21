@@ -4416,3 +4416,26 @@ NEXT extend a separately frozen651-binding/1550-component pool while preserving
 all649 prior bindings; prove native/source parity before any further replay. Do
 not repeat exact649, infer fills, weaken queue/fees/risk, retune, or inspect
 holdout. Complete net remains UNKNOWN; PAPER/NO_GO, PR9 draft/unmerged.
+
+### Exact651 native/source parity — 2026-10-21
+
+Run39572013713/job119128270610 COMPLETE SUCCESS on frozen commit987e4de. The
+separate pool preserves all649 prior bindings byte-for-byte and adds only the
+two already verified post649 receipts:10 MINT components. Totals are651
+bindings/1550 components: DIRECT359, MINT1174, MERGE17.
+
+The Java reader consumed651/651 original identities and reproduced all1550
+component tuples while passing39 rejection guards. Frozen pool/source/portion
+SHA256 values are respectively a6b28410c97ccd40a44e012aad3b9b647e77d00897ededc286ed884fc3ab7b9e,
+ec3b3a9cf3efb60a006e6a51de6253df26e2e64d110f35608912c076e8f264a1,
+and ae86d0977b02aca7aeb3c8af5ca5aa52ff4c612e69c112646a7c7144adb4f659.
+Artifact12331629082,1230 bytes,SHA256
+b50b77dcd5de6c23f6050a46104b54adebb7e4fc333bf49b7701eb9bc186e3e7.
+
+This was offline native parity only: no tape replay, RPC, market capture,
+wallet/key/order, account PnL, acceptance evaluation, parameter or holdout
+change. No new fills or profitability are claimed; complete net remains UNKNOWN.
+
+NEXT freeze exactly one same-source baseline/QW0 replay against exact651. Do not
+repeat parity, retune, inspect holdout, infer fills, or weaken queue/fees/latency/
+risk. PAPER/NO_GO, PR9 draft/unmerged.
