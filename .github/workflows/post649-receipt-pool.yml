@@ -1,0 +1,48 @@
+name: PAPER exact651 receipt pool native parity ONLY
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/post649-receipt-pool.yml', 'research/phase6/post649-pool-freeze.json']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-exact651-native-parity
+  cancel-in-progress: false
+jobs:
+  native-parity-no-tape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: Frozen651 expansion and regressions; no RPC or tape
+        run: |
+          python3 -c 'import json,hashlib;from pathlib import Path;f=json.loads(Path("research/phase6/post649-pool-freeze.json").read_bytes());assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in f["filesSha256"].items())'
+          python3 -m unittest research.phase6.tests.test_post649_receipt_pool research.phase6.tests.test_post649_next_receipts_result -q
+          python3 -m research.phase6.post649_receipt_pool --output "$RUNNER_TEMP/pool651"
+          python3 -m research.phase6.next_postactivation_pool_build --output "$RUNNER_TEMP/source651"
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: probe-engine
+      - name: Verify all651 native identities and1550 tuples
+        run: |
+          python3 -c 'import hashlib;from pathlib import Path;assert hashlib.sha256(Path("probe-engine/executor-service-0.6.0.jar").read_bytes()).hexdigest()=="bfc7bef081927f774374f92e5443c197e308e4828983dd9c19ac0ef280c45963"'
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/deps651"
+          mkdir -p "$RUNNER_TEMP/classes651" research/output/post649-pool651
+          javac -cp "$RUNNER_TEMP/deps651/BOOT-INF/lib/*" -d "$RUNNER_TEMP/classes651" $(find "$RUNNER_TEMP/source651/polybot-core/src/main/java" -name '*.java') research/phase6/ConservedMixedReplayLabels.java research/phase6/ConservedMixedReplayLabelsProbe.java research/phase6/OfflineSessionLabels.java research/phase6/CanonicalSessionParityProbe.java research/phase6/FrozenResearchPolicies.java research/phase6/FrozenStrategySessionProbe.java research/phase6/ConservedReceiptPool.java research/phase6/ConservedReceiptPoolProbe.java research/phase6/NativeReplaySupport.java research/phase6/CompleteSourceIdentityIndex.java "$RUNNER_TEMP/source651/research/phase6/IndexedExecutionLabels.java" research/phase6/IndexedReplaySupport.java research/phase6/Post649ReceiptPoolProbe.java
+          cp651="$RUNNER_TEMP/classes651:$RUNNER_TEMP/deps651/BOOT-INF/lib/*"
+          java -Xmx1g -cp "$cp651" com.polybot.hft.paper.Post649ReceiptPoolProbe "$RUNNER_TEMP/pool651/pool.json" "$RUNNER_TEMP/pool651/source-identities.json" "$RUNNER_TEMP/native651"
+          cp "$RUNNER_TEMP/native651/native-proof.json" "$RUNNER_TEMP/pool651/summary.json" research/output/post649-pool651/
+          python3 -c 'import json;from pathlib import Path;from research.phase6.post649_receipt_pool import verify_native;r=Path("research/output/post649-pool651");print(verify_native(json.loads((r/"native-proof.json").read_text()),json.loads((r/"summary.json").read_text())))'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exact651-native-parity-no-tape
+          retention-days: 7
+          path: research/output/post649-pool651/
+          if-no-files-found: error
