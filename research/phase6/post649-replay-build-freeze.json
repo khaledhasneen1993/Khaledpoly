@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "experiment": "EXACT651-GENERATED-REPLAY-BUILD",
+  "poolLogicalSha256": "a6b28410c97ccd40a44e012aad3b9b647e77d00897ededc286ed884fc3ab7b9e",
+  "generatedHelperSha256": "52de6306feeb5870a10f1e0fb98ca7c0315a6a61c0eabfd325826563e259b796",
+  "inputsSha256": {
+    "research/phase6/post649-pool-freeze.json": "52a1cbe97b757bf875f8fb19221e2c3b0f0bb1d860dd4b0a6c385fc7c960b07e",
+    "research/phase6/post649_receipt_pool.py": "f93590273b347f646d71117ecb68be9c12837a928a44f71223f70a01bea362a7",
+    "research/phase6/post649_pool_result.py": "418fe634ca891387b248cf8a4efcb941a9fa63a1e4ac37fc7ccdd03b2886311f",
+    "research/experiments/post649-receipt-pool-20261021/ci-artifact.zip": "b50b77dcd5de6c23f6050a46104b54adebb7e4fc333bf49b7701eb9bc186e3e7",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00"
+  }
+}
