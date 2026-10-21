@@ -32,6 +32,12 @@ def build():
         added.append(b);keys.add((b['seq'],b['eventIndex']));txs.add(tx)
     pool['bindings'].extend(added);pool['bindings'].sort(key=lambda b:(b['seq'],b['eventIndex']))
     if [b for b in pool['bindings'] if b.get('origin')!=ORIGIN]!=parent['bindings']:raise ValueError('Prior651 bindings changed')
+    markets={}
+    for binding in pool['bindings']:
+        normalized=sorted(binding['pair']);condition=binding['condition']
+        if condition in markets and markets[condition]!=normalized:raise ValueError('Condition mapped to multiple binary pairs')
+        markets[condition]=normalized
+    pool.update(scope='PARTIAL_MULTI_MARKET_RECEIPT_POOL_NOT_EXECUTION_MANIFEST',multiMarketBindings=True,bindingMarketPairs=dict(sorted(markets.items())))
     pool.update(expectedBindingCount=653,expectedComponentCount=1553,remainingUnboundObservations=15664,parent651PoolLogicalSha256=PARENT_LOGICAL_SHA,post651ReceiptBindings=2,post651ReceiptArtifactSha256=ZIP_SHA)
     counts=Counter(m['matchType'] for b in pool['bindings'] for m in b['matches'])
     if len(pool['bindings'])!=653 or sum(counts.values())!=1553 or counts!=Counter(DIRECT=359,MINT=1177,MERGE=17):raise ValueError('Incomplete653 expansion')

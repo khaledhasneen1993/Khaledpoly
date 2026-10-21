@@ -21,8 +21,9 @@ final class ConservedReceiptPool implements OfflineSessionLabels {
 
   ConservedReceiptPool(JsonNode root,ObjectMapper mapper) {
     this.mapper=mapper;
+    String scope=text(root,"scope");boolean multi=scope.equals("PARTIAL_MULTI_MARKET_RECEIPT_POOL_NOT_EXECUTION_MANIFEST");
     if(integer(root,"schema")!=1 || !text(root,"experiment").equals("CONSERVED-RECEIPT-POOL0")
-        || !text(root,"scope").equals("PARTIAL_SINGLE_MARKET_RECEIPT_POOL_NOT_EXECUTION_MANIFEST")
+        || !(scope.equals("PARTIAL_SINGLE_MARKET_RECEIPT_POOL_NOT_EXECUTION_MANIFEST")||multi)
         || !text(root,"unknownScopedObservation").equals("FAIL_CLOSED"))throw new IllegalArgumentException("Partial offline pool required");
     for(String k:List.of("partialLabels","metadataUsedOnlyForStaticPairIdentityNotDecisionFreshness","nativeSourceIdentityRecheckRequired"))flag(root,k,true);
     for(String k:List.of("allOriginalPairObservationsWithinWindow","nativePoolConsumerImplemented","netPnlRecomputed","candidateAccountSimulated",
@@ -32,14 +33,16 @@ final class ConservedReceiptPool implements OfflineSessionLabels {
     var metadata=root.path("metadataIdentityReference");flag(metadata,"negativeRisk",false);hashField(metadata,"sha256");
     String condition=text(metadata,"condition");if(!condition.matches("0x[0-9a-f]{64}"))throw new IllegalArgumentException("Recorded condition required");
     Set<String> pair=pair(metadata.path("pair"));
+    var marketPairs=new HashMap<String,Set<String>>();marketPairs.put(condition,pair);
+    if(multi){flag(root,"multiMarketBindings",true);var declared=root.path("bindingMarketPairs");if(!declared.isObject()||declared.size()<1||declared.size()>20)throw new IllegalArgumentException("Bounded market-pair map required");for(var it=declared.fields();it.hasNext();){var e=it.next();var declaredPair=pair(e.getValue());var prior=marketPairs.putIfAbsent(e.getKey(),declaredPair);if(!e.getKey().matches("0x[0-9a-f]{64}")||prior!=null&&!prior.equals(declaredPair))throw new IllegalArgumentException("Conflicting market pair");}}
     long count=integer(root,"expectedBindingCount"),expected=integer(root,"expectedComponentCount");
     if(count<1||count>5000||expected<1||expected>50000||!root.path("bindings").isArray()||root.path("bindings").size()!=count)throw new IllegalArgumentException("Bounded nonempty pool required");
     Set<String> ids=new HashSet<>(),txs=new HashSet<>();long lastSeq=-1,lastAt=-1;int lastIndex=-1;
     for(var n:root.path("bindings")) {
       long seq=integer(n,"seq"),idx=integer(n,"eventIndex"),at=integer(n,"at"),source=integer(n,"sourceMs");
-      String token=text(n,"token"),side=side(n),tx=text(n,"transactionHash");
+      String token=text(n,"token"),side=side(n),tx=text(n,"transactionHash"),bindingCondition=text(n,"condition");Set<String> bindingPair=pair(n.path("pair"));
       if(seq<=0||idx>Integer.MAX_VALUE||source>at||at<lastAt||seq<lastSeq||seq==lastSeq&&idx<=lastIndex
-          ||!condition.equals(text(n,"condition"))||!pair(n.path("pair")).equals(pair)||!pair.contains(token)
+          ||!marketPairs.containsKey(bindingCondition)||!marketPairs.get(bindingCondition).equals(bindingPair)||!bindingPair.contains(token)
           ||!tx.matches("0x[0-9a-f]{64}")||!txs.add(tx))throw new IllegalArgumentException("Invalid/duplicate/unordered pool identity");
       lastSeq=seq;lastIndex=(int)idx;lastAt=at;boolean buy=side.equals("BUY");
       var portions=new ArrayList<SettlementReplayLabels.Portion>();JsonNode taker=null;String exchange=null;long group=-1;
@@ -56,7 +59,7 @@ final class ConservedReceiptPool implements OfflineSessionLabels {
           if(!mt.equals(token)||ms.equals(side))throw new IllegalArgumentException("Invalid DIRECT route");
           q=buy?making:taking;c=buy?taking:making;value=c;
         } else if(route.equals(buy?"MINT":"MERGE")) {
-          if(!pair.contains(mt)||mt.equals(token)||!ms.equals(side))throw new IllegalArgumentException("Invalid complementary route");
+          if(!bindingPair.contains(mt)||mt.equals(token)||!ms.equals(side))throw new IllegalArgumentException("Invalid complementary route");
           q=buy?taking:making;c=buy?making:taking;value=q.subtract(c);
         } else throw new IllegalArgumentException("Unsupported route");
         if(c.signum()<=0||c.compareTo(q)>=0)throw new IllegalArgumentException("Invalid component price");
@@ -70,7 +73,7 @@ final class ConservedReceiptPool implements OfflineSessionLabels {
           ||new BigDecimal(shares,6).compareTo(decimal(n,"size"))!=0)throw new IllegalArgumentException("Nonconserved shares/collateral");
       String hash=hashField(n,"publicTradeIdSha256");BigDecimal price=decimal(n,"price");
       if(price.compareTo(BigDecimal.ONE)>=0)throw new IllegalArgumentException("Invalid public observation price");
-      Key key=new Key(seq,(int)idx);var binding=new SettlementReplayLabels.Binding(seq,(int)idx,at,source,hash,token,side,price,decimal(n,"size"),pair,List.copyOf(portions));
+      Key key=new Key(seq,(int)idx);var binding=new SettlementReplayLabels.Binding(seq,(int)idx,at,source,hash,token,side,price,decimal(n,"size"),bindingPair,List.copyOf(portions));
       if(bindings.putIfAbsent(key,binding)!=null)throw new IllegalArgumentException("Duplicate coordinate");transactions.put(key,tx);
     }
     components=ids.size();if(components!=expected)throw new IllegalArgumentException("Incomplete component count");
