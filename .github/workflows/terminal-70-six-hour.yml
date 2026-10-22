@@ -1,0 +1,118 @@
+name: Terminal maker MM | 70 USDC PAPER | 6h
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/terminal-70-six-hour.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: terminal-70-six-hour
+  cancel-in-progress: false
+
+jobs:
+  import_upstream:
+    name: Vendor pinned upstream without altering Khaledpoly core
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Clone and pin upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --no-checkout --depth 1 https://github.com/direkturcrypto/polymarket-terminal.git "$RUNNER_TEMP/polymarket-source"
+          git -C "$RUNNER_TEMP/polymarket-source" fetch --depth 1 origin e4e8d1f62cb6947a51c17ca9dab61ad29679f27f
+          git -C "$RUNNER_TEMP/polymarket-source" checkout --detach e4e8d1f62cb6947a51c17ca9dab61ad29679f27f
+          mkdir -p external/polymarket-terminal
+          rsync -a --exclude='.git' --exclude='node_modules' "$RUNNER_TEMP/polymarket-source/" external/polymarket-terminal/
+          printf '%s\n' 'Upstream: https://github.com/direkturcrypto/polymarket-terminal' 'Commit: e4e8d1f62cb6947a51c17ca9dab61ad29679f27f' 'Imported unmodified under external/polymarket-terminal. No wallet credentials included.' > external/polymarket-terminal/UPSTREAM.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add external/polymarket-terminal
+          if ! git diff --cached --quiet; then
+            git commit -m "Vendor pinned Polymarket Terminal under external without touching PAPER core"
+            git push origin HEAD:main
+          fi
+          test -f external/polymarket-terminal/src/maker-mm-bot.js
+          test -f external/polymarket-terminal/package.json
+
+  simulate_part_1:
+    name: PAPER public CLOB observer, 70 USDC, first 3h
+    needs: import_upstream
+    runs-on: ubuntu-latest
+    timeout-minutes: 205
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Self-tests and API preflight (read only)
+        run: |
+          python3 research/terminal_70_6h_paper.py --self-test
+          python3 - <<'PY'
+          import importlib.util, time
+          spec = importlib.util.spec_from_file_location("paper", "research/terminal_70_6h_paper.py")
+          x = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(x)
+          slot = (int(time.time()) // 900) * 900
+          market = x.market_for_slot(slot)
+          books = x.quote(market)
+          print("PUBLIC_CLOB_PREFLIGHT_OK", market["slug"], books)
+          PY
+      - name: Simulate 10800 seconds — NO orders, NO private key
+        run: |
+          python3 -u research/terminal_70_6h_paper.py --duration-seconds 10800
+      - name: Persist 3h bankroll, execution events and stats
+        uses: actions/upload-artifact@v4
+        with:
+          name: terminal-70-stage1
+          path: paper_runs/terminal_70_6h/
+          retention-days: 7
+
+  simulate_part_2:
+    name: PAPER public CLOB observer, 70 USDC, second 3h
+    needs: simulate_part_1
+    runs-on: ubuntu-latest
+    timeout-minutes: 205
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: terminal-70-stage1
+          path: paper_runs/terminal_70_6h/
+      - name: Verify carried bankroll and events
+        run: |
+          python3 - <<'PY'
+          import json
+          with open("paper_runs/terminal_70_6h/state.json") as f:
+              data = json.load(f)
+          assert data["stages_done"] == 1
+          assert data["initial_usdc"] == 70
+          print("CARRY_FORWARD_OK", data["cash"])
+          PY
+      - name: Simulate another 10800 seconds — NO orders, NO private key
+        run: |
+          python3 -u research/terminal_70_6h_paper.py --duration-seconds 10800
+      - name: Verify completed 6h and full report
+        run: |
+          python3 - <<'PY'
+          import json
+          with open("paper_runs/terminal_70_6h/summary.json") as f:
+              data = json.load(f)
+          assert data["stages_done"] == 2
+          assert data["started_with_usdc"] == 70
+          print("SIX_HOUR_PAPER_COMPLETE", json.dumps(data, indent=2))
+          PY
+      - name: Upload final 6h report, event log and ledger
+        uses: actions/upload-artifact@v4
+        with:
+          name: terminal-70-six-hour-results
+          path: paper_runs/terminal_70_6h/
+          retention-days: 14
