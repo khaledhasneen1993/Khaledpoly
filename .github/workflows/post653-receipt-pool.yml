@@ -31,12 +31,19 @@ jobs:
       - name: Generate unchanged exact653-compatible source bridge
         working-directory: frozen-source651
         run: python3 -m research.phase6.next_postactivation_pool_build --output "$RUNNER_TEMP/source655"
-      - uses: actions/download-artifact@v4
+      - name: Checkout frozen executor source after retained artifact expiry
+        uses: actions/checkout@v4
         with:
-          name: entry-witness-executor
-          run-id: 39168798844
-          github-token: ${{ github.token }}
-          path: probe-engine
+          ref: 6dc5f25aec764ae55ecf0610a617baba77b7a6f7
+          path: frozen-executor
+          persist-credentials: false
+      - name: Rebuild the frozen executor dependency container only
+        working-directory: frozen-executor
+        run: mvn --batch-mode --no-transfer-progress -DskipTests -pl executor-service -am package
+      - name: Stage frozen executor behind the original SHA-256 gate
+        run: |
+          mkdir -p probe-engine
+          cp frozen-executor/executor-service/target/executor-service-0.6.0.jar probe-engine/
       - name: Verify all655 native identities and1557 tuples
         run: |
           python3 -c 'import hashlib;from pathlib import Path;assert hashlib.sha256(Path("probe-engine/executor-service-0.6.0.jar").read_bytes()).hexdigest()=="bfc7bef081927f774374f92e5443c197e308e4828983dd9c19ac0ef280c45963"'

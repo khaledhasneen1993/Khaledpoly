@@ -16,7 +16,7 @@
   "independentPaperQualificationAllowed": false,
   "liveAllowed": false,
   "filesSha256": {
-    ".github/workflows/post653-receipt-pool.yml": "887efb915331447c78cd91538dd5dc2a0cf4d6eb4d5962daa167e176737fd475",
+    ".github/workflows/post653-receipt-pool.yml": "91478acf84b93ddfd6feb04499567da2383e96a3cbd7affe7e1d2860d66817df",
     "research/phase6/post653_receipt_pool.py": "56ae1081912bda31a083cfde2eaf2219398011684e399d9685bd0255aaded06a",
     "research/phase6/Post653ReceiptPoolProbe.java": "95b1e2920ef7309a68ac19dfcb848a4f23bf01f58b32989ffa4a75f530105d88",
     "research/phase6/tests/test_post653_receipt_pool.py": "f7b24a3623dd528f1932324ef01e3feb080fc69b535991bf434e5652efb4b0bb",
