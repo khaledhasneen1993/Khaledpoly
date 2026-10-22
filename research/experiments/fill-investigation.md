@@ -4546,3 +4546,28 @@ NEXT obtain and verify ONLY the two exact receipt targets above, then extend a
 separately frozen pool before any further replay. Do not repeat exact653, infer
 fills, weaken queue/fees/risk, retune strategy, or inspect holdout. PAPER/NO_GO,
 PR9 draft/unmerged.
+
+### Exact653 next two receipts verified — 2026-10-22
+
+Run39823548337/job119980758578 COMPLETE SUCCESS on frozen commit7bbdb67.
+Thirteen offline tests and frozen dependency hashes passed before exactly1
+chain-ID,2 receipt and2 matching-block public read-only calls. No replay,
+capture, wallet/key/order, native pool extension, parameter, acceptance or
+holdout change occurred.
+
+Candidate seq9379 is one conserved MINT group with3 maker BUY complement
+components:5 shares at.48,5 at.48 and.773585 at about.470000065. Its recorded
+complement PAPER bid was.47, so none passes the necessary price condition.
+Baseline seq83158 is one conserved MINT group with1 maker BUY complement
+component:28.52857 shares at.30. Its recorded complement PAPER bid was.24, so
+it does not pass the necessary price condition.
+
+These4 public venue maker components are NOT bot fills. Queue allocation is
+unproven; model fills remain0 and account PnL was not recomputed. Artifact
+12444908879,15899 bytes,SHA256
+3f9febab2dbc952e6ea6d8c072b417d8df6bc80b9b07f608814da940130b1bdd.
+
+NEXT extend a separately frozen655-binding/1557-component pool while preserving
+all653 prior bindings; prove native/source parity before any further replay. Do
+not repeat exact653, infer fills, weaken queue/fees/risk, retune, or inspect
+holdout. Complete net remains UNKNOWN; PAPER/NO_GO, PR9 draft/unmerged.
