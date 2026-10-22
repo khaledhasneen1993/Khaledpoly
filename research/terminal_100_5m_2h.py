@@ -181,7 +181,7 @@ def run(s, stage_seconds, events, state_path, heartbeat_seconds):
                 m={"slug":active["slug"],"yes":active["tokens"]["yes"],"no":active["tokens"]["no"]}
             if m is None:
                 s["counters"]["rejected_markets"]+=1
-                continue
+                raise ValueError("No qualifying public 5m market data")
             q=quote(m)
             last_q=q
             consecutive_failures=0
