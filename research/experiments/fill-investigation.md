@@ -4571,3 +4571,33 @@ NEXT extend a separately frozen655-binding/1557-component pool while preserving
 all653 prior bindings; prove native/source parity before any further replay. Do
 not repeat exact653, infer fills, weaken queue/fees/risk, retune, or inspect
 holdout. Complete net remains UNKNOWN; PAPER/NO_GO, PR9 draft/unmerged.
+
+### Exact655 multi-market native/source parity — 2026-10-22
+
+The initial run39834162733 failed after all exact655 tests/build checks because
+the pinned three-day executor artifact from run39168798844 had expired. No Java
+parity or market experiment ran in that attempt. Commit8b144dc rebuilt the same
+dependency container from frozen source6dc5f25 and kept the original executor
+JAR SHA256 gate; no strategy, data, queue, fee, latency, risk, acceptance or
+holdout setting changed.
+
+Run39835654997/job120023157665 then COMPLETED SUCCESS. The separate pool
+preserves all653 prior bindings byte-for-byte and adds only the two already
+verified post653 receipts:4 MINT components. Totals are655 bindings/1557
+components: DIRECT359, MINT1181, MERGE17.
+
+The Java reader consumed655/655 original identities and reproduced all1557
+component tuples while passing39 rejection guards. Frozen pool/source/portion
+SHA256 values are respectively 6dcf2f28956569965373d60ff040c2737d4c8412d812ac50def2b5608fb2881f,
+949af3a6b94b8396644fdc450c09e613229b1962c3b97d201062fe0169d8899e,
+and 67a2c1868b53ddf62387bc23c2394d176e6bc9f8aa38c1c5b81b2a19d3f08ae6.
+Artifact12451735626,1237 bytes,SHA256
+9de488b2932dba7e8e631ad37e43dd70f47c43caa32112ffa57208440bed3640.
+
+This was offline native parity only: no tape replay, market RPC/capture,
+wallet/key/order, account PnL, acceptance evaluation, parameter or holdout
+change. No fills or profitability are claimed; complete net remains UNKNOWN.
+
+NEXT freeze exactly one same-source baseline/QW0 replay against exact655. Do not
+repeat parity, retune, inspect holdout, infer fills, or weaken queue/fees/
+latency/risk. PAPER/NO_GO, PR9 draft/unmerged.
