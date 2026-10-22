@@ -4601,3 +4601,35 @@ change. No fills or profitability are claimed; complete net remains UNKNOWN.
 NEXT freeze exactly one same-source baseline/QW0 replay against exact655. Do not
 repeat parity, retune, inspect holdout, infer fills, or weaken queue/fees/
 latency/risk. PAPER/NO_GO, PR9 draft/unmerged.
+
+### Exact655 same-source baseline/QW0 replay — 2026-10-22
+
+Run39838068117/job120031524797 COMPLETED SUCCESS on frozen commit aa5fde7. The
+retained native655 gate and exact tests passed, the frozen executor JAR was
+rebuilt from pinned source and matched its original SHA256, then the unchanged
+original development source was used once per profile. No public read, capture,
+wallet, key, real order, retuning, or queue/fee/latency/risk/acceptance/holdout
+change occurred.
+
+Baseline consumed844 source identities/13 known bindings and stopped at
+seq83182, tx
+0xe602b827ff89f9212d4fb2ee389c60120ff532c54b042c45bc37075c9a466b5c,
+tokenB BUY .70 size10.25, source1792269639723. It conserved41 known maker
+components/525.374014 shares, all unused; actual queues0/0 and active211ms.
+QW0 consumed105 identities/7 known bindings and stopped at seq9496, tx
+0xa96ec2960d29c18be3f6081d1f1e05cc5bea37c5a47cb1e64561f7a54e914762,
+tokenA BUY .49 size30, source1792269594687. It conserved32 known maker
+components/364.198202 shares, all unused; actual queues1182.30/180 and
+active253ms.
+
+Both stopped prefixes have executions0,fills0,holdings0,allocated0 and
+queueAbsorbed0; all four PAPER orders were canceled and both sessions halted
+safely. cash500/realized0/fees0 are incomplete prefix state, NOT net
+performance. Artifact12452921077,13732 bytes,SHA256
+3cbcae2290504df78c99efe7771bb9183f4c7ea0dfb63f231493ddd7e2ab6c90.
+Complete comparison false, full net UNKNOWN, acceptance not evaluated.
+
+NEXT obtain and verify ONLY the two exact receipt targets above, then extend a
+separately frozen pool before any further replay. Do not repeat exact655, infer
+fills, weaken queue/fees/risk, retune strategy, or inspect holdout. PAPER/NO_GO,
+PR9 draft/unmerged.
