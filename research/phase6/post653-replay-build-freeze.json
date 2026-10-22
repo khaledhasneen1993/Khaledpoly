@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "experiment": "EXACT655-GENERATED-REPLAY-BUILD",
+  "poolLogicalSha256": "6dcf2f28956569965373d60ff040c2737d4c8412d812ac50def2b5608fb2881f",
+  "parentHelperSha256": "f3ebab4871fa5f07ec98cb69835c604684b971edd72b3df0ff0618bfaca5d1ed",
+  "generatedHelperSha256": "b12b7ef6fbc6c8863f6dd0fab15d60cb80a9a31ea16344de3269bf0a5abb9cfd",
+  "inputsSha256": {
+    "research/phase6/post653-pool-freeze.json": "ecc51ea823b6bb67262bf9326c7f6886fc2b919f0a61feec9760785ac519a9ea",
+    "research/phase6/post653_receipt_pool.py": "56ae1081912bda31a083cfde2eaf2219398011684e399d9685bd0255aaded06a",
+    "research/phase6/post653_pool_result.py": "3b9a247f971123a90b235a503301f94d564c648525db6635b81948b263ab5221",
+    "research/experiments/post653-receipt-pool-20261022/ci-artifact.zip": "9de488b2932dba7e8e631ad37e43dd70f47c43caa32112ffa57208440bed3640",
+    "research/phase6/post651_pool_build.py": "6e10d7527f2d383d7a65d74e33f777f2de41f80470f1e497de25cee087663eaf",
+    "research/phase6/post651-replay-build-freeze.json": "5c930b93100418ad1d81d00647c89a054e5fdfc58d3dcfa3d1ccdcbbaeede2e7",
+    "research/phase6/ConservedReceiptPool.java": "54fc35705bdb5143bab389f15e301fe758a10836a2a8f9054725d702fc98e53b",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00"
+  }
+}
