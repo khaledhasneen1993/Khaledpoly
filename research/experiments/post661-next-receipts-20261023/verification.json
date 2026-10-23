@@ -1,0 +1,52 @@
+{
+  "scope": "VERIFIED_POST661_NEXT_TWO_RECEIPTS_NOT_EXECUTION",
+  "runId": 39947597650,
+  "jobId": 120393955041,
+  "commit": "8f344683943fc6eb36e8496929906e54e668c0c7",
+  "artifact": {
+    "id": 12498488616,
+    "size": 16887,
+    "githubRecordedSha256": "73f345474c5282c24c5d617dc6a151c2d840ee0cf2cf1b7712dcb689ce932330",
+    "downloadRetainedByGitHubUntil": "2026-10-30T11:39:28Z"
+  },
+  "testsPassed": 13,
+  "rpcCalls": {
+    "eth_chainId": 1,
+    "eth_getTransactionReceipt": 2,
+    "eth_getBlockByHash": 2
+  },
+  "candidate": {
+    "seq": 9982,
+    "transactionHash": "0x5e1ec2c377f1aa8cf5f59166d6e472e93426e0aef32131cca77fdda0a47bd6aa",
+    "rawSha256": "0ccbaa0c80302d5660ea1e12dc44609fd522e6d2898ef7b1cfad35bcbdb16509",
+    "groupShares": "30",
+    "directSellSharesAt0.52": "5",
+    "complementMintBuySharesAt0.48": "25",
+    "priceCompatibleBotShares": "0"
+  },
+  "baseline": {
+    "seq": 83262,
+    "transactionHash": "0xbf0218fe336982520f0fc6c5e001b7ae72ac28d402e719636edf804da64fe8a1",
+    "rawSha256": "4c69df408c2e971aa3c1559b1a35a0742fa7435e8f0c06eefbe8ce7653e9dfde",
+    "groupShares": "50.882353",
+    "directSellSharesAt0.33": "15",
+    "complementMintBuyComponents": [
+      {"shares": "5", "price": "0.67"},
+      {"shares": "10", "price": "0.67"},
+      {"shares": "20", "price": "0.66"},
+      {"shares": "0.882353", "price": "0.6600000226666651555556562963"}
+    ],
+    "necessaryPriceCompatibleShares": "35.882353"
+  },
+  "queueAllocationProven": false,
+  "modelFillsCreated": 0,
+  "candidateAccountSimulated": false,
+  "nativePoolExtended": false,
+  "completeAccountComparisonPerformed": false,
+  "marketNetPnlRecomputed": false,
+  "fullAfterCostNet": "UNKNOWN",
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO",
+  "next": "Build separate exact663/1574 pool preserving exact661, then prove native/source parity before replay"
+}
