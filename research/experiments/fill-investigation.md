@@ -1,5 +1,5 @@
-Warning: truncated output (original token count: 76313)
-Total output lines: 4659
+Warning: truncated output (original token count: 76630)
+Total output lines: 4682
 
 # Execution investigation — 2026-10-17
 
@@ -1227,7 +1227,595 @@ model's result, NOT a new fourteen-label account result. No acceptance change.
 
 Run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39141370797
 completed successfully at 15:51 UTC, source132b9eb55eed83e6bb32d79bb0e3892ccce71f63.
-139 phase6 CI tests passed, and the reused executor's te…36313 tokens truncated…selected-snippet account simulation. SAME-source/config/coverage full
+139 phase6 CI tests passed, and the reused executor's tested source commit and
+artifact digest passed. Same complete development tape/config, 7/7 and 14/14
+bindings consumed. No Java/runtime/fee/queue/risk/acceptance change in this run.
+
+| Account result | Seven-label baseline | Fourteen-label correction |
+| --- | ---: | ---: |
+| Submitted orders / fills | 61 / 3 | 13 / 2 |
+| Net realized PnL after applied costs | -0.85 | -1.80 |
+| Ending cash | 499.15 | 498.20 |
+| Fees / settlement costs | 0 | 0.01 |
+| Max drawdown | 1.20 | 1.80 |
+| Unhedged quantity at expiry | 0 | 2 |
+| Ending inventory after actual resolution | 0 | 0 |
+| Completed pairs | 0 | 0 |
+| Entry suspended | false | true |
+
+The corrected model buys five at .64 and sells only three at .47. The old SELL2
+is no longer fabricated from the pre-gap public MINT aggregates. The remaining
+SELL order is cancelled at the original DATA_GAP1792269696284; the original
+recorded META at seq130093 contains minSize5. Residual two is below that current
+model minimum: 557 DUST_AWAIT_RESOLUTION decisions and no successful taker exit.
+`reduce` silently skips maker replacement below minimum; `executePending`
+rejects subminimum quantity, so repeated RISK_SELL decisions cannot liquidate
+it. Protective entry suspension starts after unhedged timeout, not because risk
+was relaxed or drawdown threshold altered; riskBreaches remains zero. Two shares
+survive until the real recorded resolution at1792269956849 paying zero to the
+held token. Ending inventory zero is resolution, NOT a successful hedge/exit.
+Loss arithmetic: maker sale3*(.64-.47)=.51, residual basis2*.64=1.28 lost at
+resolution, existing redemption cost.01 -> TOTAL1.80. Component conservation:
+814 venue shares=8 allocated+10 queue-absorbed+796 unused,49 unique components.
+Markouts still affected by true gaps; neither model qualifies independently.
+
+Exact original full reports AND full account audits AND comparison are archived
+in `exit-window-replay-20261018/result/artifact.zip.b64`, artifact12141699475,
+ZIP SHA256 0a7f87d7d0a4922392577cf557a816864c3d626c1ac271475aa73056d67636ad.
+Original comparison, exact META/exit/actual-resolution proof and loss arithmetic
+are retained beside it. A regression verifies original archive hash, bounded
+membership, report/comparison equality, complete label consumption, actual zero
+payout and monetary arithmetic. No account rerun or new receipt reads this turn.
+
+Checked official venue documentation on2026-10-18:
+https://docs.polymarket.com/trading/place-orders — API describes min_order_size
+and rounded share validation; SELL market orders use shares, BUY uses notional.
+https://github.com/Polymarket/agent-skills/blob/main/order-patterns.md .
+These sources do not justify assuming this particular below-minimum SELL was
+accepted; no orders were submitted to test it. Third-party claims of special
+FOK exceptions are not validation. Keep the recorded minimum/model constraint
+unchanged; no wallet, signed order, top-up purchase or invented dust liquidation.
+
+NEXT strategy candidate is explicitly frozen BEFORE any candidate replay in
+`research/phase6/residual-entry-risk-candidate.json`: CS-RESIDUAL-WORST-CASE-1.
+Default-off entry veto, using ONLY planned size/prices and EXISTING available
+exit-loss budget/redemption cost: q*max(firstBid,secondBid)+redemptionCost must
+fit available exit-loss budget. A single leg may fill completely while its peer
+never fills and no lawful exit exists. The known pre-entry quote5*(max(.34,.64))
++ .01=3.21 exceeds existing budget2.5; no fitted volatility/price threshold,
+parameter grid, increased stake, weaker queue, minimum size, fees or risk cap.
+Near-balanced .49/.49 quotes can fit, but whether any fills/pairs/profit remain
+requires actual causal full-account replay, not this arithmetic example.
+
+Implemented and tested only the pure research primitive `residual_entry_risk`:
+default-off behavior preservation, enabled full-loss bound, exact cost/budget
+boundary, finite/invalid fail-closed inputs and immutable original dust account
+proof. 143 phase6 tests pass locally. It is NOT wired into ResearchSession,
+streaming PAPER or default runtime and has produced NO strategy performance.
+Next integrate behind an off-by-default research option with backward-compatibility
+tests, preserve historical frozen source provenance (old verifiers currently
+compare historical source hashes to worktree files), freeze the full candidate,
+then compare fourteen-label control versus candidate on the same development
+tape/config. Do not rerun the old partial controls or collect more receipts for
+the already-complete pre-gap exit window. No holdout tuning; acceptance unchanged;
+zero fills/no loss would still fail qualification. Future receipt labels remain
+environment calibration only, never a causal signal or independent PAPER proof.
+
+## CS-RESIDUAL-WORST-CASE-1 integration frozen — 2026-10-18
+
+Starting b47cf9e5f0aa119015cb207c85fb2478f2d10908, draft PR9, all existing
+jobs complete. Integrated the EXACT preregistered q*max(pair bids)+redemptionCost
+<= existing exitLossAvailable entry veto; no parameter search. New private
+constructor option defaults false through every old ResearchSession constructor
+and every old replay path. Explicit ResidualRiskReplayMain accepts only control
+or candidate, requires receipt-labelled fresh offline account; no service config,
+HTTP endpoint, wallet or live/independent activation. Veto occurs only before
+new pair reservation; no quantity/exits/queue/minimum/fees/risk-limit changes.
+This is a per-entry bound, not a proof of portfolio-wide worst-case coverage
+across multiple simultaneously resting pairs. Up to ten causal reject samples
+and a decision counter are reported, no unbounded new trace volume.
+
+Four Java regressions cover exact budget+cost boundary, default old constructor
+versus explicit off, enabled rejection without cash loss, allowed near-balanced
+entries, and rejection of service/malformed CLI activation. They are pending
+Java21 CI (local Java17/no Maven), not claimed locally executed. 146 phase6
+Python tests pass locally, including three new source-proof fail-closed tests.
+
+Preserve exact pre-change ResearchSession and ClosedLoopReplay source text from
+tested commit d25c19a13afb55f8413af3d61846f8d4e666bd3c in a hashed immutable
+archive under `residual-entry-risk-20261018/` (compressed SHA256
+ee7541f7755c53deaf4c05addce714e57f6e3bb4f29d7e9f089e5e8dd0aa8b81).
+Historical offline account verification now verifies THESE original two sources
+against UNCHANGED historical freeze hashes, not the later working tree. Only
+those two exact archived source paths may use that proof; config/acceptance and
+all other historical inputs remain strict current hash checks. Tampered archive,
+wrong acceptance or unrelated code cannot fall back. Current replay freeze checks
+CURRENT source bytes strictly; this helper is never used to validate current
+candidate execution or waive its tests. All prior results/freezes preserved.
+
+Freeze full current source/Java tests/labels/config/acceptance provenance in
+`residual-entry-risk-replay-freeze.json` BEFORE first candidate replay. Same full
+development recording and fourteen bindings in both modes, control must exactly
+reproduce13 orders/2 fills/cash498.20/net-1.80/cost.01/drawdown1.80/expiry2/halt.
+If not, stop; do not rebaseline silently. Candidate mode differs only in the
+entry veto. Full Maven+all Python regressions precede both account runs. The old
+markout-only workflow skips this explicitly `[residual-risk-control]` tagged
+push because the dedicated workflow runs the SAME full regressions plus new
+candidate checks; no duplicate Maven build. Ordinary/manual markout checks remain
+enabled. NEXT inspect this one workflow before overlapping action. No new net
+result yet; zero fills or no loss cannot qualify, future-labelled environment is
+not independent PAPER proof. No holdout/capture/live action or acceptance edit.
+
+Current run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39150564740
+at9465a301aa3de7e3b97537651869a383b79d46a1, verify job117743176915 is running
+the full Maven+Python sequence. Markout-only run39150564712 is intentionally
+skipped by the documented dedup tag; the dedicated full check is NOT skipped.
+Wait for verification and `residual-entry-risk-account-control` before another
+comparison. No new candidate account metrics yet; latest corrected control net
+remains-1.80. Next archive default-off baseline reproduction and candidate's
+net/costs/pairs/fills/expiry/risk/reject samples; a zero-fill result is NO_GO.
+
+Verification job117743176915 has now SUCCEEDED:161 Java+291 Python=452 tests,
+including all four new Java candidate/default-off/allowed-entry checks. Compare
+job117743450294 is running on that exact tested binary. Verification provenance
+saved in `residual-entry-risk-20261018/verification.json`; do not repeat tests or
+start another account comparison while this one runs. No candidate PnL yet.
+
+## Residual entry veto result: loss avoided, zero fills, still NO_GO — 2026-10-18
+
+Run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39150564740
+completed successfully at17:47 UTC, tested source9465a301aa3de7e3b97537651869a383b79d46a1.
+The explicit OFF control exactly reproduced corrected baseline13orders/2fills,
+cash498.20/net-1.80/cost.01/drawdown1.80/expiry2/halt, as required; no silent
+rebaseline. Full regression provenance remains161 Java+291 Python=452 passing.
+
+| Same-tape account result | Guard OFF control | Guard ON candidate |
+| --- | ---: | ---: |
+| Orders / fills | 13 / 2 | 2 / 0 |
+| Net realized PnL after applied costs | -1.80 | 0 |
+| Final cash | 498.20 | 500 |
+| Applied costs / drawdown | .01 / 1.80 | 0 / 0 |
+| Entry risk rejections | 0 | 31 |
+| Unhedged shares at expiry | 2 | 0 |
+| Quantity pair-completion ratio | 0 | UNDEFINED (no fills) |
+
+The candidate avoided the known toxic entry, but made NO MONEY and provides no
+fill/pair/edge evidence. Record NO_GO_ZERO_FILLS, NOT profitability or permission
+for independent promotion. Do not retune the budget upward, reduce share minimum,
+queue, fees or acceptance to recover activity. Keep default-off research status.
+Candidate consumed all14 environment bindings but had no matching own orders at
+those observations; future-label coverage does not fabricate executions.
+
+There was exactly ONE submitted candidate pair: BUY5 first token at.46 and BUY5
+second at.38, same condition0x678cc...6dba7, submitted1792269711477. Actual
+activation1792269711729, terminal1792269711983 DATA_GAP:invalid_depth for BOTH;
+254ms active each, queue seed0, eligible direct print volume0. Public observations
+were wrong-aggressor or before activation; no price-touch fills. Both orders
+were cancelled, no pair fill. The large apparent edge (.46+.38=.84) and short
+life warrant ORIGINAL book/source coherence inspection, not an assumption that
+this is an executable16% opportunity or a justification to loosen risk. This
+is a NEW interval, not a repeat of the two earlier GAP probes rejected for0ms gain.
+
+Exact full reports/audits/comparison retained in
+`residual-entry-risk-20261018/result/artifact.zip.b64`, artifact12145347002,
+ZIP SHA256680a934c5e0d38d57cbd85a725052e0771f3a1fcfae7a3958a07a37d405d4bf7.
+Original comparison, exact only-pair order/terminal diagnostics and bounded risk
+samples retained adjacent. Regression verifies original hash/member/size bounds,
+report/comparison identity, both14-label consumption, off-control loss, zero fills,
+undefined ratio,31 vetoes,254ms lifetimes and explicit NO_GO. No missing ratio is
+zero-filled into a success score. No further account replay or public RPC this turn.
+
+Freeze ONE next diagnostic before extracting additional RAW evidence:
+`risk-opportunity-context-freeze.json`, fixed window1792269709477..1792269713983
+(4.506s:2s before submission,2s after cancellation), same two tokens and original
+development tape. Keep complete original RAW frame text, original sequence/frame
+joins and source timestamps, with existing bounded normalized-depth projection;
+do not treat three levels as queue evidence. GAP sequence/source at this NEW
+terminal are not known yet; don't invent anchors. Reused extractor must find the
+exact terminal-time invalid_depth GAP or fail, and still verify the complete
+original tape digest/chronology/clean end. Wrapper is generic by freeze path;
+original raw-gap extractor, old windows and runtime unchanged. Tests cover both
+frame/standalone GAP identity and rejection of wrong time/reason.149 phase6
+tests pass locally; no new Java changes/build needed. One small workflow extracts
+only this bounded context from the existing recording; no new capture or strategy
+replay. Next inspect whether paired quotes were coherent and whether legitimate
+source BUY/MINT candidates existed in the actual254ms active interval. No receipt
+fetch or model change until original messages justify it. All strategies remain
+unqualified; acceptance/queue/cost/risk/holdout policy unchanged, PAPER only.
+
+Started only https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39155138746
+at a01cb4b9e39c4329b48d30dcc5ba4ffd3df96902. Wait for
+`only-admissible-risk-pair-context` before any second scan or strategy adjustment.
+The candidate remains NO_GO_ZERO_FILLS, net0/no profit, OFF by default. Current
+work did not launch another account comparison, new capture, public receipt reads
+or Maven build. All source/results/next window are committed for continuation.
+
+## Only-pair original context — 2026-10-18 19:35 UTC review
+
+Run39155138746 succeeded (149 phase6 tests); original bounded context artifact
+12147061686 is retained losslessly under `risk-pair-context-20261018/` with ZIP
+SHA256 fddaeffc29f635b643d9e5ac715c33f85935155968bd6951b29b69c8ddfdbb36.
+The complete6,163,831-row source hash is unchanged;2,259 original frame pairs
+are retained. New offline proof verifies RAW hashes/frame joins, original full
+snapshot top-depth projection, public trade identity, and actual order times.
+
+At submission1792269711477 BOTH latest books have source1792269711392 and
+arrival1792269711468 (85ms source age,0ms cross-leg source skew). Original full
+snapshots at normalized sequences173337/173339 show A .45/.63 and B .37/.55;
+own .46/.38 bids improve these bids by one tick. This interval is NOT evidence
+of differently timed paired source snapshots, nor proof of executable16% edge.
+
+Actual activation remains1792269711729, NOT activationDue1792269711727. Four
+public BUY observations arrive during actual254ms active interval. Sources
+1792269711664 and1792269711727 precede observed activation, so exclude both
+from causal allocation without querying receipts. The two postactivation public
+prints are B5.3@.46 (source1763, normalizedseq173610) and A24.818182@.54
+(source1904,seq173728), with the shared179226971 prefix. Their aggregate
+complement prices .54/.46 are NOT sufficient to reject/credit individual maker
+components: mixed settlement prices must be decoded and volume conserved.
+
+Cancellation is original GAPseq173753, source1792269711911, invalid_depth
+`Crossed final batch` for both tokens. Full snapshots recover at1987,4ms AFTER
+actual cancellation1983. Do not postpone cancellation, infer a missed fill or
+repeat the previously rejected separate-frame recovery probe. No runtime edit.
+
+Freeze exactly TWO new receipts before public reads:
+`risk-pair-receipts-freeze.json` and deterministic original-bound `selection.json`.
+Transactions410a752f...e2bb7db and1e24b3b6...e24e20a6 are bound to actual opposite
+BUY orders and observed source/arrival/terminal intervals. New small workflow
+runs153 phase6 tests then public chain/receipt/block reads only, preserves raw
+receipts and checks exact integer maker-price eligibility for target BUY bids.
+It NEVER grants queue priority/fills, recomputes account PnL, changes acceptance,
+or launches Maven, another full-tape replay/capture. Existing collector's legacy
+unrelated -.85 field is explicitly removed from this new report. If incomplete,
+retain successful receipts/errors and resume only this frozen selection; do not
+broaden requests. Next inspect its `only-risk-pair-two-receipts` artifact before
+deciding whether any new account replay is warranted.153 tests pass locally.
+Known economics unchanged: corrected control net-1.80, candidate net0/zero fills,
+undefined pair ratio, NO_GO; default guard OFF, PAPER only, no holdout tuning.
+
+## Two actual risk-pair receipts — 2026-10-18 19:43 UTC
+
+Run https://github.com/khaledhasneen1993/Khaledpoly/actions/runs/39160036669
+at frozen948f4ac9999da97d355356e778c57a753a67073c succeeded.153 phase6 tests
+passed BEFORE public reads; exactly2 receipt requests,1 block request and1
+chain identity read. Both receipts yielded one unique conserved matching group.
+Artifact12148322208, SHA2565060cec3209b2b3d2f7929a09e349b08075f0b8064d7f942f1ba622201f775f2,
+is retained in `risk-pair-context-20261018/receipts/artifact.zip.b64`, including
+original receipts/block, selection, topics, full decoded report and summary.
+
+| Actual public transaction | Actual maker BUY components | Own bid | Compatible raw shares |
+| --- | --- | ---: | ---: |
+| 410a752f...e2bb7db | MINT A5.3 at .54 | .46 | 0 |
+| 1e24b3b6...e24e20a6 | MINT B19 at .46 and5.818182 at .450000017187499... | .38 | 0 |
+
+Integer shares AND collateral conserve exactly in both groups. Prices compare
+integer collateral to bid*integer shares, not rounded public prices. There were
+NO price-compatible actual maker BUY components for our two bids in the two
+postactivation observations. The other two public observations predate actual
+activation, and both orders terminate at the proven GAP. This closes this
+specific interval's observed direct/complement-route diagnostic without another
+account replay. It does NOT prove hypothetical venue redirection/queue priority
+or that every possible counterfactual strategy could never fill. No fills or
+economic changes are inferred from settlement. Both account results remain
+control-1.80 and guarded candidate0/zero fills/undefined pair ratio: NO_GO.
+
+Two additional offline regressions re-decode original RAW receipts, reproduce
+the conserved component summary without any network calls, and reject changed
+receipt identity/ambiguous groups.155 phase6 tests now pass locally. Historical
+full suite452 and this run's153 CI tests retain their original scopes/counts;
+no claim of155 new full-build CI tests. Frozen audit code/selection unchanged.
+
+Next work must address opportunity availability, NOT this already resolved
+interval, API transport, queue loosening or a repeated two-hour run. Reuse the
+saved untruncated transaction-linked censuses BEFORE requesting more data:
+original84 and fresh590 necessary-condition examples across both quote policies
+and route screens. For a FIXED five-share order and unchanged exit budget2.50,
+redemption.01, the risk rule requires both bids<=.498 (.49 on a .01 grid).
+Do not mistake these example quotes for actual submissions or use public
+complement price alone as a maker-route binding. Census sizes can be depth-
+clipped and its omitted dynamic risk/latency/queue constraints still apply.
+Determine whether an explicitly predeclared market/entry selection candidate
+has enough causal, risk-admissible observed activity BEFORE another account
+comparison. Record quantity/metadata, actual pre-decision book state, decision
+timing, activation and GAP exclusions; missing fields require bounded original
+evidence, not optimistic defaults. No new parameters or candidate chosen yet;
+do not sweep budgets, tune on independent data, or promote an idle guard as
+profitable. Current model remains default-off research, PAPER only. Follow-up
+continues because no strategy has met unchanged independent acceptance gates.
+
+## Complete saved-census feasibility — 2026-10-18 20:31 UTC review
+
+PR9 headc0317fe and all prior jobs checked first: none running. No duplicate
+capture/replay/RPC/build launched. Added offline `risk_feasible_census.py` with
+source/config/acceptance hashes a…26630 tokens truncated…Pure rule parity is not account evidence.
+
+Explicit pre-observation enablement in fresh mixed-label offline ResearchSession
+now routes entry through QW0, then canonical reservation/matching/ledger. Exits
+use frozen argmax rule; TAKER_SELL no longer falls into maker WAIT branch. Both
+POSITIVE_EDGE_COMPLETION and new POSITIVE_EDGE_EXIT recheck actual delayed FOK
+NET against unchanged minimumEdge*quantity. Preserve overdue risk behavior,
+loss/minimum-size/cash/data/depth checks and original resting/cancel lifecycle.
+Original core/default/frozen files remain untouched: second small tracked patch
+composes on immutable bridge copy and verifies every94-source hash. Default-off
+FULL canonical report still matches earlier untouched-core proof exactly.
+
+Synthetic canonical strategy tests: QW0 orders0.40/0.40,5 shares each; original
+2x100=200 entry queues;300 fixture shares=200 queue+5 allocated+95 unused.
+No holding injection. Keep books fresh, cancel unfilled peer at6571, ACK6821,
+plan fee-positive sell only after ACK, actual execution7071 after250ms. Actual
+synthetic fee0.08624, synthetic realized0.11376. THESE ARE TEST EXPECTATIONS,
+NOT market/account profits. Adverse actual execution0.42 remains within limit
+but net0.01474<original0.05 floor, so TAKER_NET_EDGE rejects, fees0, uncovered5
+shares/cash498 persist. No invented exit or inventory erasure.
+
+Five new Python regressions check exact ports, isolated build/default parity,
+reject altered queue/fees/risk, missing net guard and market/live scope promotion.
+Complete generated94-source Java17 compile succeeds. Native reports, independent
+verification and final source provenance retained in frozen-strategy-profile-20261020/.
+New Java21 CI repeats parity/synthetic integration, not a market capture/replay.
+
+Next whole-account dependency: fail-closed canonical full-tape runner and coverage
+audit.451 recovery labels are only one pair/window; missing full-source routes
+must be identified, not counted as zero or combined with aggregate volume.
+Establish complete coverage and transition parity before SAME-source full-account
+baseline/candidate comparison, then freeze executable/config BEFORE independent
+multi-market PAPER. No holdout tuning, acceptance edits or selected-snippet account.
+
+No new market PnL: old selected conditional exit+0.11264 vs-0.03747; original
+full control-$1.80 after costs,guard0/0fills,QW0 full market account UNKNOWN.
+NO_GO, PAPER only, PR9 unmerged; follow-up continues. Unknown local old activation
+archive preserved untouched. No new RPC, full original tape scan or market fill.
+
+## Full-source label-coverage census prepared — 2026-10-20 Amman
+
+Preflight checked cff52ff/PR9 and latest Actions:39330038356 COMPLETE SUCCESS,
+278 offline tests350.063s, both native integrated source build/execution steps
+successful. Downloaded artifact12223933817,14623bytes, ZIP SHA
+a93fed68383898170d9faf05a40575e018880b5f14a5e698979f0780766628d0.
+Independently reverified42 quote proposals/18 choices, synthetic queue/ACK/FOK
+guards and default-off parity. All3 downloaded report contents equal retained
+evidence. No overlapping Action, no repeated conditional exit experiment.
+
+Next dependency implemented: streaming FULL original6,163,831-row tape coverage
+census with exact compressed/logical hashes and offline-revalidated451 receipt
+bindings/1,038 components. Census is NOT a full account or strategy replay.
+Checks ALL journal chronology/tail/frame boundaries and complete consumption of
+exact coordinate/arrival/source/token/side/price/quantity/public-hash/tx bindings.
+Classifies each public observation once: bound group, known-tx duplicate
+suppressed, scoped missing, other-market unbound, unknown-market unbound.
+Other markets are explicitly UNBOUND, not silently passed to aggregate matching.
+
+Persists EVERY missing identity in deterministic hashed compressed JSONL with
+original coordinates and available tx fingerprint. Per-condition totals and
+earliest blocker by reason; missing coverage never means zero volume/fills.
+Bounded memory/output; exceeding cap fails, never truncates. No RPC/receipt
+requests, orders, model fills or net PnL. Even zero missing cannot qualify the
+single-pair partial adapter or authorize whole-account/independent/live replay.
+Frozen code/workflow/config/acceptance hashes in full-tape-coverage-freeze.json.
+Seven targeted regressions pass: exact identities, scoped/other/unknown missing,
+duplicate-volume suppression, full tail/run/terminal integrity, unknown/unbound
+frame events, missing tx identity and ambiguous/duplicate binding rejection.
+
+Next: wait for coverage census output; independently verify count/digest/source
+evidence, inspect earliest missing routes, reuse already-retained receipts before
+new bounded requests. Establish fail-closed multi-market full-source runner and
+transition parity BEFORE same-source/config/coverage baseline/candidate account
+comparison. Freeze complete executable BEFORE independent PAPER; no holdout tuning.
+
+No new market-account net: original full control-$1.80 after costs; old selected
+conditional exit-$0.03747 vs+$0.11264, NOT full-account performance. Frozen QW0
+full account UNKNOWN. NO_GO, PAPER only, acceptance/queues/fees/risk unchanged,
+PR9 remains draft/unmerged; follow-up continues. Unknown dirty old activation
+archive preserved untouched.
+
+This census implementation's complete local regression:285 tests in280.195s, OK;
+separate7 targeted cases in0.006s, OK. Frozen dependency hashes verified. Next
+push launches ONE full-source coverage-only Action; actual coverage totals must
+be read from its completed artifact, not inferred from fixture test success.
+
+## Census protocol correction: preserve original scheduler TICK — 2026-10-20 Amman
+
+Preflight current0f7dd3a / draftPR9, no overlapping Action. Run39336641679
+FAILED at coverage parser after285 tests PASSED in322.708s, source download
+digest correct. Only201-byte partial artifact12227265901 produced, no complete
+coverage.json. Failure is parser contract, NOT new strategy/market performance.
+
+Exact cause: census standalone INPUT_KINDS omitted canonical TICK. Existing
+ResearchSession.accept explicitly supports standalone TICK but frame envelope
+allows only BOOK/TRADE/TICK_SIZE/GAP. Pre-existing immutable capture-inspection
+already lists28,743 RESEARCH_TICK, total6,163,831 journal rows and16,317 trades.
+Retained original recovery context has109 timers; first original seq258642 at
+1792269759067, data{}. All research kinds in original inspector now supported.
+No guessed market/receipt data, new RPC or modified execution semantics.
+
+Corrected census explicitly COUNTS standalone TICK, creates NO volume/fill from
+timer, still rejects TICK inside frame, all unknown/unframed observations and
+invalid original chronology. Unknown-kind errors now identify kind/sequence.
+Added final equality to pinned ORIGINAL independent inspector for every journal
+kind/count, total rows, four normalized market-event counts, trade and timer
+counts. No full report/renamed missing artifact if source/count validation fails.
+
+Ten targeted tests PASS, including ACTUAL retained timer and original inspector
+vocabulary, no timer trade credit, framed-timer/unknown-type rejection and
+tampered inspector-count failures. Corrected census-only source/test freeze
+also pins original inspector hash. Original tape/451 bindings/1,038 actual
+components unchanged; QW0/fee-positive rules, account config, queues/fees/risk
+and acceptance unchanged. This is not a strategy retune or independent data use.
+
+Next publish corrected census, run ONE replacement coverage-only Action, wait
+for successful complete artifact before making coverage or whole-account net
+claims. Reuse existing receipts; no duplicate captures/strategy experiments.
+Then inspect missing routes and implement fail-closed multi-market full-source
+runner before same-source baseline/candidate account replay, freeze executable
+before independent PAPER. No manual holding, no zero-credit unknown liquidity.
+
+No new market-account PnL: original control-$1.80 after costs; selected conditional
+exit-$0.03747 vs+$0.11264 remains NOT whole-account performance. Full candidate
+UNKNOWN, NO_GO. PAPER only, PR9 unmerged, follow-up continues. Unknown dirty
+old activation archive preserved untouched.
+
+Corrected census complete local regression:288 tests in275.584s, OK; final10
+targeted cases in0.006s, OK, also check all original inspector research kinds.
+Corrected freeze dependencies and unchanged acceptance/account config verified.
+No completed source scan or new financial result asserted before replacement CI.
+
+## Complete original coverage result independently reconstructed — 2026-10-20 Amman
+
+Preflight2328229/draftPR9 and run39342821835 COMPLETE SUCCESS:288 GitHub tests
+in296.068s, full census succeeded. No active overlapping Action. Downloaded
+artifact12228709938,1,594,521bytes, SHA256
+882112d70db3b1926e235ebfd0a150fa5a3d6ffc40d0aac657358c9a2ed9a46e.
+Retained exact2-member ZIP losslessly under full-tape-coverage-20261020/result/.
+No repeated full-source scan, capture, strategy experiment or RPC in this step.
+
+All6,163,831 original journal rows,3,000,583 RAW/frame pairs,20 metadata markets,
+18 with trades;16,317 trade observations:BUY15,024/SELL1,293. Existing451
+bindings/1,038 conserved components. Missing15,866 observations:4,219 scoped
+pair +11,647 other markets. ALL missing tx hashes present and distinct; zero
+known-tx aggregate suppression. Earliest missing at original seq97/event0,
+arrival1792269588213/source1792269588056,BUY200@0.57. Unknown is NOT zero.
+
+New independent verifier revalidates451 original receipt bindings offline and
+every missing identity/coordinate/receive clock/pair-side-price-size/hash;
+merges both original-coordinate streams to reproduce digest of ALL16,317 trades:
+1f8d1d953f3755b8244c7ac11f7a3f72ccd8d73b1c9807b7cec417b6b710c1c2.
+Not just matching counts or producer's coverage flag. Every journal/normalized
+count incl28,743 TICKs equals immutable pre-existing original inspector. Actual
+missing gzip logical/compressed hashes, first blockers and per-condition counts
+reproduced; fails altered rows even if caller updates their local gzip hashes.
+
+Indexed642 receipts from reviewed prior caches.191 MISSING observations have
+an existing cached receipt CANDIDATE;15,675 missing tx outside THIS reviewed
+cache. Presence is NOT new receipt corroboration, new labels, metadata pair
+proof, queue allocation or PnL. No exhaustive all-repository cache claim.
+Five new targeted regressions pass; new CI revalidates retained proof only,
+without rescanning original20GB source or calling public RPC.
+
+Next: rebind191 retained candidates where original metadata pair is proven;
+establish native multi-market full-source runner/exposure coverage contract and
+first execution-relevant missing route BEFORE blind bulk receipt collection.
+Any no-order-irrelevance shortcut must prove canonical transition equivalence
+and fail closed with any active/reserved/due/cancel-pending order, not silently
+zero unknown volume; not implemented/authorized here. Preserve source frames,
+timers, all cash/reservation/cancel/FOK/risk transitions. SAME-source/config/
+coverage baseline/candidate full account comparison still pending; freeze full
+executable BEFORE independent PAPER. Old control-$1.80 is prior-label baseline,
+not expanded-coverage replay; never force matching it after coverage improves.
+
+No new market-account net: selected conditional-$0.03747 vs+$0.11264 remains
+not whole-account performance. Candidate full account UNKNOWN, NO_GO. PAPER
+only, acceptance/strategy/queue/fees/risk unchanged, PR9 unmerged, follow-up
+continues. Unknown local old activation archive preserved untouched.
+
+Local complete result-verifier regression:293 tests in295.910s, OK; separate
+five new targeted tests in7.313s, OK. ZIP SHA/blob identity and unchanged
+acceptance/account config verified. Next push runs retained-proof-only CI,
+not original source scan or market capture; wait for its proof artifact.
+
+## ALL191 reviewed cached observations rebound offline — 2026-10-20 Amman
+
+Preflight62d2233/draftPR9 and run39349192223 COMPLETE SUCCESS:293 GitHub tests
+in336.566s; full retained source/cache proof outputs match. No active overlap.
+No source rescan, capture, RPC or strategy/account experiment in this step.
+
+Revalidated static original binary-pair metadata/causal lineage,451 old bindings,
+all16,317 original trade identities and reviewed raw receipt cache. ALL191
+previous missing/cached candidates re-decoded against exact source coordinate,
+receive/source clock, public hash, token/side/price/size/tx facts. Exactly one
+matching group per receipt, integer shares AND collateral conservation; no
+new market pair guesses, failed-receipt skipping or outcome/price filtering.
+Static later metadata identity NEVER substitutes for executable early metadata
+freshness/fees/strategy decisions; no account execution performed.
+
+Preserve451 original bindings/raw matches unchanged. Combined642 unique original
+coordinates/txs,1,516 unique conserved maker components:1,150MINT+349DIRECT+
+17MERGE. Additional191 groups contribute478 components:329MINT+141DIRECT+8MERGE.
+BUY prices UP/SELL DOWN28-digit parity digest
+3fd8f2d4ce916cd2a70919431e81ec878cb26e94ad7e293ff81e515f6bce092c.
+Deterministic compressed pool201,377bytes/logical1,735,935bytes, retained in git
+with frozen source/test/metadata/evidence/config hashes. No duplicated raw
+receipt archive or new public read.15,675 observations STILL missing (4,028
+first pair+11,647 others); earliest missing originalseq97 unchanged.
+
+New pool is explicitly PARTIAL, NOT legacy CONSERVED-MIXED-LAB0 execution
+manifest. allOriginalPairObservationsWithinWindow=false, native consumer=false,
+fullAccountReplayAuthorized=false. Never forge completeness to reuse old adapter.
+Read-only Python identity lookup checks actual original tradeId bytes and exact
+coordinate/time/token/side/price/size/tx; unknown/duplicate observations FAIL,
+never aggregate/zero volume. Not a consumption/queue allocator. Future native
+consumer must enforce one-time observation/component consumption independently.
+
+Six targeted tests PASS:all191/no selection, original451 exact preservation,
+raw status/duplicate logs, unproven metadata rejection, saved pool/digest parity,
+actual-source byte lookup and unknown/duplicate/scope failures. Default/native
+strategy, matching engine, old adapter/451 manifest and acceptance unchanged.
+
+Next strict native PARTIAL-pool consumer; verify ALL642/1,516 component tuples
+and duplicate/unknown guards, then complete native original-frame/timer runner
+and execution-relevance coverage proof before blind collection. No-order fast
+path requires explicit canonical equivalence with no active/reserved/due/cancel-
+pending order, not implemented here. SAME-source/config/coverage full baseline/
+candidate comparison pending; freeze full executable BEFORE independent PAPER.
+
+No new market/account net or simulated bot fills. Prior control-$1.80 after
+costs and conditional-$0.03747 vs+$0.11264 remain prior DEVELOPMENT evidence,
+not expanded-label account replay. Candidate full net UNKNOWN, NO_GO. PAPER
+only, strategy/queue/fees/risk/acceptance unchanged, PR9 unmerged; follow-up
+continues. Unknown dirty old activation archive preserved untouched.
+
+Complete local cached-pool regression:299 tests in314.337s, OK; six targeted
+cases in22.729s, OK. Frozen source/test/evidence/config hashes verified. Next
+push runs one offline pool-proof CI, not source capture/scan or account replay.
+
+## Strict native PARTIAL pool and isolated session hook — 2026-10-20 Amman
+
+Preflight be81835/draftPR9; run39354913586 COMPLETE SUCCESS:299 GitHub tests
+in372.989s, all191 cached candidates re-derived byte-exactly. No active overlap.
+This step no original-tape rescan, market capture, receipt read or account replay.
+
+Recovered EXACT original tradeId byte preimages for ALL642 pool observations
+from retained source samples, each matching its source SHA256 AND normalized
+token/side/price/quantity/source facts. Not tx-only substitution or invented
+public print. Exact source-identity input SHA
+2c849a88837b0724e71bfc02bcddbbfa28da238a5ee2fe4c7f325236b3501056.
+
+New ConservedReceiptPool independent of frozen legacy adapters validates explicit
+PARTIAL envelope, static metadata pair/condition, allowed exchanges, uint256 raw
+amounts, unique sorted coords/tx/components, one DIRECT/MINT/MERGE group and BOTH
+share+collateral conservation. Reuses unchanged canonical Binding/Portion record
+types. Native actual consumption642/642 and ALL1,516 conservative BUY-UP/SELL-DOWN
+28-digit tuples match Python digest
+3fd8f2d4ce916cd2a70919431e81ec878cb26e94ad7e293ff81e515f6bce092c.
+requireConsumed rejects incomplete/failed consumption. Every successful binding
+consumes ONCE; ANY resolve failure poisons reader. Unknown ANY-token observation
+throws, including covered tx at wrong coordinate; NEVER null/empty/suppressed
+aggregate fallback.39 native rejection guards and2 extreme rounding boundaries.
+
+New reader implements EXISTING generic OfflineSessionLabels research protocol;
+no interface/window-adapter/core/frozen-policy edits, forged completeness or
+service flag. Compiled ALL94 frozen research core sources plus helpers onJava17.
+Uses unchanged a57c2fd integrated session variant. Full default-off native report
+equals untouched-core oracle. Source-built session hook proven SYNTHETIC ONLY:
+fresh500 ledger,QW0 0.4/0.4 q5, original250ms activation,2x100=200 queue;
+300 fixture shares =200 queue+5 allocated+95 unused. Cash498,A5/basis2 WITHOUT
+holding injection. Next known tx WRONG coordinate: ledger halt, cancel orders,
+reader poison, further input rejection, already-booked cash/inventory unchanged.
+These are fixture expectations, NOT market fills/profits/account evidence.
+
+Independent verifier checks source+component digests, complete consumption,
+partial/synthetic scopes, all original risk/fee/queue settings, synthetic volume
+and halt/inventory guards, complete default-off parity and source provenance.
+Five new targeted tests pass. New Java21 CI repeats native proof from retained
+data, not a source scan/capture/RPC. Original producer artifact (consumer=false)
+remains immutable historical claim; new proof separately attests native reader.
+
+Next complete original-frame/timer native runner and exposure-aware coverage
+proof, stopping at execution-relevant unknown before bounded receipt requests.
+No-order optimization requires explicit canonical equivalence, no active/
+reserved/due/cancel-pending orders, and no unknown-as-zero venue claim. Not yet
+implemented.15,675 original observations still unbound;642 adapter consumption
+is NOT selected-snippet account simulation. SAME-source/config/coverage full
 baseline/candidate replay pending; freeze executable BEFORE independent PAPER.
 
 No new market account net. Prior control-$1.80 after costs and conditional
@@ -2514,3 +3102,26 @@ NEXT extend a separately frozen657-binding/1559-component pool while preserving
 all655 prior bindings; prove native/source parity before any further replay. Do
 not repeat exact655, infer fills, weaken queue/fees/risk, retune, or inspect
 holdout. Complete net remains UNKNOWN; PAPER/NO_GO, PR9 draft/unmerged.
+
+### Exact657 multi-market native/source parity — 2026-10-23
+
+Run39874579658/job120156941028 COMPLETED SUCCESS on frozen commitaeade99. The
+separate pool preserves all655 prior bindings byte-for-byte and adds only the
+two already verified post655 receipts:2 MINT components. Totals are657
+bindings/1559 components: DIRECT359, MINT1183, MERGE17.
+
+The Java reader consumed657/657 original identities and reproduced all1559
+component tuples while passing39 rejection guards. Frozen pool/source/portion
+SHA256 values are respectively bb479f14c58ead5e1b7dc7234dc98f5e9abb06cd586b138bd351a66b9d864f93,
+76f14452765d76f0ff102c1675b2ff167158e301a3fbd68138cac7be0f43166b,
+and 9919463edb62c473666c4ea6f9ee238c801ddbb777cb9928b647e8c81ead9bcc.
+Artifact12467179513,1236 bytes,SHA256
+6c07967f7b302dfed43f8faf36a75955b318e1536b1daf2318e559033be38495.
+
+This was offline native parity only: no tape replay, market RPC/capture,
+wallet/key/order, account PnL, acceptance evaluation, parameter or holdout
+change. No fills or profitability are claimed; complete net remains UNKNOWN.
+
+NEXT freeze exactly one same-source baseline/QW0 replay against exact657. Do
+not repeat parity, retune, inspect holdout, infer fills, or weaken queue/fees/
+latency/risk. PAPER/NO_GO, PR9 draft/unmerged.
