@@ -1,0 +1,27 @@
+{
+  "scope": "TWO_EXACT_POST657_NEXT_RECEIPTS_NOT_EXECUTION",
+  "sourceRun": 39879083129,
+  "coordinates": [9662, 83208],
+  "conditions": [
+    "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "0xf0d28ec493ed0f9a8cd52be0613e1079b9cfd729fde5713349a03339ba2e9019"
+  ],
+  "maxNewReceiptRequests": 2,
+  "maxNewBlockRequests": 2,
+  "originalReplayAuthorized": false,
+  "modelFillsCreated": 0,
+  "marketNetPnlRecomputed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    ".github/workflows/post657-next-receipts.yml": "59ffb9817301a3fa450abbb39bb29453c8846ed312a0ac8bfd0197d8b3be661e",
+    "research/phase6/post657_next_receipts.py": "b6402febdb6eba73d9e5345750e4bde51026cfd2de9859b64a6189162d790025",
+    "research/phase6/tests/test_post657_next_receipts.py": "32305d7c7562c52d6e4aa438219dbf906bd486bb4ea06c42d1bd1c7923579fa9",
+    "research/phase6/post655_pool_replay_result.py": "cf66604c934601369066b25174207d09068ac52ba62daeea951afb073c1c01a8",
+    "research/phase6/tests/test_post655_pool_replay_result.py": "19ef56891a47c1ee1b8bd8a8a18749fbf3655cb4049ccd5c531b06e94332bbac",
+    "research/experiments/post655-pool-replay-20261023/ci-artifact.zip": "5612085b6dd82f6922100a83adf6b6e60f35b7aac85a0decd4041261fa3ca5d5",
+    "research/phase6/post655_next_receipts.py": "889a89a2164e6040e6720f463dccf3ca644e22bc3d76394dd4578350f75c9e4d",
+    "research/phase6/receipt_audit.py": "4337ac09ca5b5364e5f23a15359e44695e283a99584acdbafbf4c9c4fbcc21c4",
+    "research/phase6/route_coverage_audit.py": "4febb1dc81e3e6077c5bd2cd3d87c126900dc24cc0316a24e5fcaaad1a8350fb",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  }
+}

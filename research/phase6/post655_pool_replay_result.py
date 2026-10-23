@@ -8,8 +8,8 @@ import zipfile
 ROOT=Path('research/experiments/post655-pool-replay-20261023')
 ZIP_SHA='5612085b6dd82f6922100a83adf6b6e60f35b7aac85a0decd4041261fa3ca5d5'
 EXPECTED={
-    'baseline':dict(seq=83208,at=1792269639803,sourceMs=1792269639733,token='16175391777578581291856766353347645408943260654044130963788305612049839550467',side='BUY',price='.29',size='10.344828',transactionHash='0xa6c661ae8428faeda3327b5f920e2f34b2b39572cc3613dbca96b58b8853aad4',sourceConsumed=845,poolConsumed=15,components=43,venue='565.624014',activeMs=218,queues=('0','0')),
-    'candidate':dict(seq=9662,at=1792269594814,sourceMs=1792269594735,token='12589566430666404778428222777978747623958961794906352412512658324998006663268',side='BUY',price='.53',size='9.55',transactionHash='0xce4ecce1af9a26e5f7f1740584512962fd91c10db02bac69884eff208f2b47f0',sourceConsumed=106,poolConsumed=8,components=33,venue='394.198202',activeMs=311,queues=('1182.3','180')),
+    'baseline':dict(seq=83208,at=1792269639803,sourceMs=1792269639733,token='16175391777578581291856766353347645408943260654044130963788305612049839550467',side='BUY',price='0.29',size='10.344828',transactionHash='0xa6c661ae8428faeda3327b5f920e2f34b2b39572cc3613dbca96b58b8853aad4',sourceConsumed=845,poolConsumed=15,components=43,venue='565.624014',activeMs=218,queues=('0','0')),
+    'candidate':dict(seq=9662,at=1792269594814,sourceMs=1792269594735,token='12589566430666404778428222777978747623958961794906352412512658324998006663268',side='BUY',price='0.53',size='9.55',transactionHash='0xce4ecce1af9a26e5f7f1740584512962fd91c10db02bac69884eff208f2b47f0',sourceConsumed=106,poolConsumed=8,components=33,venue='394.198202',activeMs=311,queues=('1182.3','180')),
 }
 
 
