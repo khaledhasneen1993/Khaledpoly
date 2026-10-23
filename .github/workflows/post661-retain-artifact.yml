@@ -1,0 +1,45 @@
+name: Retain exact661 receipt artifact WITHOUT NEW RPC
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/post661-retain-artifact.yml', 'research/phase6/post661-retain-artifact-freeze.json']
+permissions:
+  actions: read
+  contents: write
+concurrency:
+  group: retain-exact661-receipt-artifact
+  cancel-in-progress: false
+jobs:
+  retain-existing-artifact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: paper-fill-investigation
+      - name: Download the existing successful artifact; no RPC and no replay
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p research/experiments/post661-next-receipts-20261023
+          curl --fail --location --retry 4 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/khaledhasneen1993/Khaledpoly/actions/artifacts/12498488616/zip \
+            -o research/experiments/post661-next-receipts-20261023/ci-artifact.zip
+          test "$(stat -c %s research/experiments/post661-next-receipts-20261023/ci-artifact.zip)" = 16887
+          echo '73f345474c5282c24c5d617dc6a151c2d840ee0cf2cf1b7712dcb689ce932330  research/experiments/post661-next-receipts-20261023/ci-artifact.zip' | sha256sum --check --strict
+      - name: Frozen offline verification
+        run: |
+          python3 -c 'import json,hashlib;from pathlib import Path;f=json.loads(Path("research/phase6/post661-retain-artifact-freeze.json").read_bytes());assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in f["filesSha256"].items())'
+          python3 -m unittest research.phase6.tests.test_post661_next_receipts_result research.phase6.tests.test_post661_next_receipts research.phase6.tests.test_post659_pool_replay_result -q
+          python3 -m research.phase6.post661_next_receipts_result > /tmp/post661-next-result.json
+      - name: Retain the exact raw evidence on the research branch
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add research/experiments/post661-next-receipts-20261023/ci-artifact.zip
+          git diff --cached --quiet && exit 0
+          git commit -m 'research: retain exact661 receipt artifact'
+          git push origin HEAD:paper-fill-investigation
