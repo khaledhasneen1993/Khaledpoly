@@ -1,0 +1,390 @@
+{
+  "scope" : "BOTH_ACTUAL_ORDER_PREFIX_MODEL_NOT_FULL_STRATEGY_ACCOUNT",
+  "originalSequence" : 243583,
+  "fixedHorizonMs" : 1792269754123,
+  "lastOriginalSequence" : 249876,
+  "completeOriginalBindingsConsumed" : 40,
+  "restingChecks" : [ {
+    "seq" : 244228,
+    "reason" : "RESTING",
+    "at" : 1792269750554,
+    "bothActiveEqualRemaining" : true
+  }, {
+    "seq" : 244707,
+    "reason" : "RESTING",
+    "at" : 1792269750804,
+    "bothActiveEqualRemaining" : true
+  }, {
+    "seq" : 245065,
+    "reason" : "RESTING",
+    "at" : 1792269751055,
+    "bothActiveEqualRemaining" : true
+  }, {
+    "seq" : 245662,
+    "reason" : "RESTING",
+    "at" : 1792269751306,
+    "bothActiveEqualRemaining" : true
+  }, {
+    "seq" : 246180,
+    "reason" : "RESTING",
+    "at" : 1792269751556,
+    "bothActiveEqualRemaining" : true
+  }, {
+    "seq" : 246897,
+    "reason" : "RESTING",
+    "at" : 1792269751806,
+    "bothActiveEqualRemaining" : true
+  }, {
+    "seq" : 247641,
+    "reason" : "RESTING",
+    "at" : 1792269752057,
+    "bothActiveEqualRemaining" : true
+  }, {
+    "seq" : 247887,
+    "reason" : "RESTING",
+    "at" : 1792269752307,
+    "bothActiveEqualRemaining" : true
+  }, {
+    "seq" : 248182,
+    "reason" : "RESTING",
+    "at" : 1792269752557,
+    "bothActiveEqualRemaining" : true
+  }, {
+    "seq" : 248488,
+    "reason" : "RESTING",
+    "at" : 1792269752807,
+    "bothActiveEqualRemaining" : true
+  }, {
+    "seq" : 248631,
+    "reason" : "RESTING",
+    "at" : 1792269753058,
+    "bothActiveEqualRemaining" : true
+  }, {
+    "seq" : 248778,
+    "reason" : "RESTING",
+    "at" : 1792269753308,
+    "bothActiveEqualRemaining" : true
+  }, {
+    "seq" : 248930,
+    "reason" : "RESTING",
+    "at" : 1792269753558,
+    "bothActiveEqualRemaining" : true
+  }, {
+    "seq" : 249364,
+    "reason" : "RESTING",
+    "at" : 1792269753808,
+    "bothActiveEqualRemaining" : true
+  }, {
+    "seq" : 249724,
+    "reason" : "RESTING",
+    "at" : 1792269754059,
+    "bothActiveEqualRemaining" : true
+  } ],
+  "prefixRejectionReason" : null,
+  "diagnostics" : [ {
+    "id" : "qw0-pair-0",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : true,
+    "price" : 0.48,
+    "submittedMs" : 1792269750302,
+    "activationDueMs" : 1792269750552,
+    "activatedMs" : 1792269750554,
+    "terminalMs" : 1792269754123,
+    "terminalReason" : "LAB_SETTLEMENT_COMPONENT",
+    "initialQueueAhead" : 160,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 0.00,
+    "activeMs" : 3569,
+    "printObservations" : {
+      "SETTLEMENT_COMPONENT" : 4
+    }
+  }, {
+    "id" : "qw0-pair-1",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : true,
+    "price" : 0.4,
+    "submittedMs" : 1792269750302,
+    "activationDueMs" : 1792269750552,
+    "activatedMs" : 1792269750554,
+    "terminalMs" : null,
+    "terminalReason" : "OPEN",
+    "initialQueueAhead" : 30,
+    "remainingQueueAhead" : 30,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5.00,
+    "activeMs" : 3569,
+    "printObservations" : { }
+  } ],
+  "receiptAudit" : [ {
+    "seq" : 244432,
+    "eventIndex" : 0,
+    "at" : 1792269750641,
+    "allocations" : [ ],
+    "sourceMs" : 1792269750570
+  }, {
+    "seq" : 244522,
+    "eventIndex" : 0,
+    "at" : 1792269750671,
+    "allocations" : [ ],
+    "sourceMs" : 1792269750602
+  }, {
+    "seq" : 244700,
+    "eventIndex" : 0,
+    "at" : 1792269750778,
+    "allocations" : [ ],
+    "sourceMs" : 1792269750708
+  }, {
+    "seq" : 244706,
+    "eventIndex" : 0,
+    "at" : 1792269750801,
+    "allocations" : [ ],
+    "sourceMs" : 1792269750732
+  }, {
+    "seq" : 245247,
+    "eventIndex" : 0,
+    "at" : 1792269751137,
+    "allocations" : [ ],
+    "sourceMs" : 1792269751068
+  }, {
+    "seq" : 245463,
+    "eventIndex" : 0,
+    "at" : 1792269751224,
+    "allocations" : [ ],
+    "sourceMs" : 1792269751155
+  }, {
+    "seq" : 245497,
+    "eventIndex" : 0,
+    "at" : 1792269751244,
+    "allocations" : [ ],
+    "sourceMs" : 1792269751176
+  }, {
+    "seq" : 245509,
+    "eventIndex" : 0,
+    "at" : 1792269751254,
+    "allocations" : [ ],
+    "sourceMs" : 1792269751184
+  }, {
+    "seq" : 245531,
+    "eventIndex" : 0,
+    "at" : 1792269751263,
+    "allocations" : [ ],
+    "sourceMs" : 1792269751195
+  }, {
+    "seq" : 245543,
+    "eventIndex" : 0,
+    "at" : 1792269751268,
+    "allocations" : [ ],
+    "sourceMs" : 1792269751199
+  }, {
+    "seq" : 245565,
+    "eventIndex" : 0,
+    "at" : 1792269751275,
+    "allocations" : [ ],
+    "sourceMs" : 1792269751205
+  }, {
+    "seq" : 245569,
+    "eventIndex" : 0,
+    "at" : 1792269751281,
+    "allocations" : [ ],
+    "sourceMs" : 1792269751211
+  }, {
+    "seq" : 245579,
+    "eventIndex" : 0,
+    "at" : 1792269751285,
+    "allocations" : [ ],
+    "sourceMs" : 1792269751217
+  }, {
+    "seq" : 245621,
+    "eventIndex" : 0,
+    "at" : 1792269751296,
+    "allocations" : [ ],
+    "sourceMs" : 1792269751226
+  }, {
+    "seq" : 245655,
+    "eventIndex" : 0,
+    "at" : 1792269751301,
+    "allocations" : [ ],
+    "sourceMs" : 1792269751231
+  }, {
+    "seq" : 245692,
+    "eventIndex" : 0,
+    "at" : 1792269751312,
+    "allocations" : [ ],
+    "sourceMs" : 1792269751240
+  }, {
+    "seq" : 246068,
+    "eventIndex" : 0,
+    "at" : 1792269751515,
+    "allocations" : [ ],
+    "sourceMs" : 1792269751446
+  }, {
+    "seq" : 247102,
+    "eventIndex" : 0,
+    "at" : 1792269751885,
+    "allocations" : [ ],
+    "sourceMs" : 1792269751815
+  }, {
+    "seq" : 247359,
+    "eventIndex" : 0,
+    "at" : 1792269751966,
+    "allocations" : [ ],
+    "sourceMs" : 1792269751893
+  }, {
+    "seq" : 247846,
+    "eventIndex" : 0,
+    "at" : 1792269752282,
+    "allocations" : [ ],
+    "sourceMs" : 1792269752212
+  }, {
+    "seq" : 247862,
+    "eventIndex" : 0,
+    "at" : 1792269752291,
+    "allocations" : [ ],
+    "sourceMs" : 1792269752221
+  }, {
+    "seq" : 247886,
+    "eventIndex" : 0,
+    "at" : 1792269752302,
+    "allocations" : [ ],
+    "sourceMs" : 1792269752234
+  }, {
+    "seq" : 247923,
+    "eventIndex" : 0,
+    "at" : 1792269752318,
+    "allocations" : [ ],
+    "sourceMs" : 1792269752248
+  }, {
+    "seq" : 247931,
+    "eventIndex" : 0,
+    "at" : 1792269752322,
+    "allocations" : [ ],
+    "sourceMs" : 1792269752253
+  }, {
+    "seq" : 247933,
+    "eventIndex" : 0,
+    "at" : 1792269752322,
+    "allocations" : [ ],
+    "sourceMs" : 1792269752253
+  }, {
+    "seq" : 248061,
+    "eventIndex" : 0,
+    "at" : 1792269752457,
+    "allocations" : [ ],
+    "sourceMs" : 1792269752389
+  }, {
+    "seq" : 248103,
+    "eventIndex" : 0,
+    "at" : 1792269752504,
+    "allocations" : [ ],
+    "sourceMs" : 1792269752431
+  }, {
+    "seq" : 248133,
+    "eventIndex" : 0,
+    "at" : 1792269752529,
+    "allocations" : [ ],
+    "sourceMs" : 1792269752457
+  }, {
+    "seq" : 248348,
+    "eventIndex" : 0,
+    "at" : 1792269752645,
+    "allocations" : [ ],
+    "sourceMs" : 1792269752576
+  }, {
+    "seq" : 248374,
+    "eventIndex" : 0,
+    "at" : 1792269752658,
+    "allocations" : [ ],
+    "sourceMs" : 1792269752588
+  }, {
+    "seq" : 248541,
+    "eventIndex" : 0,
+    "at" : 1792269752912,
+    "allocations" : [ ],
+    "sourceMs" : 1792269752843
+  }, {
+    "seq" : 248693,
+    "eventIndex" : 0,
+    "at" : 1792269753151,
+    "allocations" : [ ],
+    "sourceMs" : 1792269753082
+  }, {
+    "seq" : 248900,
+    "eventIndex" : 0,
+    "at" : 1792269753538,
+    "allocations" : [ ],
+    "sourceMs" : 1792269753466
+  }, {
+    "seq" : 248902,
+    "eventIndex" : 0,
+    "at" : 1792269753545,
+    "allocations" : [ ],
+    "sourceMs" : 1792269753475
+  }, {
+    "seq" : 249191,
+    "eventIndex" : 0,
+    "at" : 1792269753681,
+    "allocations" : [ ],
+    "sourceMs" : 1792269753611
+  }, {
+    "seq" : 249199,
+    "eventIndex" : 0,
+    "at" : 1792269753685,
+    "allocations" : [ ],
+    "sourceMs" : 1792269753616
+  }, {
+    "seq" : 249456,
+    "eventIndex" : 0,
+    "at" : 1792269753911,
+    "allocations" : [ ],
+    "sourceMs" : 1792269753842
+  }, {
+    "seq" : 249474,
+    "eventIndex" : 0,
+    "at" : 1792269753926,
+    "allocations" : [ ],
+    "sourceMs" : 1792269753856
+  }, {
+    "seq" : 249480,
+    "eventIndex" : 0,
+    "at" : 1792269753928,
+    "allocations" : [ ],
+    "sourceMs" : 1792269753859
+  }, {
+    "seq" : 249872,
+    "eventIndex" : 0,
+    "at" : 1792269754123,
+    "allocations" : [ {
+      "id" : "qw0-pair-0",
+      "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "buy" : true,
+      "price" : 0.48,
+      "size" : 5.00,
+      "at" : 1792269754123
+    } ],
+    "sourceMs" : 1792269754052
+  } ],
+  "modelAllocations" : [ {
+    "id" : "qw0-pair-0",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : true,
+    "price" : 0.48,
+    "size" : 5.00,
+    "at" : 1792269754123
+  } ],
+  "actualComponentAllocationDiagnostics" : {
+    "venueQuantity" : 1964.696564,
+    "hiddenLiquidityAndCrossPriceQueueUncertainty" : true,
+    "unusedQuantity" : 1799.696564,
+    "queueAbsorbed" : 160.000000,
+    "uniqueMakerComponents" : 108,
+    "allocatedQuantity" : 5.00
+  },
+  "counterpartExecutionOmitted" : false,
+  "hedgeExitAndResolutionOmitted" : true,
+  "actualBotFillsCreated" : 0,
+  "candidateAccountSimulated" : false,
+  "netPnlRecomputed" : false,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false
+}

@@ -1,0 +1,18 @@
+{
+  "scope": "VERIFIED_ONE_ORIGINAL_RECEIPT_ROUTE_NOT_BOT_FILLS",
+  "sourceCoordinate": [97, 0],
+  "transactionHash": "0x12251c3fc5cc98f770892d16a115904cec18f729ffb7f15d2f8558beeea196fc",
+  "conservedMakerComponents": 16,
+  "venueSharesRaw": 200000000,
+  "takerCollateralRaw": 114000000,
+  "routeSharesRaw": {"DIRECT": 55000000, "MINT": 145000000},
+  "rawReceiptSha256": "2ae018249628d686642c90da258643c8da45ad76d30bbfd9ad81512efc53c175",
+  "sourceObservationIdentityVerified": true,
+  "nativePoolExtended": false,
+  "counterfactualQueueAllocationProven": false,
+  "modelFillsCreated": 0,
+  "marketNetPnlRecomputed": false,
+  "completeAccountComparisonPerformed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

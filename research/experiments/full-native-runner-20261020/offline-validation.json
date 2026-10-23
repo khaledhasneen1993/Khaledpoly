@@ -1,0 +1,17 @@
+{
+  "scope": "LOCAL_BUILD_AND_SYNTHETIC_PARSER_PROOF_NOT_MARKET_ACCOUNT",
+  "completePythonRegression": {"tests": 313, "seconds": 450.356, "result": "PASS"},
+  "targetedNewTests": {"tests": 9, "seconds": 0.048, "result": "PASS"},
+  "nativeJava17Compile": "PASS_ALL94_FROZEN_CORE_SOURCES_PLUS_RESEARCH_RUNNER_AND_HELPERS",
+  "syntheticNativeProof": "PASS_WHOLE_DEFAULT_REPORT_AND_AUDIT_TIMER_FRAME_AND_HALT_GUARDS",
+  "frozenFilesAndGeneratedRunnerHashVerified": true,
+  "priorCiRun": 39361402048,
+  "priorCiRegression": {"tests": 304, "seconds": 355.498, "result": "PASS"},
+  "priorCiNativeArtifactIndependentlyVerified": true,
+  "originalSourceFirstBlockerDiagnosis": "PENDING_NEW_CI_NOT_RUN_LOCALLY",
+  "completeAccountComparisonPerformed": false,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO"
+}

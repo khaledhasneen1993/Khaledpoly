@@ -1,0 +1,306 @@
+[
+  {
+    "data": {
+      "requiredEdge": 0.030071725608214885,
+      "validPrices": true,
+      "orderIds": [
+        "sim-research-1",
+        "sim-research-2"
+      ],
+      "volatility": 0.000143451216429769,
+      "reservedNetEdge": 0.028,
+      "quantity": 5.0,
+      "depth": 20,
+      "condition": "0xb97c04fd0d1d7eb20763142c7f90d79dde4ba9563553fbb320cc73c64f521892",
+      "at": 1792254146591,
+      "reservedGrossEdge": 0.03
+    },
+    "at": 1792254146591,
+    "kind": "RESTING_RISK_CHECK"
+  },
+  {
+    "data": {
+      "requiredEdge": 0.030003988322400164,
+      "validPrices": true,
+      "orderIds": [
+        "sim-research-3",
+        "sim-research-4"
+      ],
+      "volatility": 7.976644800328e-06,
+      "reservedNetEdge": 0.028,
+      "quantity": 5.0,
+      "depth": 10,
+      "condition": "0x217c4eab87e4828762fcbf05443c43c6b08a7d740d5b64ae2af2cf43bd741edd",
+      "at": 1792254372390,
+      "reservedGrossEdge": 0.03
+    },
+    "at": 1792254372390,
+    "kind": "RESTING_RISK_CHECK"
+  },
+  {
+    "data": {
+      "requiredEdge": 0.030000000000079685,
+      "validPrices": true,
+      "orderIds": [
+        "sim-research-5",
+        "sim-research-6"
+      ],
+      "volatility": 1.59369e-13,
+      "reservedNetEdge": 0.028,
+      "quantity": 5.0,
+      "depth": 34,
+      "condition": "0x9d72f9c9d2a27fb124cef81a495f00f7b09cf7545020b36adc641a5e5a323b91",
+      "at": 1792254663511,
+      "reservedGrossEdge": 0.03
+    },
+    "at": 1792254663511,
+    "kind": "RESTING_RISK_CHECK"
+  },
+  {
+    "data": {
+      "requiredEdge": 0.030231740335510904,
+      "validPrices": true,
+      "orderIds": [
+        "sim-research-11",
+        "sim-research-12"
+      ],
+      "volatility": 0.00046348067102181,
+      "reservedNetEdge": 0.028,
+      "quantity": 5.0,
+      "depth": 17,
+      "condition": "0x9d72f9c9d2a27fb124cef81a495f00f7b09cf7545020b36adc641a5e5a323b91",
+      "at": 1792255241384,
+      "reservedGrossEdge": 0.03
+    },
+    "at": 1792255241384,
+    "kind": "RESTING_RISK_CHECK"
+  },
+  {
+    "data": {
+      "requiredEdge": 0.015092129889670333,
+      "validPrices": false,
+      "orderIds": [
+        "sim-research-13",
+        "sim-research-14"
+      ],
+      "volatility": 2.1639779340666e-05,
+      "reservedNetEdge": 0.038,
+      "quantity": 5.0,
+      "depth": 196.8,
+      "condition": "0x9d72f9c9d2a27fb124cef81a495f00f7b09cf7545020b36adc641a5e5a323b91",
+      "at": 1792255251400,
+      "reservedGrossEdge": 0.04
+    },
+    "at": 1792255251400,
+    "kind": "RESTING_RISK_CHECK"
+  },
+  {
+    "data": {
+      "requiredEdge": 0.03037214017373145,
+      "validPrices": true,
+      "orderIds": [
+        "sim-research-15",
+        "sim-research-16"
+      ],
+      "volatility": 0.000744280347462905,
+      "reservedNetEdge": 0.028,
+      "quantity": 5.0,
+      "depth": 12,
+      "condition": "0x5ad7f97316ebc4a083b80b89baf69daa1ffe31cea40d7fb55df4344496c232ef",
+      "at": 1792255897071,
+      "reservedGrossEdge": 0.03
+    },
+    "at": 1792255897071,
+    "kind": "RESTING_RISK_CHECK"
+  },
+  {
+    "data": {
+      "requiredEdge": 0.025846895196827965,
+      "validPrices": false,
+      "orderIds": [
+        "sim-research-17",
+        "sim-research-18"
+      ],
+      "volatility": 0.000443790393655932,
+      "reservedNetEdge": 0.098,
+      "quantity": 5.0,
+      "depth": 64,
+      "condition": "0xf8a5b726659a5e30b53de435818ab906ded71bac3863755d9c00226f5a6b5cd9",
+      "at": 1792255906333,
+      "reservedGrossEdge": 0.1
+    },
+    "at": 1792255906333,
+    "kind": "RESTING_RISK_CHECK"
+  },
+  {
+    "data": {
+      "requiredEdge": 0.01957945160231497,
+      "validPrices": true,
+      "orderIds": [
+        "sim-research-21",
+        "sim-research-22"
+      ],
+      "volatility": 4.940320462994e-05,
+      "reservedNetEdge": 0.018,
+      "quantity": 5.0,
+      "depth": 104.66,
+      "condition": "0x6fa4516f1c527c6f4d871845a716a356fd18a15e687e6b14d8d5b2b71e27b1f8",
+      "at": 1792256462054,
+      "reservedGrossEdge": 0.02
+    },
+    "at": 1792256462054,
+    "kind": "RESTING_RISK_CHECK"
+  },
+  {
+    "data": {
+      "requiredEdge": 0.02664935562036393,
+      "validPrices": true,
+      "orderIds": [
+        "sim-research-23",
+        "sim-research-24"
+      ],
+      "volatility": 0.00032805124072786,
+      "reservedNetEdge": 0.018,
+      "quantity": 5.0,
+      "depth": 60.66,
+      "condition": "0x6fa4516f1c527c6f4d871845a716a356fd18a15e687e6b14d8d5b2b71e27b1f8",
+      "at": 1792256496614,
+      "reservedGrossEdge": 0.02
+    },
+    "at": 1792256496614,
+    "kind": "RESTING_RISK_CHECK"
+  },
+  {
+    "data": {
+      "requiredEdge": 0.030447506842769992,
+      "validPrices": false,
+      "orderIds": [
+        "sim-research-25",
+        "sim-research-26"
+      ],
+      "volatility": 0.000895013685539985,
+      "reservedNetEdge": 0.038,
+      "quantity": 5.0,
+      "depth": 5,
+      "condition": "0x73f78f9c7e04955fa984700c909eab56a82f3be59b18661277f3e7f16921e82c",
+      "at": 1792256648028,
+      "reservedGrossEdge": 0.04
+    },
+    "at": 1792256648028,
+    "kind": "RESTING_RISK_CHECK"
+  },
+  {
+    "data": {
+      "requiredEdge": 0.030330622209752703,
+      "validPrices": true,
+      "orderIds": [
+        "sim-research-27",
+        "sim-research-28"
+      ],
+      "volatility": 0.000661244419505408,
+      "reservedNetEdge": 0.018,
+      "quantity": 5.0,
+      "depth": 24,
+      "condition": "0x6fa4516f1c527c6f4d871845a716a356fd18a15e687e6b14d8d5b2b71e27b1f8",
+      "at": 1792256805198,
+      "reservedGrossEdge": 0.02
+    },
+    "at": 1792256805198,
+    "kind": "RESTING_RISK_CHECK"
+  },
+  {
+    "data": {
+      "requiredEdge": 0.030064838737630016,
+      "validPrices": true,
+      "orderIds": [
+        "sim-research-29",
+        "sim-research-30"
+      ],
+      "volatility": 0.000129677475260031,
+      "reservedNetEdge": 0.018,
+      "quantity": 5.0,
+      "depth": 28.66,
+      "condition": "0x6fa4516f1c527c6f4d871845a716a356fd18a15e687e6b14d8d5b2b71e27b1f8",
+      "at": 1792257053475,
+      "reservedGrossEdge": 0.02
+    },
+    "at": 1792257053475,
+    "kind": "RESTING_RISK_CHECK"
+  },
+  {
+    "data": {
+      "requiredEdge": 0.030052950665634612,
+      "validPrices": true,
+      "orderIds": [
+        "sim-research-33",
+        "sim-research-34"
+      ],
+      "volatility": 0.000105901331269226,
+      "reservedNetEdge": 0.018,
+      "quantity": 5.0,
+      "depth": 20,
+      "condition": "0x42c9eb890375a8a4d0c166d69b86a8b401249812f4d2d48ed2c6eb9d18ae6cbd",
+      "at": 1792257369220,
+      "reservedGrossEdge": 0.02
+    },
+    "at": 1792257369220,
+    "kind": "RESTING_RISK_CHECK"
+  },
+  {
+    "data": {
+      "requiredEdge": 0.030035962623521886,
+      "validPrices": false,
+      "orderIds": [
+        "sim-research-35",
+        "sim-research-36"
+      ],
+      "volatility": 7.1925247043775e-05,
+      "reservedNetEdge": 0.038,
+      "quantity": 5.0,
+      "depth": 25.08,
+      "condition": "0xcde8c196bcd6a1275c63c02771710853456601b4c46999a68cdc991b0eb2b8b8",
+      "at": 1792257458567,
+      "reservedGrossEdge": 0.04
+    },
+    "at": 1792257458567,
+    "kind": "RESTING_RISK_CHECK"
+  },
+  {
+    "data": {
+      "requiredEdge": 0.030219121389235805,
+      "validPrices": false,
+      "orderIds": [
+        "sim-research-37",
+        "sim-research-38"
+      ],
+      "volatility": 0.000438242778471613,
+      "reservedNetEdge": 0.068,
+      "quantity": 5.0,
+      "depth": 12,
+      "condition": "0x6869ffab8a017b337b5523c4132d2994fccf9dcca9881b6975b7e7146a6a7c83",
+      "at": 1792258656119,
+      "reservedGrossEdge": 0.07
+    },
+    "at": 1792258656119,
+    "kind": "RESTING_RISK_CHECK"
+  },
+  {
+    "data": {
+      "requiredEdge": 0.030000621531553837,
+      "validPrices": true,
+      "orderIds": [
+        "sim-research-43",
+        "sim-research-44"
+      ],
+      "volatility": 1.243063107675e-06,
+      "reservedNetEdge": 0.018,
+      "quantity": 5.0,
+      "depth": 14.78,
+      "condition": "0x1de04e198fd04424e3edecd0f6586cf2f410f29d668d3928861d595b7c3da20c",
+      "at": 1792260205618,
+      "reservedGrossEdge": 0.02
+    },
+    "at": 1792260205618,
+    "kind": "RESTING_RISK_CHECK"
+  }
+]

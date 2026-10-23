@@ -1,0 +1,93 @@
+{
+  "scope": "VERIFIED_ORIGINAL_PRE_ACTIVATION0_ACTIVE_ARRIVAL_SOURCE_LAG_FRONTIERS_NOT_PNL",
+  "sourceCommit": "886ee0ce0f3416ff394c85baca7b41f351f6986a",
+  "runId": 39443362971,
+  "artifactId": 12275333120,
+  "artifactSha256": "f8dd0c2754b5ee15d6f78240d63dfdaf1aed7617537e5836139f0d029d0a0902",
+  "results": {
+    "baseline": {
+      "sequence": 82880,
+      "originalIdentitiesConsumed": 836,
+      "unknownAtomicClockObservations": 834,
+      "unknownPreActivationClockObservations": 8,
+      "transactionHash": "0x5881a6b9f9eb4ea32f34d6b45be18059debb840090d717ee8eb3bd65c628f90f",
+      "publicTradeIdSha256": "b59ff6f3fb423ed8bcf4a361645d8fbe5c2ce1a78f395bfc541f3961ec3a80e5",
+      "arrivalMs": 1792269639606,
+      "sourceMs": 1792269639536,
+      "orders": [
+        {
+          "id": "sim-research-1",
+          "price": 0.24,
+          "submittedMs": 1792269639335,
+          "activationDueMs": 1792269639585,
+          "activatedMs": 1792269639585,
+          "activeAtStopMs": 21,
+          "sourceBeforeActivationMs": 49,
+          "initialQueueAhead": 0,
+          "remainingQueueAhead": 0,
+          "canceledAt": 1792269639606
+        },
+        {
+          "id": "sim-research-2",
+          "price": 0.71,
+          "submittedMs": 1792269639335,
+          "activationDueMs": 1792269639585,
+          "activatedMs": 1792269639585,
+          "activeAtStopMs": 21,
+          "sourceBeforeActivationMs": 49,
+          "initialQueueAhead": 0,
+          "remainingQueueAhead": 0,
+          "canceledAt": 1792269639606
+        }
+      ],
+      "frontierOrdersActiveButTradeSourceBeforeTheirActivation": true,
+      "executionsBeforeStop": 0,
+      "fullAccountNetAfterCosts": "UNKNOWN_INCOMPLETE_PREFIX_NOT_FINANCIAL_RESULT"
+    },
+    "candidate": {
+      "sequence": 8739,
+      "originalIdentitiesConsumed": 94,
+      "unknownAtomicClockObservations": 92,
+      "unknownPreActivationClockObservations": 7,
+      "transactionHash": "0xbc2c9156987c4026fcb9a62a8a6e9065aeb21d1c9331b8b8976457bc90e648a3",
+      "publicTradeIdSha256": "cf059918208a510461b29de4d5f56316ae241d36d70105aa67bb889dceca1cf4",
+      "arrivalMs": 1792269594507,
+      "sourceMs": 1792269594437,
+      "orders": [
+        {
+          "id": "sim-research-1",
+          "price": 0.47,
+          "submittedMs": 1792269594252,
+          "activationDueMs": 1792269594502,
+          "activatedMs": 1792269594503,
+          "activeAtStopMs": 4,
+          "sourceBeforeActivationMs": 66,
+          "initialQueueAhead": 1182.3,
+          "remainingQueueAhead": 1182.3,
+          "canceledAt": 1792269594507
+        },
+        {
+          "id": "sim-research-2",
+          "price": 0.48,
+          "submittedMs": 1792269594252,
+          "activationDueMs": 1792269594502,
+          "activatedMs": 1792269594503,
+          "activeAtStopMs": 4,
+          "sourceBeforeActivationMs": 66,
+          "initialQueueAhead": 180,
+          "remainingQueueAhead": 180,
+          "canceledAt": 1792269594507
+        }
+      ],
+      "frontierOrdersActiveButTradeSourceBeforeTheirActivation": true,
+      "executionsBeforeStop": 0,
+      "fullAccountNetAfterCosts": "UNKNOWN_INCOMPLETE_PREFIX_NOT_FINANCIAL_RESULT"
+    }
+  },
+  "completeAccountComparisonPerformed": false,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO",
+  "nextStep": "No unchanged rerun. Prove narrowly source-time-at-or-before-activation irrelevance, including exact activation/cancel/queue ordering and counterexamples, before any separately frozen guard; otherwise collect bounded exact frontier receipts. Do not tune holdout or strategy."
+}

@@ -1,0 +1,16 @@
+{
+  "experiment": "RAW-HASH-GROUP-QUARANTINE-0",
+  "frozenBeforeProbeEvaluation": true,
+  "quarantineMaxMs": 250,
+  "ttlSource": "Existing research activationMs; no parameter search",
+  "productionEnabled": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    "research/phase6/depth_group_probe.py": "d2d8fca828afdb61ce93ffa5bd716b7978d8c5f727750807865750a18a11ebb9",
+    "research/phase6/tests/test_depth_group_probe.py": "551e50d811a938bdb04b0c1033abf256d507a989f52f63ecfbfb24df3dd89fc0",
+    "research/phase6/run_depth_group_probe.py": "ed2b3e1a5379d424237b70d96a8e51adde92b8ff01b006e0def0dd7dd84333e7",
+    "research/experiments/depth-group-probe-20261018/evidence.json.gz.b64": "8243fbcf61a04cd68f2d77e1ae3da58e39cc86ff6868fff647fcc1d31ff288e4",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  }
+}

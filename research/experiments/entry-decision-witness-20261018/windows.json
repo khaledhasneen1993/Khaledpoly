@@ -1,0 +1,32 @@
+[
+  {
+    "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "startMs": 1792269710984,
+    "endMs": 1792269713837
+  },
+  {
+    "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "startMs": 1792269723635,
+    "endMs": 1792269724642
+  },
+  {
+    "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "startMs": 1792269749947,
+    "endMs": 1792269751801
+  },
+  {
+    "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "startMs": 1792269758209,
+    "endMs": 1792269759209
+  },
+  {
+    "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "startMs": 1792269759353,
+    "endMs": 1792269760353
+  },
+  {
+    "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "startMs": 1792269785142,
+    "endMs": 1792269786142
+  }
+]

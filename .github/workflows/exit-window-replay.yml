@@ -1,0 +1,57 @@
+name: PAPER seven versus complete pre-gap exit labels
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/exit-window-replay.yml'
+      - 'research/phase6/exit-window-replay-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-complete-exit-window-account-control
+  cancel-in-progress: false
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+      - name: Offline receipt export, archive and regression checks
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Verify reused tested executor provenance without rebuilding unchanged Java
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          test "$(gh api repos/${{ github.repository }}/actions/artifacts/12138139813 --jq .workflow_run.head_sha)" = d25c19a13afb55f8413af3d61846f8d4e666bd3c
+          test "$(gh api repos/${{ github.repository }}/actions/artifacts/12138139813 --jq .digest)" = sha256:1beda11f1796ada3030e19f13f4a816146331d80ccc71c8e342e4b1dd43c50c8
+      - uses: actions/download-artifact@v4
+        with:
+          name: exit-covered-replay-executor
+          run-id: 39132714883
+          github-token: ${{ github.token }}
+          path: executor-service/target
+      - uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: window-input
+      - name: Same full development tape and account, seven versus fourteen exact bindings
+        run: >-
+          python3 -u -m research.phase6.compare_frozen_label_variants --input-root window-input
+          --output research/output/exit-window-replay --freeze research/phase6/exit-window-replay-freeze.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seven-versus-fourteen-account-control
+          retention-days: 7
+          path: |
+            research/output/exit-window-replay/*/report.json
+            research/output/exit-window-replay/*/audit.jsonl
+            research/output/exit-window-replay/comparison.json

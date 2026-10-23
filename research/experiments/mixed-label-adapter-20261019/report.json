@@ -1,0 +1,17 @@
+{
+  "experiment" : "CONSERVED-MIXED-LAB0",
+  "bindings" : 451,
+  "duplicateAggregateSuppressed" : 0,
+  "actualComponents" : 1038,
+  "adapterOnlyNotAccountReplay" : true,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false,
+  "candidateAccountSimulated" : false,
+  "consumedBindings" : 451,
+  "originalObservations" : 451,
+  "modelFillsCreated" : 0,
+  "netPnlRecomputed" : false,
+  "newPublicReads" : 0,
+  "labelsSha256" : "682c0d599eb0beaae7b1717decabff09e69185ad483593f823e6a10b6875459a",
+  "portionsLogicalSha256" : "402d6f602110befe0b62fd06e34ee93e34e8e960c3c4f88bd5e3b1bf5969e849"
+}

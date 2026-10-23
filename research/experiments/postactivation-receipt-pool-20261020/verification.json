@@ -1,0 +1,15 @@
+{
+  "runId": 39478398235,
+  "jobId": 118820264563,
+  "artifactId": 12291405729,
+  "artifactSha256": "279ef3b0a279c8dfc6ca0b722fcfaffcd8dc0a9c792374d7fd266712a34034bf",
+  "scope": "VERIFIED_ALL645_NATIVE_PARITY_NOT_ACCOUNT",
+  "originalIdentities": 645,
+  "componentTuples": 1534,
+  "priorBindingsPreserved": 643,
+  "addedBindings": 2,
+  "readerRejectionGuards": 39,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

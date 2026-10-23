@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "experiment": "EXACT659-ONE-SAME-SOURCE-BASELINE-QW0",
+  "scope": "ORIGINAL_DEVELOPMENT_COMPARISON_NOT_INDEPENDENT_QUALIFICATION",
+  "sourceRunId": 39067539123,
+  "sourceStoredSha256": "9363443ae9287016ab7c63d3cf11d6b1ae33d814d9e3ad340bb99b33e7285074",
+  "sourceLogicalSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "poolLogicalSha256": "977b090ad0737c6c43fe9dd8d0fd7b96f2da94534f29b31f7b935f769232355b",
+  "expectedReceiptBindings": 659,
+  "expectedActualComponents": 1562,
+  "profiles": ["baseline", "candidate"],
+  "candidate": "UNCHANGED_QW0",
+  "newPublicReads": 0,
+  "newMarketCapture": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    ".github/workflows/post657-pool-replay.yml": "61063a96af502d8a2357615d576e7a58405c8f7d69d28430986084d89486dbf8",
+    "research/phase6/post657_pool_replay.py": "14b0a63979d95effe8c7a8718a234954c5fb9a8667a72d080cb063bb7fb37835",
+    "research/phase6/post657_pool_inputs.py": "9cdee46da09794956841bfcaf907b802abfd32dcc0d8fb1c196764b6bdbe6d91",
+    "research/phase6/post657_pool_build.py": "b6b2843076e93c16ee15645442fe05e670a7ef8aeef4c82a27e13340c3efb0cb",
+    "research/phase6/post657-replay-build-freeze.json": "4c2f25f70bc0bb19a47ab5378d3ff9ef80b8de200734a1e965b6e01c3c5e3c92",
+    "research/phase6/tests/test_post657_pool_replay.py": "a86316341eac0ad99d06f17c76d7840a1314bab08de00840cbb0b303d15d5ba3",
+    "research/phase6/post657_pool_result.py": "24f13e657b533bf9d156e4041f254cb4710a7730172b7add696ad42abad84887",
+    "research/experiments/post657-receipt-pool-20261023/ci-artifact.zip": "f68081a96160708fd386d5128fc9c90937031c9e0f91b34f824c608344c9a973",
+    "research/phase6/ConservedReceiptPool.java": "54fc35705bdb5143bab389f15e301fe758a10836a2a8f9054725d702fc98e53b",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00"
+  }
+}

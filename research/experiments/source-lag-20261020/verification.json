@@ -1,0 +1,12 @@
+{
+  "scope": "VERIFIED_BOUNDED_SOURCE_LAG_MATH_NOT_SESSION_OR_RUNTIME_AUTHORIZATION",
+  "matcherDifferentials": 5144,
+  "distinctFutureContinuations": 5144,
+  "proofPredicateRejections": 9,
+  "allOrderAndActualActivationCounterexamplesVerified": true,
+  "newAtomicSessionGuardImplemented": false,
+  "newRuntimeShortcutEnabled": false,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

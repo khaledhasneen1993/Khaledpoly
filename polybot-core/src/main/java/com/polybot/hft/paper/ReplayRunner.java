@@ -20,6 +20,7 @@ public final class ReplayRunner {
     PaperMatchingEngine matching = null;
     AccountLedger ledger = null;
     long seq = 0, at = 0, start = -1;
+    long maxBookAgeMs = 0;
     String run = null, lastKind = "";
     int breaches = 0;
     BigDecimal initial = null,
@@ -58,6 +59,7 @@ public final class ReplayRunner {
                       ? new BigDecimal("4")
                       : PaperMatchingEngine.decimal(data, "queueMultiplier"));
           fillsEnabled = data.path("fillsEnabled").asBoolean();
+          maxBookAgeMs = data.path("maxBookAgeMs").asLong();
           mergeCost = PaperMatchingEngine.decimal(data, "mergeCost");
           if (stress) mergeCost = mergeCost.add(new BigDecimal("0.05"));
           Path state = workspace.resolve("ledger.json");
@@ -88,6 +90,7 @@ public final class ReplayRunner {
           continue;
         }
         if (matching == null) continue; // raw startup events before account initialization
+        metrics.advance(at, maxBookAgeMs);
         if (kind.equals("ACCOUNT_MARK")) {
           var recordedMarks = new HashMap<String, BigDecimal>();
           data.fields()
@@ -144,8 +147,9 @@ public final class ReplayRunner {
           }
         }
         var update = matching.accept(input, at, data);
+        if (input.equals("GAP")) metrics.gap(DataGap.tokens(data));
         if (input.equals("BOOK")) {
-          metrics.book(data, at);
+          metrics.book(data, at, maxBookAgeMs);
           BigDecimal bid = BigDecimal.ZERO;
           for (var level : data.path("bids"))
             bid = bid.max(PaperMatchingEngine.decimal(level, "price"));

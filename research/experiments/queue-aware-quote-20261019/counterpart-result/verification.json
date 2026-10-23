@@ -1,0 +1,14 @@
+{
+  "scope": "REPRODUCED_COMPLETE30_COUNTERPART_PRICED_COMPONENTS_NOT_ACCOUNT",
+  "originalSequence": 243583,
+  "fixedHorizonMs": 1792269754123,
+  "completeOriginalObservations": 30,
+  "actualPriceCompatibleSharesRaw": 0,
+  "counterpartAfterHorizonAudited": false,
+  "actualBotFillsCreated": 0,
+  "candidateAccountSimulated": false,
+  "netPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "REQUIRE_BOTH_ACTUAL_ORDER_ACTIVATIONS_AND_COMPLETE_HEDGE_EXIT_ACCOUNT_PATH"
+}

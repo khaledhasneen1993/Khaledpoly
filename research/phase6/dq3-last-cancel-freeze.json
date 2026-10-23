@@ -1,0 +1,32 @@
+{
+  "experiment": "DQ3-LAST-SELECTED-START-FIRST-RESTING-CANCEL-0",
+  "frozenBeforeConditionalJavaProbe": true,
+  "scope": "Exact archived context and actual legacy decision witnesses plus unchanged PairPolicy and matcher. Conditional isolated pair, NOT full candidate account/actual strategy trace. All trade allocations suppressed.",
+  "newPublicRpcOrTapeScanAllowed": false,
+  "matcherArtifactRun": 39168798844,
+  "matcherArtifactId": 12151627900,
+  "expectedCancelRequestMs": 1792269786096,
+  "expectedCancelDueMs": 1792269786346,
+  "firstPossibleTargetPrintArrivalMs": 1792269786398,
+  "restingQuantity": "5.00",
+  "legacyNewEntryQuantityNotApplicable": ".5",
+  "candidateAccountSimulated": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    "research/phase6/dq3_last_cancel.py": "04b529b19b3c6cab4bc637871db25f25b0b3dff62e71ec4816f7de671e558d70",
+    "research/phase6/Dq3LastCancelProbe.java": "e914d119f13cc237d899a7b7512ff8e73a71d61ba18a46a442d8cd22b4010320",
+    "research/phase6/Dq3ActivationProbe.java": "f7d304329c8b0c4a00750214356642026e4969e2ea3ccd92af5f01cd782cfcc7",
+    "research/phase6/tests/test_dq3_last_cancel.py": "3598fe233460c29c99c19c828ec4485715d79205664ee6e25f61eb793a3ed0e7",
+    ".github/workflows/dq3-last-cancel.yml": "a1395a3ac785f4673789c81fdfa652759078eca81de9e2c79c144ea452af5011",
+    "research/experiments/depth-quote-20261018/last-activation-result/artifact.zip.b64": "1cbdc40582b6deac11785dead08f78fe8539719af661e2ea61d9dcf5aba3e577",
+    "research/experiments/depth-quote-20261018/last-activation-result/evidence.json": "38b60b6a4ba86435beb56dcf641b9cb73955751b7ee897d2d6733ae1c3849f8a",
+    "research/experiments/depth-quote-20261018/last-leg-result/artifact.zip.b64": "3d1ddcddd67b33724b3d4629d2ba59fe329b0e92ad3624c39c0c2de7378ee6e5",
+    "research/experiments/entry-decision-witness-20261018/result/artifact.zip.b64": "15fb072bea3a4e755ae74952f7d0db3b0284ae389dc31d261cd5bf441f9a4549",
+    "polybot-core/src/main/java/com/polybot/hft/paper/PaperMatchingEngine.java": "12e89574023e0457d2066f8e50d660491a3ef182ae066bab4725cd40324fa84f",
+    "polybot-core/src/main/java/com/polybot/hft/paper/PairPolicy.java": "041cfc590e08a28cbc3c0a9099b82d157441152acbb0d95ad14dbac928abde97",
+    "polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java": "2c5a97513e9ab1c261af7a9868f3b377c89e28e8cbb883800ee6d8aee87f9923",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  }
+}

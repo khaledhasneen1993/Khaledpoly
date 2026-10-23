@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "scope": "FROZEN_INDEXED_ORIGINAL_DEVELOPMENT_ONLY_BEFORE_ORIGINAL_REPLAY",
+  "parentCommit": "5d058750b04e1e86b48f1aa945d24a1cccbac1b5",
+  "originalPrefixSha256": "2842d45d1fc041fd7c1af8a6ed44403e9c0914e59eaf9c8e4b0515b504c6de8c",
+  "inputsSha256": {
+    "research/phase6/tests/test_indexed_execution.py": "d9bd554d751b8d43820ba60edb8a2fb4726a49f0083e8b9bdbd5260f35c25dc3",
+    "research/phase6/NativeReplaySupport.java": "2cfec2c1d2a79b2dda785f643a3a73821db5ec81f5c607816e63a0d7099a5799",
+    "research/phase6/ConservedReceiptPool.java": "c04ab462f829cda982d023c61a00036ccc1fcd7eec1bb25d114d91095886edc3",
+    "research/phase6/OfflineSessionLabels.java": "ae136889db3874fe9f7b740b39c76b4fb2967172ed49773d3bacb306edf464af",
+    "research/phase6/IndexedExecutionLabels.java": "5eb8170b6e49933588e2dc379c60bd286e9929d9e2c0d0c8f716cf9b2c2da0ad",
+    "research/phase6/IndexedExecutionProbe.java": "95b7a949d79519f339aae28f2103ccdadaf9edf9be94d15c4bb7307a5c37dfb1",
+    "research/phase6/IndexedReplaySupport.java": "c3ba3525d8d79afa154e0224bbe6792b34f5686197366904ad90da25fb247f9e",
+    "research/phase6/indexed_execution_build.py": "a13fbefbb75fa164d28347862899ab2ee88e468d15959daf817061c84955191a",
+    "research/phase6/indexed_execution_inputs.py": "98d9a23e633b9414a635d3e218be61858aadc3a2f814384b7ac7c7d65bf16c32",
+    "research/phase6/indexed_execution_result.py": "448c0720eff74be34e6f7a4fb109cc437d051ea0f92b41c36fb230f4c432d6f0",
+    "research/phase6/atomic-guard-freeze.json": "c9593de09264d3cb23fa5c734f2a5b27197b5f69c6113c23b2d825117dfe4b21",
+    "research/phase6/CompleteSourceIdentityIndex.java": "1cb280859fd232d3e418a26cc39b72368047a604b4a805a8b603cc77b40252c3",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00"
+  },
+  "prefixSourcesSha256": {
+    "polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java": "f0187fc9382e294c337e0d9ed3e6094dca3b21a8896781d407cc9ff7f485f3bb",
+    "polybot-core/src/main/java/com/polybot/hft/paper/NativeFullTapeReplay.java": "605407cb95ef0550fcc6d4ceac2c20cf31fe2f29cda3b7bb5eaf6d15dd80fde7"
+  },
+  "generatedSourcesSha256": {
+    "polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java": "6e0aeef74d4142db61f35c855f25c66a9af095c525052086aebe687447ebb6e1",
+    "polybot-core/src/main/java/com/polybot/hft/paper/NativeFullTapeReplay.java": "38ee0b564dd961244551bf12386ec067a83cf349dcd24d05fa709590e1d59578"
+  },
+  "unknownVenueQuantity": "UNKNOWN_NOT_ZERO",
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

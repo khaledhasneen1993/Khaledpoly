@@ -1,0 +1,114 @@
+{
+  "experiment": "DQ3-THREE-PRICE-SUPPORTED-ISOLATED-NO-CANCEL-ACTIVATION-0",
+  "selectionStatus": "Post-development receipt diagnostic, frozen before extraction; NOT holdout",
+  "immutableMatcherSourceCommit": "6dc5f25aec764ae55ecf0610a617baba77b7a6f7",
+  "matcherArtifactRun": 39168798844,
+  "matcherArtifactId": 12151627900,
+  "matchedEngineSourceSha256": "12e89574023e0457d2066f8e50d660491a3ef182ae066bab4725cd40324fa84f",
+  "scope": "Actual engine pre-event activation queue seed only; all trade allocation suppressed; no resting cancel/strategy/account trajectory claimed",
+  "spec": {
+    "startMs": 1792269748302,
+    "endMs": 1792269753806,
+    "maxBookAgeMs": 2000,
+    "sourceRows": 6163831,
+    "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+    "states": [
+      {
+        "id": "dq3-0-243583",
+        "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "originalSequence": 243583,
+        "submitMs": 1792269750302,
+        "activationDueMs": 1792269750552,
+        "endMs": 1792269780302,
+        "quotes": [
+          {
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "price": "0.49",
+            "quantity": "5.00"
+          },
+          {
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "price": "0.47",
+            "quantity": "5.00"
+          }
+        ],
+        "targetQuote": {
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "price": "0.49",
+          "quantity": "5.00"
+        },
+        "actualPriceCompatibleUpperBoundSharesRaw": 960720922,
+        "terminalMs": 1792269760873
+      },
+      {
+        "id": "dq3-0-245065",
+        "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "originalSequence": 245065,
+        "submitMs": 1792269751055,
+        "activationDueMs": 1792269751305,
+        "endMs": 1792269781055,
+        "quotes": [
+          {
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "price": "0.49",
+            "quantity": "5.00"
+          },
+          {
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "price": "0.48",
+            "quantity": "5.00"
+          }
+        ],
+        "targetQuote": {
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "price": "0.49",
+          "quantity": "5.00"
+        },
+        "actualPriceCompatibleUpperBoundSharesRaw": 960720922,
+        "terminalMs": 1792269760873
+      },
+      {
+        "id": "dq3-0-246180",
+        "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "originalSequence": 246180,
+        "submitMs": 1792269751556,
+        "activationDueMs": 1792269751806,
+        "endMs": 1792269781556,
+        "quotes": [
+          {
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "price": "0.49",
+            "quantity": "5.00"
+          },
+          {
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "price": "0.47",
+            "quantity": "5.00"
+          }
+        ],
+        "targetQuote": {
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "price": "0.49",
+          "quantity": "5.00"
+        },
+        "actualPriceCompatibleUpperBoundSharesRaw": 960720922,
+        "terminalMs": 1792269760873
+      }
+    ]
+  },
+  "liveAllowed": false,
+  "independentPaperQualificationAllowed": false,
+  "filesSha256": {
+    "research/phase6/dq3_activation_context.py": "678d5cd6d3925d78f5e07c22d8de950814ecebc1e3f0e0029490d3922dfc09cc",
+    "research/phase6/Dq3ActivationProbe.java": "f7d304329c8b0c4a00750214356642026e4969e2ea3ccd92af5f01cd782cfcc7",
+    "research/phase6/tests/test_dq3_activation_context.py": "1a578b1774caa95eea53d8482932f154eaa1067e18f6fb0e0c6c4f945d8e4dfc",
+    ".github/workflows/dq3-activation.yml": "78a01fb692966c9b531c7a62815b383780cef630ebbc8fd5561e47ce881da7ad",
+    "polybot-core/src/main/java/com/polybot/hft/paper/PaperMatchingEngine.java": "12e89574023e0457d2066f8e50d660491a3ef182ae066bab4725cd40324fa84f",
+    "polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java": "2c5a97513e9ab1c261af7a9868f3b377c89e28e8cbb883800ee6d8aee87f9923",
+    "research/phase6/dq3_bottleneck_receipts.py": "f45aba54de40426e6545120c428d2e0f85cdf6857ff0018ca26a6667b1014488",
+    "research/experiments/depth-quote-20261018/traffic-result/artifact.zip.b64": "863e481db5a8c9cc5fe49d981644be5fd26894ba71015763c6010a2ec8cfced5",
+    "research/experiments/depth-quote-20261018/overlap-result/coverage.json": "c7af4528e8d8746942b87897263dbe4d529771c383a9bd74a379560787d1dc06",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  }
+}

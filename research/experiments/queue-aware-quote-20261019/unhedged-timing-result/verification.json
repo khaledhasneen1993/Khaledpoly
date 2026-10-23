@@ -1,0 +1,21 @@
+{
+  "scope": "CONDITIONAL_NO_FURTHER_ALLOCATIONS_WAIT_CANCEL_NOT_ACCOUNT",
+  "actualPairPolicyChecks": 21,
+  "conditionalCancelRequestMs": 1792269759315,
+  "conditionalCancelDueMs": 1792269759565,
+  "conditionalCancelAck": {
+    "originalSequence": 259283,
+    "eventIndex": 0,
+    "at": 1792269759566,
+    "kind": "BOOK"
+  },
+  "sourcePostFillCounterpartObservations": 79,
+  "postFillCounterpartExecutionUnknown": true,
+  "accountRiskAndOtherMarketsOmitted": true,
+  "fillsCreated": 0,
+  "candidateAccountSimulated": false,
+  "netPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "REQUIRE_BOUNDED_POST_FILL_RECEIPTS_BEFORE_ACTUAL_HEDGE_EXIT_ACCOUNT_PATH"
+}

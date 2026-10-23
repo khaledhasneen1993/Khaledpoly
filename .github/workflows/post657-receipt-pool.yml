@@ -1,0 +1,62 @@
+name: PAPER exact659 receipt pool native parity ONLY
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/post657-receipt-pool.yml', 'research/phase6/post657-pool-freeze.json']
+permissions:
+  contents: read
+concurrency:
+  group: paper-exact659-native-parity
+  cancel-in-progress: false
+jobs:
+  native-parity-no-tape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: Frozen659 expansion and regressions; no RPC or tape
+        run: |
+          python3 -c 'import json,hashlib;from pathlib import Path;f=json.loads(Path("research/phase6/post657-pool-freeze.json").read_bytes());assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in f["filesSha256"].items())'
+          python3 -m unittest research.phase6.tests.test_post657_receipt_pool research.phase6.tests.test_post657_next_receipts_result -q
+          python3 -m research.phase6.post657_receipt_pool --output "$RUNNER_TEMP/pool659"
+      - name: Checkout frozen exact651 source-builder inputs only
+        uses: actions/checkout@v4
+        with:
+          ref: 2f47b7110908bd9311d410be75dd0173b14f04d7
+          path: frozen-source651
+          persist-credentials: false
+      - name: Generate unchanged source bridge
+        working-directory: frozen-source651
+        run: python3 -m research.phase6.next_postactivation_pool_build --output "$RUNNER_TEMP/source659"
+      - name: Checkout frozen executor source after retained artifact expiry
+        uses: actions/checkout@v4
+        with:
+          ref: 6dc5f25aec764ae55ecf0610a617baba77b7a6f7
+          path: frozen-executor
+          persist-credentials: false
+      - name: Rebuild the frozen executor dependency container only
+        working-directory: frozen-executor
+        run: mvn --batch-mode --no-transfer-progress -DskipTests -pl executor-service -am package
+      - name: Stage frozen executor behind the original SHA-256 gate
+        run: |
+          mkdir -p probe-engine
+          cp frozen-executor/executor-service/target/executor-service-0.6.0.jar probe-engine/
+      - name: Verify all659 native identities and1562 tuples
+        run: |
+          python3 -c 'import hashlib;from pathlib import Path;assert hashlib.sha256(Path("probe-engine/executor-service-0.6.0.jar").read_bytes()).hexdigest()=="bfc7bef081927f774374f92e5443c197e308e4828983dd9c19ac0ef280c45963"'
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/deps659"
+          mkdir -p "$RUNNER_TEMP/classes659" research/output/post657-pool659
+          javac -cp "$RUNNER_TEMP/deps659/BOOT-INF/lib/*" -d "$RUNNER_TEMP/classes659" $(find "$RUNNER_TEMP/source659/polybot-core/src/main/java" -name '*.java') research/phase6/ConservedMixedReplayLabels.java research/phase6/ConservedMixedReplayLabelsProbe.java research/phase6/OfflineSessionLabels.java research/phase6/CanonicalSessionParityProbe.java research/phase6/FrozenResearchPolicies.java research/phase6/FrozenStrategySessionProbe.java research/phase6/ConservedReceiptPool.java research/phase6/ConservedReceiptPoolProbe.java research/phase6/NativeReplaySupport.java research/phase6/CompleteSourceIdentityIndex.java "$RUNNER_TEMP/source659/research/phase6/IndexedExecutionLabels.java" research/phase6/IndexedReplaySupport.java research/phase6/Post657ReceiptPoolProbe.java
+          cp659="$RUNNER_TEMP/classes659:$RUNNER_TEMP/deps659/BOOT-INF/lib/*"
+          java -Xmx1g -cp "$cp659" com.polybot.hft.paper.Post657ReceiptPoolProbe "$RUNNER_TEMP/pool659/pool.json" "$RUNNER_TEMP/pool659/source-identities.json" "$RUNNER_TEMP/native659"
+          cp "$RUNNER_TEMP/native659/native-proof.json" "$RUNNER_TEMP/pool659/summary.json" research/output/post657-pool659/
+          python3 -c 'import json;from pathlib import Path;from research.phase6.post657_receipt_pool import verify_native;r=Path("research/output/post657-pool659");print(verify_native(json.loads((r/"native-proof.json").read_text()),json.loads((r/"summary.json").read_text())))'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exact659-native-parity-no-tape
+          retention-days: 7
+          path: research/output/post657-pool659/
+          if-no-files-found: error

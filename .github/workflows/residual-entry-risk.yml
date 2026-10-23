@@ -1,0 +1,73 @@
+name: PAPER residual entry risk guard control
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/residual-entry-risk.yml'
+      - 'research/phase6/residual-entry-risk-replay-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-residual-entry-risk-control
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Full regressions including default-off and admissible-entry controls
+        run: |
+          mvn --batch-mode --no-transfer-progress verify
+          for phase in 2 3 4 5 6; do python3 -m unittest discover -s research/phase${phase}/tests -q; done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: residual-risk-executor
+          retention-days: 3
+          path: executor-service/target/executor-service-0.6.0.jar
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: residual-risk-tests
+          retention-days: 7
+          path: '**/target/surefire-reports/'
+  compare:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/download-artifact@v4
+        with:
+          name: residual-risk-executor
+          path: executor-service/target
+      - uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: residual-input
+      - name: Fourteen-label control versus explicit research risk-guard candidate
+        run: >-
+          python3 -u -m research.phase6.compare_residual_entry_risk --input-root residual-input
+          --output research/output/residual-entry-risk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: residual-entry-risk-account-control
+          retention-days: 7
+          path: |
+            research/output/residual-entry-risk/*/report.json
+            research/output/residual-entry-risk/*/audit.jsonl
+            research/output/residual-entry-risk/comparison.json

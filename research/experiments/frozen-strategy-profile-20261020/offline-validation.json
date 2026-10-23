@@ -1,0 +1,22 @@
+{
+  "scope": "FROZEN_RULE_PORT_AND_SYNTHETIC_ACCOUNT_TESTS_NOT_MARKET_PERFORMANCE",
+  "dateAmman": "2026-10-20",
+  "dateUtc": "2026-10-19",
+  "command": "python3 -m unittest discover -s research/phase6/tests -q",
+  "tests": 278,
+  "durationSeconds": 304.262,
+  "exitCode": 0,
+  "latestTargetedPolicyTestsAlsoPassed": 5,
+  "fullQuoteProposalParityCases": 42,
+  "originalDevelopmentWitnesses": 34,
+  "additionalSyntheticQuoteCases": 8,
+  "frozenExitChoiceParityCases": 18,
+  "positiveAndDeterioratedSyntheticSessionCases": 2,
+  "defaultOffCompleteReportParity": true,
+  "defaultCoreFilesModified": 0,
+  "modelMarketFillsCreated": 0,
+  "marketNetPnlRecomputed": false,
+  "fullAccountMarketComparisonPerformed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

@@ -1,0 +1,517 @@
+{
+  "experiment": "CS-MINT-LAB0",
+  "enabled": true,
+  "scope": "FIXED_BASELINE_LIFECYCLE_COMPONENT_CALIBRATION_NOT_CLOSED_LOOP",
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "bindings": [
+    {
+      "transactionHash": "0xeff5d430a86833db0aa6e5bcda6af787a62ba94765d2b33ebb003864718fec57",
+      "seq": 139431,
+      "eventIndex": 0,
+      "at": 1792269683761,
+      "sourceMs": 1792269683691,
+      "publicTradeIdSha256": "29a1a54e008229207d176d77456ad14341221020c23ea0921238c38fea2c090c"
+    },
+    {
+      "transactionHash": "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+      "seq": 139477,
+      "eventIndex": 0,
+      "at": 1792269683781,
+      "sourceMs": 1792269683710,
+      "publicTradeIdSha256": "68357e2e1b13f469e910bffcb7084736300bf6ea6fd72bc5f46450d7e34e260c"
+    },
+    {
+      "transactionHash": "0x4251e2df8151d1cb3f7861948641ad2f564b6638d05b730cd776fa11917812b5",
+      "seq": 139565,
+      "eventIndex": 0,
+      "at": 1792269683836,
+      "sourceMs": 1792269683767,
+      "publicTradeIdSha256": "47303b388d36b6170b1384f50a50abe5583103041ed615e36faa90838b7b3814"
+    },
+    {
+      "transactionHash": "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+      "seq": 139655,
+      "eventIndex": 0,
+      "at": 1792269683893,
+      "sourceMs": 1792269683821,
+      "publicTradeIdSha256": "2edf447a53b0a39e257cb6b614bd8677e1ca5dc383374dc112edae5001d4cf55"
+    },
+    {
+      "transactionHash": "0xcae00c0de444fa1fcb7eaf0cdc93800c4c59e7a2b36abd6e23c562541fe59323",
+      "seq": 139699,
+      "eventIndex": 0,
+      "at": 1792269683910,
+      "sourceMs": 1792269683833,
+      "publicTradeIdSha256": "6bf08b7128a250bd9961f8d7404f9629dbf74ba0a365c465b8bb7025b64b7807"
+    }
+  ],
+  "windows": [
+    {
+      "orderIds": [
+        "sim-research-3",
+        "sim-research-4"
+      ],
+      "conditionalAllocations": [
+        {
+          "orderId": "sim-research-4",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "price": "0.64",
+          "quantity": "5",
+          "at": 1792269683761,
+          "sourceMs": 1792269683691,
+          "portionIdentity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xeff5d430a86833db0aa6e5bcda6af787a62ba94765d2b33ebb003864718fec57",
+            609,
+            600
+          ],
+          "route": "MINT",
+          "counterfactualNotActualBotFill": true
+        }
+      ],
+      "componentAudit": [
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xeff5d430a86833db0aa6e5bcda6af787a62ba94765d2b33ebb003864718fec57",
+            609,
+            600
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "28.06",
+          "allocated": "5",
+          "queueAbsorbed": "0",
+          "unused": "23.06",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xeff5d430a86833db0aa6e5bcda6af787a62ba94765d2b33ebb003864718fec57",
+            609,
+            602
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "50",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "50",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xeff5d430a86833db0aa6e5bcda6af787a62ba94765d2b33ebb003864718fec57",
+            609,
+            604
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "21.94",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "21.94",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+            604,
+            587
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "8.06",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "8.06",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+            604,
+            589
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "27.21",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "27.21",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+            604,
+            591
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "16",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "16",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+            604,
+            593
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "20",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "20",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+            604,
+            595
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "5",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "5",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+            604,
+            597
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "5",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "5",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+            604,
+            599
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "18.73",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "18.73",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0x4251e2df8151d1cb3f7861948641ad2f564b6638d05b730cd776fa11917812b5",
+            1431,
+            1416
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "19.53",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "19.53",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0x4251e2df8151d1cb3f7861948641ad2f564b6638d05b730cd776fa11917812b5",
+            1431,
+            1418
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "5",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "5",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0x4251e2df8151d1cb3f7861948641ad2f564b6638d05b730cd776fa11917812b5",
+            1431,
+            1420
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "10",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "10",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0x4251e2df8151d1cb3f7861948641ad2f564b6638d05b730cd776fa11917812b5",
+            1431,
+            1422
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "20",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "20",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0x4251e2df8151d1cb3f7861948641ad2f564b6638d05b730cd776fa11917812b5",
+            1431,
+            1424
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "20",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "20",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0x4251e2df8151d1cb3f7861948641ad2f564b6638d05b730cd776fa11917812b5",
+            1431,
+            1426
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "25.47",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "25.47",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+            1818,
+            1799
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "6.74",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "6.74",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+            1818,
+            1801
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "10",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "10",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+            1818,
+            1803
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "20",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "20",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+            1818,
+            1805
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "20",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "20",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+            1818,
+            1807
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "20",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "20",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+            1818,
+            1809
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "10",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "10",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+            1818,
+            1811
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "10",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "10",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+            1818,
+            1813
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "3.26",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "3.26",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xcae00c0de444fa1fcb7eaf0cdc93800c4c59e7a2b36abd6e23c562541fe59323",
+            791,
+            778
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "16.74",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "16.74",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xcae00c0de444fa1fcb7eaf0cdc93800c4c59e7a2b36abd6e23c562541fe59323",
+            791,
+            780
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "20",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "20",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xcae00c0de444fa1fcb7eaf0cdc93800c4c59e7a2b36abd6e23c562541fe59323",
+            791,
+            782
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "35",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "35",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xcae00c0de444fa1fcb7eaf0cdc93800c4c59e7a2b36abd6e23c562541fe59323",
+            791,
+            784
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "20",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "20",
+          "accountMutated": false
+        },
+        {
+          "identity": [
+            "0xe111180000d2663c0091e4f400237545b87b996b",
+            "0xcae00c0de444fa1fcb7eaf0cdc93800c4c59e7a2b36abd6e23c562541fe59323",
+            791,
+            786
+          ],
+          "reason": "PROCESSED",
+          "venueQuantity": "8.26",
+          "allocated": "0",
+          "queueAbsorbed": "0",
+          "unused": "8.26",
+          "accountMutated": false
+        }
+      ]
+    },
+    {
+      "orderIds": [
+        "sim-research-41",
+        "sim-research-42"
+      ],
+      "conditionalAllocations": [],
+      "componentAudit": []
+    }
+  ],
+  "receiptSamplesMatchingTape": 5,
+  "boundReceiptSamples": 5,
+  "conditionalAllocatedShares": "5",
+  "baselineMeasuredFillsForTheseOrders": 0,
+  "baselineWasNotRecomputedByThisLab": true,
+  "labelCoverageIsPartial": true,
+  "futureReceiptLabelsAreEnvironmentOnly": true,
+  "queueSeedsAreMeasuredBaselineDiagnosticsNotProjectedDepth": true,
+  "changedStrategyDecisionsAfterAllocationNotSimulated": true,
+  "matchingAssumptions": {
+    "activationMs": 250,
+    "cancelMs": 250,
+    "maxBookAgeMs": 2000,
+    "queueMultiplier": "2"
+  },
+  "hiddenLiquidityAndCrossPriceQueueUncertainty": true,
+  "accountMutated": false,
+  "executionCostsNotEvaluated": true,
+  "riskPolicyNotResimulated": true,
+  "notClosedLoopCandidateComparison": true,
+  "netPnlAfterCosts": null,
+  "feesOrRiskChanged": false,
+  "actualBotFillsAsserted": false,
+  "independentPaperQualificationAllowed": false,
+  "decision": "NO_GO",
+  "liveAllowed": false
+}

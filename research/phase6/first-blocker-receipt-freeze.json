@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "experiment": "FIRST-ORIGINAL-BLOCKER-ONE-RECEIPT0",
+  "sourceRunId": 39366694662,
+  "sourceArtifactId": 12239219391,
+  "originalCoordinate": [97, 0],
+  "transactionHash": "0x12251c3fc5cc98f770892d16a115904cec18f729ffb7f15d2f8558beeea196fc",
+  "maxNewReceiptRequests": 1,
+  "maxNewBlockRequests": 1,
+  "modelFillsCreated": 0,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    "research/phase6/first_blocker_receipt.py": "476937b61a8592aae4f6f13c17f06159122be9326b42a7845f7522eebb63c3c5",
+    "research/phase6/tests/test_first_blocker_receipt.py": "5b8d32aeb219119ef7cd76a7613e7b8367fd5c77e854ef0841ecdcf2bfd4195a",
+    ".github/workflows/first-blocker-receipt.yml": "a19f60209dd3dc8a3e4262946c8e07171e90a0cae79b125b3e3425e27fde38e5",
+    "research/experiments/full-native-runner-20261020/original-diagnosis.zip": "5a251717de06ad26c2920180fcc5fa8ec4fad72d725f64f02f85d742833e74a4",
+    "research/phase6/full_runner_diagnosis.py": "3ad79446f69f47f54d6cc4db0d59787f85446e454894778b50235228a6771d62",
+    "research/phase6/full-runner-freeze.json": "5a01000cbdbc2db19877b01b3ad62ee0ab20db7c2a5a72ea95b8eaceacb78466",
+    "research/phase6/receipt_audit.py": "4337ac09ca5b5364e5f23a15359e44695e283a99584acdbafbf4c9c4fbcc21c4",
+    "research/phase6/route_coverage_audit.py": "4febb1dc81e3e6077c5bd2cd3d87c126900dc24cc0316a24e5fcaaad1a8350fb",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00"
+  }
+}

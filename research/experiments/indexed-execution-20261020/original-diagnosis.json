@@ -1,0 +1,59 @@
+{
+  "scope": "VERIFIED_ORIGINAL_INDEXED_REPLAY_PENDING_ORDER_FRONTIERS_NOT_PNL",
+  "sourceCommit": "3d5310ae613ec6995fbbafee2fca8ebd44d96c74",
+  "runId": 39433713918,
+  "results": {
+    "baseline": {
+      "sequence": 82652,
+      "sourceIdentitiesConsumed": 828,
+      "unknownAtomicClockObservations": 826,
+      "transactionHash": "0xabb9930366c096c65dfc936150f834b0232419ce46ef4d2f7fccfe23135bd60f",
+      "publicTradeIdSha256": "1b81ca9cf16df95aa8687cdb7346a55cc2db324797fff2e8585bc0b24463e50c",
+      "paperOrdersSubmitted": 2,
+      "paperOrderPrices": [
+        "0.24",
+        "0.71"
+      ],
+      "arrivalAfterSubmissionMs": [
+        54,
+        54
+      ],
+      "configuredActivationMs": 250,
+      "tradeSourceBeforeSubmissions": true,
+      "frontierOrdersStillPendingNotActive": true,
+      "ordersCanceledAtHalt": 2,
+      "executionsBeforeStop": 0,
+      "fullAccountNetPnl": "UNKNOWN_INCOMPLETE_PREFIX_NOT_FINANCIAL_RESULT"
+    },
+    "candidate": {
+      "sequence": 8018,
+      "sourceIdentitiesConsumed": 87,
+      "unknownAtomicClockObservations": 85,
+      "transactionHash": "0x9e0dfd50b48b5638e7ea9ab4ceba42d40e8fb680acdb2801498c1393af9a906d",
+      "publicTradeIdSha256": "ac6c904c08f1459f5e6d266fb8fbcd1c479c68646ddf6039ec0f8a7e20f4cee0",
+      "paperOrdersSubmitted": 2,
+      "paperOrderPrices": [
+        "0.47",
+        "0.48"
+      ],
+      "arrivalAfterSubmissionMs": [
+        20,
+        20
+      ],
+      "configuredActivationMs": 250,
+      "tradeSourceBeforeSubmissions": true,
+      "frontierOrdersStillPendingNotActive": true,
+      "ordersCanceledAtHalt": 2,
+      "executionsBeforeStop": 0,
+      "fullAccountNetPnl": "UNKNOWN_INCOMPLETE_PREFIX_NOT_FINANCIAL_RESULT"
+    }
+  },
+  "original628PassedInBothReplays": true,
+  "completeAccountComparisonPerformed": false,
+  "marketNetPnlRecomputed": false,
+  "newPublicReads": 0,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO",
+  "nextStep": "Prove pending/pre-activation print irrelevance with unchanged activation/cancel ordering before broadening frozen guard; otherwise request only bounded exact frontier receipts. Do not tune strategy or rerun unchanged data."
+}

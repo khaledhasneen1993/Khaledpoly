@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "parentCommit": "f1e17bf1a9f361fb1892b49de87130e2e684c873",
+  "scope": "CONDITIONAL_NO_FURTHER_ALLOCATIONS_WAIT_CANCEL_NOT_ACCOUNT",
+  "originalSequence": 243583,
+  "firstAllocationMs": 1792269754123,
+  "policyChanged": false,
+  "filesSha256": {
+    "research/phase6/queue_aware_unhedged_timing.py": "92d392b5ebe42646c070d8fba1f81f9829aab20d11c5aa7a76039688e075a3cf",
+    "research/phase6/Qw0UnhedgedTimingProbe.java": "009b0df6ae8915964bada36ce1fa9b19dace44b07c23e7a6f2e5ef8916bceb73",
+    "research/phase6/tests/test_queue_aware_unhedged_timing.py": "ef05f920ef126534b7bc85965f982f94a5e0e557a95cf2593b2eee728edd2ac9",
+    ".github/workflows/queue-aware-unhedged-timing.yml": "27202afd743ab18eb1e00a194ecd991834f0b3f5486c231eea0039b25a22950e",
+    "research/phase6/Qw0CausalProbe.java": "aedba6b3482f162d0e1d4dd690c6828839753e69539ff4063ea44c48c0e1f10f",
+    "research/phase6/queue_aware_pair_prefix.py": "2d8cbdfb806bcee9412b7315835d77b9495bb6a1e86632c28a88086151428d6e",
+    "research/phase6/queue_aware_pair_prefix_result.py": "15668112203e81d47aaad84234ecef9fa3f73578ad7006540405d445cd7a1db4",
+    "polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java": "2c5a97513e9ab1c261af7a9868f3b377c89e28e8cbb883800ee6d8aee87f9923",
+    "polybot-core/src/main/java/com/polybot/hft/paper/PairPolicy.java": "041cfc590e08a28cbc3c0a9099b82d157441152acbb0d95ad14dbac928abde97",
+    "polybot-core/src/main/java/com/polybot/hft/paper/PaperMatchingEngine.java": "12e89574023e0457d2066f8e50d660491a3ef182ae066bab4725cd40324fa84f",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  },
+  "engineeringCorrection": "Exact source-anchor numeric values, not Jackson IntNode/LongNode identity; no policy changes"
+}

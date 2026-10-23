@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "parentCommit": "bb45d8fde18b44164fc21fbf637d4a2ed32a4f2e",
+  "scope": "FROZEN79_POST_FILL_COUNTERPART_COMPONENTS_NOT_ACCOUNT",
+  "maxNewReceiptRequests": 79,
+  "conditionalCancelAckMs": 1792269759566,
+  "policyChanged": false,
+  "filesSha256": {
+    "research/phase6/queue_aware_postfill_receipts.py": "9102390d52dfdc10247dcdb0f09a89e821eea018dda1837990f68164a6d4f2a8",
+    "research/phase6/tests/test_queue_aware_postfill_receipts.py": "16ff24461d20bae23047a1f3b8d839d4751bb6f8968b96ce0a3647d7580d53fc",
+    ".github/workflows/queue-aware-postfill-receipts.yml": "28163c335b05a8804a8f9fa42f3594a590a2071c2506d75da5a4448af599e9fc",
+    "research/experiments/queue-aware-quote-20261019/postfill-selection.json": "9edc4034a1248c2e3c3582ff3eaea90722dd86e4924da14d361f09022157b5ec",
+    "research/phase6/queue_aware_unhedged_timing_result.py": "ec4daee6ebded7e8db17911730bf7d8e3a3e169a0ed5e9c02a92b89e2fdfaa9c",
+    "research/phase6/queue_aware_unhedged_timing.py": "92d392b5ebe42646c070d8fba1f81f9829aab20d11c5aa7a76039688e075a3cf",
+    "research/phase6/queue_aware_counterpart.py": "d4eb82ba975911b89c22b24baeec4c1ffc2c92d861718aec4ab8d29e8f282151",
+    "research/phase6/receipt_audit.py": "4337ac09ca5b5364e5f23a15359e44695e283a99584acdbafbf4c9c4fbcc21c4",
+    "research/phase6/route_coverage_audit.py": "4febb1dc81e3e6077c5bd2cd3d87c126900dc24cc0316a24e5fcaaad1a8350fb",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/experiments/queue-aware-quote-20261019/unhedged-timing-result/report.json": "1f5ff521d69d6e2de84a11b00e9a929700ec0f9375b7ed2f2e9448fef73ecc7f",
+    "research/experiments/queue-aware-quote-20261019/unhedged-timing-result/evidence.json": "092e43180ea5a2b796ad7c7122bf01abfb913594a8f256893e4dfba87feddb49"
+  }
+}

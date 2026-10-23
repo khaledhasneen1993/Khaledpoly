@@ -1,0 +1,10 @@
+{
+  "scope": "VERIFIED_INDEXED_INTEGRATION_IN_SYNTHETIC_ENVELOPE_NOT_MARKET_RESULT",
+  "originalPrefixIdentities": 2,
+  "integrationChecks": 9,
+  "identityAndAtomicWitnessIntegrated": true,
+  "fullOriginalTapeReplayed": false,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

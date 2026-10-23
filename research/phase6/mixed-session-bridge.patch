@@ -1,0 +1,66 @@
+diff --git a/polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java b/polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java
+index c024adc..14487e5 100644
+--- a/polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java
++++ b/polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java
+@@ -64,7 +64,7 @@ public final class ResearchSession implements AutoCloseable {
+   private long now = -1, nextDecision, sequence, inputSequence;
+   private final String sessionId;
+   private final boolean externalMode;
+-  private final SettlementReplayLabels settlementLabels;
++  private final OfflineSessionLabels settlementLabels;
+   private final boolean residualEntryRiskGuard;
+   private final List<Map<String,Object>> residualRiskRejectSamples=new ArrayList<>();
+   private long replayRowSequence=-1;
+@@ -120,6 +120,21 @@ public final class ResearchSession implements AutoCloseable {
+   ResearchSession(AccountLedger ledger, ResearchConfig cfg, ObjectMapper mapper, Path state,
+       BiConsumer<String,Object> output, boolean externalMode, String replaySessionId,
+       SettlementReplayLabels settlementLabels, boolean residualEntryRiskGuard) {
++    this(ledger,cfg,mapper,state,output,externalMode,replaySessionId,
++        OfflineSessionLabels.legacy(settlementLabels),residualEntryRiskGuard,OfflineSessionLabels.Profile.LEGACY);
++  }
++
++  ResearchSession(AccountLedger ledger, ResearchConfig cfg, ObjectMapper mapper, Path state,
++      BiConsumer<String,Object> output, boolean externalMode, String replaySessionId,
++      OfflineSessionLabels settlementLabels, boolean residualEntryRiskGuard,OfflineSessionLabels.Profile profile) {
++    if (profile==null || (settlementLabels==null ? profile!=OfflineSessionLabels.Profile.LEGACY : settlementLabels.profile()!=profile))
++      throw new IllegalArgumentException("Explicit offline label profile mismatch");
++    if (profile==OfflineSessionLabels.Profile.MIXED_BINDING_BRIDGE0
++        && (!ledger.snapshot().orders().isEmpty() || !ledger.snapshot().holdings().isEmpty()
++            || !ledger.snapshot().executions().isEmpty() || ledger.snapshot().halted()
++            || ledger.snapshot().cash().compareTo(cfg.initialCash())!=0
++            || ledger.snapshot().realized().signum()!=0 || ledger.snapshot().fees().signum()!=0))
++      throw new IllegalArgumentException("Mixed label bridge requires a fresh empty PAPER ledger");
+     if (residualEntryRiskGuard && settlementLabels==null)
+       throw new IllegalArgumentException("Residual entry guard is explicit fresh offline research only");
+     if (settlementLabels!=null && (externalMode || java.nio.file.Files.exists(state)))
+@@ -376,9 +391,14 @@ public final class ResearchSession implements AutoCloseable {
+       if (kind.equals("GAP")) data = scopedGap(data);
+       markouts.advance(at, cfg.maxBookAgeMs());
+       long gapsBefore = matching.gaps();
+-      var binding=settlementLabels!=null && kind.equals("TRADE")
+-          ? settlementLabels.resolve(replayRowSequence,replayEventIndex,at,data):null;
+-      apply(binding==null?matching.accept(kind,at,data):matching.acceptSettlement(at,data,binding));
++      try {
++        var binding=settlementLabels!=null && kind.equals("TRADE")
++            ? settlementLabels.resolve(replayRowSequence,replayEventIndex,at,data):null;
++        apply(binding==null?matching.accept(kind,at,data):matching.acceptSettlement(at,data,binding));
++      } catch (RuntimeException error) {
++        if (settlementLabels!=null && settlementLabels.profile()==OfflineSessionLabels.Profile.MIXED_BINDING_BRIDGE0) suspend();
++        throw error;
++      }
+       if (matching.gaps() > gapsBefore && !kind.equals("GAP"))
+         output.accept(
+             "ALERT",
+@@ -1584,6 +1604,12 @@ public final class ResearchSession implements AutoCloseable {
+       r.put("settlementExperiment",settlementLabels.report());
+       r.put("settlementVolumeConservation",matching.settlementDiagnostics());
+       r.put("independentPaperQualificationAllowed",false);
++      if (settlementLabels.profile()==OfflineSessionLabels.Profile.MIXED_BINDING_BRIDGE0) {
++        r.put("researchLabelBridgeOnly",true);
++        r.put("frozenQw0AndFeePositivePoliciesIntegrated",false);
++        r.put("fullOriginalTapeCoverageProven",false);
++        r.put("liveAllowed",false);
++      }
+     }
+     r.putAll(markouts.snapshot(Math.max(now, 0)));
+     var active = new ArrayList<Map<String, Object>>();

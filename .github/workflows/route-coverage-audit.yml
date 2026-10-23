@@ -1,0 +1,37 @@
+name: PAPER frozen entry and exit route receipts
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/route-coverage-audit.yml'
+      - 'research/phase6/route_coverage_audit.py'
+      - 'research/phase6/tests/test_route_coverage_audit.py'
+      - 'research/phase6/route-coverage-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-frozen-route-coverage
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Optional audit-only Keccak decoder
+        run: |
+          python3 -m venv "$RUNNER_TEMP/route-audit-env"
+          "$RUNNER_TEMP/route-audit-env/bin/pip" install --only-binary=:all: --no-deps pycryptodome==3.23.0
+      - name: Offline conservation, cache and regression checks before public reads
+        run: '"$RUNNER_TEMP/route-audit-env/bin/python" -m unittest discover -s research/phase6/tests -q'
+      - name: Read only frozen selected receipts, reuse existing receipts and blocks
+        run: >-
+          "$RUNNER_TEMP/route-audit-env/bin/python" -u -m research.phase6.route_coverage_audit
+          --output research/output/route-coverage
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frozen-entry-exit-route-receipts
+          retention-days: 7
+          path: research/output/route-coverage/

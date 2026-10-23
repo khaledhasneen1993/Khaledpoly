@@ -1,0 +1,87 @@
+name: PAPER predeclared best-bid comparison
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-best-bid-comparison
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Verify pricing compatibility, queue and all regression contracts
+        run: |
+          mvn --batch-mode --no-transfer-progress verify
+          for phase in 2 3 4 5 6; do python3 -m unittest discover -s research/phase${phase}/tests -q; done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quote-comparison-executor
+          path: executor-service/target/executor-service-0.6.0.jar
+          retention-days: 3
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quote-comparison-tests
+          path: '**/target/surefire-reports/'
+          retention-days: 3
+  compare:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    strategy:
+      fail-fast: false
+      matrix:
+        recording: [original, fresh]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/download-artifact@v4
+        with:
+          name: quote-comparison-executor
+          path: executor-service/target
+      - uses: actions/download-artifact@v4
+        if: matrix.recording == 'original'
+        with:
+          name: two-hour-paper-39048983750
+          run-id: 39048983750
+          github-token: ${{ github.token }}
+          path: original-archive
+      - name: Lossless original tape preparation
+        if: matrix.recording == 'original'
+        run: python3 -u -m research.phase6.prepare_recorded_replay prepare --archive original-archive/two-hour-paper-evidence.tar.gz --output comparison-input
+      - uses: actions/download-artifact@v4
+        if: matrix.recording == 'fresh'
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: comparison-input
+      - name: Identical-tape baseline and single predeclared pricing candidate
+        env:
+          RECORDING: ${{ matrix.recording }}
+        run: |
+          orders=44
+          if [ "$RECORDING" = fresh ]; then orders=52; fi
+          python3 -u -m research.phase6.compare_quote_candidate --input-root comparison-input --output research/output/quote-comparison --expected-baseline-orders "$orders"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quote-comparison-${{ matrix.recording }}
+          retention-days: 7
+          path: |
+            research/output/quote-comparison/*/report.json
+            research/output/quote-comparison/*/audit.jsonl
+            research/output/quote-comparison/comparison.json
+            comparison-input/provenance.json

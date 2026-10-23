@@ -1,0 +1,48 @@
+name: PAPER QW0 conditional unhedged wait and cancel timing
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/queue-aware-unhedged-timing.yml', 'research/phase6/queue-aware-unhedged-timing-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-qw0-unhedged-timing
+  cancel-in-progress: false
+jobs:
+  timing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: Offline regressions before new gate evaluation
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: probe-engine
+      - name: Compile observers and synthetic source-anchor checks before gate evaluation
+        run: |
+          mkdir -p "$RUNNER_TEMP/qw0-timing"
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/qw0-engine"
+          javac -cp "$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" -d "$RUNNER_TEMP/qw0-timing" research/phase6/Qw0CausalProbe.java research/phase6/Qw0UnhedgedTimingProbe.java
+          java -cp "$RUNNER_TEMP/qw0-timing:$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" com.polybot.hft.paper.Qw0CausalProbe --self-test
+          java -cp "$RUNNER_TEMP/qw0-timing:$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" com.polybot.hft.paper.Qw0UnhedgedTimingProbe --self-test
+      - name: Reuse original context, conditional no-further-fill clock only
+        run: python3 -m research.phase6.queue_aware_unhedged_timing --output research/output/qw0-unhedged-timing
+      - name: Actual unchanged wait policy and conditional cancel clock
+        run: >-
+          java -Xmx2g -cp "$RUNNER_TEMP/qw0-timing:$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*"
+          com.polybot.hft.paper.Qw0UnhedgedTimingProbe research/output/qw0-unhedged-timing/context.json.gz
+          research/output/qw0-unhedged-timing/evidence.json research/output/qw0-unhedged-timing/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qw0-conditional-unhedged-timing
+          retention-days: 7
+          path: research/output/qw0-unhedged-timing/

@@ -1,0 +1,16 @@
+{
+  "workflowRun": 39067539123,
+  "historicalJob": 117498492412,
+  "artifact": 12113893739,
+  "strategyCommit": "64a395b49459a2594438ea166f8ef92a7e6af1bb",
+  "newFreshPaperJob": 117498492549,
+  "freshStatusAtReview": "IN_PROGRESS",
+  "behaviorChanged": false,
+  "decision": "NO_GO",
+  "filesSha256": {
+    "provenance.json": "eaca7e8694f2147ea59ccc39f6ab1cf30538604a36ceca4adfc5e0811063351d",
+    "resting-risk-checks.json": "37a3a6e9c7155d27f0dd2f07ebfc04b1d7422008342bc70875e85417636c8231",
+    "report.json": "96c9c7d668ff59253e1e5fcc02b7c25c055ac8eb3fefcfb253901ea12c78ad47",
+    "diagnosis.json": "b6c9f47fe0c2ddc368153d2c884f89cca1127b0481feb608985783a6f64685b1"
+  }
+}

@@ -1,0 +1,6 @@
+2026-10-19T11:39:43.4835711Z Ran 228 tests in 152.470s
+2026-10-19T11:39:49.3380326Z 2 actual-matcher synthetic queue and current-book-source assertions passed
+2026-10-19T11:39:49.6042965Z 3 empty/nonempty frame and standalone callback ordering assertions passed
+2026-10-19T11:40:19.1567534Z {"completeActualGroups": 148, "sourceGAP": 1792269760873, "newPublicReads": 0, "newTapeScans": 0}
+2026-10-19T11:40:20.9407447Z ##[error]Exception in thread "main" java.lang.AssertionError: Hedge executable before GAP requires additional complete receipt/action evidence
+2026-10-19T11:40:20.9500695Z ##[error]Process completed with exit code 1.

@@ -1,0 +1,16 @@
+{
+  "runId": 39287345589,
+  "artifactId": 12202764797,
+  "sourceCommit": "e42f1ca12409178baf01556f9f56f7dd9a6fc37a",
+  "archiveSha256": "152c9a2d2e107e10653dac92b8bc9731ba77085695b9eb23ffbaea638b1dbc43",
+  "members": {
+    "input.json": {
+      "bytes": 700603,
+      "sha256": "626eddfff815f5bebbba9e6b928d23965d29eba7d9a9e85f51541fb5e227a0b8"
+    },
+    "report.json": {
+      "bytes": 20287,
+      "sha256": "d1fff8e1dc61830b8f455d0ce228a0af8bd76f1ab9b737a372e35dd1d94bb34d"
+    }
+  }
+}

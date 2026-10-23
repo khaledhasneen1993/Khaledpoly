@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "command": "python3 -m unittest discover -s research/phase6/tests -q",
+  "tests": 293,
+  "durationSeconds": 295.910,
+  "result": "OK",
+  "targetedCommand": "python3 -m unittest research.phase6.tests.test_full_tape_coverage_result -v",
+  "targetedTests": 5,
+  "targetedDurationSeconds": 7.313,
+  "targetedResult": "OK",
+  "allOriginalTradeIdentitiesReconstructed": 16317,
+  "missingOriginalObservations": 15866,
+  "cachedReceiptCandidatesNotNewValidatedLabels": 191,
+  "originalCompleteArtifactRetainedLosslessly": true,
+  "acceptanceAndAccountConfigurationUnchanged": true,
+  "newSourceScans": 0,
+  "newPublicReads": 0,
+  "modelFillsCreated": 0,
+  "netPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

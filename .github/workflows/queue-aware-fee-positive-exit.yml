@@ -1,0 +1,48 @@
+name: PAPER QW0 fee-positive first-exit candidate
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/queue-aware-fee-positive-exit.yml', 'research/phase6/queue-aware-fee-positive-exit-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-qw0-fee-positive-first-exit
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: All offline regressions before new native gate
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: probe-engine
+      - name: Compile observers only; exact boundary and native FOK fee/depth tests
+        run: |
+          mkdir -p "$RUNNER_TEMP/qw0-recovery"
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/qw0-engine"
+          javac -cp "$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" -d "$RUNNER_TEMP/qw0-recovery" research/phase6/Qw0CausalProbe.java research/phase6/Qw0RestingProbe.java research/phase6/Qw0ActiveReductionProbe.java research/phase6/Qw0FeePositiveExitProbe.java
+          java -cp "$RUNNER_TEMP/qw0-recovery:$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" com.polybot.hft.paper.Qw0ActiveReductionProbe --self-test
+          java -cp "$RUNNER_TEMP/qw0-recovery:$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" com.polybot.hft.paper.Qw0FeePositiveExitProbe --self-test
+      - name: All451 labels verified from retained original receipts; no RPC or source scan
+        run: python3 -m research.phase6.queue_aware_fee_positive_exit --output research/output/qw0-fee-positive-exit/input.json
+      - name: Frozen candidate on SAME original conditional inputs; first allocation only
+        run: >-
+          java -Xmx2g -cp "$RUNNER_TEMP/qw0-recovery:$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*"
+          com.polybot.hft.paper.Qw0FeePositiveExitProbe research/experiments/queue-aware-quote-20261019/post-gap-result/context.records.jsonl.gz
+          research/output/qw0-fee-positive-exit/input.json research/output/qw0-fee-positive-exit/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qw0-fee-positive-first-exit
+          retention-days: 7
+          path: research/output/qw0-fee-positive-exit/

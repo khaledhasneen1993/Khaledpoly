@@ -1,0 +1,25 @@
+{
+  "scope": "ACTUAL_ENTRY_WITNESS_RESULT_NOT_STRATEGY_PERFORMANCE",
+  "artifactZipSha256": "934abe8054ebbc30c3c9625d65176843f63a0bfbe39676f9b50ce2c3e6ffc6e6",
+  "sourceRun": 39168798844,
+  "artifactId": 12152096415,
+  "originalFieldsReproduced": 69,
+  "originalAuditActionsReproduced": true,
+  "windowsCovered": 6,
+  "witnessCount": 34,
+  "actualBranchCounts": {
+    "MIN_SIZE_AND_NET_EDGE": 16,
+    "PAIR_SUBMITTED": 1,
+    "RESTING": 2,
+    "MIN_SIZE": 3,
+    "NET_EDGE": 12
+  },
+  "minSizeRejections": 19,
+  "insufficientEdgeRejections": 28,
+  "accountNetPnl": 0,
+  "fills": 0,
+  "fillsInferred": false,
+  "decision": "NO_GO",
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

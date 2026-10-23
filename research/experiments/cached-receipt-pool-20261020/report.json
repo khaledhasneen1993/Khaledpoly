@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "experiment": "CONSERVED-RECEIPT-POOL0",
+  "scope": "PARTIAL_SINGLE_MARKET_RECEIPT_POOL_NOT_EXECUTION_MANIFEST",
+  "partialLabels": true,
+  "allOriginalPairObservationsWithinWindow": false,
+  "unknownScopedObservation": "FAIL_CLOSED",
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "sourceCensusArtifactZipSha256": "882112d70db3b1926e235ebfd0a150fa5a3d6ffc40d0aac657358c9a2ed9a46e",
+  "sourceAllTradeIdentitiesSha256": "1f8d1d953f3755b8244c7ac11f7a3f72ccd8d73b1c9807b7cec417b6b710c1c2",
+  "metadataIdentityReference": {
+    "path": "research/experiments/queue-aware-quote-20261019/resting-result/evidence.json",
+    "sha256": "7fa1a1db395505779421387b038c67cfaf8cc7c1ec5a7c5a099f1a85aa1b5035",
+    "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "pair": [
+      "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "12589566430666404778428222777978747623958961794906352412512658324998006663268"
+    ],
+    "negativeRisk": false
+  },
+  "metadataUsedOnlyForStaticPairIdentityNotDecisionFreshness": true,
+  "expectedBindingCount": 642,
+  "expectedComponentCount": 1516,
+  "originalBindings": 451,
+  "reboundCachedBindings": 191,
+  "remainingUnboundObservations": 15675,
+  "routeComponentCounts": {
+    "MINT": 1150,
+    "DIRECT": 349,
+    "MERGE": 17
+  },
+  "reboundRouteComponentCounts": {
+    "MINT": 329,
+    "DIRECT": 141,
+    "MERGE": 8
+  },
+  "nativeSourceIdentityRecheckRequired": true,
+  "nativePoolConsumerImplemented": false,
+  "newPublicReads": 0,
+  "modelFillsCreated": 0,
+  "netPnlRecomputed": false,
+  "candidateAccountSimulated": false,
+  "fullAccountReplayAuthorized": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO",
+  "portionsLogicalSha256": "3fd8f2d4ce916cd2a70919431e81ec878cb26e94ad7e293ff81e515f6bce092c",
+  "poolLogicalSha256": "745dadce6749d701ba6048ab1ef76f3f43b354c058e27e9163c2174725aaceea",
+  "poolCompressedSha256": "76be579d7fffe2b9449a502bf8258bf990759a68a458291f82fbad07a417f329",
+  "poolLogicalBytes": 1735935,
+  "poolCompressedBytes": 201377
+}

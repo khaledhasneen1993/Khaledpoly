@@ -1,0 +1,72 @@
+name: PAPER exact663 receipt pool native parity ONLY
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/post661-receipt-pool.yml', 'research/phase6/post661-pool-freeze.json']
+permissions:
+  contents: write
+concurrency:
+  group: paper-exact663-native-parity
+  cancel-in-progress: false
+jobs:
+  native-parity-no-tape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: paper-fill-investigation
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: Frozen663 expansion and regressions; no RPC or tape
+        run: |
+          python3 -c 'import json,hashlib;from pathlib import Path;f=json.loads(Path("research/phase6/post661-pool-freeze.json").read_bytes());assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in f["filesSha256"].items())'
+          python3 -m unittest research.phase6.tests.test_post661_receipt_pool research.phase6.tests.test_post661_next_receipts_result -q
+          python3 -m research.phase6.post661_receipt_pool --output "$RUNNER_TEMP/pool663"
+      - name: Checkout frozen source-builder inputs only
+        uses: actions/checkout@v4
+        with:
+          ref: 2f47b7110908bd9311d410be75dd0173b14f04d7
+          path: frozen-source651
+          persist-credentials: false
+      - name: Generate unchanged source bridge
+        working-directory: frozen-source651
+        run: python3 -m research.phase6.next_postactivation_pool_build --output "$RUNNER_TEMP/source663"
+      - name: Checkout frozen executor source
+        uses: actions/checkout@v4
+        with:
+          ref: 6dc5f25aec764ae55ecf0610a617baba77b7a6f7
+          path: frozen-executor
+          persist-credentials: false
+      - name: Rebuild the frozen executor dependency container only
+        working-directory: frozen-executor
+        run: mvn --batch-mode --no-transfer-progress -DskipTests -pl executor-service -am package
+      - name: Stage frozen executor behind the original SHA-256 gate
+        run: |
+          mkdir -p probe-engine
+          cp frozen-executor/executor-service/target/executor-service-0.6.0.jar probe-engine/
+      - name: Verify all663 native identities and1574 tuples
+        run: |
+          python3 -c 'import hashlib;from pathlib import Path;assert hashlib.sha256(Path("probe-engine/executor-service-0.6.0.jar").read_bytes()).hexdigest()=="bfc7bef081927f774374f92e5443c197e308e4828983dd9c19ac0ef280c45963"'
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/deps663"
+          mkdir -p "$RUNNER_TEMP/classes663" research/output/post661-pool663
+          javac -cp "$RUNNER_TEMP/deps663/BOOT-INF/lib/*" -d "$RUNNER_TEMP/classes663" $(find "$RUNNER_TEMP/source663/polybot-core/src/main/java" -name '*.java') research/phase6/ConservedMixedReplayLabels.java research/phase6/ConservedMixedReplayLabelsProbe.java research/phase6/OfflineSessionLabels.java research/phase6/CanonicalSessionParityProbe.java research/phase6/FrozenResearchPolicies.java research/phase6/FrozenStrategySessionProbe.java research/phase6/ConservedReceiptPool.java research/phase6/ConservedReceiptPoolProbe.java research/phase6/NativeReplaySupport.java research/phase6/CompleteSourceIdentityIndex.java "$RUNNER_TEMP/source663/research/phase6/IndexedExecutionLabels.java" research/phase6/IndexedReplaySupport.java research/phase6/Post661ReceiptPoolProbe.java
+          cp663="$RUNNER_TEMP/classes663:$RUNNER_TEMP/deps663/BOOT-INF/lib/*"
+          java -Xmx1g -cp "$cp663" com.polybot.hft.paper.Post661ReceiptPoolProbe "$RUNNER_TEMP/pool663/pool.json" "$RUNNER_TEMP/pool663/source-identities.json" "$RUNNER_TEMP/native663"
+          cp "$RUNNER_TEMP/native663/native-proof.json" "$RUNNER_TEMP/pool663/summary.json" research/output/post661-pool663/
+          python3 -c 'import json;from pathlib import Path;from research.phase6.post661_receipt_pool import verify_native;r=Path("research/output/post661-pool663");print(verify_native(json.loads((r/"native-proof.json").read_text()),json.loads((r/"summary.json").read_text())))'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: exact663-native-parity-no-tape
+          retention-days: 7
+          path: research/output/post661-pool663/
+          if-no-files-found: error
+      - name: Retain native parity reports on the research branch
+        run: |
+          mkdir -p research/experiments/post661-receipt-pool-20261023
+          cp research/output/post661-pool663/native-proof.json research/output/post661-pool663/summary.json research/experiments/post661-receipt-pool-20261023/
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add research/experiments/post661-receipt-pool-20261023/native-proof.json research/experiments/post661-receipt-pool-20261023/summary.json
+          git commit -m 'research: retain exact663 native parity reports'
+          git push origin HEAD:paper-fill-investigation

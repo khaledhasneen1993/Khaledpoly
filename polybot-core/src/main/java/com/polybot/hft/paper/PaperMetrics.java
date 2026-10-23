@@ -23,6 +23,8 @@ public final class PaperMetrics {
   private final List<Pending> pending = new ArrayList<>();
   private final Map<Integer, BigDecimal> totals = new TreeMap<>();
   private final Map<Integer, Integer> counts = new TreeMap<>();
+  private final Map<String, Map<Integer, Integer>> missing = new TreeMap<>();
+  private final Map<String, Long> bookSources = new HashMap<>();
   private BigDecimal bought = BigDecimal.ZERO, sold = BigDecimal.ZERO;
   private int fills;
 
@@ -34,6 +36,14 @@ public final class PaperMetrics {
   }
 
   public synchronized void book(JsonNode n, long at) {
+    String token = n.path("token").asText();
+    long source = n.path("sourceMs").asLong(-1);
+    Long prior = bookSources.get(token);
+    if (source < 0 || source > at || prior != null && source < prior) {
+      invalidate(Set.of(token), "INVALID_BOOK");
+      bookSources.remove(token);
+      return;
+    }
     BigDecimal bid = null, ask = null;
     for (var r : n.path("bids")) {
       var p = PaperMatchingEngine.decimal(r, "price");
@@ -43,7 +53,12 @@ public final class PaperMetrics {
       var p = PaperMatchingEngine.decimal(r, "price");
       ask = ask == null ? p : ask.min(p);
     }
-    if (bid == null || ask == null) return;
+    if (bid == null || ask == null || bid.compareTo(ask) > 0) {
+      invalidate(Set.of(token), "INVALID_BOOK");
+      bookSources.remove(token);
+      return;
+    }
+    bookSources.put(token, source);
     BigDecimal mid = bid.add(ask).divide(BigDecimal.valueOf(2));
     var it = pending.iterator();
     while (it.hasNext()) {
@@ -79,12 +94,67 @@ public final class PaperMetrics {
                 "quantity",
                 p.fill.size()));
       }
+      if (at - due > 2000) recordMissing(p, "OBSERVATION_WINDOW_EXPIRED");
       if (at - due > 2000 || n.path("sourceMs").asLong() >= due) it.remove();
     }
   }
 
+  public synchronized void book(JsonNode n, long at, long maxBookAgeMs) {
+    advance(at, maxBookAgeMs);
+    long source = n.path("sourceMs").asLong(-1);
+    if (source >= 0 && source <= at && at - source > maxBookAgeMs) {
+      invalidate(Set.of(n.path("token").asText()), "STALE_DEPTH");
+      bookSources.remove(n.path("token").asText());
+      return;
+    }
+    book(n, at);
+  }
+
+  /** A recovered snapshot cannot repair uncertainty between a fill and its horizon. */
+  public synchronized void gap(Set<String> tokens) {
+    invalidate(tokens, "DATA_GAP");
+    if (tokens.isEmpty()) bookSources.clear();
+    else bookSources.keySet().removeAll(tokens);
+  }
+
+  /** Call before processing each arrival, including ticks and replacement snapshots. */
+  public synchronized void advance(long at, long maxBookAgeMs) {
+    var stale = new HashSet<String>();
+    bookSources.forEach((token, source) -> {
+      if (at - source > maxBookAgeMs) stale.add(token);
+    });
+    if (!stale.isEmpty()) {
+      invalidate(stale, "STALE_DEPTH");
+      bookSources.keySet().removeAll(stale);
+    }
+    expire(at);
+  }
+
+  private void invalidate(Set<String> tokens, String reason) {
+    pending.removeIf(p -> {
+      if (!tokens.isEmpty() && !tokens.contains(p.fill.token())) return false;
+      recordMissing(p, reason);
+      return true;
+    });
+  }
+
+  private void recordMissing(Pending p, String reason) {
+    missing.computeIfAbsent(reason, ignored -> new TreeMap<>())
+        .merge(p.horizon, 1, Integer::sum);
+  }
+
+  private void expire(long now) {
+    pending.removeIf(p -> {
+      if (now <= p.fill.at() + p.horizon + 2000) return false;
+      recordMissing(p, "OBSERVATION_WINDOW_EXPIRED");
+      return true;
+    });
+  }
+
   public synchronized Map<String, Object> snapshot(long now) {
-    pending.removeIf(p -> now > p.fill.at() + p.horizon + 2000);
+    expire(now);
+    var missingSnapshot = new TreeMap<String, Map<Integer, Integer>>();
+    missing.forEach((reason, horizons) -> missingSnapshot.put(reason, Map.copyOf(horizons)));
     return Map.of(
         "fills",
         fills,
@@ -98,6 +168,10 @@ public final class PaperMetrics {
         Map.copyOf(counts),
         "pendingMarkouts",
         pending.size(),
+        "missingMarkoutsByReason",
+        Map.copyOf(missingSnapshot),
+        "markoutContinuityPolicy",
+        "NO_GAP_OR_STALE_DEPTH_BETWEEN_FILL_AND_OBSERVATION",
         "incentives",
         BigDecimal.ZERO);
   }

@@ -1,0 +1,27 @@
+name: PAPER QW0 original recovery451 conserved receipts
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/queue-aware-recovery-receipts.yml', 'research/phase6/queue-aware-recovery-receipts-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-qw0-original-recovery451
+  cancel-in-progress: false
+jobs:
+  public-receipts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: All offline source and evidence tests before public reads
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - name: Frozen original451 source observations only; no price/outcome filtering or orders
+        run: python3 -u -m research.phase6.queue_aware_recovery_receipts --output research/output/qw0-recovery451
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qw0-original-recovery451-receipts
+          retention-days: 7
+          path: research/output/qw0-recovery451/

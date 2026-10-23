@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "parentCommit": "506f2f2df0ccbc44242ab3d0de5e95a1f2d59cdc",
+  "scope": "COMPLETE30_COUNTERPART_ORIGINAL_PREFIX_PRICE_COVERAGE_NOT_EXECUTION",
+  "maxNewReceiptRequests": 30,
+  "fixedHorizonMs": 1792269754123,
+  "policyChanged": false,
+  "filesSha256": {
+    "research/phase6/queue_aware_counterpart.py": "d4eb82ba975911b89c22b24baeec4c1ffc2c92d861718aec4ab8d29e8f282151",
+    "research/phase6/tests/test_queue_aware_counterpart.py": "62284f60fec56f00599f2539ef11828c46ee9e0f6d230e8d887dc8ef18ac4ac6",
+    ".github/workflows/queue-aware-counterpart.yml": "04b026f66ab19bc616b252ebe77746b8fd4f7f3519a2d823709f8597594d0673",
+    "research/experiments/queue-aware-quote-20261019/counterpart-selection.json": "87b2285aad8d6cf0bc344c3822da8992a1b057a6e2d79d63651cf7f900ff32e0",
+    "research/phase6/receipt_audit.py": "4337ac09ca5b5364e5f23a15359e44695e283a99584acdbafbf4c9c4fbcc21c4",
+    "research/phase6/route_coverage_audit.py": "4febb1dc81e3e6077c5bd2cd3d87c126900dc24cc0316a24e5fcaaad1a8350fb",
+    "research/phase6/queue_aware_cached_traffic.py": "c0eb05e454a15eaeedf59037f472c9f43e081c27eba3c8a017803f4fe7c46b70",
+    "research/phase6/queue_aware_causal.py": "885c59fb24b43e37f92e90956b4c27a0f62f32c0bc4232090055c5b1469a495b",
+    "research/phase6/queue_aware_causal_result.py": "efc13ee1f54bfad745866338dd4f8447c1c582fcccf3800ca9b938fc004358bd",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  }
+}

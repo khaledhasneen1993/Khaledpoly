@@ -1,0 +1,59 @@
+name: PAPER QW0 one supported target causal upper bound
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/queue-aware-causal.yml'
+      - 'research/phase6/queue-aware-causal-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-qw0-single-supported-causal
+  cancel-in-progress: false
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: All offline phase6 source/receipt/policy regressions
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: probe-engine
+      - name: Compile only isolated gate against already-verified engine; no Maven build
+        run: |
+          mkdir -p "$RUNNER_TEMP/qw0-probe"
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/qw0-engine"
+          javac -cp "$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" -d "$RUNNER_TEMP/qw0-probe" research/phase6/Qw0CausalProbe.java
+          java -cp "$RUNNER_TEMP/qw0-probe:$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*" com.polybot.hft.paper.Qw0CausalProbe --self-test
+      - uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: qw0-causal-input
+      - name: One frozen original window through first scoped GAP; original complete source hash required
+        run: >-
+          python3 -u -m research.phase6.queue_aware_causal --input-root qw0-causal-input
+          --output research/output/qw0-causal
+      - name: Actual matcher conservative component allocation, optimistic no-strategy-cancel target-only probe
+        run: >-
+          java -Xmx2g -cp "$RUNNER_TEMP/qw0-probe:$RUNNER_TEMP/qw0-engine/BOOT-INF/lib/*"
+          com.polybot.hft.paper.Qw0CausalProbe research/output/qw0-causal/context.json.gz
+          research/output/qw0-causal/bindings.json research/output/qw0-causal/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qw0-single-supported-causal
+          retention-days: 7
+          path: research/output/qw0-causal/

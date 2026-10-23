@@ -1,0 +1,193 @@
+{
+  "scope": "ACTUAL_RECEIPT_COMPONENTS_OF_SELECTED_UPPER_BOUND_LEG_NOT_QUEUE_ALLOCATION",
+  "targetQuote": {
+    "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "price": "0.47",
+    "quantity": "5.00"
+  },
+  "results": [
+    {
+      "transactionHash": "0x38f3a6d64e22cd524cd0aa1e1bab530674a29c9c3e460db4f0fab637506d95ed",
+      "routeSharesRaw": {
+        "DIRECT": 5000000,
+        "MINT": 8250000
+      },
+      "targetBuyComponents": [
+        {
+          "route": "MINT",
+          "makerToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "makerSide": "BUY",
+          "sharesRaw": 5000000,
+          "collateralRaw": 2400000,
+          "makerPrice": "0.48",
+          "makerLogIndex": 1023
+        },
+        {
+          "route": "MINT",
+          "makerToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "makerSide": "BUY",
+          "sharesRaw": 3250000,
+          "collateralRaw": 1560000,
+          "makerPrice": "0.48",
+          "makerLogIndex": 1025
+        }
+      ],
+      "atOrBelowOwnBidSharesRaw": 0
+    },
+    {
+      "transactionHash": "0x110aefd3cb5bfc8f4ad06f277fa29bf2a9d9dcc43d57127c0a8d77fa7176930c",
+      "routeSharesRaw": {
+        "MINT": 26750000,
+        "DIRECT": 9250000
+      },
+      "targetBuyComponents": [
+        {
+          "route": "MINT",
+          "makerToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "makerSide": "BUY",
+          "sharesRaw": 26750000,
+          "collateralRaw": 12840000,
+          "makerPrice": "0.48",
+          "makerLogIndex": 997
+        }
+      ],
+      "atOrBelowOwnBidSharesRaw": 0
+    },
+    {
+      "transactionHash": "0x5af5f5d8a8acd4a044cd1c3351756d4e2e1dc0eadde045a4438d45e8f3b1adff",
+      "routeSharesRaw": {
+        "DIRECT": 18352942
+      },
+      "targetBuyComponents": [],
+      "atOrBelowOwnBidSharesRaw": 0
+    },
+    {
+      "transactionHash": "0x1ce854c6b45de0f4adfbf2b8042dbcd3da9f1298755b24b759f4434cd1194995",
+      "routeSharesRaw": {
+        "DIRECT": 21640000,
+        "MINT": 26360000
+      },
+      "targetBuyComponents": [
+        {
+          "route": "MINT",
+          "makerToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "makerSide": "BUY",
+          "sharesRaw": 19000000,
+          "collateralRaw": 9310000,
+          "makerPrice": "0.49",
+          "makerLogIndex": 1970
+        },
+        {
+          "route": "MINT",
+          "makerToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "makerSide": "BUY",
+          "sharesRaw": 7360000,
+          "collateralRaw": 3606400,
+          "makerPrice": "0.49",
+          "makerLogIndex": 1972
+        }
+      ],
+      "atOrBelowOwnBidSharesRaw": 0
+    },
+    {
+      "transactionHash": "0x49cb8b8952f8c3f400464b51dcc8d119990238ec20c6f8e015b60a1c23613ee4",
+      "routeSharesRaw": {
+        "DIRECT": 35000000,
+        "MINT": 44990000
+      },
+      "targetBuyComponents": [
+        {
+          "route": "MINT",
+          "makerToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "makerSide": "BUY",
+          "sharesRaw": 10000000,
+          "collateralRaw": 5100000,
+          "makerPrice": "0.51",
+          "makerLogIndex": 2148
+        },
+        {
+          "route": "MINT",
+          "makerToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "makerSide": "BUY",
+          "sharesRaw": 34990000,
+          "collateralRaw": 17844900,
+          "makerPrice": "0.51",
+          "makerLogIndex": 2150
+        }
+      ],
+      "atOrBelowOwnBidSharesRaw": 0
+    },
+    {
+      "transactionHash": "0xf38f61d271ba71997ff756c3468088bc6702e10c7d00f1dfcee02cd68e2fd76c",
+      "routeSharesRaw": {
+        "DIRECT": 15312500
+      },
+      "targetBuyComponents": [],
+      "atOrBelowOwnBidSharesRaw": 0
+    },
+    {
+      "transactionHash": "0x3be6b9f11c40c289b6e80722f7cbc0d5a5c8ac7500b78db540a6ba396be574ce",
+      "routeSharesRaw": {
+        "MINT": 14285715
+      },
+      "targetBuyComponents": [
+        {
+          "route": "MINT",
+          "makerToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "makerSide": "BUY",
+          "sharesRaw": 5830000,
+          "collateralRaw": 2973300,
+          "makerPrice": "0.51",
+          "makerLogIndex": 1836
+        },
+        {
+          "route": "MINT",
+          "makerToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "makerSide": "BUY",
+          "sharesRaw": 8455715,
+          "collateralRaw": 4312415,
+          "makerPrice": "0.5100000413921235519409062392",
+          "makerLogIndex": 1838
+        }
+      ],
+      "atOrBelowOwnBidSharesRaw": 0
+    },
+    {
+      "transactionHash": "0x6c38a94fc2683ac8aac6fcf4e16c6a654fd0a5b909fad10408f3334e33b4895e",
+      "routeSharesRaw": {
+        "MINT": 45042554,
+        "DIRECT": 5000000
+      },
+      "targetBuyComponents": [
+        {
+          "route": "MINT",
+          "makerToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "makerSide": "BUY",
+          "sharesRaw": 19000000,
+          "collateralRaw": 10070000,
+          "makerPrice": "0.53",
+          "makerLogIndex": 912
+        },
+        {
+          "route": "MINT",
+          "makerToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "makerSide": "BUY",
+          "sharesRaw": 26042554,
+          "collateralRaw": 13802554,
+          "makerPrice": "0.5300000145915028149696838490",
+          "makerLogIndex": 916
+        }
+      ],
+      "atOrBelowOwnBidSharesRaw": 0
+    }
+  ],
+  "targetBuyAtOrBelowOwnBidSharesRaw": 0,
+  "otherLegAudited": false,
+  "otherStatesAudited": false,
+  "observedActivationOrQueueProven": false,
+  "fillsCreated": 0,
+  "netPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO"
+}

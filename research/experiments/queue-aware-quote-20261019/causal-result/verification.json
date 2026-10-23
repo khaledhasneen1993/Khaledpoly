@@ -1,0 +1,21 @@
+{
+  "scope": "REPRODUCED_OPTIMISTIC_QW0_TARGET_ONLY_CONDITIONAL_ALLOCATION_NOT_PROFIT",
+  "originalSequence": 243583,
+  "originalLabelsConsumed": 39,
+  "uniqueActualComponents": 121,
+  "initialQueueAhead": "160",
+  "conditionalAllocatedShares": "5.00",
+  "queueAbsorbed": "160.00",
+  "conditionalFillTimes": [
+    1792269754123
+  ],
+  "independentPythonActualComponentAllocationReproduced": true,
+  "restingRiskCancellationOmitted": true,
+  "counterpartExecutionOmitted": true,
+  "actualBotFillsCreated": 0,
+  "netPnlRecomputed": false,
+  "candidateAccountSimulated": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "REQUIRE_ACTUAL_RESTING_LIFETIME_AND_COUNTERPART_BEFORE_ACCOUNT_OR_INDEPENDENT_PAPER"
+}

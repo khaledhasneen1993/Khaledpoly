@@ -1,0 +1,198 @@
+{
+  "scope": "ONLY_CANDIDATE_PAIR_DIAGNOSTIC_NOT_FILL_PROOF",
+  "originalAuditEvents": [
+    {
+      "data": {
+        "at": 1792269711477,
+        "purpose": "ENTRY",
+        "quantity": 5.0,
+        "price": 0.46,
+        "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "id": "sim-research-1"
+      },
+      "at": 1792269711477,
+      "kind": "ORDER"
+    },
+    {
+      "data": {
+        "at": 1792269711477,
+        "purpose": "ENTRY",
+        "quantity": 5.0,
+        "price": 0.38,
+        "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "id": "sim-research-2"
+      },
+      "at": 1792269711477,
+      "kind": "ORDER"
+    },
+    {
+      "data": {
+        "status": "CANCELED",
+        "reason": "DATA_GAP:invalid_depth",
+        "at": 1792269711983,
+        "id": "sim-research-1"
+      },
+      "at": 1792269711983,
+      "kind": "ORDER_TERMINAL"
+    },
+    {
+      "data": {
+        "status": "CANCELED",
+        "reason": "DATA_GAP:invalid_depth",
+        "at": 1792269711983,
+        "id": "sim-research-2"
+      },
+      "at": 1792269711983,
+      "kind": "ORDER_TERMINAL"
+    }
+  ],
+  "makerExecutionDiagnostics": [
+    {
+      "id": "sim-research-1",
+      "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "buy": true,
+      "price": 0.46,
+      "submittedMs": 1792269711477,
+      "activationDueMs": 1792269711727,
+      "activatedMs": 1792269711729,
+      "terminalMs": 1792269711983,
+      "terminalReason": "DATA_GAP:invalid_depth",
+      "initialQueueAhead": 0,
+      "remainingQueueAhead": 0,
+      "eligiblePrintVolume": 0,
+      "remainingShares": 5,
+      "activeMs": 254,
+      "printObservations": {
+        "ORDER_NOT_ACTIVE": 8,
+        "WRONG_AGGRESSOR": 3
+      }
+    },
+    {
+      "id": "sim-research-2",
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "buy": true,
+      "price": 0.38,
+      "submittedMs": 1792269711477,
+      "activationDueMs": 1792269711727,
+      "activatedMs": 1792269711729,
+      "terminalMs": 1792269711983,
+      "terminalReason": "DATA_GAP:invalid_depth",
+      "initialQueueAhead": 0,
+      "remainingQueueAhead": 0,
+      "eligiblePrintVolume": 0,
+      "remainingShares": 5,
+      "activeMs": 254,
+      "printObservations": {
+        "WRONG_AGGRESSOR": 1
+      }
+    }
+  ],
+  "decisionReasons": {
+    "NET_EDGE": 19873,
+    "MIN_SIZE_AND_NET_EDGE": 29704,
+    "BOOK_MISSING": 1489,
+    "MIN_SIZE": 70,
+    "EMPTY_DEPTH": 6063,
+    "PAIR_SUBMITTED": 1,
+    "RESTING": 2,
+    "OUTSIDE_MARKET": 295106,
+    "BOOK_STALE": 74,
+    "ENTRY_RESIDUAL_LOSS_BUDGET": 31,
+    "PRICE_BOUND_OR_STALE_TICK": 159
+  },
+  "riskRejectSamples": [
+    {
+      "quantity": 5.0,
+      "redemptionCost": 0.01,
+      "firstBid": 0.24,
+      "at": 1792269639335,
+      "secondBid": 0.71,
+      "budget": 2.5,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7"
+    },
+    {
+      "quantity": 5.0,
+      "redemptionCost": 0.01,
+      "firstBid": 0.34,
+      "at": 1792269683175,
+      "secondBid": 0.64,
+      "budget": 2.5,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7"
+    },
+    {
+      "quantity": 5.0,
+      "redemptionCost": 0.01,
+      "firstBid": 0.34,
+      "at": 1792269683428,
+      "secondBid": 0.64,
+      "budget": 2.5,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7"
+    },
+    {
+      "quantity": 5.0,
+      "redemptionCost": 0.01,
+      "firstBid": 0.34,
+      "at": 1792269683679,
+      "secondBid": 0.64,
+      "budget": 2.5,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7"
+    },
+    {
+      "quantity": 5.0,
+      "redemptionCost": 0.01,
+      "firstBid": 0.52,
+      "at": 1792269708719,
+      "secondBid": 0.46,
+      "budget": 2.5,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7"
+    },
+    {
+      "quantity": 5.0,
+      "redemptionCost": 0.01,
+      "firstBid": 0.31,
+      "at": 1792269742282,
+      "secondBid": 0.64,
+      "budget": 2.5,
+      "condition": "0xf0d28ec493ed0f9a8cd52be0613e1079b9cfd729fde5713349a03339ba2e9019"
+    },
+    {
+      "quantity": 5.0,
+      "redemptionCost": 0.01,
+      "firstBid": 0.64,
+      "at": 1792269819131,
+      "secondBid": 0.3,
+      "budget": 2.5,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7"
+    },
+    {
+      "quantity": 5.0,
+      "redemptionCost": 0.01,
+      "firstBid": 0.72,
+      "at": 1792269824389,
+      "secondBid": 0.23,
+      "budget": 2.5,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7"
+    },
+    {
+      "quantity": 5.0,
+      "redemptionCost": 0.01,
+      "firstBid": 0.69,
+      "at": 1792269834406,
+      "secondBid": 0.24,
+      "budget": 2.5,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7"
+    },
+    {
+      "quantity": 5.0,
+      "redemptionCost": 0.01,
+      "firstBid": 0.68,
+      "at": 1792269836918,
+      "secondBid": 0.19,
+      "budget": 2.5,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7"
+    }
+  ],
+  "quantityPairCompletion": null,
+  "fillsInferred": false,
+  "pnlInferred": false
+}

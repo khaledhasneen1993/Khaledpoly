@@ -1,0 +1,35 @@
+name: PAPER bounded active-order evidence
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-order-window
+  cancel-in-progress: false
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify bounded extraction and preserved chronology
+        run: python3 -m unittest research.phase6.tests.test_order_window -v
+      - uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: window-input
+      - name: Extract two fixed lifecycle windows, no new market capture
+        # Retain normalized book frames and only relevant RAW last-trade messages.
+        run: >-
+          python3 -u -m research.phase6.order_window --input-root window-input
+          --spec research/experiments/order-window-20261018/spec.json
+          --output research/output/order-window.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bounded-active-order-windows
+          retention-days: 7
+          path: research/output/order-window.json

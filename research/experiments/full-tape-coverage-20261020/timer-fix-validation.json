@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "command": "python3 -m unittest discover -s research/phase6/tests -q",
+  "tests": 288,
+  "durationSeconds": 275.584,
+  "result": "OK",
+  "separateFinalTargetedCommand": "python3 -m unittest research.phase6.tests.test_full_tape_label_coverage -v",
+  "targetedTests": 10,
+  "targetedDurationSeconds": 0.006,
+  "targetedResult": "OK",
+  "originalInspectorVocabularyAndRetainedTimerVerified": true,
+  "correctedFrozenDependencyHashesVerified": true,
+  "acceptanceAndAccountConfigurationUnchanged": true,
+  "fullSourceCoverageTotalsStillPending": true,
+  "modelFillsCreated": 0,
+  "netPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

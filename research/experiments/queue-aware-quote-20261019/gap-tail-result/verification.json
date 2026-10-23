@@ -1,0 +1,16 @@
+{
+  "scope": "ALL14_ORIGINAL_TAIL_GROUPS_BEFORE_FIRST_GAP_NOT_EXECUTION",
+  "completeOriginalObservations": 14,
+  "actualBPriceCompatibleSharesRaw": 0,
+  "actualASellPriceCompatibleSharesRaw": 23000000,
+  "necessaryVolumeIsNotQueueAllocation": true,
+  "hedgeQueueAndLifecycleNotSimulated": true,
+  "sourceWindowStartExclusiveMs": 1792269759566,
+  "sourceWindowEndExclusiveMs": 1792269760873,
+  "actualBotFillsCreated": 0,
+  "netPnlRecomputed": false,
+  "candidateAccountSimulated": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "FREEZE_SEPARATE_ACTIVE_REDUCTION_GATE_WITH_SIDE_CONSERVATIVE_COMPONENT_PRICES"
+}

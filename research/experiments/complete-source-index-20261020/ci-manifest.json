@@ -1,0 +1,16 @@
+{
+  "sourceCommit": "fdb3f970331b6821fe8f37c22a900c6e2839bf31",
+  "runId": 39410095950,
+  "jobId": 118585458513,
+  "artifactId": 12259190881,
+  "artifactBytes": 724,
+  "artifactZipSha256": "68f841a1c2a703a8cdfeb86516f8c153fb4e902182b9a74772d2941d38ca8b6c",
+  "proofSha256": "8ac973519fb45642810569e8c2c08b4b6ea76cdccf778a9b907e85b8fc1ddc95",
+  "githubConclusion": "success",
+  "githubTargetedTests": 29,
+  "githubTestSeconds": 12.713,
+  "downloadedProofEqualsLocalReconstruction": true,
+  "marketNetPnlRecomputed": false,
+  "runtimeOptimizationImplemented": false,
+  "liveAllowed": false
+}

@@ -1,0 +1,122 @@
+{
+  "scope": "ELEVEN_SELECTED_LEGACY_STARTS_NOT_GLOBAL_DQ3_TRAJECTORY_OR_PROFIT",
+  "results": [
+    {
+      "originalSequence": 173342,
+      "targetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.45",
+        "quantity": "5.00"
+      },
+      "reason": "ZERO_ACTUAL_PRICE_COMPATIBLE_COMPONENTS_IN_COMPLETE_TARGET_LEG_WINDOW"
+    },
+    {
+      "originalSequence": 197690,
+      "targetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.47",
+        "quantity": "5.00"
+      },
+      "reason": "ZERO_ACTUAL_PRICE_COMPATIBLE_COMPONENTS_IN_COMPLETE_TARGET_LEG_WINDOW"
+    },
+    {
+      "originalSequence": 198832,
+      "targetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.48",
+        "quantity": "5.00"
+      },
+      "reason": "ZERO_ACTUAL_PRICE_COMPATIBLE_COMPONENTS_IN_COMPLETE_TARGET_LEG_WINDOW"
+    },
+    {
+      "originalSequence": 243583,
+      "targetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "reason": "INITIAL_QUEUE_EXCEEDS_COMPLETE_ACTUAL_PRICED_UPPER_BOUND"
+    },
+    {
+      "originalSequence": 245065,
+      "targetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "reason": "INITIAL_QUEUE_EXCEEDS_COMPLETE_ACTUAL_PRICED_UPPER_BOUND"
+    },
+    {
+      "originalSequence": 246180,
+      "targetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "reason": "POST_ONLY_WOULD_CROSS"
+    },
+    {
+      "originalSequence": 258161,
+      "targetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "reason": "ZERO_ACTUAL_PRICE_COMPATIBLE_COMPONENTS_IN_COMPLETE_TARGET_LEG_WINDOW"
+    },
+    {
+      "originalSequence": 258635,
+      "targetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "reason": "ZERO_ACTUAL_PRICE_COMPATIBLE_COMPONENTS_IN_COMPLETE_TARGET_LEG_WINDOW"
+    },
+    {
+      "originalSequence": 259283,
+      "targetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "reason": "ZERO_ACTUAL_PRICE_COMPATIBLE_COMPONENTS_IN_COMPLETE_TARGET_LEG_WINDOW"
+    },
+    {
+      "originalSequence": 259597,
+      "targetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "reason": "ZERO_ACTUAL_PRICE_COMPATIBLE_COMPONENTS_IN_COMPLETE_TARGET_LEG_WINDOW"
+    },
+    {
+      "originalSequence": 299650,
+      "targetQuote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "reason": "CONDITIONAL_RESTING_RISK_CANCEL_BEFORE_ANY_TARGET_OBSERVATION"
+    }
+  ],
+  "finalConditionalCancel": {
+    "originalSequence": 299650,
+    "reason": "CONDITIONAL_RESTING_RISK_CANCEL_BEFORE_ANY_TARGET_OBSERVATION",
+    "cancelAckMs": 1792269786347,
+    "cancelAckSequence": 300416,
+    "firstPossibleTargetPrintArrivalMs": 1792269786398,
+    "millisecondsBeforeFirstPrint": 51
+  },
+  "zeroActualComponentLegs": 7,
+  "queueBoundRejectedStarts": 2,
+  "postOnlyRejectedStarts": 1,
+  "conditionalRiskCanceledStarts": 1,
+  "fillsCreated": 0,
+  "netPnlRecomputed": false,
+  "candidateAccountSimulated": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "DO_NOT_PROMOTE_DQ3_ON_THESE_SELECTED_DEVELOPMENT_STATES"
+}

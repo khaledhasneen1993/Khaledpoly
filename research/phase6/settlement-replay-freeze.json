@@ -1,0 +1,24 @@
+{
+  "experiment": "CS-MINT-LAB0-CLOSED-LOOP-MARKOUT-CONTINUITY-REV1",
+  "frozenBeforeFirstDevelopmentReplay": true,
+  "partialLabels": true,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    "polybot-core/src/main/java/com/polybot/hft/paper/SettlementReplayLabels.java": "1715071b6caa5171fd482a612f07cde9eb385479d13203ee09f9e9f245adf052",
+    "polybot-core/src/main/java/com/polybot/hft/paper/SettlementReplayMain.java": "32195fd82ec24bc369de23acf32ca1c1aad78c591126a3088f2b28de4ddc44a3",
+    "polybot-core/src/main/java/com/polybot/hft/paper/PaperMatchingEngine.java": "12e89574023e0457d2066f8e50d660491a3ef182ae066bab4725cd40324fa84f",
+    "polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java": "3cbafd11c6def89d29a9c57ceb0e5372711f202228eecad61f30a2c783a8392d",
+    "polybot-core/src/main/java/com/polybot/hft/paper/ClosedLoopReplay.java": "a5751689ad55797760650d27b5b1bdf2a26111f9dd033a34b21aecb56c73fcaa",
+    "research/phase6/export_settlement_labels.py": "e60becc69540c826b11ea0aea79899ab4bc93c6a89ab17fddbd3cc5d8724c238",
+    "research/phase6/compare_settlement_replay.py": "ef9bb4ed1a3f91b89794a67b3e40c3acd7274bf6848a045f1e44746d9c7239ad",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/experiments/settlement-lab0-20261018/replay-labels.json": "15e240cbe3e4b0ebed5d3240627df19d4a37b8006919efcf70c69874c1aa9457",
+    "polybot-core/src/main/java/com/polybot/hft/paper/PaperMetrics.java": "cfbc6839c86e30d40a066af86c29390562b1cdde622d0e80fe79f680d347c7ac",
+    "polybot-core/src/main/java/com/polybot/hft/paper/ReplayRunner.java": "e92edff7d05b07157cb4b55e7b5e48ea57d3df4cf3621da61deb6dec39c4217f"
+  },
+  "priorCompletedFreeze": "research/experiments/settlement-replay-20261018/freeze.original.json",
+  "priorCompletedFreezeSha256": "bce4ac21c8841ccfe56f36a9806ba95e8ff9d6ad3ad4d791890f46657d7ee3b8",
+  "revisionPurpose": "Measurement correctness only; no strategy, queue, costs, risk, config or acceptance change. Full replay not yet repeated."
+}

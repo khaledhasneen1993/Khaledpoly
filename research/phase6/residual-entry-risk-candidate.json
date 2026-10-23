@@ -1,0 +1,40 @@
+{
+  "candidate": "CS-RESIDUAL-WORST-CASE-1",
+  "status": "RESEARCH_PRIMITIVE_ONLY_NOT_CONNECTED_TO_STRATEGY",
+  "frozenBeforeFirstCandidateReplay": true,
+  "formula": "planned_pair_quantity * max(first_bid,second_bid) + existing_redemption_cost <= existing_exit_loss_available",
+  "rationale": "Bound total loss if one leg fills and no lawful executable exit exists; do not assume below-minimum residual can be sold.",
+  "enabledByDefault": false,
+  "changes": {
+    "strategyEntryVetoOnly": true,
+    "quantityIncrease": false,
+    "queueChange": false,
+    "feeChange": false,
+    "riskLimitChange": false,
+    "minimumSizeRelaxation": false
+  },
+  "knownDevelopmentExample": {
+    "quantity": "5",
+    "firstBid": ".34",
+    "secondBid": ".64",
+    "exitBudget": "2.5",
+    "redemptionCost": ".01",
+    "worstCaseUnpairedLoss": "3.21",
+    "allow": false
+  },
+  "baselineBindings": 14,
+  "logicalDevelopmentTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "parameterGridAllowed": false,
+  "holdoutTuningAllowed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "next": "Default-off integration, constructor/config backward compatibility tests, fail-closed historical source provenance, then freeze same-tape full-account comparison. Zero fills cannot qualify.",
+  "filesSha256": {
+    "research/phase6/residual_entry_risk.py": "82f7fae693c1a9a0b33d175a302419ac363c1069004d9392671f7704015dddbc",
+    "research/phase6/tests/test_residual_entry_risk.py": "1e15431eba25a54df192fa53505c581bbba24f7a5c2fee3b83b27b5b20be954f",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/experiments/exit-window-replay-20261018/replay-labels.json": "ae4c80f984166529b5cb51de186bf74485c6aceb2cf280b10f9d6e3d993926dc",
+    "research/experiments/exit-window-replay-20261018/result/dust-diagnosis.json": "8bbb7a9c4fd7d1eb2818a74e0150a76399a369a89b20411007acfff7ba0f743c"
+  }
+}

@@ -1,0 +1,36 @@
+name: PAPER QW0 original post-GAP data context
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/queue-aware-post-gap.yml', 'research/phase6/queue-aware-post-gap-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-qw0-original-post-gap-context
+  cancel-in-progress: false
+jobs:
+  original-context:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: All offline regressions before original data extraction
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: original-source
+      - name: One fixed recovery and unchanged unhedged-deadline context; full original hash required
+        run: >-
+          python3 -u -m research.phase6.queue_aware_post_gap_context
+          --input-root original-source --output research/output/qw0-post-gap
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qw0-original-post-gap-context
+          retention-days: 7
+          path: research/output/qw0-post-gap/

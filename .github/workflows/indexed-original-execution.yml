@@ -1,0 +1,68 @@
+name: PAPER frozen indexed original execution diagnosis
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/indexed-original-execution.yml', 'research/phase6/indexed-execution-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-frozen-indexed-original-execution
+  cancel-in-progress: false
+jobs:
+  proof-then-original-development:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: Frozen integration and bounded offline regressions before source replay
+        run: |
+          python3 -m unittest research.phase6.tests.test_indexed_execution research.phase6.tests.test_atomic_guard research.phase6.tests.test_native_source_index research.phase6.tests.test_complete_source_index research.phase6.tests.test_no_order_result research.phase6.tests.test_expanded_receipt_pool research.phase6.tests.test_expanded_pool_result research.phase6.tests.test_full_runner_build research.phase6.tests.test_full_runner_diagnosis -q
+          python3 -m research.phase6.indexed_execution_build --output "$RUNNER_TEMP/indexed-src"
+          python3 -m research.phase6.indexed_execution_inputs --output "$RUNNER_TEMP/indexed-inputs"
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: proof-engine
+      - name: Compile isolated path, test atomic original-prefix fixtures, default and counterexamples
+        run: |
+          python3 -c 'import hashlib;from pathlib import Path;assert hashlib.sha256(Path("proof-engine/executor-service-0.6.0.jar").read_bytes()).hexdigest()=="bfc7bef081927f774374f92e5443c197e308e4828983dd9c19ac0ef280c45963"'
+          unzip -q proof-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/indexed-deps"
+          mkdir -p "$RUNNER_TEMP/indexed-classes" research/output/indexed-original/proof
+          javac -cp "$RUNNER_TEMP/indexed-deps/BOOT-INF/lib/*" -d "$RUNNER_TEMP/indexed-classes" $(find "$RUNNER_TEMP/indexed-src/polybot-core/src/main/java" -name '*.java') research/phase6/ConservedMixedReplayLabels.java research/phase6/ConservedMixedReplayLabelsProbe.java research/phase6/OfflineSessionLabels.java research/phase6/CanonicalSessionParityProbe.java research/phase6/FrozenResearchPolicies.java research/phase6/FrozenStrategySessionProbe.java research/phase6/ConservedReceiptPool.java research/phase6/ConservedReceiptPoolProbe.java research/phase6/NativeReplaySupport.java research/phase6/NoOrderDifferentialProbe.java research/phase6/AtomicNoOrderGuardProbe.java research/phase6/CompleteSourceIdentityIndex.java research/phase6/IndexedExecutionLabels.java research/phase6/IndexedReplaySupport.java research/phase6/IndexedExecutionProbe.java
+          indexed_cp="$RUNNER_TEMP/indexed-classes:$RUNNER_TEMP/indexed-deps/BOOT-INF/lib/*"
+          java -Xmx1g -cp "$indexed_cp" com.polybot.hft.paper.IndexedExecutionProbe "$RUNNER_TEMP/indexed-inputs/pool/pool.json" "$RUNNER_TEMP/indexed-inputs/source/complete-index.jsonl" "$RUNNER_TEMP/indexed-inputs/original-prefix.json" "$RUNNER_TEMP/integration-proof"
+          cp "$RUNNER_TEMP/integration-proof/indexed-execution-proof.json" research/output/indexed-original/proof/
+          python3 -m research.phase6.indexed_execution_result --proof research/output/indexed-original/proof/indexed-execution-proof.json > research/output/indexed-original/proof/verification.json
+          java -Xmx1g -cp "$indexed_cp" com.polybot.hft.paper.AtomicNoOrderGuardProbe "$RUNNER_TEMP/atomic-proof"
+          cp "$RUNNER_TEMP/atomic-proof/atomic-guard-proof.json" research/output/indexed-original/proof/
+          python3 -m research.phase6.atomic_guard_result --proof research/output/indexed-original/proof/atomic-guard-proof.json > research/output/indexed-original/proof/atomic-verification.json
+          java -Xmx1g -cp "$indexed_cp" com.polybot.hft.paper.CanonicalSessionParityProbe "$RUNNER_TEMP/indexed-default"
+          cp "$RUNNER_TEMP/indexed-default/parity.json" research/output/indexed-original/proof/default-parity.json
+          python3 -c 'import json;from pathlib import Path;assert json.loads(Path("research/output/indexed-original/proof/default-parity.json").read_text())==json.loads(Path("research/experiments/session-bridge-20261019/default-before.json").read_text())'
+          java -Xmx1g -cp "$indexed_cp" com.polybot.hft.paper.NoOrderDifferentialProbe "$RUNNER_TEMP/indexed-inputs/pool/pool.json" "$RUNNER_TEMP/indexed-inputs/pool/source-identities.json" "$RUNNER_TEMP/indexed-differential"
+          cp "$RUNNER_TEMP/indexed-differential/no-order-proof.json" research/output/indexed-original/proof/
+          python3 -m research.phase6.no_order_result --root research/output/indexed-original/proof > research/output/indexed-original/proof/differential-verification.json
+      - name: Download existing ORIGINAL DEVELOPMENT source only after frozen proofs pass
+        uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: original-development-source
+      - name: SAME original source, unchanged fees/queue/risk, baseline then frozen candidate
+        run: |
+          indexed_cp="$RUNNER_TEMP/indexed-classes:$RUNNER_TEMP/indexed-deps/BOOT-INF/lib/*"
+          python3 -m research.phase6.indexed_execution_result --input-root original-development-source --inputs "$RUNNER_TEMP/indexed-inputs" --classpath "$indexed_cp" --output research/output/indexed-original/development
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frozen-indexed-original-execution-reports
+          retention-days: 7
+          path: research/output/indexed-original/
+          if-no-files-found: error

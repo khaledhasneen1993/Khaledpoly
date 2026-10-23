@@ -1,0 +1,30 @@
+name: PAPER complete source identity index proof only
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/complete-source-index.yml', 'research/phase6/complete-source-index-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-complete-source-index-proof
+  cancel-in-progress: false
+jobs:
+  identity-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Frozen input and bounded offline identity regressions; no capture, RPC or execution
+        run: |
+          python3 -c 'import hashlib,json;from pathlib import Path;f=json.loads(Path("research/phase6/complete-source-index-freeze.json").read_text());assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in f["filesSha256"].items())'
+          python3 -m unittest research.phase6.tests.test_complete_source_index research.phase6.tests.test_no_order_result research.phase6.tests.test_expanded_receipt_pool research.phase6.tests.test_expanded_pool_result research.phase6.tests.test_full_runner_build research.phase6.tests.test_full_runner_diagnosis -q
+          python3 -m research.phase6.complete_source_index --output research/output/complete-source-index/proof.json
+          cmp research/output/complete-source-index/proof.json research/experiments/complete-source-index-20261020/proof.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: complete-source-index-proof-only
+          retention-days: 7
+          path: research/output/complete-source-index/
+          if-no-files-found: error

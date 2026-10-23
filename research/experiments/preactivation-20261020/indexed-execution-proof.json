@@ -1,0 +1,121 @@
+{
+  "scope" : "TWO_ORIGINAL_PREIMAGES_IN_SYNTHETIC_SESSION_NOT_ORIGINAL_TAPE_REPLAY",
+  "prefixSha256" : "2842d45d1fc041fd7c1af8a6ed44403e9c0914e59eaf9c8e4b0515b504c6de8c",
+  "checks" : [ "ORIGINAL97_KNOWN_AND628_ATOMIC_CLOCK", "UNKNOWN_VENUE_QUANTITY_NOT_ZERO_OR_PUBLIC", "PREFIX_CANNOT_CERTIFY_FULL_SOURCE_OR_POOL", "EXPIRY_AFTER_IDENTITY_AND_REAL_POOL_CONSUMPTION", "EXPOSURE_HALTS_CANCELS_BLOCKS_CONTINUATION", "MUTATION_AFTER_EXPIRY_HALTS_CANCELS_BLOCKS_CONTINUATION", "DUPLICATE_HALTS_CANCELS_BLOCKS_CONTINUATION", "MISSING_PREFIX_HALTS_CANCELS_BLOCKS_CONTINUATION", "FRAME_INDEX_HALTS_CANCELS_BLOCKS_CONTINUATION" ],
+  "ordinary" : {
+    "scope" : "INDEXED_ORIGINAL_DEVELOPMENT_EXECUTION_NOT_QUALIFICATION",
+    "temporalWitnessProfile" : "PRE_ACTIVATION0",
+    "unknownPreActivationClockObservations" : 0,
+    "sourceIndex" : {
+      "identitiesSha256" : "1f8d1d953f3755b8244c7ac11f7a3f72ccd8d73b1c9807b7cec417b6b710c1c2",
+      "runtimeSkipAuthorized" : false,
+      "consumedOriginalPreimages" : 2,
+      "completeOriginalConsumption" : false,
+      "settlementRoutesValidatedByIndex" : false,
+      "failed" : false,
+      "originalIdentities" : 16317,
+      "subsetPreimageTestOnly" : false
+    },
+    "realReceiptPool" : {
+      "experiment" : "CONSERVED-RECEIPT-POOL0",
+      "bindings" : 643,
+      "consumedBindings" : 1,
+      "actualComponents" : 1532,
+      "failed" : false,
+      "strictPartialPool" : true,
+      "nativePartialPoolReaderImplemented" : true,
+      "aggregateFallbackAllowed" : false,
+      "fullOriginalTapeCoverageProven" : false,
+      "fullAccountReplayAuthorized" : false,
+      "independentPaperQualificationAllowed" : false,
+      "liveAllowed" : false
+    },
+    "lastAttemptedOriginalObservation" : {
+      "eventIndex" : 0,
+      "seq" : 628,
+      "observation" : {
+        "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "size" : "12",
+        "side" : "BUY",
+        "sourceMs" : 1792269588824,
+        "price" : "0.57",
+        "tradeId" : "{\"market\":\"0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7\",\"asset_id\":\"88599287360325233240690982088109814021050513475420535621672707507474151524334\",\"price\":\"0.57\",\"size\":\"12\",\"fee_rate_bps\":\"0\",\"side\":\"BUY\",\"timestamp\":\"1792269588824\",\"event_type\":\"last_trade_price\",\"transaction_hash\":\"0xab04630289f70e9cff07206d4ee31f5d291d73ba79bd4dd0c9281f0427d9ba90\"}"
+      },
+      "at" : 1792269588894
+    },
+    "failed" : false,
+    "knownAppliedObservations" : 1,
+    "knownExpiredObservations" : 0,
+    "knownExpiredComponentQuantityNotApplied" : 0,
+    "unknownAtomicClockObservations" : 1,
+    "unknownExpiredAtomicClockObservations" : 0,
+    "unknownObservedPublicSizeNotVenueQuantity" : 12,
+    "unknownVenueQuantity" : "UNKNOWN_NOT_ZERO",
+    "venueConservationScope" : "KNOWN_NONEXPIRED_COMPONENTS_ONLY_NOT_COMPLETE_VENUE_VOLUME",
+    "aggregateFallbackAllowed" : false,
+    "independentPaperQualificationAllowed" : false,
+    "liveAllowed" : false
+  },
+  "expired" : {
+    "scope" : "INDEXED_ORIGINAL_DEVELOPMENT_EXECUTION_NOT_QUALIFICATION",
+    "temporalWitnessProfile" : "PRE_ACTIVATION0",
+    "unknownPreActivationClockObservations" : 0,
+    "sourceIndex" : {
+      "identitiesSha256" : "1f8d1d953f3755b8244c7ac11f7a3f72ccd8d73b1c9807b7cec417b6b710c1c2",
+      "runtimeSkipAuthorized" : false,
+      "consumedOriginalPreimages" : 2,
+      "completeOriginalConsumption" : false,
+      "settlementRoutesValidatedByIndex" : false,
+      "failed" : false,
+      "originalIdentities" : 16317,
+      "subsetPreimageTestOnly" : false
+    },
+    "realReceiptPool" : {
+      "experiment" : "CONSERVED-RECEIPT-POOL0",
+      "bindings" : 643,
+      "consumedBindings" : 1,
+      "actualComponents" : 1532,
+      "failed" : false,
+      "strictPartialPool" : true,
+      "nativePartialPoolReaderImplemented" : true,
+      "aggregateFallbackAllowed" : false,
+      "fullOriginalTapeCoverageProven" : false,
+      "fullAccountReplayAuthorized" : false,
+      "independentPaperQualificationAllowed" : false,
+      "liveAllowed" : false
+    },
+    "lastAttemptedOriginalObservation" : {
+      "eventIndex" : 0,
+      "seq" : 628,
+      "observation" : {
+        "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "size" : "12",
+        "side" : "BUY",
+        "sourceMs" : 1792269588824,
+        "price" : "0.57",
+        "tradeId" : "{\"market\":\"0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7\",\"asset_id\":\"88599287360325233240690982088109814021050513475420535621672707507474151524334\",\"price\":\"0.57\",\"size\":\"12\",\"fee_rate_bps\":\"0\",\"side\":\"BUY\",\"timestamp\":\"1792269588824\",\"event_type\":\"last_trade_price\",\"transaction_hash\":\"0xab04630289f70e9cff07206d4ee31f5d291d73ba79bd4dd0c9281f0427d9ba90\"}"
+      },
+      "at" : 1792269588894
+    },
+    "failed" : false,
+    "knownAppliedObservations" : 0,
+    "knownExpiredObservations" : 1,
+    "knownExpiredComponentQuantityNotApplied" : 200.000000,
+    "unknownAtomicClockObservations" : 1,
+    "unknownExpiredAtomicClockObservations" : 1,
+    "unknownObservedPublicSizeNotVenueQuantity" : 12,
+    "unknownVenueQuantity" : "UNKNOWN_NOT_ZERO",
+    "venueConservationScope" : "KNOWN_NONEXPIRED_COMPONENTS_ONLY_NOT_COMPLETE_VENUE_VOLUME",
+    "aggregateFallbackAllowed" : false,
+    "independentPaperQualificationAllowed" : false,
+    "liveAllowed" : false
+  },
+  "allFixtureAccountsUnchanged" : true,
+  "identityAndAtomicWitnessIntegrated" : true,
+  "unknownVenueQuantity" : "UNKNOWN_NOT_ZERO",
+  "fullOriginalTapeReplayed" : false,
+  "completeAccountComparisonPerformed" : false,
+  "marketNetPnlRecomputed" : false,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false
+}

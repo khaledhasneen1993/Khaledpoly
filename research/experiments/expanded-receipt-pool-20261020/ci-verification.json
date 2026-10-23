@@ -1,0 +1,18 @@
+{
+  "scope": "VERIFIED_EXPANDED643_NATIVE_AND_ORIGINAL628_STOP_NOT_ACCOUNT_RESULT",
+  "nativeIdentities": 643,
+  "nativeComponentTuples": 1532,
+  "original97ConsumedOnce": true,
+  "original16ComponentsConserved": true,
+  "nextOriginalCoordinate": [628, 0],
+  "sameSourceAndCoverageBothPolicies": true,
+  "prefixAccountCounts": {
+    "baseline": {"orderHistory": 0, "holdings": 0, "executions": 0},
+    "candidate": {"orderHistory": 0, "holdings": 0, "executions": 0}
+  },
+  "generalNoOrderOptimizationProven": false,
+  "marketNetPnlRecomputed": false,
+  "completeAccountComparisonPerformed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

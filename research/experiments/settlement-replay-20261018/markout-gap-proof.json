@@ -1,0 +1,55 @@
+{
+  "scope": "ONE_PROVEN_CONTAMINATED_FILL_NOT_A_FULL_MARKOUT_RECOMPUTATION",
+  "fill": {
+    "data": {
+      "id": "sim-research-4",
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "buy": true,
+      "price": 0.64,
+      "size": 5,
+      "at": 1792269683761
+    },
+    "at": 1792269683761,
+    "kind": "FILL"
+  },
+  "gap": {
+    "schema": 1,
+    "runId": "e4040b5c-f460-436e-86db-9fe60d656ea8",
+    "seq": 140300,
+    "arrivalMs": 1792269684239,
+    "elapsedNanos": 101752750965,
+    "kind": "RESEARCH_FRAME",
+    "sourceMs": null,
+    "data": {
+      "frameId": 69124,
+      "events": [
+        {
+          "kind": "GAP",
+          "data": {
+            "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+            "sourceMs": 1792269684169,
+            "detail": "Crossed final batch",
+            "reason": "invalid_depth"
+          },
+          "originalEventIndex": 0
+        },
+        {
+          "kind": "GAP",
+          "data": {
+            "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+            "sourceMs": 1792269684169,
+            "detail": "Crossed final batch",
+            "reason": "invalid_depth"
+          },
+          "originalEventIndex": 1
+        }
+      ],
+      "decodedMs": 1792269684239
+    },
+    "sourceCanonicalRowSha256": "a5366437ee1d10d1927516c13a09fcfcb741153ab6ba78899c67a1ebcc685bec"
+  },
+  "firstHorizonDueMs": 1792269684761,
+  "invalidatesAllThreeBuyHorizons": true,
+  "remainingSellMarkoutValidity": "NOT_RECOMPUTED_FROM_FULL_TAPE",
+  "originalAuditAlertsDoNotContainTokenScope": true
+}

@@ -1,0 +1,68 @@
+{
+  "scope": "INDEPENDENTLY_REPRODUCED_ACTIVE_REDUCTION_TO_FIRST_GAP_NOT_ACCOUNT",
+  "completeOriginalGroups": 162,
+  "activationEvidence": [
+    {
+      "id": "qw0-gap-0",
+      "originalSequence": 244228,
+      "eventIndex": 0,
+      "at": 1792269750554,
+      "preEventBookSourceMs": 1792269750481,
+      "initialQueue": "160"
+    },
+    {
+      "id": "qw0-gap-1",
+      "originalSequence": 244228,
+      "eventIndex": 0,
+      "at": 1792269750554,
+      "preEventBookSourceMs": 1792269750481,
+      "initialQueue": "30"
+    },
+    {
+      "id": "qw0-gap-reduction",
+      "originalSequence": 259597,
+      "eventIndex": 0,
+      "at": 1792269759818,
+      "preEventBookSourceMs": 1792269759725,
+      "initialQueue": "313.16"
+    }
+  ],
+  "actualPriceCompatibleSellComponents": [
+    {
+      "seq": 259607,
+      "eventIndex": 0,
+      "at": 1792269759853,
+      "sourceMs": 1792269759782,
+      "quantity": "10",
+      "queueAbsorbed": "0",
+      "reason": "PROCESSED"
+    },
+    {
+      "seq": 260606,
+      "eventIndex": 0,
+      "at": 1792269760853,
+      "sourceMs": 1792269760783,
+      "quantity": "13",
+      "queueAbsorbed": "13",
+      "reason": "PROCESSED"
+    }
+  ],
+  "uniqueActualComponents": 360,
+  "reductionQueueAbsorbed": "13.00",
+  "remainingReductionQueue": "300.16",
+  "remainingUnhedgedShares": "5.00",
+  "conservedTotals": {
+    "venueQuantity": "6124.483887",
+    "queueAbsorbed": "173.00",
+    "allocatedQuantity": "5.00",
+    "unusedQuantity": "5946.483887"
+  },
+  "modelReductionFilledShares": "0.00",
+  "firstGapMs": 1792269760873,
+  "actualBotFillsCreated": 0,
+  "candidateAccountSimulated": false,
+  "netPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "REQUIRE_ORIGINAL_POST_GAP_RECOVERY_AND_FULL_ACCOUNT"
+}

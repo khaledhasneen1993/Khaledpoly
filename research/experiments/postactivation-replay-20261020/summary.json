@@ -1,0 +1,39 @@
+{
+  "scope": "ONE_SAME_ORIGINAL_DEVELOPMENT_EXACT645_BASELINE_QW0_NOT_QUALIFICATION",
+  "sourceStoredSha256": "9363443ae9287016ab7c63d3cf11d6b1ae33d814d9e3ad340bb99b33e7285074",
+  "poolLogicalSha256": "16dab5fa70b908ccb5c7aeaaba803f2c5ac4f66b0efa50de6b2d1b82c0d662c7",
+  "results": {
+    "baseline": {
+      "status": "INCOMPLETE_FAIL_CLOSED_NOT_PNL_RESULT",
+      "row": {
+        "kind": "RESEARCH_FRAME",
+        "seq": 82986,
+        "arrivalMs": 1792269639697
+      },
+      "errors": [
+        "IllegalStateException: Eligible/invalid/cancel/sell order cannot use source-lag witness"
+      ],
+      "sourceConsumed": 839,
+      "knownReceiptBindingsConsumed": 3,
+      "marketNetPnlRecomputed": false
+    },
+    "candidate": {
+      "status": "INCOMPLETE_FAIL_CLOSED_NOT_PNL_RESULT",
+      "row": {
+        "arrivalMs": 1792269594591,
+        "seq": 9060,
+        "kind": "RESEARCH_FRAME"
+      },
+      "errors": [
+        "IllegalStateException: Eligible/invalid/cancel/sell order cannot use source-lag witness"
+      ],
+      "sourceConsumed": 100,
+      "knownReceiptBindingsConsumed": 2,
+      "marketNetPnlRecomputed": false
+    }
+  },
+  "completeAccountComparisonPerformed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO"
+}

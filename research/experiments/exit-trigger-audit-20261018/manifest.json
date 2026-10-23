@@ -1,0 +1,15 @@
+{
+  "workflowRun": 39132403617,
+  "sourceCommit": "891e13c49afa8fb15848d03ba81a96c19deecf59",
+  "artifact": 12138561972,
+  "zipSha256": "72c428ee7a3adbd8881bc86ebe1a52560e3462bbf9371163b78874e2482d36da",
+  "ciPhase6Tests": 131,
+  "firstObservedDirectShares": 13,
+  "secondObservedMintShares": 5,
+  "secondObservedDirectShares": 0,
+  "originalAccountNetPnl": "-0.85",
+  "accountRecomputed": false,
+  "queueAllocationProven": false,
+  "liveAllowed": false,
+  "decision": "NO_GO"
+}

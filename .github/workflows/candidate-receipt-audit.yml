@@ -1,0 +1,32 @@
+name: PAPER fixed candidate receipt corroboration
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-candidate-receipt-audit
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Isolate optional Keccak decoder dependency
+        run: |
+          python3 -m venv "$RUNNER_TEMP/receipt-audit-env"
+          "$RUNNER_TEMP/receipt-audit-env/bin/pip" install --only-binary=:all: --no-deps pycryptodome==3.23.0
+      - name: Verify selection, grouping, volumes and read-only boundary
+        run: '"$RUNNER_TEMP/receipt-audit-env/bin/python" -m unittest research.phase6.tests.test_receipt_audit research.phase6.tests.test_candidate_receipt_audit -v'
+      - name: Read only the fixed candidate transactions
+        run: >-
+          "$RUNNER_TEMP/receipt-audit-env/bin/python" -u -m research.phase6.receipt_audit --candidates
+          --census research/experiments/transaction-linked-census-20261018/original.json
+          --census research/experiments/transaction-linked-census-20261018/fresh.json
+          --output research/output/candidate-receipt-audit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fixed-candidate-receipt-audit
+          retention-days: 7
+          path: research/output/candidate-receipt-audit/

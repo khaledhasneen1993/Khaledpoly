@@ -1,0 +1,47 @@
+name: PAPER proof-only no-order execution differential
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/no-order-differential.yml', 'research/phase6/no-order-proof-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-proof-only-no-order
+  cancel-in-progress: false
+jobs:
+  proof-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: Frozen source and bounded differential/source/guard regression
+        run: |
+          python3 -c 'import json,hashlib;from pathlib import Path;f=json.loads(Path("research/phase6/no-order-proof-freeze.json").read_text());assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in f["filesSha256"].items())'
+          python3 -m unittest research.phase6.tests.test_no_order_result research.phase6.tests.test_expanded_receipt_pool research.phase6.tests.test_expanded_pool_result research.phase6.tests.test_full_runner_build research.phase6.tests.test_full_runner_diagnosis -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: proof-engine
+      - name: Compile unchanged frozen core and independent proof-only probe; no RPC or tape replay
+        run: |
+          python3 -m research.phase6.expanded_receipt_pool --output "$RUNNER_TEMP/noorder-inputs"
+          python3 -m research.phase6.full_runner_build --output "$RUNNER_TEMP/noorder-src"
+          unzip -q proof-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/noorder-deps"
+          mkdir -p "$RUNNER_TEMP/noorder-classes" research/output/no-order-proof
+          javac -cp "$RUNNER_TEMP/noorder-deps/BOOT-INF/lib/*" -d "$RUNNER_TEMP/noorder-classes" $(find "$RUNNER_TEMP/noorder-src/polybot-core/src/main/java" -name '*.java') research/phase6/ConservedMixedReplayLabels.java research/phase6/ConservedMixedReplayLabelsProbe.java research/phase6/OfflineSessionLabels.java research/phase6/CanonicalSessionParityProbe.java research/phase6/FrozenResearchPolicies.java research/phase6/FrozenStrategySessionProbe.java research/phase6/ConservedReceiptPool.java research/phase6/ConservedReceiptPoolProbe.java research/phase6/NativeReplaySupport.java research/phase6/NoOrderDifferentialProbe.java
+          java -Xmx1g -cp "$RUNNER_TEMP/noorder-classes:$RUNNER_TEMP/noorder-deps/BOOT-INF/lib/*" com.polybot.hft.paper.NoOrderDifferentialProbe "$RUNNER_TEMP/noorder-inputs/pool.json" "$RUNNER_TEMP/noorder-inputs/source-identities.json" "$RUNNER_TEMP/noorder-proof"
+          cp "$RUNNER_TEMP/noorder-proof/no-order-proof.json" research/output/no-order-proof/no-order-proof.json
+          python3 -m research.phase6.no_order_result --root research/output/no-order-proof > research/output/no-order-proof/verification.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: proof-only-no-order-differential
+          retention-days: 7
+          path: research/output/no-order-proof/
+          if-no-files-found: error

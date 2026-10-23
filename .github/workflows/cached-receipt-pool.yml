@@ -1,0 +1,35 @@
+name: PAPER rebind reviewed cached receipts
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/cached-receipt-pool.yml', 'research/phase6/cached-receipt-pool-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-reviewed-cache-pool
+  cancel-in-progress: false
+jobs:
+  offline-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Frozen source/evidence and unchanged acceptance
+        run: |
+          python3 -c 'import json,hashlib; from pathlib import Path; f=json.loads(Path("research/phase6/cached-receipt-pool-freeze.json").read_text()); assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in f["filesSha256"].items())'
+          echo '7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503  research/phase2/acceptance.json' | sha256sum -c -
+      - name: Complete offline regressions
+        run: python3 -m unittest discover -s research/phase6/tests -q
+      - name: Rebind all191 reviewed candidates; no new RPC, source scan or account replay
+        run: |
+          python3 -m research.phase6.cached_receipt_pool --output "$RUNNER_TEMP/receipt-pool"
+          cmp research/experiments/cached-receipt-pool-20261020/bindings.json.gz "$RUNNER_TEMP/receipt-pool/bindings.json.gz"
+          cmp research/experiments/cached-receipt-pool-20261020/report.json "$RUNNER_TEMP/receipt-pool/report.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reviewed-cached-receipt-pool
+          retention-days: 7
+          path: ${{ runner.temp }}/receipt-pool/
+          if-no-files-found: error

@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "experiment": "EXACT649-GENERATED-REPLAY-BUILD",
+  "poolLogicalSha256": "377a4394ec3542dfa085f33771a238e030142303b327ef8a14caf3b93de6481a",
+  "generatedHelperSha256": "a98e946e853e37c84e235763d5a90cbcff5c13d9fdb8caaff61a97ab53609751",
+  "inputsSha256": {
+    "research/phase6/post647-pool-freeze.json": "9d5fa304ee8b0de7d80b710e3c99f888a1d88a7d8209b0291b08acc2db39d258",
+    "research/phase6/post647_receipt_pool.py": "7dde0709a84dd79c036851961adbb1c5c43aa1c22154fa7ef334aefcb6bd2e8e",
+    "research/phase6/post647_pool_result.py": "7fceb0a72240da4892976aefc5dc992bc89cc1ac0e6a1880ecf007f48e15e9d1",
+    "research/experiments/post647-receipt-pool-20261021/ci-artifact.zip": "178d32559cbfff83689f85fbba608e491155a034b3f60b0270fc1c89292a03a7",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00"
+  }
+}

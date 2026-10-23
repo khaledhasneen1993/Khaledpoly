@@ -1,0 +1,32 @@
+{
+  "parentCommit": "498542892bb7290b1eaee125bb3a40deea7a0d82",
+  "previousProofRun": 39305626305,
+  "previousProofConclusion": "SUCCESS",
+  "previousProofTests": 261,
+  "retainedEngineRun": 39168798844,
+  "retainedEngineArtifact": 12151627900,
+  "retainedEngineArchiveSha256": "f051412b702c858952c6265b2bd73520471a699e19e165c0521964be255900fb",
+  "localCompilation": "Java17 ALL94 unchanged core sources plus2 adapter classes; retained dependency libraries; no Maven build claim",
+  "syntheticNativeTests": {
+    "canonicalRouteQueueBridges": 4,
+    "negativeRejections": 22,
+    "sideRoundingBoundaries": 2
+  },
+  "labelInput": {
+    "bytes": 1556983,
+    "sha256": "682c0d599eb0beaae7b1717decabff09e69185ad483593f823e6a10b6875459a"
+  },
+  "filesSha256": {
+    "research/phase6/ConservedMixedReplayLabels.java": "b4e3bf6d498b250e6cfae7f2f867cb42ff0849794d72aab907e1727d1cc9924b",
+    "research/phase6/ConservedMixedReplayLabelsProbe.java": "26a001e679ec0b840c807f81241845f1c27657dd7a7d1abb7ba4b5d980ec172e",
+    "research/phase6/mixed_replay_labels.py": "9165a5fb688c27bf9b31fdd82e85abbfeb5e8b5f25b37d61b7959557978ccc31",
+    "research/phase6/mixed_replay_labels_proof.py": "64a08e8e35053df44bf34172cae185f9dbc0c4f850dbaf7a593aa622cade4809",
+    "polybot-core/src/main/java/com/polybot/hft/paper/SettlementReplayLabels.java": "1715071b6caa5171fd482a612f07cde9eb385479d13203ee09f9e9f245adf052",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  },
+  "reportSha256": "a45db7d282609b67ea62d716da5d4b64216de7a08f7d941504ea2722429c2543",
+  "scope": "ADAPTER_ONLY_NOT_ACCOUNT",
+  "modelFillsCreated": 0,
+  "netPnlRecomputed": false,
+  "liveAllowed": false
+}

@@ -1,0 +1,321 @@
+{
+  "scope": "EXACT_FROZEN_STATE_LEG_RECEIPT_COVERAGE_NOT_EXECUTION",
+  "legs": [
+    {
+      "originalSequence": 173342,
+      "quote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.45",
+        "quantity": "5.00"
+      },
+      "observationCount": 1,
+      "auditedObservations": 1,
+      "complete": true,
+      "actualPriceCompatibleSharesRaw": 0,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": true
+    },
+    {
+      "originalSequence": 173342,
+      "quote": {
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.37",
+        "quantity": "5.00"
+      },
+      "observationCount": 2,
+      "auditedObservations": 1,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 197690,
+      "quote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.47",
+        "quantity": "5.00"
+      },
+      "observationCount": 8,
+      "auditedObservations": 8,
+      "complete": true,
+      "actualPriceCompatibleSharesRaw": 0,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": true
+    },
+    {
+      "originalSequence": 197690,
+      "quote": {
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "observationCount": 47,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 198832,
+      "quote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.48",
+        "quantity": "5.00"
+      },
+      "observationCount": 4,
+      "auditedObservations": 4,
+      "complete": true,
+      "actualPriceCompatibleSharesRaw": 0,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": true
+    },
+    {
+      "originalSequence": 198832,
+      "quote": {
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.48",
+        "quantity": "5.00"
+      },
+      "observationCount": 25,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 243583,
+      "quote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "observationCount": 39,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 243583,
+      "quote": {
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "quantity": "5.00"
+      },
+      "observationCount": 123,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 245065,
+      "quote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "observationCount": 37,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 245065,
+      "quote": {
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.48",
+        "quantity": "5.00"
+      },
+      "observationCount": 109,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 246180,
+      "quote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "observationCount": 37,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 246180,
+      "quote": {
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "quantity": "5.00"
+      },
+      "observationCount": 108,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 258161,
+      "quote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "observationCount": 10,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 258161,
+      "quote": {
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "quantity": "5.00"
+      },
+      "observationCount": 20,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 258635,
+      "quote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "observationCount": 7,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 258635,
+      "quote": {
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "quantity": "5.00"
+      },
+      "observationCount": 18,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 259283,
+      "quote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "observationCount": 4,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 259283,
+      "quote": {
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.48",
+        "quantity": "5.00"
+      },
+      "observationCount": 13,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 259597,
+      "quote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "observationCount": 4,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 259597,
+      "quote": {
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.48",
+        "quantity": "5.00"
+      },
+      "observationCount": 11,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 299650,
+      "quote": {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.49",
+        "quantity": "5.00"
+      },
+      "observationCount": 19,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    },
+    {
+      "originalSequence": 299650,
+      "quote": {
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "quantity": "5.00"
+      },
+      "observationCount": 177,
+      "auditedObservations": 0,
+      "complete": false,
+      "actualPriceCompatibleSharesRaw": null,
+      "partialKnownPriceCompatibleSharesRaw": 0,
+      "completeWindowZeroActualPricedComponents": false
+    }
+  ],
+  "receiptCacheTransactions": 10,
+  "fillsCreated": 0,
+  "netPnlRecomputed": false,
+  "queueOrObservedActivationProven": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "incompleteLegsMustNotBeTreatedAsZero": true,
+  "overlappingLegVolumesMustNotBeSummed": true
+}

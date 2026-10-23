@@ -1,0 +1,38 @@
+{
+  "experiment": "DQ3-0-SELECTED-NECESSARY-TRAFFIC",
+  "frozenBeforeFirstTrafficScan": true,
+  "selection": "research/experiments/depth-quote-20261018/traffic-selection.json",
+  "spec": {
+    "sourceRows": 6163831,
+    "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+    "maxBookAgeMs": 2000,
+    "activationMs": 250
+  },
+  "scope": "11 INDEPENDENT observed legacy decision states, NOT successive candidate orders",
+  "durationCapRule": "At most unchanged unhedgedMs=30000 after each state, first original GAP/unavailable/resolution earlier censors",
+  "activationRule": "Relaxed due-time cutoff for an explicit UPPER BOUND, never claimed observed activation",
+  "trafficRule": "All same-token SELL and opposite-token BUY at ANY public price require actual maker receipt components; do not infer from aggregate/last public price",
+  "omittedConstraints": [
+    "observed activation",
+    "actual queue",
+    "real resting edge cancellations",
+    "candidate state trajectory",
+    "current-book source eligibility"
+  ],
+  "publicRpcAllowed": false,
+  "accountReplayAllowed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    "research/phase6/depth_quote_traffic.py": "a9f744bc20e359ef53fc06278b5381e28a18d570fa565b9e94eb12e121b31c5e",
+    "research/phase6/tests/test_depth_quote_traffic.py": "d28ba3a8af490837b8587bbc168b1cac1e58804788fc029019821eefe3729fe4",
+    "research/phase6/depth_quote_screen.py": "7968e53e09a5490efef4fe652453da53663b25876dcb435f7c9ff9849d5032fc",
+    "research/phase6/tests/test_depth_quote_screen.py": "b0d53a3e3e77e3e378de1447a95eb57041b86375b6b65303808a6f7c9d6b15b1",
+    "research/phase6/depth-quote-candidate-freeze.json": "99e7b608ea51c2c5cd3310288de169c7196a418dad1eea2de667af1fcb2c28bc",
+    "research/phase6/depth_quote_lab.py": "9cb867a19ddeb29ad5480ce37914c6fff6b2f0358616b524b96fd3a31002a2c0",
+    "research/experiments/depth-quote-20261018/state-screen.json": "8a922b1dfa25c41a9ff5173053ba449975da0aaeaf9088f149ef7a35c04ba839",
+    "research/experiments/depth-quote-20261018/traffic-selection.json": "5a744b19e664e441705dd8daeafb4ecfaeb4a660db803be905e9d88574b83f0e",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  }
+}

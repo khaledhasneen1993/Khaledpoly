@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "experiment": "NO-ORDER-DIFFERENTIAL-PROOF0",
+  "scope": "SYNTHETIC_DIFFERENTIAL_ONLY_NOT_RUNTIME_AUTHORIZATION_OR_MARKET_REPLAY",
+  "matcherContextsPerOriginalIdentity": 4,
+  "originalIdentities": 643,
+  "matcherDifferentials": 2572,
+  "futureDistinctComponentContinuations": 2572,
+  "runtimeOptimizationImplemented": false,
+  "unknownObservationsSkipped": false,
+  "fullAccountReplayAuthorized": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    "research/phase6/NoOrderDifferentialProbe.java": "ce44dca6b9fa8fe9c5e4835e85055d36a214b5d9bbccb24a06b669d0b99ef5e8",
+    "research/phase6/no_order_result.py": "561d2c26b18770d420e1b4c305bd34be91c840786475dc30fb21834db14110ae",
+    "research/phase6/tests/test_no_order_result.py": "35c526aacd7cdb7724f6180389ac81b201f7c705dbf1f992ed0882195c91c7d3",
+    ".github/workflows/no-order-differential.yml": "6bf81f8e887ac0fbd06c7a8bf33522aa6c8973ad62052719553667c753737c2a",
+    "research/experiments/no-order-differential-20261020/no-order-proof.json": "efd0fdc2d5ef661953f3cc2dad6d8250554d5baa512870d2b3cb1a9063aa13c4",
+    "polybot-core/src/main/java/com/polybot/hft/paper/PaperMatchingEngine.java": "12e89574023e0457d2066f8e50d660491a3ef182ae066bab4725cd40324fa84f",
+    "research/phase6/full_runner_build.py": "271e333f9b1cfd25d2ca8a9442e31affba5a1228bf942accf6bb1a504479b25f",
+    "research/phase6/ConservedReceiptPool.java": "c04ab462f829cda982d023c61a00036ccc1fcd7eec1bb25d114d91095886edc3",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00"
+  }
+}

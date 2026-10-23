@@ -1,0 +1,36 @@
+{
+  "scope": "MEASURED_CONSERVATIVE_MATCHER_NOT_VENUE_EXECUTION",
+  "orders": 52,
+  "activatedOrders": 45,
+  "ordersWithoutSameTokenPrint": 18,
+  "ordersWithEligiblePrint": 0,
+  "ordersWithEligibleVolumeNotExceedingInitialQueue": 0,
+  "totalActiveOrderMs": 34600,
+  "terminalReasons": {
+    "DATA_GAP:invalid_depth": 16,
+    "RESTING_NET_EDGE": 16,
+    "RESTING_PRICE_INVALID": 10,
+    "STALE_BOOK": 2,
+    "POST_ONLY_WOULD_CROSS": 5,
+    "PEER_REJECTED:sim-research-28": 1,
+    "PEER_REJECTED:sim-research-35": 1,
+    "PEER_REJECTED:sim-research-43": 1
+  },
+  "printObservations": {
+    "ORDER_NOT_ACTIVE": 86,
+    "WRONG_AGGRESSOR": 158,
+    "PRINT_BEFORE_CURRENT_BOOK": 13,
+    "DIFFERENT_PRICE": 5
+  },
+  "printCountsArePerOrder": true,
+  "submittedOrders": 52,
+  "fills": 0,
+  "cash": 500.0,
+  "netRealizedPnl": 0.0,
+  "riskBreaches": 0,
+  "maxDrawdown": 0,
+  "strategyRevision": null,
+  "inputSha256": null,
+  "decision": "NO_GO",
+  "liveAllowed": false
+}

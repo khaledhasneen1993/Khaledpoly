@@ -1,0 +1,40 @@
+name: PAPER retained fee-positive proof
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/fee-positive-proof.yml'
+      - 'research/phase6/queue_aware_fee_positive_result.py'
+      - 'research/phase6/queue_aware_exit_comparison.py'
+      - 'research/phase6/tests/test_queue_aware_fee_positive_result.py'
+      - 'research/experiments/queue-aware-quote-20261019/fee-positive-result/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-retained-fee-positive-proof
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unchanged acceptance and all offline regressions
+        run: |
+          echo '7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503  research/phase2/acceptance.json' | sha256sum -c -
+          python3 -m unittest discover -s research/phase6/tests -q
+      - name: Reproduce retained native result independently; no RPC, capture or new native replay
+        run: |
+          mkdir -p research/output/retained-fee-positive-proof
+          python3 -m research.phase6.queue_aware_fee_positive_result > research/output/retained-fee-positive-proof/verification.json
+          python3 -m research.phase6.queue_aware_exit_comparison > research/output/retained-fee-positive-proof/comparison.json
+          cmp research/output/retained-fee-positive-proof/verification.json research/experiments/queue-aware-quote-20261019/fee-positive-result/verification.json
+          cmp research/output/retained-fee-positive-proof/comparison.json research/experiments/queue-aware-quote-20261019/fee-positive-result/comparison.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: retained-fee-positive-proof
+          retention-days: 7
+          path: research/output/retained-fee-positive-proof/
+          if-no-files-found: error

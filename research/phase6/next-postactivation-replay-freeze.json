@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "experiment": "EXACT647-ONE-SAME-SOURCE-BASELINE-QW0",
+  "scope": "ORIGINAL_DEVELOPMENT_COMPARISON_NOT_INDEPENDENT_QUALIFICATION",
+  "sourceRunId": 39067539123,
+  "sourceStoredSha256": "9363443ae9287016ab7c63d3cf11d6b1ae33d814d9e3ad340bb99b33e7285074",
+  "sourceLogicalSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "poolLogicalSha256": "aa3f42e1cfff24fd5c9f3750136f56a4e23d7cd333a9d949e4224b176c4a4da4",
+  "expectedReceiptBindings": 647,
+  "expectedActualComponents": 1536,
+  "profiles": ["baseline", "candidate"],
+  "candidate": "UNCHANGED_QW0",
+  "newPublicReads": 0,
+  "newMarketCapture": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    ".github/workflows/next-postactivation-pool-replay.yml": "cc3f516f4a124cca88cbe33f231c6f89c0c48f8b53d7a9fe5d0e265ccb8394b0",
+    "research/phase6/next_postactivation_pool_replay.py": "0e789f1e929f8891f3fb0e7c6715f55c94143e1bde775c4ded249f792326c6af",
+    "research/phase6/next_postactivation_pool_inputs.py": "8473648a9133314e5c312ea76bb4b3bef2dd2b7705d8319ec925c5a9c2257e98",
+    "research/phase6/next_postactivation_pool_build.py": "20016751a48921957a3214149a241226936d9a5c6ca3e6d2d819d6e65b9d01bc",
+    "research/phase6/next-postactivation-replay-build-freeze.json": "a337108f67119313fd970343d4f17aa2308378bbfa389c1caacf7a71119edfc3",
+    "research/phase6/tests/test_next_postactivation_pool_replay.py": "a261f7172eb95e1c0024f56bbe83d377f9413179e8600f13f76633865a516c52",
+    "research/experiments/next-postactivation-receipt-pool-20261021/ci-artifact.zip": "6c854c25ea475c9a97e5d62972858ccabf9982e37a218c94a81070c6b26ea975",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00"
+  }
+}

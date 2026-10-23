@@ -1,0 +1,62 @@
+name: PAPER expanded643 native pool and original next blocker
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/expanded-receipt-pool.yml', 'research/phase6/expanded-pool-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-expanded643-native-pool
+  cancel-in-progress: false
+jobs:
+  native-next-blocker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - name: Frozen new pool and targeted receipt/runner regression; no RPC
+        run: |
+          python3 -c 'import json,hashlib; from pathlib import Path; f=json.loads(Path("research/phase6/expanded-pool-freeze.json").read_text()); assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in f["filesSha256"].items())'
+          python3 -m unittest research.phase6.tests.test_expanded_receipt_pool research.phase6.tests.test_first_blocker_result research.phase6.tests.test_first_blocker_receipt research.phase6.tests.test_full_runner_build research.phase6.tests.test_full_runner_diagnosis research.phase6.tests.test_receipt_audit research.phase6.tests.test_route_coverage_audit -q
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-witness-executor
+          run-id: 39168798844
+          github-token: ${{ github.token }}
+          path: probe-engine
+      - name: Isolated full source build and ALL643 original identity parity
+        run: |
+          python3 -m research.phase6.expanded_receipt_pool --output "$RUNNER_TEMP/expanded-inputs"
+          python3 -m research.phase6.full_runner_build --output "$RUNNER_TEMP/expanded-src"
+          unzip -q probe-engine/executor-service-0.6.0.jar 'BOOT-INF/lib/*' -d "$RUNNER_TEMP/expanded-deps"
+          mkdir -p "$RUNNER_TEMP/expanded-classes" research/output/expanded643
+          javac -cp "$RUNNER_TEMP/expanded-deps/BOOT-INF/lib/*" -d "$RUNNER_TEMP/expanded-classes" $(find "$RUNNER_TEMP/expanded-src/polybot-core/src/main/java" -name '*.java') research/phase6/ConservedMixedReplayLabels.java research/phase6/ConservedMixedReplayLabelsProbe.java research/phase6/OfflineSessionLabels.java research/phase6/CanonicalSessionParityProbe.java research/phase6/FrozenResearchPolicies.java research/phase6/FrozenStrategySessionProbe.java research/phase6/ConservedReceiptPool.java research/phase6/ConservedReceiptPoolProbe.java research/phase6/NativeReplaySupport.java research/phase6/ExpandedReceiptPoolProbe.java
+          java -cp "$RUNNER_TEMP/expanded-classes:$RUNNER_TEMP/expanded-deps/BOOT-INF/lib/*" com.polybot.hft.paper.ExpandedReceiptPoolProbe "$RUNNER_TEMP/expanded-inputs/pool.json" "$RUNNER_TEMP/expanded-inputs/source-identities.json" "$RUNNER_TEMP/expanded-proof"
+          java -cp "$RUNNER_TEMP/expanded-classes:$RUNNER_TEMP/expanded-deps/BOOT-INF/lib/*" com.polybot.hft.paper.CanonicalSessionParityProbe "$RUNNER_TEMP/expanded-default"
+          cp "$RUNNER_TEMP/expanded-proof/native-proof.json" research/output/expanded643/native-proof.json
+          cp "$RUNNER_TEMP/expanded-inputs/summary.json" research/output/expanded643/summary.json
+          cp "$RUNNER_TEMP/expanded-default/parity.json" research/output/expanded643/default-after.json
+          python3 -c 'import json;from pathlib import Path;from research.phase6.expanded_receipt_pool import verify_native; r=Path("research/output/expanded643"); assert json.loads((r/"default-after.json").read_text())==json.loads(Path("research/experiments/session-bridge-20261019/default-before.json").read_text()); print(verify_native(json.loads((r/"native-proof.json").read_text()),json.loads((r/"summary.json").read_text())))'
+      - uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: original-source
+      - name: Same original source with expanded frozen coverage; stop at next unknown
+        run: >-
+          python3 -u -m research.phase6.expanded_receipt_pool
+          --input-root original-source --output research/output/expanded643/original-diagnosis
+          --classpath "$RUNNER_TEMP/expanded-classes:$RUNNER_TEMP/expanded-deps/BOOT-INF/lib/*"
+          --inputs "$RUNNER_TEMP/expanded-inputs"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: expanded643-native-next-blocker
+          retention-days: 7
+          path: research/output/expanded643/
+          if-no-files-found: error

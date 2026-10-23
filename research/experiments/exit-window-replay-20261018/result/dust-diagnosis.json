@@ -1,0 +1,124 @@
+{
+  "metadata": {
+    "schema": 1,
+    "runId": "e4040b5c-f460-436e-86db-9fe60d656ea8",
+    "seq": 130093,
+    "arrivalMs": 1792269674796,
+    "elapsedNanos": 92309825113,
+    "kind": "RESEARCH_META",
+    "sourceMs": null,
+    "data": {
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "first": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "second": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "startMs": 1792269000000,
+      "endMs": 1792269900000,
+      "tick": 0.01,
+      "minSize": 5,
+      "feeRate": 0.07,
+      "feeExponent": 1,
+      "accepting": true,
+      "observedMs": 1792269674795,
+      "evidence": "https://gamma-api.polymarket.com/markets?slug=btc-updown-15m-1792269000",
+      "negativeRisk": false
+    }
+  },
+  "originalAuditEvents": [
+    {
+      "data": {
+        "id": "sim-research-4",
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "buy": true,
+        "price": 0.64,
+        "size": 5,
+        "at": 1792269683761
+      },
+      "kind": "FILL",
+      "at": 1792269683761
+    },
+    {
+      "data": {
+        "id": "sim-research-14",
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "buy": false,
+        "price": 0.47,
+        "size": 3.0,
+        "at": 1792269694955
+      },
+      "kind": "FILL",
+      "at": 1792269694955
+    },
+    {
+      "data": {
+        "reason": "DATA_GAP:invalid_depth",
+        "status": "CANCELED",
+        "id": "sim-research-14",
+        "at": 1792269696284
+      },
+      "kind": "ORDER_TERMINAL",
+      "at": 1792269696284
+    },
+    {
+      "data": {
+        "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "payouts": {
+          "88599287360325233240690982088109814021050513475420535621672707507474151524334": 1.0,
+          "12589566430666404778428222777978747623958961794906352412512658324998006663268": 0.0
+        },
+        "transaction": "0x2c554db620f1d62df0842a0b581416c1935fd2ff7ebec869ea266ad6c5b93738",
+        "resolvedMs": 1792269953000,
+        "observedMs": 1792269956849,
+        "source": "https://data-api.polymarket.com/v2/resolutions",
+        "raw": {
+          "condition_id": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+          "status": "resolved",
+          "extended_review": false,
+          "was_disputed": false,
+          "new_version_q": false,
+          "transaction_hash": "0x2c554db620f1d62df0842a0b581416c1935fd2ff7ebec869ea266ad6c5b93738",
+          "log_index": "913",
+          "last_update_timestamp": "2026-10-17T20:45:53Z",
+          "payouts": [
+            1000000,
+            0
+          ],
+          "resolution_source": "reported",
+          "resolved_block": 95709737,
+          "resolved_at": "2026-10-17T20:45:53Z"
+        }
+      },
+      "kind": "RESOLVED",
+      "at": 1792269956849
+    }
+  ],
+  "decisionReasons": {
+    "RESTING_REDUCTION": 21,
+    "BOOK_STALE": 74,
+    "MIN_SIZE": 8,
+    "TAKER_DATA_REJECT": 1,
+    "OUTSIDE_MARKET": 295106,
+    "EMPTY_DEPTH": 6063,
+    "NET_EDGE": 198,
+    "RESTING": 5,
+    "BOOK_MISSING": 1489,
+    "DUST_AWAIT_RESOLUTION": 557,
+    "ENTRY_SUSPENDED": 48225,
+    "TAKER_PENDING": 612,
+    "PAIR_SUBMITTED": 2,
+    "MIN_SIZE_AND_NET_EDGE": 670,
+    "WAIT_SECOND_LEG": 20
+  },
+  "accountNetPnl": -1.8,
+  "cash": 498.2,
+  "fees": 0.01,
+  "lossDecomposition": {
+    "makerSaleLoss": ".51",
+    "remainingBasisLostAtResolution": "1.28",
+    "redemptionCost": ".01",
+    "sum": "1.80"
+  },
+  "endingInventory": 0,
+  "unhedgedSharesAtExpiry": "2",
+  "minimumOrderSize": 5,
+  "evidenceScope": "RECORDED_DEVELOPMENT_CONDITIONAL_FUTURE_LABEL_MODEL_NOT_INDEPENDENT_PROFITABILITY"
+}

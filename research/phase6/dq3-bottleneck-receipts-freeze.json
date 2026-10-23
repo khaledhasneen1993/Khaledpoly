@@ -1,0 +1,22 @@
+{
+  "experiment": "DQ3-FIRST-ADDITIONAL-COMPLETE-BOTTLENECK-LEG-0",
+  "frozenBeforePublicReceiptReads": true,
+  "maxNewReceiptRequests": 8,
+  "actualOrderOrObservedActivationClaimed": false,
+  "scope": "Complete8 public observations of least-observed leg of FIRST additional priced state only. Other47 observations/other states NOT audited.",
+  "pricePolicyFrozenUnchanged": true,
+  "accountReplayAllowed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "filesSha256": {
+    "research/phase6/dq3_bottleneck_receipts.py": "f45aba54de40426e6545120c428d2e0f85cdf6857ff0018ca26a6667b1014488",
+    "research/phase6/tests/test_dq3_bottleneck_receipts.py": "b69f6e6c3a420e80a6d7561f636561c03c079175233df425c7ed49d4c3a7392b",
+    "research/phase6/receipt_audit.py": "4337ac09ca5b5364e5f23a15359e44695e283a99584acdbafbf4c9c4fbcc21c4",
+    "research/phase6/route_coverage_audit.py": "4febb1dc81e3e6077c5bd2cd3d87c126900dc24cc0316a24e5fcaaad1a8350fb",
+    "research/phase6/candidate_receipt_audit.py": "88f02d3ddc7614fcc4f676a00ba63b6819d805532d5ef0336fc2e57c173a2f38",
+    "research/experiments/depth-quote-20261018/traffic-result/artifact.zip.b64": "863e481db5a8c9cc5fe49d981644be5fd26894ba71015763c6010a2ec8cfced5",
+    "research/experiments/depth-quote-20261018/state-screen.json": "8a922b1dfa25c41a9ff5173053ba449975da0aaeaf9088f149ef7a35c04ba839",
+    "research/experiments/depth-quote-20261018/bottleneck-selection.json": "c9b7f75315eb3d6d07aa4ef4de7bc6670cb82e83ed8c156479b462e8f9b0c444",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  }
+}

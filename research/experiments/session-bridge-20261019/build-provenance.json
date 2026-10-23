@@ -1,0 +1,14 @@
+{
+  "scope": "ISOLATED_SOURCE_BUILD_NOT_ACCOUNT_OR_PROFIT_PROOF",
+  "coreSources": 94,
+  "defaultCoreFilesModified": 0,
+  "generatedCoreFilesChanged": [
+    "polybot-core/src/main/java/com/polybot/hft/paper/ResearchSession.java"
+  ],
+  "originalSessionSha256": "2c5a97513e9ab1c261af7a9868f3b377c89e28e8cbb883800ee6d8aee87f9923",
+  "patchedSessionSha256": "f483959b350a680d430d66465daf600b56386a0c6c5bcf0a13f9a8c4ca339fa5",
+  "patchSha256": "3aa324cab78fc37b9174ea28207b353c3729c2678552dde0a67daf3eaa3687ec",
+  "frozenStrategyChanged": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

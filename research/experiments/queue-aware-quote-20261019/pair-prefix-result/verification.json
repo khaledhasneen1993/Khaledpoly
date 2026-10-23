@@ -1,0 +1,22 @@
+{
+  "scope": "REPRODUCED_BOTH_ORDER_PREFIX_NOT_ACCOUNT",
+  "originalSequence": 243583,
+  "completeOriginalBindings": 40,
+  "actualRestingChecks": 15,
+  "actualActivationQueues": [
+    "160",
+    "30"
+  ],
+  "allocatedSharesByToken": {
+    "88599287360325233240690982088109814021050513475420535621672707507474151524334": "5.00",
+    "12589566430666404778428222777978747623958961794906352412512658324998006663268": "0.00"
+  },
+  "uniqueActualComponents": 108,
+  "hedgeExitResolutionNotSimulated": true,
+  "candidateAccountSimulated": false,
+  "actualBotFillsCreated": 0,
+  "netPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "REQUIRE_UNHEDGED_HEDGE_CANCEL_EXIT_AND_RESOLUTION_ACCOUNT_EVIDENCE"
+}

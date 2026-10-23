@@ -1,0 +1,208 @@
+{
+  "scope" : "ALL645_NATIVE_IDENTITY_PARITY_NOT_ACCOUNT_REPLAY",
+  "readerRejectionGuards" : 39,
+  "conservativeRoundingBoundaryCases" : 2,
+  "separateSyntheticUnknownGuard" : {
+    "inputKind" : "SYNTHETIC_ONLY_NOT_MARKET",
+    "existingCashAndInventoryPreserved" : true,
+    "session" : {
+      "submittedOrders" : 2,
+      "filledOrders" : 1,
+      "orderFillRate" : 0.50000000,
+      "decisionToFillP50Ms" : 319,
+      "decisionToFillP95Ms" : 319,
+      "orderTerminalReasons" : {
+        "DATA_GAP:unknown" : 1,
+        "LAB_SETTLEMENT_COMPONENT" : 1
+      },
+      "orderTerminalStatuses" : {
+        "CANCELED" : 1,
+        "FILLED" : 1
+      },
+      "decisions" : 3,
+      "decisionReasons" : {
+        "BOOK_MISSING" : 1,
+        "PAIR_SUBMITTED" : 1,
+        "RESTING" : 1
+      },
+      "edgeDistribution" : {
+        "0.20" : 2
+      },
+      "executions" : [ {
+        "orderId" : "sim-research-1",
+        "at" : 1570,
+        "token" : "a",
+        "buy" : true,
+        "size" : 5,
+        "price" : 0.4,
+        "fee" : 0,
+        "liquidity" : "MAKER",
+        "condition" : "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "purpose" : "ENTRY",
+        "expectedEdge" : 0.2,
+        "decisionToFillMs" : 319
+      } ],
+      "pairCompletions" : [ ],
+      "quantityPairCompletion" : 0E-8,
+      "maxDrawdown" : 0,
+      "missingMarkObservations" : 0,
+      "expiredMarkets" : 0,
+      "residualExpiryWorstCaseNotional" : 0,
+      "makerExecutionDiagnostics" : [ {
+        "id" : "sim-research-1",
+        "token" : "a",
+        "buy" : true,
+        "price" : 0.4,
+        "submittedMs" : 1251,
+        "activationDueMs" : 1501,
+        "activatedMs" : 1501,
+        "terminalMs" : 1570,
+        "terminalReason" : "LAB_SETTLEMENT_COMPONENT",
+        "initialQueueAhead" : 200,
+        "remainingQueueAhead" : 0,
+        "eligiblePrintVolume" : 0,
+        "remainingShares" : 0,
+        "activeMs" : 69,
+        "printObservations" : {
+          "SETTLEMENT_COMPONENT" : 1
+        }
+      }, {
+        "id" : "sim-research-2",
+        "token" : "b",
+        "buy" : true,
+        "price" : 0.4,
+        "submittedMs" : 1251,
+        "activationDueMs" : 1501,
+        "activatedMs" : 1501,
+        "terminalMs" : 1571,
+        "terminalReason" : "DATA_GAP:unknown",
+        "initialQueueAhead" : 200,
+        "remainingQueueAhead" : 200,
+        "eligiblePrintVolume" : 0,
+        "remainingShares" : 5,
+        "activeMs" : 70,
+        "printObservations" : { }
+      } ],
+      "settlementExperiment" : {
+        "experiment" : "CONSERVED-RECEIPT-POOL0",
+        "bindings" : 1,
+        "consumedBindings" : 1,
+        "actualComponents" : 1,
+        "failed" : true,
+        "strictPartialPool" : true,
+        "nativePartialPoolReaderImplemented" : true,
+        "aggregateFallbackAllowed" : false,
+        "fullOriginalTapeCoverageProven" : false,
+        "fullAccountReplayAuthorized" : false,
+        "independentPaperQualificationAllowed" : false,
+        "liveAllowed" : false
+      },
+      "settlementVolumeConservation" : {
+        "allocatedQuantity" : 5,
+        "uniqueMakerComponents" : 1,
+        "queueAbsorbed" : 200,
+        "unusedQuantity" : 95.000000,
+        "hiddenLiquidityAndCrossPriceQueueUncertainty" : true,
+        "venueQuantity" : 300.000000
+      },
+      "independentPaperQualificationAllowed" : false,
+      "researchLabelBridgeOnly" : false,
+      "frozenQw0AndFeePositivePoliciesIntegrated" : true,
+      "fullOriginalTapeCoverageProven" : false,
+      "liveAllowed" : false,
+      "fills" : 1,
+      "markoutSamples" : { },
+      "soldShares" : 0,
+      "markoutPnl" : { },
+      "missingMarkoutsByReason" : {
+        "DATA_GAP" : {
+          "30000" : 1,
+          "5000" : 1,
+          "1000" : 1
+        }
+      },
+      "incentives" : 0,
+      "pendingMarkouts" : 0,
+      "markoutContinuityPolicy" : "NO_GAP_OR_STALE_DEPTH_BETWEEN_FILL_AND_OBSERVATION",
+      "boughtShares" : 5,
+      "activeMarkets" : [ {
+        "condition" : "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "remainingMs" : 998429,
+        "accepting" : true,
+        "freshBooks" : true,
+        "oldestBookAgeMs" : 321,
+        "inventoryImbalance" : 5
+      } ],
+      "cash" : 498.0,
+      "availableCash" : 498.000,
+      "netRealizedPnl" : 0,
+      "feesAndSettlementCosts" : 0,
+      "holdings" : {
+        "a" : {
+          "shares" : 5,
+          "basis" : 2.0
+        }
+      },
+      "halted" : true,
+      "dataGaps" : 1,
+      "riskBreaches" : 0,
+      "resolvedMarkets" : 0,
+      "resolvedTradedMarkets" : 0,
+      "pendingTakers" : 0,
+      "openOrderCount" : 0,
+      "exitLossUsed" : 0,
+      "residualEntryRiskGuard" : false,
+      "residualEntryRiskRejectSamples" : [ ],
+      "decision" : "NO_GO",
+      "configuration" : {
+        "schema" : 1,
+        "initialCash" : 500,
+        "orderShares" : 5,
+        "minimumEdge" : 0.01,
+        "portfolioBudget" : 100,
+        "activationMs" : 250,
+        "cancelMs" : 250,
+        "maxBookAgeMs" : 2000,
+        "queueMultiplier" : 2,
+        "mergeCost" : 0.01,
+        "redemptionCost" : 0.01,
+        "unhedgedMs" : 30000,
+        "maxUnhedged" : 25,
+        "maxExitLoss" : 2.5,
+        "feeMultiplier" : 1,
+        "decisionMillis" : 250,
+        "metadataMaxAgeMs" : 60000,
+        "latencyJitterMs" : 0,
+        "latencySeed" : 0,
+        "makerImprovementTicks" : 1
+      }
+    },
+    "unknownCoveredTransactionAtWrongCoordinateHaltsCancels" : true,
+    "syntheticCash" : "498",
+    "syntheticShares" : "5",
+    "canonicalQueueConserved" : true,
+    "subsequentInputBlocked" : true
+  },
+  "originalIdentities" : 645,
+  "pool" : {
+    "experiment" : "CONSERVED-RECEIPT-POOL0",
+    "bindings" : 645,
+    "consumedBindings" : 645,
+    "actualComponents" : 1534,
+    "failed" : false,
+    "strictPartialPool" : true,
+    "nativePartialPoolReaderImplemented" : true,
+    "aggregateFallbackAllowed" : false,
+    "fullOriginalTapeCoverageProven" : false,
+    "fullAccountReplayAuthorized" : false,
+    "independentPaperQualificationAllowed" : false,
+    "liveAllowed" : false
+  },
+  "portionsLogicalSha256" : "3cbc56241d00623bef3825837e26b48c328f04e9fc13a4806169810d4dc4fac7",
+  "poolLogicalSha256" : "16dab5fa70b908ccb5c7aeaaba803f2c5ac4f66b0efa50de6b2d1b82c0d662c7",
+  "sourceIdentitiesSha256" : "221cd9a9e7f6fe1cbc280e964a9db25018ed46f0bf7e81722a74b7049b75c016",
+  "marketNetPnlRecomputed" : false,
+  "completeAccountComparisonPerformed" : false,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false
+}

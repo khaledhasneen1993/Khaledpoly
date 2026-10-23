@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "scope": "FULL_ORIGINAL_TAPE_LABEL_COVERAGE_ONLY_NOT_ACCOUNT_REPLAY",
+  "sourceRunId": 39067539123,
+  "sourceArtifactId": 12117311261,
+  "sourceRows": 6163831,
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "storedTapeSha256": "9363443ae9287016ab7c63d3cf11d6b1ae33d814d9e3ad340bb99b33e7285074",
+  "labelsSha256": "682c0d599eb0beaae7b1717decabff09e69185ad483593f823e6a10b6875459a",
+  "existingLabels": 451,
+  "existingConservedComponents": 1038,
+  "referenceInspection": "research/experiments/fresh-paper-20261018/capture-inspection.json",
+  "filesSha256": {
+    "research/phase6/full_tape_label_coverage.py": "4feb754c5ff06827d4c4a647b6fffc00e5ac2355760ab23a99e6174a05845375",
+    "research/phase6/tests/test_full_tape_label_coverage.py": "553cd8208e209e19695aa63d5cd23dd0c1800374a2ae8e6f3662ae00730371b5",
+    "research/experiments/fresh-paper-20261018/capture-inspection.json": "1c9fcb5c0e0b98bc96c94bd8cc985bbf0c8241ca9d1b22c58ceb2f9171cc8479",
+    ".github/workflows/full-tape-label-coverage.yml": "e4005f991f4af050db111a839e20e6ac5e6ddc96fca80fa5ed09c9d6081b32c0",
+    "research/phase6/mixed_replay_labels.py": "9165a5fb688c27bf9b31fdd82e85abbfeb5e8b5f25b37d61b7959557978ccc31",
+    "research/phase6/ConservedMixedReplayLabels.java": "b4e3bf6d498b250e6cfae7f2f867cb42ff0849794d72aab907e1727d1cc9924b",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503"
+  },
+  "newReceiptRequestsAllowed": 0,
+  "ordersAllowed": false,
+  "unknownObservationsAreZero": false,
+  "aggregateFallbackAllowed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

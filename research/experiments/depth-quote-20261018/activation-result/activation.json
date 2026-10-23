@@ -1,0 +1,151 @@
+{
+  "fillsCreated" : 0,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false,
+  "actualRestingCancellationSimulated" : false,
+  "allTradeVolumeSuppressed" : true,
+  "netPnlRecomputed" : false,
+  "scope" : "ISOLATED_NO_CANCEL_ACTIVATION_SEED_ONLY_NOT_ACTUAL_ACCOUNT",
+  "results" : [ {
+    "state" : {
+      "id" : "dq3-0-243583",
+      "condition" : "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "originalSequence" : 243583,
+      "submitMs" : 1792269750302,
+      "activationDueMs" : 1792269750552,
+      "endMs" : 1792269780302,
+      "quotes" : [ {
+        "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price" : "0.49",
+        "quantity" : "5.00"
+      }, {
+        "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price" : "0.47",
+        "quantity" : "5.00"
+      } ],
+      "targetQuote" : {
+        "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price" : "0.49",
+        "quantity" : "5.00"
+      },
+      "actualPriceCompatibleUpperBoundSharesRaw" : 960720922,
+      "terminalMs" : 1792269760873
+    },
+    "diagnostic" : {
+      "id" : "dq3-seed-243583",
+      "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "buy" : true,
+      "price" : 0.49,
+      "submittedMs" : 1792269750302,
+      "activationDueMs" : 1792269750552,
+      "activatedMs" : 1792269750554,
+      "terminalMs" : null,
+      "terminalReason" : "OPEN",
+      "initialQueueAhead" : 1292.48,
+      "remainingQueueAhead" : 1292.48,
+      "eligiblePrintVolume" : 0,
+      "remainingShares" : 5.00,
+      "activeMs" : 0,
+      "printObservations" : { }
+    },
+    "firstInputAtOrAfterDueSequence" : 244228,
+    "activationOutcomeSequence" : 244228,
+    "activationOutcomeEventIndex" : 0,
+    "sameFirstDueInput" : true,
+    "tickChangeSinceSubmission" : false
+  }, {
+    "state" : {
+      "id" : "dq3-0-245065",
+      "condition" : "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "originalSequence" : 245065,
+      "submitMs" : 1792269751055,
+      "activationDueMs" : 1792269751305,
+      "endMs" : 1792269781055,
+      "quotes" : [ {
+        "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price" : "0.49",
+        "quantity" : "5.00"
+      }, {
+        "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price" : "0.48",
+        "quantity" : "5.00"
+      } ],
+      "targetQuote" : {
+        "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price" : "0.49",
+        "quantity" : "5.00"
+      },
+      "actualPriceCompatibleUpperBoundSharesRaw" : 960720922,
+      "terminalMs" : 1792269760873
+    },
+    "diagnostic" : {
+      "id" : "dq3-seed-245065",
+      "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "buy" : true,
+      "price" : 0.49,
+      "submittedMs" : 1792269751055,
+      "activationDueMs" : 1792269751305,
+      "activatedMs" : 1792269751306,
+      "terminalMs" : null,
+      "terminalReason" : "OPEN",
+      "initialQueueAhead" : 1292.48,
+      "remainingQueueAhead" : 1292.48,
+      "eligiblePrintVolume" : 0,
+      "remainingShares" : 5.00,
+      "activeMs" : 0,
+      "printObservations" : { }
+    },
+    "firstInputAtOrAfterDueSequence" : 245662,
+    "activationOutcomeSequence" : 245662,
+    "activationOutcomeEventIndex" : 0,
+    "sameFirstDueInput" : true,
+    "tickChangeSinceSubmission" : false
+  }, {
+    "state" : {
+      "id" : "dq3-0-246180",
+      "condition" : "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "originalSequence" : 246180,
+      "submitMs" : 1792269751556,
+      "activationDueMs" : 1792269751806,
+      "endMs" : 1792269781556,
+      "quotes" : [ {
+        "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price" : "0.49",
+        "quantity" : "5.00"
+      }, {
+        "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price" : "0.47",
+        "quantity" : "5.00"
+      } ],
+      "targetQuote" : {
+        "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price" : "0.49",
+        "quantity" : "5.00"
+      },
+      "actualPriceCompatibleUpperBoundSharesRaw" : 960720922,
+      "terminalMs" : 1792269760873
+    },
+    "diagnostic" : {
+      "id" : "dq3-seed-246180",
+      "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "buy" : true,
+      "price" : 0.49,
+      "submittedMs" : 1792269751556,
+      "activationDueMs" : 1792269751806,
+      "activatedMs" : null,
+      "terminalMs" : 1792269751806,
+      "terminalReason" : "POST_ONLY_WOULD_CROSS",
+      "initialQueueAhead" : null,
+      "remainingQueueAhead" : null,
+      "eligiblePrintVolume" : 0,
+      "remainingShares" : 5.00,
+      "activeMs" : 0,
+      "printObservations" : { }
+    },
+    "firstInputAtOrAfterDueSequence" : 246897,
+    "activationOutcomeSequence" : 246897,
+    "activationOutcomeEventIndex" : 0,
+    "sameFirstDueInput" : true,
+    "tickChangeSinceSubmission" : false
+  } ]
+}

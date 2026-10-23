@@ -1,0 +1,92 @@
+{
+  "experiment": "CS-MINT-LAB0",
+  "enabled": false,
+  "scope": "FIXED_BASELINE_LIFECYCLE_COMPONENT_CALIBRATION_NOT_CLOSED_LOOP",
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "bindings": [
+    {
+      "transactionHash": "0xeff5d430a86833db0aa6e5bcda6af787a62ba94765d2b33ebb003864718fec57",
+      "seq": 139431,
+      "eventIndex": 0,
+      "at": 1792269683761,
+      "sourceMs": 1792269683691,
+      "publicTradeIdSha256": "29a1a54e008229207d176d77456ad14341221020c23ea0921238c38fea2c090c"
+    },
+    {
+      "transactionHash": "0xeee181bd6bfe716ea75a597043a56d541a8e2f11e9e18a47ce92b20cbe7291bb",
+      "seq": 139477,
+      "eventIndex": 0,
+      "at": 1792269683781,
+      "sourceMs": 1792269683710,
+      "publicTradeIdSha256": "68357e2e1b13f469e910bffcb7084736300bf6ea6fd72bc5f46450d7e34e260c"
+    },
+    {
+      "transactionHash": "0x4251e2df8151d1cb3f7861948641ad2f564b6638d05b730cd776fa11917812b5",
+      "seq": 139565,
+      "eventIndex": 0,
+      "at": 1792269683836,
+      "sourceMs": 1792269683767,
+      "publicTradeIdSha256": "47303b388d36b6170b1384f50a50abe5583103041ed615e36faa90838b7b3814"
+    },
+    {
+      "transactionHash": "0xe2844866b8cfb89577c6803a67c9d5e8b9ddfa2c86c6efea6b9ff31bbbb649b2",
+      "seq": 139655,
+      "eventIndex": 0,
+      "at": 1792269683893,
+      "sourceMs": 1792269683821,
+      "publicTradeIdSha256": "2edf447a53b0a39e257cb6b614bd8677e1ca5dc383374dc112edae5001d4cf55"
+    },
+    {
+      "transactionHash": "0xcae00c0de444fa1fcb7eaf0cdc93800c4c59e7a2b36abd6e23c562541fe59323",
+      "seq": 139699,
+      "eventIndex": 0,
+      "at": 1792269683910,
+      "sourceMs": 1792269683833,
+      "publicTradeIdSha256": "6bf08b7128a250bd9961f8d7404f9629dbf74ba0a365c465b8bb7025b64b7807"
+    }
+  ],
+  "windows": [
+    {
+      "orderIds": [
+        "sim-research-3",
+        "sim-research-4"
+      ],
+      "conditionalAllocations": [],
+      "componentAudit": []
+    },
+    {
+      "orderIds": [
+        "sim-research-41",
+        "sim-research-42"
+      ],
+      "conditionalAllocations": [],
+      "componentAudit": []
+    }
+  ],
+  "receiptSamplesMatchingTape": 5,
+  "boundReceiptSamples": 5,
+  "conditionalAllocatedShares": "0",
+  "baselineMeasuredFillsForTheseOrders": 0,
+  "baselineWasNotRecomputedByThisLab": true,
+  "labelCoverageIsPartial": true,
+  "futureReceiptLabelsAreEnvironmentOnly": true,
+  "queueSeedsAreMeasuredBaselineDiagnosticsNotProjectedDepth": true,
+  "changedStrategyDecisionsAfterAllocationNotSimulated": true,
+  "matchingAssumptions": {
+    "activationMs": 250,
+    "cancelMs": 250,
+    "maxBookAgeMs": 2000,
+    "queueMultiplier": "2"
+  },
+  "hiddenLiquidityAndCrossPriceQueueUncertainty": true,
+  "accountMutated": false,
+  "executionCostsNotEvaluated": true,
+  "riskPolicyNotResimulated": true,
+  "notClosedLoopCandidateComparison": true,
+  "netPnlAfterCosts": null,
+  "feesOrRiskChanged": false,
+  "actualBotFillsAsserted": false,
+  "independentPaperQualificationAllowed": false,
+  "decision": "NO_GO",
+  "liveAllowed": false
+}

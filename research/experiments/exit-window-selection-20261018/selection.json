@@ -1,0 +1,201 @@
+{
+  "scope": "ENTIRE_RECORDED_OWN_TOKEN_BUY_EXIT_WINDOW_UNTIL_FIRST_GAP_NOT_OBSERVED_ORDER_LIFETIME",
+  "selectedBeforeAdditionalReceiptReads": true,
+  "window": {
+    "startInclusiveMs": 1792269694445,
+    "endExclusiveMs": 1792269696284,
+    "endReason": "FIRST_ORIGINAL_INVALID_DEPTH_GAP",
+    "gapNormalizedSeq": 155412
+  },
+  "originalObservedOrderDiagnostic": {
+    "id": "sim-research-14",
+    "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy": false,
+    "price": 0.47,
+    "submittedMs": 1792269694195,
+    "activationDueMs": 1792269694445,
+    "activatedMs": 1792269694445,
+    "terminalMs": 1792269695069,
+    "terminalReason": "PRINT_FILLED",
+    "initialQueueAhead": 10,
+    "remainingQueueAhead": 0,
+    "eligiblePrintVolume": 18,
+    "remainingShares": 0,
+    "activeMs": 624,
+    "printObservations": {
+      "ELIGIBLE_PRINT": 2,
+      "ORDER_NOT_ACTIVE": 1
+    }
+  },
+  "sevenLabelReplayTerminalMs": 1792269695159,
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "sourceRawContextGzipSha256": "09464def880b4d604dc88dc4036b387fb7387d608d0cf33b5691d78069a9ea4a",
+  "sourceRawContextArtifact": 12134459459,
+  "transactions": [
+    {
+      "transactionHash": "0xc8e07c1f9e610746c394fc146bb3b88eca85b8e76ef6980192330af7c590c5d8",
+      "normalizedSeq": 153844,
+      "originalEventIndex": 0,
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "size": "13",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269694886",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0xc8e07c1f9e610746c394fc146bb3b88eca85b8e76ef6980192330af7c590c5d8",
+        "arrivalMs": 1792269694955
+      }
+    },
+    {
+      "transactionHash": "0xee2a2436ad21f798967970d6d97632706a952430adfc1f3546495b344b9a9ad4",
+      "normalizedSeq": 153978,
+      "originalEventIndex": 0,
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "size": "5",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269694998",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0xee2a2436ad21f798967970d6d97632706a952430adfc1f3546495b344b9a9ad4",
+        "arrivalMs": 1792269695069
+      }
+    },
+    {
+      "transactionHash": "0x94b64ae3e17c51ccc686b2c10b6d3c86c4d3a6271a63b1c3dea19fd398c880bb",
+      "normalizedSeq": 154084,
+      "originalEventIndex": 0,
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "size": "5",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269695090",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x94b64ae3e17c51ccc686b2c10b6d3c86c4d3a6271a63b1c3dea19fd398c880bb",
+        "arrivalMs": 1792269695159
+      }
+    },
+    {
+      "transactionHash": "0x47a15fb4e709d1a732eb498859da2c4acc085b8fbf86adfa385bb858575e6cdb",
+      "normalizedSeq": 154732,
+      "originalEventIndex": 0,
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "size": "47",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269695736",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x47a15fb4e709d1a732eb498859da2c4acc085b8fbf86adfa385bb858575e6cdb",
+        "arrivalMs": 1792269695807
+      }
+    },
+    {
+      "transactionHash": "0x5a0d97a9fe29b7b584d3f40e58565db53c0e391aa1cc98d1d6b0185bb89ecbf5",
+      "normalizedSeq": 154776,
+      "originalEventIndex": 0,
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "size": "47",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269695788",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x5a0d97a9fe29b7b584d3f40e58565db53c0e391aa1cc98d1d6b0185bb89ecbf5",
+        "arrivalMs": 1792269695857
+      }
+    },
+    {
+      "transactionHash": "0x632088c575416a6be1f1a7871b99223e36c4657942a72cbc68e82c281ba17561",
+      "normalizedSeq": 155069,
+      "originalEventIndex": 0,
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "size": "47",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269696045",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x632088c575416a6be1f1a7871b99223e36c4657942a72cbc68e82c281ba17561",
+        "arrivalMs": 1792269696116
+      }
+    },
+    {
+      "transactionHash": "0x1bfc8b202f0f3728137e631f8e677517fa79c1f2899c3907e3d93685a0a7edd7",
+      "normalizedSeq": 155348,
+      "originalEventIndex": 0,
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "size": "55",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269696180",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x1bfc8b202f0f3728137e631f8e677517fa79c1f2899c3907e3d93685a0a7edd7",
+        "arrivalMs": 1792269696250
+      }
+    },
+    {
+      "transactionHash": "0x94a2d14dcb7202886402aa92d018d053e7f9247957abd3f664507bd067d10554",
+      "normalizedSeq": 155356,
+      "originalEventIndex": 0,
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "size": "40",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269696187",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x94a2d14dcb7202886402aa92d018d053e7f9247957abd3f664507bd067d10554",
+        "arrivalMs": 1792269696257
+      }
+    },
+    {
+      "transactionHash": "0x703ddbb4bd7f5b89f33fe5667cc86b35749724f6b3adeaeeb0719eff6276f8e7",
+      "normalizedSeq": 155372,
+      "originalEventIndex": 0,
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.47",
+        "size": "55",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269696201",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x703ddbb4bd7f5b89f33fe5667cc86b35749724f6b3adeaeeb0719eff6276f8e7",
+        "arrivalMs": 1792269696270
+      }
+    }
+  ],
+  "existingReceiptTransactions": [
+    "0xc8e07c1f9e610746c394fc146bb3b88eca85b8e76ef6980192330af7c590c5d8",
+    "0xee2a2436ad21f798967970d6d97632706a952430adfc1f3546495b344b9a9ad4"
+  ],
+  "existingReceiptArtifact": 12138561972,
+  "existingReceiptArtifactZipSha256": "72c428ee7a3adbd8881bc86ebe1a52560e3462bbf9371163b78874e2482d36da",
+  "maxNewReceiptRequests": 7,
+  "totalUniqueTransactions": 9,
+  "accountReplayAllowed": false,
+  "queueAllocationProven": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

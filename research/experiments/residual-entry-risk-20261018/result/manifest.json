@@ -1,0 +1,32 @@
+{
+  "run": 39150564740,
+  "sourceCommit": "9465a301aa3de7e3b97537651869a383b79d46a1",
+  "artifact": 12145347002,
+  "artifactZipSha256": "680a934c5e0d38d57cbd85a725052e0771f3a1fcfae7a3958a07a37d405d4bf7",
+  "verification": {
+    "javaTests": 161,
+    "pythonTests": 291,
+    "totalTests": 452
+  },
+  "control": {
+    "orders": 13,
+    "fills": 2,
+    "netPnl": "-1.80",
+    "cash": "498.20",
+    "costs": ".01"
+  },
+  "candidate": {
+    "orders": 2,
+    "fills": 0,
+    "netPnl": "0",
+    "cash": "500",
+    "costs": "0",
+    "quantityPairCompletion": null,
+    "entryRiskRejects": 31
+  },
+  "candidatePromoted": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO_ZERO_FILLS",
+  "next": "Inspect only candidate pair original RAW/normalized context; no risk loosening, holdout retuning or duplicated account replay."
+}

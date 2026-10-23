@@ -1,0 +1,35 @@
+name: PAPER frozen pre-gap exit window receipts
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/exit-window-audit.yml'
+      - 'research/phase6/exit-window-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-frozen-exit-window
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Optional offline receipt decoder dependency
+        run: |
+          python3 -m venv "$RUNNER_TEMP/window-audit-env"
+          "$RUNNER_TEMP/window-audit-env/bin/pip" install --only-binary=:all: --no-deps pycryptodome==3.23.0
+      - name: Offline regressions before public reads
+        run: '"$RUNNER_TEMP/window-audit-env/bin/python" -m unittest discover -s research/phase6/tests -q'
+      - name: Nine fixed observations, reuse two receipts, at most seven new receipt reads
+        run: >-
+          "$RUNNER_TEMP/window-audit-env/bin/python" -u -m research.phase6.exit_window_audit
+          --output research/output/exit-window-audit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frozen-pre-gap-exit-window-receipts
+          retention-days: 7
+          path: research/output/exit-window-audit/

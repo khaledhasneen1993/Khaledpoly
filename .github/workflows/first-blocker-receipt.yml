@@ -1,0 +1,31 @@
+name: PAPER one exact first-blocker receipt
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/first-blocker-receipt.yml', 'research/phase6/first-blocker-receipt-freeze.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-one-first-blocker-receipt
+  cancel-in-progress: false
+jobs:
+  one-readonly-receipt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify frozen provenance and targeted offline regression before reads
+        run: |
+          python3 -c 'import json,hashlib; from pathlib import Path; f=json.loads(Path("research/phase6/first-blocker-receipt-freeze.json").read_text()); assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in f["filesSha256"].items())'
+          python3 -m unittest research.phase6.tests.test_first_blocker_receipt research.phase6.tests.test_full_runner_build research.phase6.tests.test_full_runner_diagnosis research.phase6.tests.test_receipt_audit research.phase6.tests.test_route_coverage_audit -q
+          python3 -m research.phase6.first_blocker_receipt
+      - name: One public receipt and one matching block only; checkpoint every success
+        run: python3 -u -m research.phase6.first_blocker_receipt --output research/output/first-blocker-receipt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: first-blocker-one-receipt
+          retention-days: 7
+          path: research/output/first-blocker-receipt/
+          if-no-files-found: error

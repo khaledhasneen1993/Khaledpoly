@@ -1,0 +1,20 @@
+{
+  "workflowRun": 39132714883,
+  "sourceCommit": "d25c19a13afb55f8413af3d61846f8d4e666bd3c",
+  "resultArtifact": 12138763339,
+  "resultArtifactZipSha256": "c3f46b928b6cb150356c44317737975bf8d798c9418af9b1015550889750dbb6",
+  "testArtifact": 12138408392,
+  "javaTests": 157,
+  "pythonTests": 277,
+  "totalTests": 434,
+  "localPhase6TestsAfterOfflineArchive": 134,
+  "baselineNetPnl": "-0.85",
+  "candidateNetPnl": "-0.85",
+  "accountFillReplacementDelayMs": 90,
+  "coverageStillPartial": true,
+  "newPublicReceiptRequestsThisTurn": 0,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO",
+  "nextSelectionSha256": "52ff778f09e50e73871b0905d69858da668a15864620d7937887009a390468ef"
+}

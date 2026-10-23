@@ -1,0 +1,30 @@
+name: PAPER exact659 next two receipts ONLY
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths: ['.github/workflows/post659-next-receipts.yml', 'research/phase6/post659-next-receipts-freeze.json']
+permissions:
+  contents: read
+concurrency:
+  group: paper-exact659-next-two-receipts
+  cancel-in-progress: false
+jobs:
+  next-two-public-readonly-receipts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Frozen two-target provenance and offline regressions before reads
+        run: |
+          python3 -c 'import json,hashlib;from pathlib import Path;f=json.loads(Path("research/phase6/post659-next-receipts-freeze.json").read_bytes());assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in f["filesSha256"].items())'
+          python3 -m unittest research.phase6.tests.test_post659_next_receipts research.phase6.tests.test_post657_pool_replay_result research.phase6.tests.test_post657_next_receipts research.phase6.tests.test_receipt_audit research.phase6.tests.test_route_coverage_audit -q
+          python3 -m research.phase6.post659_next_receipts
+      - name: At most two public receipts and two matching blocks
+        run: python3 -u -m research.phase6.post659_next_receipts --output research/output/post659-next-receipts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exact659-next-two-receipts
+          retention-days: 7
+          path: research/output/post659-next-receipts/
+          if-no-files-found: error

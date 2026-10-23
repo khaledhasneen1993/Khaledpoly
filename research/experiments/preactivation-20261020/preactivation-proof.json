@@ -1,0 +1,20 @@
+{
+  "scope" : "SYNTHETIC_PRE_ACTIVATION_CONTEXTS_OVER_ACTUAL643_COMPONENTS_NOT_MARKET",
+  "actualIdentities" : 643,
+  "pendingDifferentials" : 5144,
+  "distinctFutureContinuations" : 5144,
+  "syntheticFutureFillEvents" : 128,
+  "sourceTimeContexts" : [ "BEFORE_SUBMIT", "LATEST_AT_ARRIVAL" ],
+  "pendingAgeContextsMs" : [ 0, 20, 54, 249 ],
+  "activationMsUnchanged" : 250,
+  "queueMultiplierUnchanged" : 2,
+  "rejectionGuards" : [ "ACTIVATION_DUE_EQUAL", "ACTIVATION_PAST_DUE", "ACTIVE", "SELL_PENDING", "CANCEL_PENDING", "CANCEL_DUE", "SOURCE_FUTURE", "SOURCE_NEGATIVE", "CLOCK_REGRESSION", "RESERVATION_MISSING", "ORPHAN_RESERVATION", "RESERVATION_MISMATCH", "HOLDING", "PENDING_FOK", "UNHEDGED_TIMER", "SESSION_FAILED", "ENTRY_STOPPED", "HALTED", "PERSISTENCE_FAILED", "CHECKPOINT_CLOSED", "LEDGER_CLOSED", "EXTERNAL_MODE", "RECOVERED_CHECKPOINT" ],
+  "allNonSettlementPrivateMatchingFieldsCompared" : true,
+  "repeatedComponentFutureDivergenceVerified" : true,
+  "oldEmptyOrderGuardUnchanged" : true,
+  "fullMatchingStateEquivalent" : false,
+  "marketNetPnlRecomputed" : false,
+  "originalTapeReplayed" : false,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false
+}

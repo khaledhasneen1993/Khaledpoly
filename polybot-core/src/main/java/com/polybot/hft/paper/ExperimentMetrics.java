@@ -33,6 +33,8 @@ public final class ExperimentMetrics {
       edgeBuckets.merge(edge.setScale(2, RoundingMode.FLOOR).toPlainString(), 1, Integer::sum);
   }
 
+  Map<String,Long> decisionReasonsSnapshot() { return Map.copyOf(reasons); }
+
   public void fill(PaperMatchingEngine.Fill f, BigDecimal fee, String liquidity) {
     Intent i = intents.get(f.id());
     if (i != null) filledOrders.add(f.id());

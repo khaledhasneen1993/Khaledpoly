@@ -1,0 +1,15 @@
+{
+  "workflowRun": 39120483374,
+  "sourceCommit": "bed655fb4dae8d2ed2fb05afa8f4620f314f312f",
+  "artifact": 12134390936,
+  "artifactZipSha256": "a7b192044612f4fa331e76ad4af017b2741315018777d22e15fd3498412cdd76",
+  "completedUtc": "2026-10-18T10:49:41Z",
+  "phase6Tests": 114,
+  "filesSha256": {
+    "freeze.json": "904f51b9f74d5b326a21f0f7b8b43c23441f6443f83694224690849fcb32ef7f",
+    "report.json": "7760e443b3fe71c11c808a12adb9c2c47c574e59e229e333bb048188e6a931a6"
+  },
+  "netPnlRecomputed": false,
+  "originalAccountNetPnl": -0.85,
+  "decision": "NO_GO"
+}

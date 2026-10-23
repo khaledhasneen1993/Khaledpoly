@@ -1,0 +1,23 @@
+{
+  "workflowRun": 39141046777,
+  "sourceCommit": "2f79b49230b51d3a1a8764cf65126b651c0af177",
+  "artifact": 12140998562,
+  "zipSha256": "0e856ae5da7aa679a06db38a877962125f62a3c1dc61a5492b52dc2eb8338b29",
+  "requested": 9,
+  "corroborated": 9,
+  "ciPhase6Tests": 137,
+  "localPhase6TestsAfterExport": 138,
+  "directShares": 13,
+  "mintShares": 301,
+  "rpcCalls": {
+    "eth_chainId": 1,
+    "eth_getTransactionReceipt": 7,
+    "eth_getBlockByHash": 1
+  },
+  "replacementFillReceiptRoute": "MINT_ONLY",
+  "queueAllocationProven": false,
+  "accountRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO"
+}

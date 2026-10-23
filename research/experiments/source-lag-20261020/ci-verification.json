@@ -1,0 +1,21 @@
+{
+  "scope": "VERIFIED_JAVA21_SOURCE_LAG_PROOF_ONLY_NOT_RUNTIME_AUTHORIZATION",
+  "sourceCommit": "7d88f0655bb9c794937c9c0548f26ff21256930e",
+  "runId": 39450218277,
+  "jobId": 118722737363,
+  "artifactId": 12277499794,
+  "artifactSha256": "ca77279140a0d98592ced523556446e71c4ff941012b95e024ca3ed0ce1fb76e",
+  "artifactBytes": 10611,
+  "verifiedMembers": 13,
+  "matcherDifferentials": 5144,
+  "distinctFutureContinuations": 5144,
+  "nativeProofEqualsLocal": true,
+  "priorAtomicDefaultAndIndexedProofsUnchanged": true,
+  "newAtomicSessionGuardImplemented": false,
+  "newRuntimeShortcutEnabled": false,
+  "originalTapeReplayed": false,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO"
+}

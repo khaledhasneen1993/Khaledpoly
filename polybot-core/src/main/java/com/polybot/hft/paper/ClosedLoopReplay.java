@@ -34,7 +34,7 @@ public final class ClosedLoopReplay {
       String freezeSha)
       throws Exception {
     return runInternal(
-        tape, out, config, limits, mapper, raw, windowStart, windowEnd, freezeSha, false);
+        tape, out, config, limits, mapper, raw, windowStart, windowEnd, freezeSha, false, null, false);
   }
 
   public static Map<String, Object> runExternal(
@@ -46,7 +46,19 @@ public final class ClosedLoopReplay {
       boolean raw)
       throws Exception {
     return runInternal(
-        tape, out, config, limits, mapper, raw, Long.MIN_VALUE, Long.MAX_VALUE, "", true);
+        tape, out, config, limits, mapper, raw, Long.MIN_VALUE, Long.MAX_VALUE, "", true, null, false);
+  }
+
+  static Map<String,Object> runSettlementLab(Path tape,Path out,ResearchConfig config,
+      AccountLedger.Limits limits,ObjectMapper mapper,SettlementReplayLabels labels) throws Exception {
+    labels.verifyTape(tape);
+    return runInternal(tape,out,config,limits,mapper,false,Long.MIN_VALUE,Long.MAX_VALUE,"",false,labels,false);
+  }
+
+  static Map<String,Object> runResidualRiskLab(Path tape,Path out,ResearchConfig config,
+      AccountLedger.Limits limits,ObjectMapper mapper,SettlementReplayLabels labels,boolean enabled) throws Exception {
+    labels.verifyTape(tape);
+    return runInternal(tape,out,config,limits,mapper,false,Long.MIN_VALUE,Long.MAX_VALUE,"",false,labels,enabled);
   }
 
   private static Map<String, Object> runInternal(
@@ -59,8 +71,25 @@ public final class ClosedLoopReplay {
       long windowStart,
       long windowEnd,
       String freezeSha,
-      boolean external)
+      boolean external,
+      SettlementReplayLabels settlementLabels,
+      boolean residualEntryRiskGuard)
       throws Exception {
+    return runInternal(tape,out,config,limits,mapper,raw,windowStart,windowEnd,freezeSha,external,
+        settlementLabels,residualEntryRiskGuard,null);
+  }
+
+  static Map<String,Object> runDecisionWitnessLab(Path tape,Path out,ResearchConfig config,
+      AccountLedger.Limits limits,ObjectMapper mapper,SettlementReplayLabels labels,
+      EntryDecisionWitness witness) throws Exception {
+    labels.verifyTape(tape);
+    return runInternal(tape,out,config,limits,mapper,false,Long.MIN_VALUE,Long.MAX_VALUE,"",false,labels,true,witness);
+  }
+
+  private static Map<String, Object> runInternal(Path tape,Path out,ResearchConfig config,
+      AccountLedger.Limits limits,ObjectMapper mapper,boolean raw,long windowStart,long windowEnd,
+      String freezeSha,boolean external,SettlementReplayLabels settlementLabels,
+      boolean residualEntryRiskGuard,EntryDecisionWitness witness) throws Exception {
     if (windowStart >= windowEnd) throw new IllegalArgumentException("Empty heldout window");
     if (Files.exists(out)) throw new IllegalArgumentException("Replay output must not exist");
     Files.createDirectories(out);
@@ -129,8 +158,11 @@ public final class ClosedLoopReplay {
                 out.resolve("session.json"),
                 (kind, data) -> audit.add(Map.of("kind", kind, "at", clock.millis(), "data", data)),
                 external,
-                externalSession);
+                externalSession,
+                settlementLabels,
+                residualEntryRiskGuard);
         var reader = TapeIO.reader(tape)) {
+      if (witness!=null) session.enableDecisionWitness(witness);
       String line;
       while ((line = reader.readLine()) != null) {
         JsonNode row = mapper.readTree(line);
@@ -253,11 +285,13 @@ public final class ClosedLoopReplay {
             marketDays.add(
                 Instant.ofEpochMilli(m.startMs()).atZone(ZoneOffset.UTC).toLocalDate().toString());
           }
-          session.accept(input, at, data);
+          if (settlementLabels==null) session.accept(input, at, data);
+          else session.acceptReplay(input,at,data,seq);
         }
       }
       if (pendingFrameId != -1)
         throw new IllegalArgumentException("Raw observation without completed frame");
+      if (settlementLabels!=null) settlementLabels.requireConsumed();
       var result = new LinkedHashMap<String, Object>(session.report());
       result.put("frameAtomicity", framed ? "recorded-frame-v1" : "legacy-unframed");
       result.put("decisionClock", "recorded-inputs");
@@ -271,6 +305,11 @@ public final class ClosedLoopReplay {
       result.put("inputFormat", raw ? "raw-market" : "normalized-public-v1");
       result.put("strategyIndependentDataset", declared && !external);
       result.put("externalPaperInputs", external);
+      if (settlementLabels!=null) {
+        result.put("replayMode","research-settlement-labelled-development-only");
+        result.put("strategyIndependentDataset",false);
+        result.put("independentPaperQualificationAllowed",false);
+      }
       if (external) {
         result.put("startingCash", initialExternalAccount.path("cash"));
         result.put("startingRealizedPnl", initialExternalAccount.path("realized"));

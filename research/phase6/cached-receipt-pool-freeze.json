@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "scope": "OFFLINE_PARTIAL_RECEIPT_POOL_PROOF_NOT_STRATEGY_SELECTION",
+  "sourceCommit": "62d22331e8a265c308d765dee137ac5883154357",
+  "sourceLogicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "sourceTradeIdentitiesSha256": "1f8d1d953f3755b8244c7ac11f7a3f72ccd8d73b1c9807b7cec417b6b710c1c2",
+  "originalBindings": 451,
+  "allReviewedCachedCandidates": 191,
+  "combinedBindings": 642,
+  "actualConservedComponents": 1516,
+  "poolLogicalSha256": "745dadce6749d701ba6048ab1ef76f3f43b354c058e27e9163c2174725aaceea",
+  "filesSha256": {
+    "research/phase6/cached_receipt_pool.py": "99978a0427775b52891b885f4ade962d87c521d223801bd938ac5fd3916f318d",
+    "research/phase6/tests/test_cached_receipt_pool.py": "bce657fc5a29a21cde4daf03c9428b5ba3feb04aa0bfbd74b40fe3717de58dcc",
+    ".github/workflows/cached-receipt-pool.yml": "80dd0d1d563f125cab177567724610a6c0afc3ffa9adaee2a5da4d5900cefe63",
+    "research/experiments/cached-receipt-pool-20261020/bindings.json.gz": "76be579d7fffe2b9449a502bf8258bf990759a68a458291f82fbad07a417f329",
+    "research/experiments/cached-receipt-pool-20261020/report.json": "ad0ec735e1a79178f94fba2a042bf516d22747abb7e6689ef8f109a16a8da61c",
+    "research/phase6/full_tape_coverage_result.py": "2f7d7ca12768fe94c9746920d553a07a24c2b2bfc1ce2ebfce6091d54ef20f07",
+    "research/phase6/full-tape-coverage-freeze.json": "60fd2d3307b4fce9e01facd1cbbeabcb5950ef79bc20b004a353697bc3edcd6e",
+    "research/experiments/full-tape-coverage-20261020/result/artifact.zip": "882112d70db3b1926e235ebfd0a150fa5a3d6ffc40d0aac657358c9a2ed9a46e",
+    "research/experiments/queue-aware-quote-20261019/resting-result/evidence.json": "7fa1a1db395505779421387b038c67cfaf8cc7c1ec5a7c5a099f1a85aa1b5035",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/phase2/research-config.json": "a84b6b3283e15b0069aafe615d19abeebda8f3e4104467ed1111983ab5ddbc00"
+  },
+  "newPublicReads": 0,
+  "allOriginalPairObservationsWithinWindow": false,
+  "nativePoolConsumerImplemented": false,
+  "fullAccountReplayAuthorized": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

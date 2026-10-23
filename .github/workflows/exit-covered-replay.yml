@@ -1,0 +1,73 @@
+name: PAPER same tape five versus seven receipt labels
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/exit-covered-replay.yml'
+      - 'research/phase6/exit-covered-replay-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-exit-covered-account-control
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Full regressions including SELL DIRECT versus MINT separation
+        run: |
+          mvn --batch-mode --no-transfer-progress verify
+          for phase in 2 3 4 5 6; do python3 -m unittest discover -s research/phase${phase}/tests -q; done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: exit-covered-replay-executor
+          retention-days: 3
+          path: executor-service/target/executor-service-0.6.0.jar
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exit-covered-replay-tests
+          retention-days: 7
+          path: '**/target/surefire-reports/'
+  compare:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/download-artifact@v4
+        with:
+          name: exit-covered-replay-executor
+          path: executor-service/target
+      - uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: exit-covered-input
+      - name: Frozen five versus seven labels, same full account and development tape
+        run: >-
+          python3 -u -m research.phase6.compare_exit_covered_replay --input-root exit-covered-input
+          --output research/output/exit-covered-replay
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: five-versus-seven-account-control
+          retention-days: 7
+          path: |
+            research/output/exit-covered-replay/*/report.json
+            research/output/exit-covered-replay/*/audit.jsonl
+            research/output/exit-covered-replay/comparison.json

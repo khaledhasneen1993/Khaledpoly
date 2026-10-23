@@ -1,0 +1,22 @@
+{
+  "experiment": "FROZEN-ENTRY-EXIT-ROUTES-0",
+  "frozenBeforeAnyNewReceiptRead": true,
+  "selection": "research/experiments/route-coverage-selection-20261018/selection.json",
+  "pair": [
+    "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "12589566430666404778428222777978747623958961794906352412512658324998006663268"
+  ],
+  "maxUniqueTransactions": 20,
+  "maxNewReceiptRequests": 18,
+  "liveAllowed": false,
+  "independentPaperQualificationAllowed": false,
+  "filesSha256": {
+    "research/experiments/route-coverage-selection-20261018/selection.json": "e6a2a65813593fe454b6c4ceb85a52012845c668cfec6a8703f0f9e3128fe9c4",
+    "research/phase6/route_coverage_audit.py": "4febb1dc81e3e6077c5bd2cd3d87c126900dc24cc0316a24e5fcaaad1a8350fb",
+    "research/phase6/tests/test_route_coverage_audit.py": "4eeb3c4dd3dfe1160c48fa590dcfef06222b9f2d93ebd5005118106114e6e599",
+    "research/phase6/receipt_audit.py": "4337ac09ca5b5364e5f23a15359e44695e283a99584acdbafbf4c9c4fbcc21c4",
+    "research/phase2/acceptance.json": "7ac9a726348ecb5848591d4326963b8a5b129acc7a741a61d41305afdd5e8503",
+    "research/experiments/candidate-receipt-audit-20261018/raw/receipt-5.json": "52dcd2f9362785fe4611cea2e20b1389bbb15f78bc6990cb66ce31b935280c5b",
+    "research/experiments/candidate-receipt-audit-20261018/raw/receipt-6.json": "707556ac849195e5ed2b46fe91e461ae48972d0c248f4983375354cec9bf2008"
+  }
+}

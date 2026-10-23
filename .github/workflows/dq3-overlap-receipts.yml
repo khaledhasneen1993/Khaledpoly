@@ -1,0 +1,35 @@
+name: PAPER DQ3 frozen overlapping complete-leg receipts
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/dq3-overlap-receipts.yml'
+      - 'research/phase6/dq3-overlap-receipts-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paper-dq3-overlap-receipts
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Optional public receipt Keccak decoder only
+        run: |
+          python3 -m venv "$RUNNER_TEMP/dq3-overlap-env"
+          "$RUNNER_TEMP/dq3-overlap-env/bin/pip" install --only-binary=:all: --no-deps pycryptodome==3.23.0
+      - name: All offline phase6 regressions before any public reads
+        run: '"$RUNNER_TEMP/dq3-overlap-env/bin/python" -m unittest discover -s research/phase6/tests -q'
+      - name: Frozen complete-leg public receipts, no orders or account replay
+        run: >-
+          "$RUNNER_TEMP/dq3-overlap-env/bin/python" -u -m research.phase6.dq3_receipt_coverage
+          --output research/output/dq3-overlap-receipts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dq3-overlap-complete-leg-receipts
+          retention-days: 7
+          path: research/output/dq3-overlap-receipts/

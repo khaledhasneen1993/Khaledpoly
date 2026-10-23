@@ -1,0 +1,23 @@
+{
+  "sourceCommit": "cdcffc6d02908a24816bc98607b702f9f8d9a346",
+  "runId": 39424638964,
+  "jobId": 118633985383,
+  "artifactId": 12264504808,
+  "artifactBytes": 3927,
+  "artifactZipSha256": "92ea7aab6c79ca8caca73157e1fed917843bd5dd8fa863c4b32783ace066fe20",
+  "githubConclusion": "success",
+  "githubJavaVersion": 21,
+  "githubTargetedTests": 37,
+  "githubTestSeconds": 22.406,
+  "syntheticAtomicGuardRejections": 22,
+  "fourConcurrentMonitorUsersBlockedThenReleased": true,
+  "downloadedGuardProofEqualsLocalJava17": true,
+  "downloadedDefaultParityEqualsUnchangedOracle": true,
+  "downloadedNoOrderDifferentialAndCounterexamplesIndependentlyVerified": true,
+  "atomicGuardImplementedInIsolatedBuild": true,
+  "identityConsumerIntegrated": false,
+  "runtimeExecutionSkipImplemented": false,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

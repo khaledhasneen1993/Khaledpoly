@@ -1,0 +1,68 @@
+name: PAPER closed-loop settlement calibration
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-closed-loop-settlement-calibration
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Full regression and account/risk/fee integration tests
+        run: |
+          mvn --batch-mode --no-transfer-progress verify
+          for phase in 2 3 4 5 6; do python3 -m unittest discover -s research/phase${phase}/tests -q; done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: settlement-replay-executor
+          retention-days: 3
+          path: executor-service/target/executor-service-0.6.0.jar
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: settlement-replay-tests
+          retention-days: 3
+          path: '**/target/surefire-reports/'
+  compare:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/download-artifact@v4
+        with:
+          name: settlement-replay-executor
+          path: executor-service/target
+      - uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: settlement-input
+      - name: Same complete development tape, same config, actual account feedback
+        run: >-
+          python3 -u -m research.phase6.compare_settlement_replay --input-root settlement-input
+          --output research/output/settlement-replay
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: closed-loop-settlement-comparison
+          retention-days: 7
+          path: |
+            research/output/settlement-replay/*/report.json
+            research/output/settlement-replay/*/audit.jsonl
+            research/output/settlement-replay/comparison.json

@@ -1,0 +1,35 @@
+{
+  "scope": "COMPLETE_CENSUS_INDEX_WITH_PARTIAL_RAW_PREIMAGE_PROOF_NOT_EXECUTION",
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "index": {
+    "observations": 16317,
+    "uniqueTransactions": 16317,
+    "uniquePublicTradeIds": 16317,
+    "globalIdentityReuse": false,
+    "identitiesSha256": "1f8d1d953f3755b8244c7ac11f7a3f72ccd8d73b1c9807b7cec417b6b710c1c2"
+  },
+  "preimages": {
+    "observations": 16317,
+    "uniqueTransactions": 16317,
+    "uniquePublicTradeIds": 16317,
+    "globalIdentityReuse": false,
+    "identitiesSha256": "1f8d1d953f3755b8244c7ac11f7a3f72ccd8d73b1c9807b7cec417b6b710c1c2",
+    "consumedOriginalPreimages": 643,
+    "subsetPreimageTestOnly": true,
+    "failed": false,
+    "completeOriginalConsumption": false,
+    "settlementRoutesValidatedByIndex": false,
+    "runtimeSkipAuthorized": false
+  },
+  "unknownPreimagesNotInvented": 15674,
+  "newPublicReads": 0,
+  "originalTapeRescanned": false,
+  "runtimeOptimizationImplemented": false,
+  "atomicSessionGuardImplemented": false,
+  "marketNetPnlRecomputed": false,
+  "fullAccountReplayAuthorized": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO",
+  "partialPreimagesCorrectlyRejectedAsFullConsumption": true
+}

@@ -1,0 +1,13 @@
+{
+  "scope": "VERIFIED_SAME_SOURCE_FIRST_BLOCKER_NOT_ACCOUNT_PERFORMANCE",
+  "sourceArtifactSha256": "5a251717de06ad26c2920180fcc5fa8ec4fad72d725f64f02f85d742833e74a4",
+  "seq": 97,
+  "eventIndex": 0,
+  "sameOriginalBlocker": true,
+  "noOrdersOrExecutionsBeforeBlocker": true,
+  "noOrderOptimizationProven": false,
+  "completeAccountComparisonPerformed": false,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

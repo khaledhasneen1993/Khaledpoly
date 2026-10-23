@@ -1,0 +1,78 @@
+{
+  "scope": "VERIFIED_TWO_ORIGINAL_RECEIPT_ROUTES_NOT_BOT_FILLS_OR_ACCOUNT",
+  "sourceCommit": "1f2c7e9d0f1897ace68c0665b943663fd883f381",
+  "runId": 39468514569,
+  "artifactId": 12286053123,
+  "artifactSha256": "b18b80b960a5de5273197fc04460f4a70224ead77d0307827c494ba5a4337e79",
+  "results": [
+    {
+      "profile": "candidate",
+      "sourceCoordinate": [
+        9035,
+        0
+      ],
+      "transactionHash": "0x740e975da87f07493fd104e7a8aecead4727eb365955e732c8bc3ff4f5972a1c",
+      "publicTradeIdSha256": "e1fc98f1e7aedae1d2cd0584a92ba00af0c887016f9e43f5ba921234f3f869f4",
+      "rawReceiptSha256": "0cf9e5fdd2b231416908ec007e4e7b953120d43bdea1e2496972463aa60789e7",
+      "conservedMakerComponents": 1,
+      "venueSharesRaw": 3846154,
+      "takerCollateralRaw": 2000000,
+      "routeSharesRaw": {
+        "DIRECT": 3846154
+      },
+      "componentQuoteComparisons": [
+        {
+          "makerLogIndex": 142,
+          "makerSide": "SELL",
+          "makerToken": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "makerPrice": "0.5199999792000008319999667200",
+          "sharesRaw": 3846154,
+          "eligibleRecordedOrdersByNecessaryConditions": []
+        }
+      ],
+      "noRecordedOrderPassesNecessaryMatchingConditions": true,
+      "counterfactualQueueAllocationProven": false,
+      "modelFillsCreated": 0
+    },
+    {
+      "profile": "baseline",
+      "sourceCoordinate": [
+        82964,
+        0
+      ],
+      "transactionHash": "0x6fb0a9218d26394ca3ce7f6874218e38ed8f886ca60e1dd3a6b44f1f43446590",
+      "publicTradeIdSha256": "02611e681229c98e51f4f3a4032b9afedd19227f2c563cf498a4f117c4eb8469",
+      "rawReceiptSha256": "199e8660e0c3d6db7be0e8fe7ef76274e71cbbff360a10a59d20203cdb53e05f",
+      "conservedMakerComponents": 1,
+      "venueSharesRaw": 9000000,
+      "takerCollateralRaw": 6390000,
+      "routeSharesRaw": {
+        "MINT": 9000000
+      },
+      "componentQuoteComparisons": [
+        {
+          "makerLogIndex": 685,
+          "makerSide": "BUY",
+          "makerToken": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "makerPrice": "0.29",
+          "sharesRaw": 9000000,
+          "eligibleRecordedOrdersByNecessaryConditions": []
+        }
+      ],
+      "noRecordedOrderPassesNecessaryMatchingConditions": true,
+      "counterfactualQueueAllocationProven": false,
+      "modelFillsCreated": 0
+    }
+  ],
+  "conservedMakerComponents": 2,
+  "sourceObservationIdentitiesVerified": true,
+  "nativePoolExtended": false,
+  "newRuntimeShortcutEnabled": false,
+  "modelFillsCreated": 0,
+  "marketNetPnlRecomputed": false,
+  "completeAccountComparisonPerformed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO",
+  "nextStep": "Build a separately frozen645-binding/1534-component real pool preserving all643 existing bindings, verify native parity and source identities before ONE new baseline/QW0 replay. Do not tune strategy/holdout, infer fills, weaken queue or repeat the unchanged source run."
+}

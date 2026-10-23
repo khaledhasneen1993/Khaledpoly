@@ -1,0 +1,587 @@
+{
+  "scope": "ALL14_ORIGINAL_TAIL_GROUPS_BEFORE_FIRST_GAP_NOT_EXECUTION",
+  "state": {
+    "id": "dq3-0-243583",
+    "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "originalSequence": 243583,
+    "submitMs": 1792269750302,
+    "activationDueMs": 1792269750552,
+    "endMs": 1792269780302,
+    "quotes": [
+      {
+        "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.48",
+        "quantity": "5.00"
+      },
+      {
+        "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.4",
+        "quantity": "5.00"
+      }
+    ],
+    "targetQuote": {
+      "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "price": "0.48",
+      "quantity": "5.00"
+    },
+    "terminalMs": 1792269760873
+  },
+  "targetQuote": {
+    "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "price": "0.4",
+    "quantity": "5.00"
+  },
+  "fixedHorizonMs": 1792269760873,
+  "observations": 14,
+  "complete": true,
+  "results": [
+    {
+      "transactionHash": "0x2b6fc711b37b596fdc9798f804f9116b317395bb129e8d46fdade5a0ff3d5aeb",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.51",
+        "size": "14.705883",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269759782",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x2b6fc711b37b596fdc9798f804f9116b317395bb129e8d46fdade5a0ff3d5aeb"
+      },
+      "arrivalMs": 1792269759853,
+      "normalizedSeq": 259607,
+      "eventIndex": 0,
+      "originalCensusBid": "0.47",
+      "actualPriceCompatibleSharesRaw": 0,
+      "parts": [
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x2b6fc711b37b596fdc9798f804f9116b317395bb129e8d46fdade5a0ff3d5aeb:739:733",
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "buy": false,
+          "sharesRaw": 10000000,
+          "collateralRaw": 5100000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x2b6fc711b37b596fdc9798f804f9116b317395bb129e8d46fdade5a0ff3d5aeb:739:736",
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "buy": false,
+          "sharesRaw": 4705883,
+          "collateralRaw": 2400000
+        }
+      ]
+    },
+    {
+      "transactionHash": "0x31b794bf6c81d0c246880a48ae73fadb02b47dad030e746202436916067ba83f",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+        "price": "0.5",
+        "size": "0.61",
+        "fee_rate_bps": "0",
+        "side": "SELL",
+        "timestamp": "1792269759901",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x31b794bf6c81d0c246880a48ae73fadb02b47dad030e746202436916067ba83f"
+      },
+      "arrivalMs": 1792269759970,
+      "normalizedSeq": 259737,
+      "eventIndex": 0,
+      "originalCensusBid": "0.47",
+      "actualPriceCompatibleSharesRaw": 0,
+      "parts": [
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x31b794bf6c81d0c246880a48ae73fadb02b47dad030e746202436916067ba83f:891:887",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 610000,
+          "collateralRaw": 305000
+        }
+      ]
+    },
+    {
+      "transactionHash": "0x7575396520789e70f61e0826c45efbc6c1f64a9230ce034371b126bff5415e95",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.5",
+        "size": "6.33",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269760015",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x7575396520789e70f61e0826c45efbc6c1f64a9230ce034371b126bff5415e95"
+      },
+      "arrivalMs": 1792269760084,
+      "normalizedSeq": 259869,
+      "eventIndex": 0,
+      "originalCensusBid": "0.47",
+      "actualPriceCompatibleSharesRaw": 0,
+      "parts": [
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x7575396520789e70f61e0826c45efbc6c1f64a9230ce034371b126bff5415e95:1068:1065",
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "buy": false,
+          "sharesRaw": 6330000,
+          "collateralRaw": 3165000
+        }
+      ]
+    },
+    {
+      "transactionHash": "0xe312b1ec729d7b897b4c4e123d05977ea1872ec33f69bdea8ee5c8ae7273d673",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.51",
+        "size": "2",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269760421",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0xe312b1ec729d7b897b4c4e123d05977ea1872ec33f69bdea8ee5c8ae7273d673"
+      },
+      "arrivalMs": 1792269760490,
+      "normalizedSeq": 260244,
+      "eventIndex": 0,
+      "originalCensusBid": "0.47",
+      "actualPriceCompatibleSharesRaw": 0,
+      "parts": [
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0xe312b1ec729d7b897b4c4e123d05977ea1872ec33f69bdea8ee5c8ae7273d673:1038:1033",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 2000000,
+          "collateralRaw": 980000
+        }
+      ]
+    },
+    {
+      "transactionHash": "0x4861e01f9db8b802dfb03d076d5d0f430248dd264dea41696e6565d03b02b359",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.52",
+        "size": "52",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269760608",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x4861e01f9db8b802dfb03d076d5d0f430248dd264dea41696e6565d03b02b359"
+      },
+      "arrivalMs": 1792269760677,
+      "normalizedSeq": 260357,
+      "eventIndex": 0,
+      "originalCensusBid": "0.47",
+      "actualPriceCompatibleSharesRaw": 0,
+      "parts": [
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x4861e01f9db8b802dfb03d076d5d0f430248dd264dea41696e6565d03b02b359:76:65",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 8000000,
+          "collateralRaw": 3840000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x4861e01f9db8b802dfb03d076d5d0f430248dd264dea41696e6565d03b02b359:76:67",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 30000000,
+          "collateralRaw": 14400000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x4861e01f9db8b802dfb03d076d5d0f430248dd264dea41696e6565d03b02b359:76:69",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 5000000,
+          "collateralRaw": 2400000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x4861e01f9db8b802dfb03d076d5d0f430248dd264dea41696e6565d03b02b359:76:71",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 9000000,
+          "collateralRaw": 4230000
+        }
+      ]
+    },
+    {
+      "transactionHash": "0x6e2d2e682d42cdd53ddf3de7451e5eb2a428a8d3f3ea3b8388cfd53fc3be02d1",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.53",
+        "size": "52",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269760640",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x6e2d2e682d42cdd53ddf3de7451e5eb2a428a8d3f3ea3b8388cfd53fc3be02d1"
+      },
+      "arrivalMs": 1792269760709,
+      "normalizedSeq": 260381,
+      "eventIndex": 0,
+      "originalCensusBid": "0.47",
+      "actualPriceCompatibleSharesRaw": 0,
+      "parts": [
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x6e2d2e682d42cdd53ddf3de7451e5eb2a428a8d3f3ea3b8388cfd53fc3be02d1:138:125",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 21000000,
+          "collateralRaw": 9870000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x6e2d2e682d42cdd53ddf3de7451e5eb2a428a8d3f3ea3b8388cfd53fc3be02d1:138:127",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 5000000,
+          "collateralRaw": 2350000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x6e2d2e682d42cdd53ddf3de7451e5eb2a428a8d3f3ea3b8388cfd53fc3be02d1:138:129",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 5000000,
+          "collateralRaw": 2350000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x6e2d2e682d42cdd53ddf3de7451e5eb2a428a8d3f3ea3b8388cfd53fc3be02d1:138:131",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 10000000,
+          "collateralRaw": 4600000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x6e2d2e682d42cdd53ddf3de7451e5eb2a428a8d3f3ea3b8388cfd53fc3be02d1:138:133",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 11000000,
+          "collateralRaw": 5060000
+        }
+      ]
+    },
+    {
+      "transactionHash": "0xfe5b0e81259960a3702091362f575578761885c2bbd712234b135b52b9e21688",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.54",
+        "size": "52",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269760666",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0xfe5b0e81259960a3702091362f575578761885c2bbd712234b135b52b9e21688"
+      },
+      "arrivalMs": 1792269760737,
+      "normalizedSeq": 260399,
+      "eventIndex": 0,
+      "originalCensusBid": "0.47",
+      "actualPriceCompatibleSharesRaw": 0,
+      "parts": [
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0xfe5b0e81259960a3702091362f575578761885c2bbd712234b135b52b9e21688:167:156",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 9000000,
+          "collateralRaw": 4140000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0xfe5b0e81259960a3702091362f575578761885c2bbd712234b135b52b9e21688:167:158",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 5000000,
+          "collateralRaw": 2300000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0xfe5b0e81259960a3702091362f575578761885c2bbd712234b135b52b9e21688:167:160",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 30000000,
+          "collateralRaw": 13800000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0xfe5b0e81259960a3702091362f575578761885c2bbd712234b135b52b9e21688:167:162",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 8000000,
+          "collateralRaw": 3680000
+        }
+      ]
+    },
+    {
+      "transactionHash": "0x094f52713d30f0a8816ad67d999a56ac2569516cdb5cbbc38efd249d0f301960",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.54",
+        "size": "52",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269760682",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x094f52713d30f0a8816ad67d999a56ac2569516cdb5cbbc38efd249d0f301960"
+      },
+      "arrivalMs": 1792269760751,
+      "normalizedSeq": 260413,
+      "eventIndex": 0,
+      "originalCensusBid": "0.47",
+      "actualPriceCompatibleSharesRaw": 0,
+      "parts": [
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x094f52713d30f0a8816ad67d999a56ac2569516cdb5cbbc38efd249d0f301960:127:120",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 42000000,
+          "collateralRaw": 19320000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x094f52713d30f0a8816ad67d999a56ac2569516cdb5cbbc38efd249d0f301960:127:122",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 10000000,
+          "collateralRaw": 4600000
+        }
+      ]
+    },
+    {
+      "transactionHash": "0x0bec927b21f00a29dac40d7cc25405a7a5478e66addd5549a7db154ca6c77e20",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.54",
+        "size": "52",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269760702",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x0bec927b21f00a29dac40d7cc25405a7a5478e66addd5549a7db154ca6c77e20"
+      },
+      "arrivalMs": 1792269760771,
+      "normalizedSeq": 260437,
+      "eventIndex": 0,
+      "originalCensusBid": "0.47",
+      "actualPriceCompatibleSharesRaw": 0,
+      "parts": [
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x0bec927b21f00a29dac40d7cc25405a7a5478e66addd5549a7db154ca6c77e20:154:147",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 40000000,
+          "collateralRaw": 18400000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x0bec927b21f00a29dac40d7cc25405a7a5478e66addd5549a7db154ca6c77e20:154:149",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 12000000,
+          "collateralRaw": 5520000
+        }
+      ]
+    },
+    {
+      "transactionHash": "0xaba4d8689fe7996210547a04bdec62264f2e981c3b43223ef517b02b3c9c0fdf",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.55",
+        "size": "52",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269760719",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0xaba4d8689fe7996210547a04bdec62264f2e981c3b43223ef517b02b3c9c0fdf"
+      },
+      "arrivalMs": 1792269760789,
+      "normalizedSeq": 260471,
+      "eventIndex": 0,
+      "originalCensusBid": "0.47",
+      "actualPriceCompatibleSharesRaw": 0,
+      "parts": [
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0xaba4d8689fe7996210547a04bdec62264f2e981c3b43223ef517b02b3c9c0fdf:307:296",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 18000000,
+          "collateralRaw": 8280000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0xaba4d8689fe7996210547a04bdec62264f2e981c3b43223ef517b02b3c9c0fdf:307:298",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 10000000,
+          "collateralRaw": 4500000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0xaba4d8689fe7996210547a04bdec62264f2e981c3b43223ef517b02b3c9c0fdf:307:300",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 20000000,
+          "collateralRaw": 9000000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0xaba4d8689fe7996210547a04bdec62264f2e981c3b43223ef517b02b3c9c0fdf:307:302",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 4000000,
+          "collateralRaw": 1800000
+        }
+      ]
+    },
+    {
+      "transactionHash": "0x82d3aef13c92f19354d1d3ee88bb05669a7f38f4076d9019a5ea31447d048688",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.55",
+        "size": "52",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269760730",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x82d3aef13c92f19354d1d3ee88bb05669a7f38f4076d9019a5ea31447d048688"
+      },
+      "arrivalMs": 1792269760799,
+      "normalizedSeq": 260485,
+      "eventIndex": 0,
+      "originalCensusBid": "0.47",
+      "actualPriceCompatibleSharesRaw": 0,
+      "parts": [
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x82d3aef13c92f19354d1d3ee88bb05669a7f38f4076d9019a5ea31447d048688:200:191",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 1000000,
+          "collateralRaw": 450000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x82d3aef13c92f19354d1d3ee88bb05669a7f38f4076d9019a5ea31447d048688:200:193",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 30000000,
+          "collateralRaw": 13500000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x82d3aef13c92f19354d1d3ee88bb05669a7f38f4076d9019a5ea31447d048688:200:195",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 21000000,
+          "collateralRaw": 9450000
+        }
+      ]
+    },
+    {
+      "transactionHash": "0xfe69f7f765cb34cd8fed4c74fb340a16982fd5860f3f1ac4e2886e4cd042dbbd",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.55",
+        "size": "52",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269760735",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0xfe69f7f765cb34cd8fed4c74fb340a16982fd5860f3f1ac4e2886e4cd042dbbd"
+      },
+      "arrivalMs": 1792269760805,
+      "normalizedSeq": 260505,
+      "eventIndex": 0,
+      "originalCensusBid": "0.47",
+      "actualPriceCompatibleSharesRaw": 0,
+      "parts": [
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0xfe69f7f765cb34cd8fed4c74fb340a16982fd5860f3f1ac4e2886e4cd042dbbd:409:402",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 9000000,
+          "collateralRaw": 4050000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0xfe69f7f765cb34cd8fed4c74fb340a16982fd5860f3f1ac4e2886e4cd042dbbd:409:404",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 43000000,
+          "collateralRaw": 19350000
+        }
+      ]
+    },
+    {
+      "transactionHash": "0x7a2ae66c261941ed3271e681c03a0f4ad5d979b8c03362068c5e2e8b8a5ed992",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.55",
+        "size": "52",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269760743",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x7a2ae66c261941ed3271e681c03a0f4ad5d979b8c03362068c5e2e8b8a5ed992"
+      },
+      "arrivalMs": 1792269760813,
+      "normalizedSeq": 260529,
+      "eventIndex": 0,
+      "originalCensusBid": "0.47",
+      "actualPriceCompatibleSharesRaw": 0,
+      "parts": [
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x7a2ae66c261941ed3271e681c03a0f4ad5d979b8c03362068c5e2e8b8a5ed992:280:273",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 7000000,
+          "collateralRaw": 3150000
+        },
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x7a2ae66c261941ed3271e681c03a0f4ad5d979b8c03362068c5e2e8b8a5ed992:280:275",
+          "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+          "buy": true,
+          "sharesRaw": 45000000,
+          "collateralRaw": 20250000
+        }
+      ]
+    },
+    {
+      "transactionHash": "0x4fc5cb4542298341ffbf43c569017d74f876218d8b4eb535df92f244134d1d09",
+      "sample": {
+        "market": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "asset_id": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+        "price": "0.52",
+        "size": "13",
+        "fee_rate_bps": "0",
+        "side": "BUY",
+        "timestamp": "1792269760783",
+        "event_type": "last_trade_price",
+        "transaction_hash": "0x4fc5cb4542298341ffbf43c569017d74f876218d8b4eb535df92f244134d1d09"
+      },
+      "arrivalMs": 1792269760853,
+      "normalizedSeq": 260606,
+      "eventIndex": 0,
+      "originalCensusBid": "0.47",
+      "actualPriceCompatibleSharesRaw": 0,
+      "parts": [
+        {
+          "identity": "0xe111180000d2663c0091e4f400237545b87b996b:0x4fc5cb4542298341ffbf43c569017d74f876218d8b4eb535df92f244134d1d09:238:235",
+          "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+          "buy": false,
+          "sharesRaw": 13000000,
+          "collateralRaw": 6760000
+        }
+      ]
+    }
+  ],
+  "actualPriceCompatibleSharesRaw": 0,
+  "componentPriceDerivedFromIntegerSettlementNotAggregateComplement": true,
+  "activationQueueOrStrategyLifecycleProven": false,
+  "fillsCreated": 0,
+  "netPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NEED_ACTUAL_SOURCE_TIME_HEDGE_QUEUE_AND_LIFECYCLE",
+  "hypotheticalUnchangedHedgeQuote": {
+    "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "side": "SELL",
+    "price": "0.51",
+    "quantity": "5.00"
+  },
+  "hedgeSellPriceCompatibleSharesRaw": 23000000,
+  "noHypotheticalQueueOrFillClaimed": true
+}

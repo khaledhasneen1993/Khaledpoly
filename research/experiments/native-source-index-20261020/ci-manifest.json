@@ -1,0 +1,23 @@
+{
+  "sourceCommit": "603f2871ed9157b58e68a290c8e12073da4cb0aa",
+  "runId": 39417026089,
+  "jobId": 118608424759,
+  "artifactId": 12262047950,
+  "artifactBytes": 1358,
+  "artifactZipSha256": "d55fe31207cac39b926604fa6c2615cc2392e0db0b5206c7380865869f699daa",
+  "githubConclusion": "success",
+  "githubTargetedTests": 33,
+  "githubTestSeconds": 12.449,
+  "githubJavaVersion": 21,
+  "nativeOriginalIndexIdentities": 16317,
+  "nativeActualRawPreimagesMatched": 643,
+  "nativeRejectionGuards": 23,
+  "downloadedProofIndependentlyVerified": true,
+  "downloadedProofSemanticallyEqualsLocalJava17": true,
+  "nativeIdentityConsumerImplemented": true,
+  "runtimeOptimizationImplemented": false,
+  "atomicSessionGuardImplemented": false,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

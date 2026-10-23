@@ -1,0 +1,19 @@
+{
+  "scope": "OFFLINE_TESTS_NOT_ACCOUNT_OR_PROFITABILITY_PROOF",
+  "dateUtc": "2026-10-19",
+  "command": "python3 -m unittest discover -s research/phase6/tests -q",
+  "tests": 265,
+  "durationSeconds": 283.570,
+  "exitCode": 0,
+  "result": "OK",
+  "latestTargetedAdapterTestsAlsoPassed": 4,
+  "nativeSyntheticQueueBridgeCases": 4,
+  "nativeRejectionCases": 22,
+  "nativeConservativeRoundingBoundaryCases": 2,
+  "actualSourceBindingsValidated": 451,
+  "actualComponentsComparedAcrossLanguages": 1038,
+  "modelMarketFillsCreated": 0,
+  "netPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

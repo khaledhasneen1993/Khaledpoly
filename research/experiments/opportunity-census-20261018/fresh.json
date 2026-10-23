@@ -1,0 +1,515 @@
+{
+  "scope": "NORMALIZED_PRINT_NECESSARY_CONDITION_UPPER_BOUND",
+  "rows": 6163831,
+  "logicalTapeSha256": "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+  "runId": "e4040b5c-f460-436e-86db-9fe60d656ea8",
+  "recordingClosedCleanly": true,
+  "observedTrades": 16317,
+  "oneClassificationPerPrintPerPolicy": true,
+  "policyCounts": {
+    "0": {
+      "WRONG_AGGRESSOR": 15024,
+      "NEW_ENTRY_MIN_SIZE": 617,
+      "BELOW_BASE_EDGE_FLOOR": 443,
+      "QUOTE_NOT_AT_PRINT": 68,
+      "NECESSARY_CONDITIONS_ONLY": 45,
+      "INVALID_OR_OLD_PRINT_SOURCE": 66,
+      "DEPTH_UNAVAILABLE": 52,
+      "NO_FRESH_ACTIVE_BINARY_MARKET": 2
+    },
+    "1": {
+      "WRONG_AGGRESSOR": 15024,
+      "NEW_ENTRY_MIN_SIZE": 617,
+      "BELOW_BASE_EDGE_FLOOR": 470,
+      "QUOTE_NOT_AT_PRINT": 84,
+      "INVALID_OR_OLD_PRINT_SOURCE": 66,
+      "DEPTH_UNAVAILABLE": 52,
+      "NECESSARY_CONDITIONS_ONLY": 2,
+      "NO_FRESH_ACTIVE_BINARY_MARKET": 2
+    }
+  },
+  "examples": [
+    {
+      "at": 1792269605356,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "improvementTicks": 0,
+      "printPrice": "0.20",
+      "printSize": "0.01",
+      "otherQuote": "0.58",
+      "netEdgeUpperBound": "0.218"
+    },
+    {
+      "at": 1792269622911,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "improvementTicks": 0,
+      "printPrice": "0.20",
+      "printSize": "82.75",
+      "otherQuote": "0.77",
+      "netEdgeUpperBound": "0.028"
+    },
+    {
+      "at": 1792269643853,
+      "condition": "0xf0d28ec493ed0f9a8cd52be0613e1079b9cfd729fde5713349a03339ba2e9019",
+      "token": "16175391777578581291856766353347645408943260654044130963788305612049839550467",
+      "improvementTicks": 0,
+      "printPrice": "0.32",
+      "printSize": "14.32",
+      "otherQuote": "0.65",
+      "netEdgeUpperBound": "0.028"
+    },
+    {
+      "at": 1792269664794,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "improvementTicks": 0,
+      "printPrice": "0.34",
+      "printSize": "21.85",
+      "otherQuote": "0.64",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792269687593,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "improvementTicks": 0,
+      "printPrice": "0.50",
+      "printSize": "12.92",
+      "otherQuote": "0.48",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792269688855,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "token": "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+      "improvementTicks": 0,
+      "printPrice": "0.55",
+      "printSize": "81.4",
+      "otherQuote": "0.42",
+      "netEdgeUpperBound": "0.028"
+    },
+    {
+      "at": 1792269718404,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "improvementTicks": 0,
+      "printPrice": "0.55",
+      "printSize": "0.08",
+      "otherQuote": "0.43",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792269785642,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "improvementTicks": 0,
+      "printPrice": "0.49",
+      "printSize": "100",
+      "otherQuote": "0.49",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792269838585,
+      "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+      "token": "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+      "improvementTicks": 0,
+      "printPrice": "0.12",
+      "printSize": "10",
+      "otherQuote": "0.86",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792270322219,
+      "condition": "0x1cf666d7017b46e78d63d20e35009f48fef4798b5e6b5b89cf4c5fdb7b14ee67",
+      "token": "68713744852050441410525222986399224163071215075586452812298378957198443263074",
+      "improvementTicks": 0,
+      "printPrice": "0.37",
+      "printSize": "0.1",
+      "otherQuote": "0.58",
+      "netEdgeUpperBound": "0.048"
+    },
+    {
+      "at": 1792270323519,
+      "condition": "0x1cf666d7017b46e78d63d20e35009f48fef4798b5e6b5b89cf4c5fdb7b14ee67",
+      "token": "68713744852050441410525222986399224163071215075586452812298378957198443263074",
+      "improvementTicks": 0,
+      "printPrice": "0.36",
+      "printSize": "0.25",
+      "otherQuote": "0.61",
+      "netEdgeUpperBound": "0.028"
+    },
+    {
+      "at": 1792270520637,
+      "condition": "0x1cf666d7017b46e78d63d20e35009f48fef4798b5e6b5b89cf4c5fdb7b14ee67",
+      "token": "60453725400291540906707255377279644238700481508117554396074505575883769430752",
+      "improvementTicks": 0,
+      "printPrice": "0.66",
+      "printSize": "50",
+      "otherQuote": "0.31",
+      "netEdgeUpperBound": "0.028"
+    },
+    {
+      "at": 1792270520700,
+      "condition": "0x1cf666d7017b46e78d63d20e35009f48fef4798b5e6b5b89cf4c5fdb7b14ee67",
+      "token": "60453725400291540906707255377279644238700481508117554396074505575883769430752",
+      "improvementTicks": 0,
+      "printPrice": "0.66",
+      "printSize": "51.15",
+      "otherQuote": "0.32",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792270520704,
+      "condition": "0x1cf666d7017b46e78d63d20e35009f48fef4798b5e6b5b89cf4c5fdb7b14ee67",
+      "token": "60453725400291540906707255377279644238700481508117554396074505575883769430752",
+      "improvementTicks": 0,
+      "printPrice": "0.66",
+      "printSize": "30",
+      "otherQuote": "0.32",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792270520715,
+      "condition": "0x1cf666d7017b46e78d63d20e35009f48fef4798b5e6b5b89cf4c5fdb7b14ee67",
+      "token": "60453725400291540906707255377279644238700481508117554396074505575883769430752",
+      "improvementTicks": 0,
+      "printPrice": "0.66",
+      "printSize": "80.06",
+      "otherQuote": "0.32",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792270620377,
+      "condition": "0x1cf666d7017b46e78d63d20e35009f48fef4798b5e6b5b89cf4c5fdb7b14ee67",
+      "token": "68713744852050441410525222986399224163071215075586452812298378957198443263074",
+      "improvementTicks": 0,
+      "printPrice": "0.33",
+      "printSize": "0.62",
+      "otherQuote": "0.65",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792271509195,
+      "condition": "0x7d3442d3090177e5ddfd629a2d6de26ffaebe9410be06966ada3c29e3e0827fd",
+      "token": "56594055081742285401126461087344997302154330102790609573500257095344610475856",
+      "improvementTicks": 0,
+      "printPrice": "0.55",
+      "printSize": "51.32",
+      "otherQuote": "0.43",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792272702522,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.26",
+      "printSize": "25",
+      "otherQuote": "0.72",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792272702552,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.26",
+      "printSize": "30",
+      "otherQuote": "0.72",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792272731161,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.20",
+      "printSize": "25",
+      "otherQuote": "0.78",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792272731162,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.20",
+      "printSize": "25",
+      "otherQuote": "0.78",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792272731172,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.20",
+      "printSize": "30",
+      "otherQuote": "0.78",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792272731174,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.20",
+      "printSize": "40",
+      "otherQuote": "0.78",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792272731179,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.20",
+      "printSize": "30",
+      "otherQuote": "0.78",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792272731182,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.20",
+      "printSize": "30",
+      "otherQuote": "0.78",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792272731182,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.20",
+      "printSize": "30",
+      "otherQuote": "0.78",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792272731184,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.20",
+      "printSize": "45",
+      "otherQuote": "0.78",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792272731190,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.20",
+      "printSize": "45",
+      "otherQuote": "0.78",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792272731192,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.20",
+      "printSize": "40",
+      "otherQuote": "0.78",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792272731196,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.20",
+      "printSize": "0.04",
+      "otherQuote": "0.78",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792272731196,
+      "condition": "0x4575dd291202014725b97578e723c5c5ab45d96cd3536f2f8e47ffed1856e50c",
+      "token": "98826021943202708520924659479598273757755752889897158966321766492280966891783",
+      "improvementTicks": 1,
+      "printPrice": "0.09",
+      "printSize": "30",
+      "otherQuote": "0.89",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792272731856,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.18",
+      "printSize": "45",
+      "otherQuote": "0.79",
+      "netEdgeUpperBound": "0.028"
+    },
+    {
+      "at": 1792272731883,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.18",
+      "printSize": "45",
+      "otherQuote": "0.79",
+      "netEdgeUpperBound": "0.028"
+    },
+    {
+      "at": 1792272736056,
+      "condition": "0x4575dd291202014725b97578e723c5c5ab45d96cd3536f2f8e47ffed1856e50c",
+      "token": "98826021943202708520924659479598273757755752889897158966321766492280966891783",
+      "improvementTicks": 0,
+      "printPrice": "0.04",
+      "printSize": "129",
+      "otherQuote": "0.93",
+      "netEdgeUpperBound": "0.028"
+    },
+    {
+      "at": 1792272737828,
+      "condition": "0x4575dd291202014725b97578e723c5c5ab45d96cd3536f2f8e47ffed1856e50c",
+      "token": "98826021943202708520924659479598273757755752889897158966321766492280966891783",
+      "improvementTicks": 0,
+      "printPrice": "0.05",
+      "printSize": "0.77",
+      "otherQuote": "0.93",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792273282459,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.080",
+      "printSize": "51",
+      "otherQuote": "0.908",
+      "netEdgeUpperBound": "0.010"
+    },
+    {
+      "at": 1792273282469,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.080",
+      "printSize": "76.07",
+      "otherQuote": "0.908",
+      "netEdgeUpperBound": "0.010"
+    },
+    {
+      "at": 1792273282475,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.080",
+      "printSize": "117.82",
+      "otherQuote": "0.908",
+      "netEdgeUpperBound": "0.010"
+    },
+    {
+      "at": 1792273282480,
+      "condition": "0x7549140890e8d37021aab21e1aa930b61a9c13971174b4129d6c480edafd51ed",
+      "token": "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+      "improvementTicks": 0,
+      "printPrice": "0.080",
+      "printSize": "61.87",
+      "otherQuote": "0.908",
+      "netEdgeUpperBound": "0.010"
+    },
+    {
+      "at": 1792273857042,
+      "condition": "0x365560c0d62b88bedf0589c73f7a07d41a77ca5c0a7c91543ae04d0da1066d00",
+      "token": "29131754755567212351062316123224412461519036887322564961665137729819314532072",
+      "improvementTicks": 0,
+      "printPrice": "0.65",
+      "printSize": "64.32",
+      "otherQuote": "0.32",
+      "netEdgeUpperBound": "0.028"
+    },
+    {
+      "at": 1792274011970,
+      "condition": "0x0f7a73dda76f47857d9a74c3bec705c02256d32b0f29724f9597a2cf86e4d7af",
+      "token": "4741298333014922915782732753767395522089391146582083930116327766566133352439",
+      "improvementTicks": 0,
+      "printPrice": "0.12",
+      "printSize": "2",
+      "otherQuote": "0.86",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792274147649,
+      "condition": "0x365560c0d62b88bedf0589c73f7a07d41a77ca5c0a7c91543ae04d0da1066d00",
+      "token": "114953758067521965270511378081785848850861134452028212551328204259190146744366",
+      "improvementTicks": 1,
+      "printPrice": "0.46",
+      "printSize": "46.09",
+      "otherQuote": "0.52",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792274159777,
+      "condition": "0x365560c0d62b88bedf0589c73f7a07d41a77ca5c0a7c91543ae04d0da1066d00",
+      "token": "29131754755567212351062316123224412461519036887322564961665137729819314532072",
+      "improvementTicks": 0,
+      "printPrice": "0.50",
+      "printSize": "20",
+      "otherQuote": "0.48",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792274283050,
+      "condition": "0x0f7a73dda76f47857d9a74c3bec705c02256d32b0f29724f9597a2cf86e4d7af",
+      "token": "4741298333014922915782732753767395522089391146582083930116327766566133352439",
+      "improvementTicks": 0,
+      "printPrice": "0.15",
+      "printSize": "0.66",
+      "otherQuote": "0.82",
+      "netEdgeUpperBound": "0.028"
+    },
+    {
+      "at": 1792275512218,
+      "condition": "0xf0dcc487dbb00c29e4e3658cdff4da0566b1b23d14ec9aa03541d158616dabd0",
+      "token": "23483883631632360165735493411298462619921502740293970738062164777872750645807",
+      "improvementTicks": 0,
+      "printPrice": "0.23",
+      "printSize": "80",
+      "otherQuote": "0.75",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792276577754,
+      "condition": "0xf62c5b41da87c5e0a1f0e747377f41f8f2f85477cf091fa81135ee44f6dfc068",
+      "token": "1333500203349507063149201693716525627848031088957522037614558227677551172017",
+      "improvementTicks": 0,
+      "printPrice": "0.59",
+      "printSize": "40",
+      "otherQuote": "0.39",
+      "netEdgeUpperBound": "0.018"
+    },
+    {
+      "at": 1792276737315,
+      "condition": "0xf62c5b41da87c5e0a1f0e747377f41f8f2f85477cf091fa81135ee44f6dfc068",
+      "token": "1333500203349507063149201693716525627848031088957522037614558227677551172017",
+      "improvementTicks": 0,
+      "printPrice": "0.63",
+      "printSize": "45",
+      "otherQuote": "0.35",
+      "netEdgeUpperBound": "0.018"
+    }
+  ],
+  "omittedConstraints": [
+    "dynamic risk premiums",
+    "activation latency",
+    "queue depletion",
+    "order placement before the print",
+    "available account budget",
+    "inventory risk"
+  ],
+  "fillsInferred": false,
+  "pnlInferred": false,
+  "decision": "NO_GO",
+  "liveAllowed": false
+}

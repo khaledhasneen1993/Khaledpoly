@@ -1,0 +1,40 @@
+name: PAPER frozen-fill continuity audit
+on:
+  push:
+    branches: [paper-fill-investigation]
+    paths:
+      - '.github/workflows/markout-coverage.yml'
+      - 'research/phase6/markout_coverage.py'
+      - 'research/phase6/tests/test_markout_coverage.py'
+      - 'research/phase6/markout-coverage-freeze.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: paper-frozen-fill-continuity-audit
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Offline audit regressions and frozen source/config checks
+        run: python3 -m unittest discover -s research/phase6/tests -v
+      - uses: actions/download-artifact@v4
+        with:
+          name: fresh-paper-compressed-tape
+          run-id: 39067539123
+          github-token: ${{ github.token }}
+          path: coverage-input
+      - name: One read-only pass over existing recording, no account replay or new capture
+        run: >-
+          python3 -u -m research.phase6.markout_coverage --input-root coverage-input
+          --output research/output/markout-coverage.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frozen-fill-markout-coverage
+          retention-days: 7
+          path: research/output/markout-coverage.json

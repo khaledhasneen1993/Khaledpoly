@@ -1,0 +1,97 @@
+{
+  "scope": "VERIFIED_ORIGINAL_SOURCE_LAG0_SOURCE_AFTER_ACTIVATION_FRONTIERS_NOT_PNL",
+  "sourceCommit": "da1211f2eccca29e865994f4090f8df55edb0000",
+  "runId": 39459692699,
+  "artifactId": 12281674124,
+  "artifactSha256": "74765c9e6b019b029b7dc2297b4087a368b02092aec179ff06db92102fe55b7c",
+  "results": {
+    "baseline": {
+      "sequence": 82964,
+      "originalIdentitiesConsumed": 838,
+      "unknownAtomicClockObservations": 836,
+      "unknownSourceLagClockObservations": 10,
+      "unknownSourceLagActiveClockObservations": 2,
+      "transactionHash": "0x6fb0a9218d26394ca3ce7f6874218e38ed8f886ca60e1dd3a6b44f1f43446590",
+      "publicTradeIdSha256": "02611e681229c98e51f4f3a4032b9afedd19227f2c563cf498a4f117c4eb8469",
+      "arrivalMs": 1792269639671,
+      "sourceMs": 1792269639603,
+      "orders": [
+        {
+          "id": "sim-research-1",
+          "price": 0.24,
+          "submittedMs": 1792269639335,
+          "activationDueMs": 1792269639585,
+          "activatedMs": 1792269639585,
+          "activeAtStopMs": 86,
+          "sourceAfterActivationMs": 18,
+          "initialQueueAhead": 0,
+          "remainingQueueAhead": 0,
+          "canceledAt": 1792269639671
+        },
+        {
+          "id": "sim-research-2",
+          "price": 0.71,
+          "submittedMs": 1792269639335,
+          "activationDueMs": 1792269639585,
+          "activatedMs": 1792269639585,
+          "activeAtStopMs": 86,
+          "sourceAfterActivationMs": 18,
+          "initialQueueAhead": 0,
+          "remainingQueueAhead": 0,
+          "canceledAt": 1792269639671
+        }
+      ],
+      "frontierOrdersActiveAndTradeSourceAfterTheirActivation": true,
+      "temporalShortcutNoLongerApplies": true,
+      "executionsBeforeStop": 0,
+      "fullAccountNetAfterCosts": "UNKNOWN_INCOMPLETE_PREFIX_NOT_FINANCIAL_RESULT"
+    },
+    "candidate": {
+      "sequence": 9035,
+      "originalIdentitiesConsumed": 99,
+      "unknownAtomicClockObservations": 97,
+      "unknownSourceLagClockObservations": 12,
+      "unknownSourceLagActiveClockObservations": 5,
+      "transactionHash": "0x740e975da87f07493fd104e7a8aecead4727eb365955e732c8bc3ff4f5972a1c",
+      "publicTradeIdSha256": "e1fc98f1e7aedae1d2cd0584a92ba00af0c887016f9e43f5ba921234f3f869f4",
+      "arrivalMs": 1792269594582,
+      "sourceMs": 1792269594511,
+      "orders": [
+        {
+          "id": "sim-research-1",
+          "price": 0.47,
+          "submittedMs": 1792269594252,
+          "activationDueMs": 1792269594502,
+          "activatedMs": 1792269594503,
+          "activeAtStopMs": 79,
+          "sourceAfterActivationMs": 8,
+          "initialQueueAhead": 1182.3,
+          "remainingQueueAhead": 1182.3,
+          "canceledAt": 1792269594582
+        },
+        {
+          "id": "sim-research-2",
+          "price": 0.48,
+          "submittedMs": 1792269594252,
+          "activationDueMs": 1792269594502,
+          "activatedMs": 1792269594503,
+          "activeAtStopMs": 79,
+          "sourceAfterActivationMs": 8,
+          "initialQueueAhead": 180,
+          "remainingQueueAhead": 180,
+          "canceledAt": 1792269594582
+        }
+      ],
+      "frontierOrdersActiveAndTradeSourceAfterTheirActivation": true,
+      "temporalShortcutNoLongerApplies": true,
+      "executionsBeforeStop": 0,
+      "fullAccountNetAfterCosts": "UNKNOWN_INCOMPLETE_PREFIX_NOT_FINANCIAL_RESULT"
+    }
+  },
+  "completeAccountComparisonPerformed": false,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "NO_GO",
+  "nextStep": "No unchanged rerun or weaker temporal guard. Obtain and independently verify ONLY the exact original baseline82964 and candidate9035 transaction receipts, parse conserved settlement components, preserve raw preimages, then separately freeze an expanded real pool before one new same-source comparison. Public price/size is NOT venue quantity or a bot fill. No holdout or strategy tuning."
+}

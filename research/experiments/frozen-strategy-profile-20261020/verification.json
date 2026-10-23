@@ -1,0 +1,15 @@
+{
+  "scope": "VERIFIED_FROZEN_RULE_PORT_AND_SYNTHETIC_SESSION_NOT_MARKET_PNL",
+  "developmentWitnessProposals": 34,
+  "additionalSyntheticQuoteCases": 8,
+  "feePositiveChoiceCases": 18,
+  "completeDefaultOffParity": true,
+  "canonicalEntryQueueAndCancelAckPreserved": true,
+  "actualExecutionNetRechecked": true,
+  "frozenRulesIntegratedInExplicitOfflineProfile": true,
+  "fullAccountMarketComparisonPerformed": false,
+  "modelMarketFillsCreated": 0,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

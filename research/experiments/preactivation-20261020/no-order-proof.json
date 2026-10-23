@@ -1,0 +1,33 @@
+{
+  "scope" : "PROOF_ONLY_SYNTHETIC_BOOK_CONTEXTS_OVER_ACTUAL643_IDENTITIES_NOT_MARKET_REPLAY",
+  "poolLogicalSha256" : "c41eda69ffe03ed06835a9fac403401f0d68aa3fa92b019bf37d410a212ee231",
+  "sourceIdentitiesSha256" : "27ac545988149c87bdfd4caee963100b7d10eb2808e6a74d82ae4b8321c65423",
+  "actualIdentities" : 643,
+  "matcherDifferentialCases" : 2572,
+  "distinctFutureContinuationCases" : 2572,
+  "syntheticFutureFillEvents" : 2780,
+  "guardRejections" : [ "SUBMITTED_WAITING", "ACTIVATION_DUE", "ACTIVE", "CANCEL_PENDING", "CANCEL_DUE", "OTHER_TOKEN", "LEDGER_RESERVATION", "NONZERO_HOLDING", "PENDING_FOK", "FAILED_SESSION", "ENTRY_STOPPED", "HALTED_LEDGER" ],
+  "excludedMatchingFields" : [ "settlementAllocated", "settlementComponents", "settlementQueue", "settlementUnused", "settlementVenue" ],
+  "separateSyntheticSessionDifferential" : {
+    "wholeLedgerAndAuditEqual" : true,
+    "futureOpenOrders" : 2,
+    "futureEntryAndActivationEqual" : true,
+    "noOrderPredicateRejectedAfterEntry" : true,
+    "comparisonPoints" : 3,
+    "wholeReportExceptTwoExplicitDiagnosticsEqual" : true,
+    "scope" : "SYNTHETIC_SESSION_LEDGER_AUDIT_CONTINUATION_NOT_MARKET"
+  },
+  "allOtherPrivateMatchingFieldsCompared" : true,
+  "repeatedComponentFutureDivergenceDetected" : true,
+  "legacyPublicPrintBookkeepingDivergenceDetected" : true,
+  "knownVenueVolumeNotEquivalentToClockOnly" : true,
+  "sourceIdentityAndGlobalTransactionUniquenessStillRequired" : true,
+  "fullMatchingStateEquivalent" : false,
+  "sessionLevelEquivalenceProven" : false,
+  "runtimeOptimizationImplemented" : false,
+  "unknownObservationsSkipped" : false,
+  "fullAccountReplayAuthorized" : false,
+  "marketNetPnlRecomputed" : false,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false
+}

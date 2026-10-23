@@ -1,0 +1,26 @@
+{
+  "scope": "INDEPENDENTLY_RECONSTRUCTED_COMPLETE_TRADE_IDENTITIES_NOT_ACCOUNT",
+  "sourceRows": 6163831,
+  "marketsWithMetadata": 20,
+  "marketsWithTrades": 18,
+  "originalTradeObservations": 16317,
+  "validatedBindings": 451,
+  "missingObservations": 15866,
+  "missingUniqueTransactions": 15866,
+  "missingRepeatedTransactionObservations": 0,
+  "missingObservationsWithoutTransaction": 0,
+  "allTradeIdentityDigestReproduced": true,
+  "originalInspectorCountsReproduced": true,
+  "coverageCounts": {
+    "MISSING_SCOPED_PAIR_LABEL": 4219,
+    "OTHER_MARKET_UNBOUND_NO_AGGREGATE_FALLBACK": 11647,
+    "BOUND_CONSERVED_GROUP": 451
+  },
+  "allObservationIdentitiesSha256": "1f8d1d953f3755b8244c7ac11f7a3f72ccd8d73b1c9807b7cec417b6b710c1c2",
+  "newReceiptRequests": 0,
+  "modelFillsCreated": 0,
+  "netPnlRecomputed": false,
+  "fullAccountReplayAuthorized": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

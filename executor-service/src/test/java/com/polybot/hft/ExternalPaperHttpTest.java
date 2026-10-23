@@ -195,7 +195,10 @@ class ExternalPaperHttpTest {
               "SELL"),
           at);
     }
-    raw(List.of(book("a", base + 5504), book("b", base + 5504)), base + 5504);
+    // A clean markout fixture must maintain depth continuity, not silently jump 5s.
+    // Production GAP/stale censoring is tested separately in PaperMetricsTest.
+    for (long offset : new long[] {1000, 2000, 3000, 4000, 5000, 5504})
+      raw(List.of(book("a", base + offset), book("b", base + offset)), base + offset);
     var result = snapshot();
     assertThat(result.path("account").path("cash").decimalValue()).isEqualByComparingTo("500.89");
     journal.close();
@@ -234,6 +237,7 @@ class ExternalPaperHttpTest {
     assertThat((JsonNode) mapper.valueToTree(rawReport)).isEqualTo(mapper.valueToTree(normalized));
     assertThat(normalized.get("strategyIndependentDataset")).isEqualTo(false);
     assertThat(normalized.get("decision")).isEqualTo("NO_GO");
+    assertThat(normalized.get("markoutSamples")).isEqualTo(Map.of(1000, 2, 5000, 2));
     Files.createDirectories(Path.of("target"));
     Files.copy(
         tape, Path.of("target/phase3-execution-events.jsonl"), StandardCopyOption.REPLACE_EXISTING);

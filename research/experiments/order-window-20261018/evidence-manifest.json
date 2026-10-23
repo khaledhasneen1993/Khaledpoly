@@ -1,0 +1,13 @@
+{
+  "workflowRun": 39101203025,
+  "artifact": 12126507232,
+  "sourceExtractSha256": "152ab09b6db03588ec0ef545f5371bb9de20e743232176f3f0249ce2320dfecf",
+  "projectionSha256": "1dd9b35e15c1687f48a0d64670c03564b5e25efa6003a4d86acb454791194a06",
+  "encoding": "GZIP_BASE64_ASCII",
+  "projectionDepthIsNotFull": true,
+  "sourceWindowRows": [
+    3333,
+    3851
+  ],
+  "projectionPreservesCausalDiagnosticExactly": true
+}

@@ -1,0 +1,134 @@
+{
+  "sourceRun": 39079812595,
+  "sourceArtifact": 12119320792,
+  "sourceBaselineReportSha256": "c2bc2a5857d40ae6aa0056ffff24d142d9b521cc577bcb9662f3fb41ec9b3db2",
+  "sourceBaselineAuditSha256": "c2c66ff5d6d729fe459048563bcb7262068e68c4e5fce8a8a39a6b2c1f96359e",
+  "baselineLifecyclesExactlyMatchLiveReport": true,
+  "events": [
+    {
+      "data": {
+        "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "price": 0.34,
+        "quantity": 5.0,
+        "purpose": "ENTRY",
+        "at": 1792269683175,
+        "id": "sim-research-3"
+      },
+      "kind": "ORDER",
+      "at": 1792269683175
+    },
+    {
+      "data": {
+        "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "price": 0.64,
+        "quantity": 5.0,
+        "purpose": "ENTRY",
+        "at": 1792269683175,
+        "id": "sim-research-4"
+      },
+      "kind": "ORDER",
+      "at": 1792269683175
+    },
+    {
+      "data": {
+        "reservedNetEdge": 0.018,
+        "volatility": 0.000589570531012069,
+        "orderIds": [
+          "sim-research-3",
+          "sim-research-4"
+        ],
+        "validPrices": true,
+        "requiredEdge": 0.030294785265506035,
+        "reservedGrossEdge": 0.02,
+        "at": 1792269683929,
+        "condition": "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+        "depth": 10.74,
+        "quantity": 5.0
+      },
+      "kind": "RESTING_RISK_CHECK",
+      "at": 1792269683929
+    },
+    {
+      "data": {
+        "id": "sim-research-3",
+        "reason": "RESTING_NET_EDGE",
+        "at": 1792269683929
+      },
+      "kind": "CANCEL_REQUEST",
+      "at": 1792269683929
+    },
+    {
+      "data": {
+        "id": "sim-research-4",
+        "reason": "RESTING_NET_EDGE",
+        "at": 1792269683929
+      },
+      "kind": "CANCEL_REQUEST",
+      "at": 1792269683929
+    },
+    {
+      "data": {
+        "status": "CANCELED",
+        "id": "sim-research-3",
+        "at": 1792269684180,
+        "reason": "RESTING_NET_EDGE"
+      },
+      "kind": "ORDER_TERMINAL",
+      "at": 1792269684180
+    },
+    {
+      "data": {
+        "status": "CANCELED",
+        "id": "sim-research-4",
+        "at": 1792269684180,
+        "reason": "RESTING_NET_EDGE"
+      },
+      "kind": "ORDER_TERMINAL",
+      "at": 1792269684180
+    },
+    {
+      "data": {
+        "condition": "0x365560c0d62b88bedf0589c73f7a07d41a77ca5c0a7c91543ae04d0da1066d00",
+        "price": 0.81,
+        "quantity": 5.0,
+        "purpose": "ENTRY",
+        "at": 1792273548201,
+        "id": "sim-research-41"
+      },
+      "kind": "ORDER",
+      "at": 1792273548201
+    },
+    {
+      "data": {
+        "condition": "0x365560c0d62b88bedf0589c73f7a07d41a77ca5c0a7c91543ae04d0da1066d00",
+        "price": 0.15,
+        "quantity": 5.0,
+        "purpose": "ENTRY",
+        "at": 1792273548201,
+        "id": "sim-research-42"
+      },
+      "kind": "ORDER",
+      "at": 1792273548201
+    },
+    {
+      "data": {
+        "status": "CANCELED",
+        "id": "sim-research-41",
+        "at": 1792273552901,
+        "reason": "DATA_GAP:invalid_depth"
+      },
+      "kind": "ORDER_TERMINAL",
+      "at": 1792273552901
+    },
+    {
+      "data": {
+        "status": "CANCELED",
+        "id": "sim-research-42",
+        "at": 1792273552901,
+        "reason": "DATA_GAP:invalid_depth"
+      },
+      "kind": "ORDER_TERMINAL",
+      "at": 1792273552901
+    }
+  ]
+}

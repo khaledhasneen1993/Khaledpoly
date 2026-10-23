@@ -1,0 +1,31 @@
+{
+  "scope": "REJECTED_DEVELOPMENT_COMPONENT_CANDIDATE",
+  "originalRawContextArtifact": 12134459459,
+  "rawContextZipSha256": "31b3186ae2ebe21d38158e157a401d600019ffa70c8471741c9c0cbedaa3dcea",
+  "originalRawRows": 29,
+  "proof": "Exact recorded snapshot + preceding raw deltas + same hash/source removals + confirming full snapshot",
+  "baselineGapAnchors": [
+    140300,
+    155412
+  ],
+  "conditionalRecoveryCases": 4,
+  "observedLatencyGainMs": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "candidatePromoted": false,
+  "netPnlRecomputed": false,
+  "originalAccountNetPnl": -0.85,
+  "decision": "NO_GO",
+  "officialHashReference": "https://github.com/Polymarket/py-clob-client/blob/main/py_clob_client/utilities.py",
+  "hashLimitation": "Recorded WS snapshots omit min_order_size/tick_size/neg_risk/last_trade_price used by current official SDK summary hash. No guessed metadata or cryptographic verification claimed.",
+  "filesSha256": {
+    "initial-probe-failure.json": "572748ab034608361d0ca9d304e773298fb1931133cebd8fc82136fca4531576",
+    "freeze.json": "1fe58bcba2fdb5a19dc58234cd70e858d77d96ba17c96565409dd6dff689840d",
+    "report.json": "fa5991abbd62c14dc14008fc3626f9345e2b51ebecca5f35ac8733d800ec1f1b",
+    "freeze.initial.json": "1e415a5b63c9472441c8bb5c574ff481f687737d8d7a326731d15a76ffd6e82a",
+    "evidence.json.gz.b64": "017f70d55107f01a9ca86cdfd27906cf8769f375eb1cc8cd4337954ffd97d9b4"
+  }
+}

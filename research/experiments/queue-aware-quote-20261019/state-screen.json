@@ -1,0 +1,708 @@
+{
+  "experiment": "QW0",
+  "preregistrationCommit": "62c72e053e4ae29dc0e34fdff7e95174123212a1",
+  "scope": "SAME_SELECTED_LEGACY_DEVELOPMENT_WITNESSES_PRICE_SCREEN_NOT_ACCOUNT_PERFORMANCE",
+  "states": [
+    {
+      "originalSequence": 173158,
+      "at": 1792269711226,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "0.50",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 173342,
+      "at": 1792269711477,
+      "actualLegacyReason": {
+        "PAIR_SUBMITTED": 1
+      },
+      "originalQuantity": "5.00",
+      "originalMinSize": 5,
+      "baselineDQ3": {
+        "firstBid": "0.45",
+        "secondBid": "0.37",
+        "quantity": "5.00",
+        "requiredEdge": "0.0244747328286429720",
+        "firstLevelIndex": 0,
+        "secondLevelIndex": 0,
+        "firstDisplayedSize": "113.54",
+        "secondDisplayedSize": "75.49",
+        "netEdgeTotal": "0.8900",
+        "worstUnpairedLoss": "2.2600",
+        "queuePriorityOrFillProven": false
+      },
+      "proposal": {
+        "firstBid": "0.45",
+        "secondBid": "0.37",
+        "quantity": "5.00",
+        "requiredEdge": "0.0312279428286429720",
+        "originalRequiredEdge": "0.0244747328286429720",
+        "thinPremiumReserve": "0.00675321",
+        "firstLevelIndex": 0,
+        "secondLevelIndex": 0,
+        "firstDisplayedSize": "113.54",
+        "secondDisplayedSize": "75.49",
+        "firstDisplayedQueueProxy": "227.08",
+        "secondDisplayedQueueProxy": "150.98",
+        "netEdgeTotal": "0.8900",
+        "worstUnpairedLoss": "2.2600",
+        "queuePriorityOrFillProven": false
+      },
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 173546,
+      "at": 1792269711729,
+      "actualLegacyReason": {
+        "RESTING": 1
+      },
+      "originalQuantity": "2.70",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 173742,
+      "at": 1792269711980,
+      "actualLegacyReason": {
+        "RESTING": 1
+      },
+      "originalQuantity": "5.00",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 174246,
+      "at": 1792269712230,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "1.00",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 174443,
+      "at": 1792269712480,
+      "actualLegacyReason": {
+        "MIN_SIZE": 1
+      },
+      "originalQuantity": "0.50",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 174724,
+      "at": 1792269712730,
+      "actualLegacyReason": {
+        "MIN_SIZE": 1
+      },
+      "originalQuantity": "0.76",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 175038,
+      "at": 1792269712980,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "0.80",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 175564,
+      "at": 1792269713230,
+      "actualLegacyReason": {
+        "MIN_SIZE": 1
+      },
+      "originalQuantity": "2.10",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 176104,
+      "at": 1792269713481,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "1.00",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 176663,
+      "at": 1792269713731,
+      "actualLegacyReason": {
+        "NET_EDGE": 1
+      },
+      "originalQuantity": "5.00",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 197690,
+      "at": 1792269723747,
+      "actualLegacyReason": {
+        "NET_EDGE": 1
+      },
+      "originalQuantity": "5.00",
+      "originalMinSize": 5,
+      "baselineDQ3": {
+        "firstBid": "0.47",
+        "secondBid": "0.49",
+        "quantity": "5.00",
+        "requiredEdge": "0.0325031300038242185",
+        "firstLevelIndex": 1,
+        "secondLevelIndex": 2,
+        "firstDisplayedSize": "62",
+        "secondDisplayedSize": "65",
+        "netEdgeTotal": "0.1900",
+        "worstUnpairedLoss": "2.4600",
+        "queuePriorityOrFillProven": false
+      },
+      "proposal": {
+        "firstBid": "0.46",
+        "secondBid": "0.49",
+        "quantity": "5.00",
+        "requiredEdge": "0.0400000000038242185",
+        "originalRequiredEdge": "0.0325031300038242185",
+        "thinPremiumReserve": "0.00749687",
+        "firstLevelIndex": 2,
+        "secondLevelIndex": 2,
+        "firstDisplayedSize": "73",
+        "secondDisplayedSize": "65",
+        "firstDisplayedQueueProxy": "146",
+        "secondDisplayedQueueProxy": "130",
+        "netEdgeTotal": "0.2400",
+        "worstUnpairedLoss": "2.4600",
+        "queuePriorityOrFillProven": false
+      },
+      "changedPricedPair": true,
+      "additionalLawfulStateVsLegacy": true
+    },
+    {
+      "originalSequence": 198066,
+      "at": 1792269723997,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "3.40",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 198581,
+      "at": 1792269724247,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "3.50",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 198832,
+      "at": 1792269724498,
+      "actualLegacyReason": {
+        "NET_EDGE": 1
+      },
+      "originalQuantity": "5.00",
+      "originalMinSize": 5,
+      "baselineDQ3": {
+        "firstBid": "0.48",
+        "secondBid": "0.48",
+        "quantity": "5.00",
+        "requiredEdge": "0.0326774961125318500",
+        "firstLevelIndex": 1,
+        "secondLevelIndex": 2,
+        "firstDisplayedSize": "65",
+        "secondDisplayedSize": "3560",
+        "netEdgeTotal": "0.1900",
+        "worstUnpairedLoss": "2.4100",
+        "queuePriorityOrFillProven": false
+      },
+      "proposal": {
+        "firstBid": "0.47",
+        "secondBid": "0.48",
+        "quantity": "5.00",
+        "requiredEdge": "0.0400000061125318500",
+        "originalRequiredEdge": "0.0326774961125318500",
+        "thinPremiumReserve": "0.00732251",
+        "firstLevelIndex": 2,
+        "secondLevelIndex": 2,
+        "firstDisplayedSize": "97",
+        "secondDisplayedSize": "3560",
+        "firstDisplayedQueueProxy": "194",
+        "secondDisplayedQueueProxy": "7120",
+        "netEdgeTotal": "0.2400",
+        "worstUnpairedLoss": "2.4100",
+        "queuePriorityOrFillProven": false
+      },
+      "changedPricedPair": true,
+      "additionalLawfulStateVsLegacy": true
+    },
+    {
+      "originalSequence": 243157,
+      "at": 1792269750052,
+      "actualLegacyReason": {
+        "NET_EDGE": 1
+      },
+      "originalQuantity": "5.00",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 243583,
+      "at": 1792269750302,
+      "actualLegacyReason": {
+        "NET_EDGE": 1
+      },
+      "originalQuantity": "5.00",
+      "originalMinSize": 5,
+      "baselineDQ3": {
+        "firstBid": "0.49",
+        "secondBid": "0.47",
+        "quantity": "5.00",
+        "requiredEdge": "0.0333087349223797470",
+        "firstLevelIndex": 1,
+        "secondLevelIndex": 0,
+        "firstDisplayedSize": "840",
+        "secondDisplayedSize": "80",
+        "netEdgeTotal": "0.1900",
+        "worstUnpairedLoss": "2.4600",
+        "queuePriorityOrFillProven": false
+      },
+      "proposal": {
+        "firstBid": "0.48",
+        "secondBid": "0.4",
+        "quantity": "5.00",
+        "requiredEdge": "0.0408087349223797470",
+        "originalRequiredEdge": "0.0333087349223797470",
+        "thinPremiumReserve": "0.00750000",
+        "firstLevelIndex": 2,
+        "secondLevelIndex": 2,
+        "firstDisplayedSize": "120",
+        "secondDisplayedSize": "66",
+        "firstDisplayedQueueProxy": "240",
+        "secondDisplayedQueueProxy": "132",
+        "netEdgeTotal": "0.5900",
+        "worstUnpairedLoss": "2.4100",
+        "queuePriorityOrFillProven": false
+      },
+      "changedPricedPair": true,
+      "additionalLawfulStateVsLegacy": true
+    },
+    {
+      "originalSequence": 244228,
+      "at": 1792269750554,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "1.07",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 244707,
+      "at": 1792269750804,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "0.76",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 245065,
+      "at": 1792269751055,
+      "actualLegacyReason": {
+        "NET_EDGE": 1
+      },
+      "originalQuantity": "5.00",
+      "originalMinSize": 5,
+      "baselineDQ3": {
+        "firstBid": "0.49",
+        "secondBid": "0.48",
+        "quantity": "5.00",
+        "requiredEdge": "0.0236831363783112045",
+        "firstLevelIndex": 1,
+        "secondLevelIndex": 1,
+        "firstDisplayedSize": "756.24",
+        "secondDisplayedSize": "562",
+        "netEdgeTotal": "0.1400",
+        "worstUnpairedLoss": "2.4600",
+        "queuePriorityOrFillProven": false
+      },
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 245662,
+      "at": 1792269751306,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "2.50",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 246180,
+      "at": 1792269751556,
+      "actualLegacyReason": {
+        "NET_EDGE": 1
+      },
+      "originalQuantity": "5.00",
+      "originalMinSize": 5,
+      "baselineDQ3": {
+        "firstBid": "0.49",
+        "secondBid": "0.47",
+        "quantity": "5.00",
+        "requiredEdge": "0.0356254393291799020",
+        "firstLevelIndex": 1,
+        "secondLevelIndex": 2,
+        "firstDisplayedSize": "848.52",
+        "secondDisplayedSize": "266.98",
+        "netEdgeTotal": "0.1900",
+        "worstUnpairedLoss": "2.4600",
+        "queuePriorityOrFillProven": false
+      },
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 256847,
+      "at": 1792269758313,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "1.89",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 257508,
+      "at": 1792269758565,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "1.85",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 258161,
+      "at": 1792269758815,
+      "actualLegacyReason": {
+        "NET_EDGE": 1
+      },
+      "originalQuantity": "5.00",
+      "originalMinSize": 5,
+      "baselineDQ3": {
+        "firstBid": "0.49",
+        "secondBid": "0.47",
+        "quantity": "5.00",
+        "requiredEdge": "0.0366667437600484365",
+        "firstLevelIndex": 1,
+        "secondLevelIndex": 2,
+        "firstDisplayedSize": "95",
+        "secondDisplayedSize": "75",
+        "netEdgeTotal": "0.1900",
+        "worstUnpairedLoss": "2.4600",
+        "queuePriorityOrFillProven": false
+      },
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 258635,
+      "at": 1792269759065,
+      "actualLegacyReason": {
+        "NET_EDGE": 1
+      },
+      "originalQuantity": "5.00",
+      "originalMinSize": 5,
+      "baselineDQ3": {
+        "firstBid": "0.49",
+        "secondBid": "0.47",
+        "quantity": "5.00",
+        "requiredEdge": "0.0367616514855430970",
+        "firstLevelIndex": 2,
+        "secondLevelIndex": 1,
+        "firstDisplayedSize": "65",
+        "secondDisplayedSize": "100",
+        "netEdgeTotal": "0.1900",
+        "worstUnpairedLoss": "2.4600",
+        "queuePriorityOrFillProven": false
+      },
+      "proposal": {
+        "firstBid": "0.49",
+        "secondBid": "0.46",
+        "quantity": "5.00",
+        "requiredEdge": "0.0400000014855430970",
+        "originalRequiredEdge": "0.0367616514855430970",
+        "thinPremiumReserve": "0.00323835",
+        "firstLevelIndex": 2,
+        "secondLevelIndex": 2,
+        "firstDisplayedSize": "65",
+        "secondDisplayedSize": "70",
+        "firstDisplayedQueueProxy": "130",
+        "secondDisplayedQueueProxy": "140",
+        "netEdgeTotal": "0.2400",
+        "worstUnpairedLoss": "2.4600",
+        "queuePriorityOrFillProven": false
+      },
+      "changedPricedPair": true,
+      "additionalLawfulStateVsLegacy": true
+    },
+    {
+      "originalSequence": 259283,
+      "at": 1792269759566,
+      "actualLegacyReason": {
+        "NET_EDGE": 1
+      },
+      "originalQuantity": "5.00",
+      "originalMinSize": 5,
+      "baselineDQ3": {
+        "firstBid": "0.49",
+        "secondBid": "0.48",
+        "quantity": "5.00",
+        "requiredEdge": "0.0233704200000000020",
+        "firstLevelIndex": 1,
+        "secondLevelIndex": 0,
+        "firstDisplayedSize": "65",
+        "secondDisplayedSize": "370.86",
+        "netEdgeTotal": "0.1400",
+        "worstUnpairedLoss": "2.4600",
+        "queuePriorityOrFillProven": false
+      },
+      "proposal": {
+        "firstBid": "0.48",
+        "secondBid": "0.47",
+        "quantity": "5.00",
+        "requiredEdge": "0.0402500000000000020",
+        "originalRequiredEdge": "0.0233704200000000020",
+        "thinPremiumReserve": "0.01687958",
+        "firstLevelIndex": 2,
+        "secondLevelIndex": 1,
+        "firstDisplayedSize": "65",
+        "secondDisplayedSize": "100",
+        "firstDisplayedQueueProxy": "130",
+        "secondDisplayedQueueProxy": "200",
+        "netEdgeTotal": "0.2400",
+        "worstUnpairedLoss": "2.4100",
+        "queuePriorityOrFillProven": false
+      },
+      "changedPricedPair": true,
+      "additionalLawfulStateVsLegacy": true
+    },
+    {
+      "originalSequence": 259597,
+      "at": 1792269759818,
+      "actualLegacyReason": {
+        "NET_EDGE": 1
+      },
+      "originalQuantity": "5.00",
+      "originalMinSize": 5,
+      "baselineDQ3": {
+        "firstBid": "0.49",
+        "secondBid": "0.48",
+        "quantity": "5.00",
+        "requiredEdge": "0.0265060950015595650",
+        "firstLevelIndex": 0,
+        "secondLevelIndex": 1,
+        "firstDisplayedSize": "285",
+        "secondDisplayedSize": "227.24",
+        "netEdgeTotal": "0.1400",
+        "worstUnpairedLoss": "2.4600",
+        "queuePriorityOrFillProven": false
+      },
+      "proposal": {
+        "firstBid": "0.47",
+        "secondBid": "0.47",
+        "quantity": "5.00",
+        "requiredEdge": "0.0401195750015595650",
+        "originalRequiredEdge": "0.0265060950015595650",
+        "thinPremiumReserve": "0.01361348",
+        "firstLevelIndex": 2,
+        "secondLevelIndex": 2,
+        "firstDisplayedSize": "125",
+        "secondDisplayedSize": "70",
+        "firstDisplayedQueueProxy": "250",
+        "secondDisplayedQueueProxy": "140",
+        "netEdgeTotal": "0.2900",
+        "worstUnpairedLoss": "2.3600",
+        "queuePriorityOrFillProven": false
+      },
+      "changedPricedPair": true,
+      "additionalLawfulStateVsLegacy": true
+    },
+    {
+      "originalSequence": 259857,
+      "at": 1792269760068,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "0.36",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 260066,
+      "at": 1792269760318,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "0.80",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 298767,
+      "at": 1792269785346,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "3.50",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 299219,
+      "at": 1792269785596,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "1.90",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 299650,
+      "at": 1792269785846,
+      "actualLegacyReason": {
+        "NET_EDGE": 1
+      },
+      "originalQuantity": "5.00",
+      "originalMinSize": 5,
+      "baselineDQ3": {
+        "firstBid": "0.49",
+        "secondBid": "0.47",
+        "quantity": "5.00",
+        "requiredEdge": "0.0313713607289069515",
+        "firstLevelIndex": 1,
+        "secondLevelIndex": 1,
+        "firstDisplayedSize": "100",
+        "secondDisplayedSize": "394.97",
+        "netEdgeTotal": "0.1900",
+        "worstUnpairedLoss": "2.4600",
+        "queuePriorityOrFillProven": false
+      },
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    },
+    {
+      "originalSequence": 299997,
+      "at": 1792269786096,
+      "actualLegacyReason": {
+        "MIN_SIZE_AND_NET_EDGE": 1
+      },
+      "originalQuantity": "0.50",
+      "originalMinSize": 5,
+      "baselineDQ3": null,
+      "proposal": null,
+      "changedPricedPair": false,
+      "additionalLawfulStateVsLegacy": false
+    }
+  ],
+  "witnessCount": 34,
+  "actualLegacySubmittedStates": 1,
+  "baselineDQ3PricedStates": 11,
+  "candidatePricedStates": 7,
+  "additionalLawfulStatesVsLegacy": 6,
+  "changedPricedPairsVsDQ3": 6,
+  "originalSizeBlockedStatesStillBlocked": 20,
+  "queueProxiesAreNotActivationOrFills": true,
+  "candidateAccountSimulated": false,
+  "fillsCreated": 0,
+  "netPnlRecomputed": false,
+  "feesQueueRiskLimitsOrAcceptanceRelaxed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false,
+  "decision": "SEPARATELY_FREEZE_NECESSARY_TRAFFIC_ONLY"
+}

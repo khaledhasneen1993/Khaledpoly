@@ -1,0 +1,18 @@
+{
+  "scope": "OFFLINE_AND_SYNTHETIC_TESTS_NOT_MARKET_PROFITABILITY_PROOF",
+  "dateUtc": "2026-10-19",
+  "fullSuiteCommand": "python3 -m unittest discover -s research/phase6/tests -q",
+  "fullSuiteTests": 269,
+  "fullSuiteSeconds": 296.403,
+  "fullSuiteExitCode": 0,
+  "additionalResultTestsPassed": 4,
+  "latestTargetedBuildAndResultTestsPassed": 8,
+  "distinctPythonTestsCovered": 273,
+  "nativeSessionGuardCases": 7,
+  "completeDefaultReportParity": true,
+  "defaultCoreFilesModified": 0,
+  "modelMarketFillsCreated": 0,
+  "marketNetPnlRecomputed": false,
+  "independentPaperQualificationAllowed": false,
+  "liveAllowed": false
+}

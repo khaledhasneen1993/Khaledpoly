@@ -1,0 +1,1465 @@
+{
+  "submittedOrders" : 61,
+  "filledOrders" : 2,
+  "orderFillRate" : 0.03278688,
+  "decisionToFillP50Ms" : 760,
+  "decisionToFillP95Ms" : 874,
+  "orderTerminalReasons" : {
+    "PEER_REJECTED" : 3,
+    "LAB_SETTLEMENT_COMPONENT" : 1,
+    "PRINT_FILLED" : 1,
+    "POST_ONLY_WOULD_CROSS" : 6,
+    "DATA_GAP:invalid_depth" : 24,
+    "RESTING_PRICE_INVALID" : 10,
+    "RESTING_NET_EDGE" : 14,
+    "STALE_BOOK" : 2
+  },
+  "orderTerminalStatuses" : {
+    "REJECTED" : 6,
+    "FILLED" : 2,
+    "CANCELED" : 53
+  },
+  "decisions" : 352563,
+  "decisionReasons" : {
+    "WAIT_CANCEL_ACK" : 5,
+    "MIN_SIZE" : 57,
+    "BOOK_STALE" : 74,
+    "RESTING_REDUCTION" : 16,
+    "RESTING_PRICE_INVALID" : 6,
+    "WAIT_SECOND_LEG" : 20,
+    "MIN_SIZE_AND_NET_EDGE" : 29645,
+    "PRICE_BOUND_OR_STALE_TICK" : 159,
+    "PAIR_SUBMITTED" : 26,
+    "RESTING_NET_EDGE" : 7,
+    "BOOK_MISSING" : 1489,
+    "RESTING" : 57,
+    "NET_EDGE" : 19833,
+    "EMPTY_DEPTH" : 6063,
+    "OUTSIDE_MARKET" : 295106
+  },
+  "edgeDistribution" : {
+    "0.37" : 2,
+    "0.36" : 1,
+    "0.35" : 1,
+    "0.34" : 1,
+    "0.33" : 1,
+    "0.19" : 1,
+    "0.18" : 2,
+    "0.17" : 2,
+    "0.16" : 3,
+    "0.15" : 2,
+    "0.13" : 2,
+    "0.12" : 1,
+    "0.11" : 3,
+    "0.10" : 4,
+    "0.42" : 1,
+    "0.40" : 1,
+    "0.22" : 1,
+    "0.09" : 1,
+    "0.08" : 4,
+    "0.07" : 22,
+    "0.06" : 24,
+    "0.05" : 36,
+    "0.04" : 50,
+    "0.03" : 106,
+    "0.02" : 300,
+    "0.01" : 42055,
+    "0.00" : 7004
+  },
+  "executions" : [ {
+    "orderId" : "sim-research-4",
+    "at" : 1792269683761,
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : true,
+    "size" : 5,
+    "price" : 0.64,
+    "fee" : 0,
+    "liquidity" : "MAKER",
+    "condition" : "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "purpose" : "ENTRY",
+    "expectedEdge" : 0.02,
+    "decisionToFillMs" : 586
+  }, {
+    "orderId" : "sim-research-14",
+    "at" : 1792269694955,
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : false,
+    "size" : 3,
+    "price" : 0.47,
+    "fee" : 0,
+    "liquidity" : "MAKER",
+    "condition" : "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "purpose" : "MAKER_REDUCTION",
+    "expectedEdge" : -0.170000000000000000,
+    "decisionToFillMs" : 760
+  }, {
+    "orderId" : "sim-research-14",
+    "at" : 1792269695069,
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : false,
+    "size" : 2,
+    "price" : 0.47,
+    "fee" : 0,
+    "liquidity" : "MAKER",
+    "condition" : "0x678cc98fe36da747189b6ed6304dfe4a3d65d1e585a6b3537d9f2b7a4ca6dba7",
+    "purpose" : "MAKER_REDUCTION",
+    "expectedEdge" : -0.170000000000000000,
+    "decisionToFillMs" : 874
+  } ],
+  "pairCompletions" : [ ],
+  "quantityPairCompletion" : 0E-8,
+  "maxDrawdown" : 1.20,
+  "missingMarkObservations" : 22,
+  "expiredMarkets" : 16,
+  "residualExpiryWorstCaseNotional" : 0,
+  "makerExecutionDiagnostics" : [ {
+    "id" : "sim-research-1",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : true,
+    "price" : 0.24,
+    "submittedMs" : 1792269639335,
+    "activationDueMs" : 1792269639585,
+    "activatedMs" : 1792269639585,
+    "terminalMs" : 1792269640308,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 723,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 6,
+      "ORDER_NOT_ACTIVE" : 5
+    }
+  }, {
+    "id" : "sim-research-2",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : true,
+    "price" : 0.71,
+    "submittedMs" : 1792269639335,
+    "activationDueMs" : 1792269639585,
+    "activatedMs" : 1792269639585,
+    "terminalMs" : 1792269640308,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 723,
+    "printObservations" : {
+      "PRINT_BEFORE_CURRENT_BOOK" : 1,
+      "WRONG_AGGRESSOR" : 23,
+      "ORDER_NOT_ACTIVE" : 3
+    }
+  }, {
+    "id" : "sim-research-3",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : true,
+    "price" : 0.34,
+    "submittedMs" : 1792269683175,
+    "activationDueMs" : 1792269683425,
+    "activatedMs" : 1792269683428,
+    "terminalMs" : 1792269684239,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 811,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 53
+    }
+  }, {
+    "id" : "sim-research-4",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : true,
+    "price" : 0.64,
+    "submittedMs" : 1792269683175,
+    "activationDueMs" : 1792269683425,
+    "activatedMs" : 1792269683428,
+    "terminalMs" : 1792269683761,
+    "terminalReason" : "LAB_SETTLEMENT_COMPONENT",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 0,
+    "activeMs" : 333,
+    "printObservations" : {
+      "SETTLEMENT_COMPONENT" : 1
+    }
+  }, {
+    "id" : "sim-research-6",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : false,
+    "price" : 0.44,
+    "submittedMs" : 1792269688939,
+    "activationDueMs" : 1792269689189,
+    "activatedMs" : 1792269689189,
+    "terminalMs" : 1792269689422,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 233,
+    "printObservations" : {
+      "ORDER_NOT_ACTIVE" : 12,
+      "DIFFERENT_PRICE" : 7
+    }
+  }, {
+    "id" : "sim-research-7",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : false,
+    "price" : 0.48,
+    "submittedMs" : 1792269689440,
+    "activationDueMs" : 1792269689690,
+    "activatedMs" : null,
+    "terminalMs" : 1792269689691,
+    "terminalReason" : "POST_ONLY_WOULD_CROSS",
+    "initialQueueAhead" : null,
+    "remainingQueueAhead" : null,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 0,
+    "printObservations" : {
+      "ORDER_NOT_ACTIVE" : 5
+    }
+  }, {
+    "id" : "sim-research-8",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : false,
+    "price" : 0.49,
+    "submittedMs" : 1792269689691,
+    "activationDueMs" : 1792269689941,
+    "activatedMs" : 1792269689941,
+    "terminalMs" : 1792269690612,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 211.72,
+    "remainingQueueAhead" : 211.72,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 671,
+    "printObservations" : {
+      "PRINT_BEFORE_CURRENT_BOOK" : 1,
+      "ORDER_NOT_ACTIVE" : 1,
+      "DIFFERENT_PRICE" : 4,
+      "PRINT_NOT_AFTER_ACTIVATION" : 1
+    }
+  }, {
+    "id" : "sim-research-9",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : false,
+    "price" : 0.49,
+    "submittedMs" : 1792269690691,
+    "activationDueMs" : 1792269690941,
+    "activatedMs" : 1792269690941,
+    "terminalMs" : 1792269692221,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 1407.42,
+    "remainingQueueAhead" : 1407.42,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 1280,
+    "printObservations" : {
+      "DIFFERENT_PRICE" : 4
+    }
+  }, {
+    "id" : "sim-research-10",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : false,
+    "price" : 0.44,
+    "submittedMs" : 1792269692443,
+    "activationDueMs" : 1792269692693,
+    "activatedMs" : null,
+    "terminalMs" : 1792269692577,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : null,
+    "remainingQueueAhead" : null,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 0,
+    "printObservations" : {
+      "ORDER_NOT_ACTIVE" : 1
+    }
+  }, {
+    "id" : "sim-research-11",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : false,
+    "price" : 0.45,
+    "submittedMs" : 1792269692693,
+    "activationDueMs" : 1792269692943,
+    "activatedMs" : null,
+    "terminalMs" : 1792269692828,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : null,
+    "remainingQueueAhead" : null,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 0,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-12",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : false,
+    "price" : 0.43,
+    "submittedMs" : 1792269692943,
+    "activationDueMs" : 1792269693193,
+    "activatedMs" : 1792269693194,
+    "terminalMs" : 1792269693312,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 77.08,
+    "remainingQueueAhead" : 77.08,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 118,
+    "printObservations" : {
+      "ORDER_NOT_ACTIVE" : 2,
+      "DIFFERENT_PRICE" : 2
+    }
+  }, {
+    "id" : "sim-research-13",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : false,
+    "price" : 0.45,
+    "submittedMs" : 1792269693444,
+    "activationDueMs" : 1792269693694,
+    "activatedMs" : 1792269693694,
+    "terminalMs" : 1792269694099,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 103.86,
+    "remainingQueueAhead" : 28.837777,
+    "eligiblePrintVolume" : 75.022223,
+    "remainingShares" : 5,
+    "activeMs" : 405,
+    "printObservations" : {
+      "ELIGIBLE_PRINT" : 4,
+      "DIFFERENT_PRICE" : 1,
+      "QUEUE_NOT_EXHAUSTED" : 4,
+      "PRINT_NOT_AFTER_ACTIVATION" : 1
+    }
+  }, {
+    "id" : "sim-research-14",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : false,
+    "price" : 0.47,
+    "submittedMs" : 1792269694195,
+    "activationDueMs" : 1792269694445,
+    "activatedMs" : 1792269694445,
+    "terminalMs" : 1792269695069,
+    "terminalReason" : "PRINT_FILLED",
+    "initialQueueAhead" : 10,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 18,
+    "remainingShares" : 0,
+    "activeMs" : 624,
+    "printObservations" : {
+      "ELIGIBLE_PRINT" : 2,
+      "ORDER_NOT_ACTIVE" : 1
+    }
+  }, {
+    "id" : "sim-research-17",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : true,
+    "price" : 0.52,
+    "submittedMs" : 1792269708719,
+    "activationDueMs" : 1792269708969,
+    "activatedMs" : 1792269708970,
+    "terminalMs" : 1792269709223,
+    "terminalReason" : "RESTING_NET_EDGE",
+    "initialQueueAhead" : 156.76,
+    "remainingQueueAhead" : 156.76,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 253,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 2,
+      "ORDER_NOT_ACTIVE" : 1
+    }
+  }, {
+    "id" : "sim-research-18",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : true,
+    "price" : 0.46,
+    "submittedMs" : 1792269708719,
+    "activationDueMs" : 1792269708969,
+    "activatedMs" : 1792269708970,
+    "terminalMs" : 1792269709223,
+    "terminalReason" : "RESTING_NET_EDGE",
+    "initialQueueAhead" : 11791.84,
+    "remainingQueueAhead" : 11791.84,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 253,
+    "printObservations" : {
+      "PRINT_BEFORE_CURRENT_BOOK" : 1
+    }
+  }, {
+    "id" : "sim-research-19",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : true,
+    "price" : 0.46,
+    "submittedMs" : 1792269711477,
+    "activationDueMs" : 1792269711727,
+    "activatedMs" : 1792269711729,
+    "terminalMs" : 1792269711983,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 254,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 3,
+      "ORDER_NOT_ACTIVE" : 8
+    }
+  }, {
+    "id" : "sim-research-20",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : true,
+    "price" : 0.38,
+    "submittedMs" : 1792269711477,
+    "activationDueMs" : 1792269711727,
+    "activatedMs" : 1792269711729,
+    "terminalMs" : 1792269711983,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 254,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 1
+    }
+  }, {
+    "id" : "sim-research-21",
+    "token" : "16175391777578581291856766353347645408943260654044130963788305612049839550467",
+    "buy" : true,
+    "price" : 0.31,
+    "submittedMs" : 1792269742282,
+    "activationDueMs" : 1792269742532,
+    "activatedMs" : 1792269742532,
+    "terminalMs" : 1792269744288,
+    "terminalReason" : "RESTING_PRICE_INVALID",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 1756,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 5
+    }
+  }, {
+    "id" : "sim-research-22",
+    "token" : "20137364530685466064804594203834096984022555122711773440197812413539992965162",
+    "buy" : true,
+    "price" : 0.64,
+    "submittedMs" : 1792269742282,
+    "activationDueMs" : 1792269742532,
+    "activatedMs" : 1792269742532,
+    "terminalMs" : 1792269744288,
+    "terminalReason" : "RESTING_PRICE_INVALID",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 1756,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-23",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : true,
+    "price" : 0.64,
+    "submittedMs" : 1792269819131,
+    "activationDueMs" : 1792269819381,
+    "activatedMs" : 1792269819381,
+    "terminalMs" : 1792269820134,
+    "terminalReason" : "RESTING_PRICE_INVALID",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 753,
+    "printObservations" : {
+      "PRINT_BEFORE_CURRENT_BOOK" : 1,
+      "WRONG_AGGRESSOR" : 1,
+      "ORDER_NOT_ACTIVE" : 2
+    }
+  }, {
+    "id" : "sim-research-24",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : true,
+    "price" : 0.3,
+    "submittedMs" : 1792269819131,
+    "activationDueMs" : 1792269819381,
+    "activatedMs" : 1792269819381,
+    "terminalMs" : 1792269820134,
+    "terminalReason" : "RESTING_PRICE_INVALID",
+    "initialQueueAhead" : 90,
+    "remainingQueueAhead" : 90,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 753,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 17,
+      "PRINT_BEFORE_CURRENT_BOOK" : 1,
+      "ORDER_NOT_ACTIVE" : 6,
+      "DIFFERENT_PRICE" : 2
+    }
+  }, {
+    "id" : "sim-research-25",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : true,
+    "price" : 0.72,
+    "submittedMs" : 1792269824389,
+    "activationDueMs" : 1792269824639,
+    "activatedMs" : 1792269824639,
+    "terminalMs" : 1792269824924,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 68.4,
+    "remainingQueueAhead" : 68.4,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 285,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 7,
+      "ORDER_NOT_ACTIVE" : 3
+    }
+  }, {
+    "id" : "sim-research-26",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : true,
+    "price" : 0.23,
+    "submittedMs" : 1792269824389,
+    "activationDueMs" : 1792269824639,
+    "activatedMs" : 1792269824639,
+    "terminalMs" : 1792269824924,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 234.26,
+    "remainingQueueAhead" : 234.26,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 285,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 2,
+      "ORDER_NOT_ACTIVE" : 2
+    }
+  }, {
+    "id" : "sim-research-27",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : true,
+    "price" : 0.69,
+    "submittedMs" : 1792269834406,
+    "activationDueMs" : 1792269834656,
+    "activatedMs" : 1792269834658,
+    "terminalMs" : 1792269836666,
+    "terminalReason" : "STALE_BOOK",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 2008,
+    "printObservations" : {
+      "ORDER_NOT_ACTIVE" : 4
+    }
+  }, {
+    "id" : "sim-research-28",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : true,
+    "price" : 0.24,
+    "submittedMs" : 1792269834406,
+    "activationDueMs" : 1792269834656,
+    "activatedMs" : 1792269834658,
+    "terminalMs" : 1792269836666,
+    "terminalReason" : "STALE_BOOK",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 2008,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 1,
+      "ORDER_NOT_ACTIVE" : 2
+    }
+  }, {
+    "id" : "sim-research-29",
+    "token" : "88599287360325233240690982088109814021050513475420535621672707507474151524334",
+    "buy" : true,
+    "price" : 0.68,
+    "submittedMs" : 1792269836918,
+    "activationDueMs" : 1792269837168,
+    "activatedMs" : 1792269837168,
+    "terminalMs" : 1792269837212,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 44,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 5,
+      "ORDER_NOT_ACTIVE" : 2
+    }
+  }, {
+    "id" : "sim-research-30",
+    "token" : "12589566430666404778428222777978747623958961794906352412512658324998006663268",
+    "buy" : true,
+    "price" : 0.19,
+    "submittedMs" : 1792269836918,
+    "activationDueMs" : 1792269837168,
+    "activatedMs" : 1792269837168,
+    "terminalMs" : 1792269837212,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 44,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 1,
+      "ORDER_NOT_ACTIVE" : 3
+    }
+  }, {
+    "id" : "sim-research-31",
+    "token" : "60453725400291540906707255377279644238700481508117554396074505575883769430752",
+    "buy" : true,
+    "price" : 0.59,
+    "submittedMs" : 1792270322225,
+    "activationDueMs" : 1792270322475,
+    "activatedMs" : 1792270322477,
+    "terminalMs" : 1792270322728,
+    "terminalReason" : "RESTING_NET_EDGE",
+    "initialQueueAhead" : 80,
+    "remainingQueueAhead" : 80,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 251,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 8,
+      "ORDER_NOT_ACTIVE" : 5
+    }
+  }, {
+    "id" : "sim-research-32",
+    "token" : "68713744852050441410525222986399224163071215075586452812298378957198443263074",
+    "buy" : true,
+    "price" : 0.38,
+    "submittedMs" : 1792270322225,
+    "activationDueMs" : 1792270322475,
+    "activatedMs" : 1792270322477,
+    "terminalMs" : 1792270322728,
+    "terminalReason" : "RESTING_NET_EDGE",
+    "initialQueueAhead" : 31.42,
+    "remainingQueueAhead" : 31.42,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 251,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 1,
+      "ORDER_NOT_ACTIVE" : 2
+    }
+  }, {
+    "id" : "sim-research-33",
+    "token" : "60453725400291540906707255377279644238700481508117554396074505575883769430752",
+    "buy" : true,
+    "price" : 0.72,
+    "submittedMs" : 1792270539420,
+    "activationDueMs" : 1792270539670,
+    "activatedMs" : 1792270539672,
+    "terminalMs" : 1792270540925,
+    "terminalReason" : "RESTING_PRICE_INVALID",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 1253,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 1,
+      "DIFFERENT_PRICE" : 1
+    }
+  }, {
+    "id" : "sim-research-34",
+    "token" : "68713744852050441410525222986399224163071215075586452812298378957198443263074",
+    "buy" : true,
+    "price" : 0.26,
+    "submittedMs" : 1792270539420,
+    "activationDueMs" : 1792270539670,
+    "activatedMs" : 1792270539672,
+    "terminalMs" : 1792270540925,
+    "terminalReason" : "RESTING_PRICE_INVALID",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 1253,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 1
+    }
+  }, {
+    "id" : "sim-research-35",
+    "token" : "60453725400291540906707255377279644238700481508117554396074505575883769430752",
+    "buy" : true,
+    "price" : 0.67,
+    "submittedMs" : 1792270615770,
+    "activationDueMs" : 1792270616020,
+    "activatedMs" : null,
+    "terminalMs" : 1792270616003,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : null,
+    "remainingQueueAhead" : null,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 0,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-36",
+    "token" : "68713744852050441410525222986399224163071215075586452812298378957198443263074",
+    "buy" : true,
+    "price" : 0.3,
+    "submittedMs" : 1792270615770,
+    "activationDueMs" : 1792270616020,
+    "activatedMs" : null,
+    "terminalMs" : 1792270616003,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : null,
+    "remainingQueueAhead" : null,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 0,
+    "printObservations" : {
+      "PRINT_BEFORE_CURRENT_BOOK" : 2,
+      "ORDER_NOT_ACTIVE" : 7
+    }
+  }, {
+    "id" : "sim-research-37",
+    "token" : "56594055081742285401126461087344997302154330102790609573500257095344610475856",
+    "buy" : true,
+    "price" : 0.42,
+    "submittedMs" : 1792270874842,
+    "activationDueMs" : 1792270875092,
+    "activatedMs" : null,
+    "terminalMs" : 1792270875092,
+    "terminalReason" : "POST_ONLY_WOULD_CROSS",
+    "initialQueueAhead" : null,
+    "remainingQueueAhead" : null,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 0,
+    "printObservations" : {
+      "ORDER_NOT_ACTIVE" : 4
+    }
+  }, {
+    "id" : "sim-research-38",
+    "token" : "63389254310243942298662961901083654221297418086974101235694343905851769797150",
+    "buy" : true,
+    "price" : 0.54,
+    "submittedMs" : 1792270874842,
+    "activationDueMs" : 1792270875092,
+    "activatedMs" : 1792270875092,
+    "terminalMs" : 1792270875209,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 226.36,
+    "remainingQueueAhead" : 226.36,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 117,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 2,
+      "ORDER_NOT_ACTIVE" : 1
+    }
+  }, {
+    "id" : "sim-research-39",
+    "token" : "56594055081742285401126461087344997302154330102790609573500257095344610475856",
+    "buy" : true,
+    "price" : 0.39,
+    "submittedMs" : 1792271377873,
+    "activationDueMs" : 1792271378123,
+    "activatedMs" : 1792271378123,
+    "terminalMs" : 1792271378374,
+    "terminalReason" : "PEER_REJECTED:sim-research-40",
+    "initialQueueAhead" : 697.06,
+    "remainingQueueAhead" : 697.06,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 251,
+    "printObservations" : {
+      "PRINT_BEFORE_CURRENT_BOOK" : 3,
+      "WRONG_AGGRESSOR" : 2,
+      "ORDER_NOT_ACTIVE" : 6
+    }
+  }, {
+    "id" : "sim-research-40",
+    "token" : "63389254310243942298662961901083654221297418086974101235694343905851769797150",
+    "buy" : true,
+    "price" : 0.59,
+    "submittedMs" : 1792271377873,
+    "activationDueMs" : 1792271378123,
+    "activatedMs" : null,
+    "terminalMs" : 1792271378123,
+    "terminalReason" : "POST_ONLY_WOULD_CROSS",
+    "initialQueueAhead" : null,
+    "remainingQueueAhead" : null,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 0,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-41",
+    "token" : "84665667317220934988554783199677753943116285022093459518578532927292183788362",
+    "buy" : true,
+    "price" : 0.38,
+    "submittedMs" : 1792271452224,
+    "activationDueMs" : 1792271452474,
+    "activatedMs" : 1792271452475,
+    "terminalMs" : 1792271452798,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 323,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 11,
+      "PRINT_BEFORE_CURRENT_BOOK" : 1,
+      "ORDER_NOT_ACTIVE" : 11,
+      "DIFFERENT_PRICE" : 1
+    }
+  }, {
+    "id" : "sim-research-42",
+    "token" : "81612192540779355103642463861444662448688366769729947944043160190247313559462",
+    "buy" : true,
+    "price" : 0.58,
+    "submittedMs" : 1792271452224,
+    "activationDueMs" : 1792271452474,
+    "activatedMs" : 1792271452475,
+    "terminalMs" : 1792271452798,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 323,
+    "printObservations" : {
+      "PRINT_BEFORE_CURRENT_BOOK" : 1
+    }
+  }, {
+    "id" : "sim-research-43",
+    "token" : "84665667317220934988554783199677753943116285022093459518578532927292183788362",
+    "buy" : true,
+    "price" : 0.44,
+    "submittedMs" : 1792271468250,
+    "activationDueMs" : 1792271468500,
+    "activatedMs" : 1792271468500,
+    "terminalMs" : 1792271469002,
+    "terminalReason" : "RESTING_PRICE_INVALID",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 502,
+    "printObservations" : {
+      "ORDER_NOT_ACTIVE" : 3,
+      "DIFFERENT_PRICE" : 1
+    }
+  }, {
+    "id" : "sim-research-44",
+    "token" : "81612192540779355103642463861444662448688366769729947944043160190247313559462",
+    "buy" : true,
+    "price" : 0.52,
+    "submittedMs" : 1792271468250,
+    "activationDueMs" : 1792271468500,
+    "activatedMs" : 1792271468500,
+    "terminalMs" : 1792271469002,
+    "terminalReason" : "RESTING_PRICE_INVALID",
+    "initialQueueAhead" : 10,
+    "remainingQueueAhead" : 10,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 502,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 1
+    }
+  }, {
+    "id" : "sim-research-45",
+    "token" : "96371365769352158478291046907531478085946919315051203313885857514445973649906",
+    "buy" : true,
+    "price" : 0.01,
+    "submittedMs" : 1792272225199,
+    "activationDueMs" : 1792272225449,
+    "activatedMs" : 1792272225451,
+    "terminalMs" : 1792272225701,
+    "terminalReason" : "RESTING_NET_EDGE",
+    "initialQueueAhead" : 2425.4,
+    "remainingQueueAhead" : 2425.4,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 250,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-46",
+    "token" : "90827958547092315523053718314766058700661330048869415774334054001811040147565",
+    "buy" : true,
+    "price" : 0.96,
+    "submittedMs" : 1792272225199,
+    "activationDueMs" : 1792272225449,
+    "activatedMs" : 1792272225451,
+    "terminalMs" : 1792272225701,
+    "terminalReason" : "RESTING_NET_EDGE",
+    "initialQueueAhead" : 2604.98,
+    "remainingQueueAhead" : 2604.98,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 250,
+    "printObservations" : {
+      "PRINT_BEFORE_CURRENT_BOOK" : 1
+    }
+  }, {
+    "id" : "sim-research-47",
+    "token" : "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+    "buy" : true,
+    "price" : 0.15,
+    "submittedMs" : 1792272794412,
+    "activationDueMs" : 1792272794662,
+    "activatedMs" : null,
+    "terminalMs" : 1792272794664,
+    "terminalReason" : "POST_ONLY_WOULD_CROSS",
+    "initialQueueAhead" : null,
+    "remainingQueueAhead" : null,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 0,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-48",
+    "token" : "111483047138744341084908511134649046340782071893203968292523044546548806603017",
+    "buy" : true,
+    "price" : 0.83,
+    "submittedMs" : 1792272794412,
+    "activationDueMs" : 1792272794662,
+    "activatedMs" : 1792272794664,
+    "terminalMs" : 1792272794916,
+    "terminalReason" : "PEER_REJECTED:sim-research-47",
+    "initialQueueAhead" : 1438.96,
+    "remainingQueueAhead" : 1438.96,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 252,
+    "printObservations" : {
+      "ORDER_NOT_ACTIVE" : 2
+    }
+  }, {
+    "id" : "sim-research-49",
+    "token" : "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+    "buy" : true,
+    "price" : 0.18,
+    "submittedMs" : 1792272945337,
+    "activationDueMs" : 1792272945587,
+    "activatedMs" : 1792272945587,
+    "terminalMs" : 1792272945837,
+    "terminalReason" : "RESTING_NET_EDGE",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 250,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-50",
+    "token" : "111483047138744341084908511134649046340782071893203968292523044546548806603017",
+    "buy" : true,
+    "price" : 0.8,
+    "submittedMs" : 1792272945337,
+    "activationDueMs" : 1792272945587,
+    "activatedMs" : 1792272945587,
+    "terminalMs" : 1792272945837,
+    "terminalReason" : "RESTING_NET_EDGE",
+    "initialQueueAhead" : 318,
+    "remainingQueueAhead" : 318,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 250,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-51",
+    "token" : "39957124264501461044113367286064663231125607305517193008308429942676497738063",
+    "buy" : true,
+    "price" : 0.02,
+    "submittedMs" : 1792273158804,
+    "activationDueMs" : 1792273159054,
+    "activatedMs" : 1792273159057,
+    "terminalMs" : 1792273159307,
+    "terminalReason" : "RESTING_NET_EDGE",
+    "initialQueueAhead" : 1684.78,
+    "remainingQueueAhead" : 1684.78,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 250,
+    "printObservations" : {
+      "PRINT_BEFORE_CURRENT_BOOK" : 1,
+      "ORDER_NOT_ACTIVE" : 1
+    }
+  }, {
+    "id" : "sim-research-52",
+    "token" : "111483047138744341084908511134649046340782071893203968292523044546548806603017",
+    "buy" : true,
+    "price" : 0.96,
+    "submittedMs" : 1792273158804,
+    "activationDueMs" : 1792273159054,
+    "activatedMs" : 1792273159057,
+    "terminalMs" : 1792273159307,
+    "terminalReason" : "RESTING_NET_EDGE",
+    "initialQueueAhead" : 430,
+    "remainingQueueAhead" : 430,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 250,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-53",
+    "token" : "29131754755567212351062316123224412461519036887322564961665137729819314532072",
+    "buy" : true,
+    "price" : 0.81,
+    "submittedMs" : 1792273548201,
+    "activationDueMs" : 1792273548451,
+    "activatedMs" : 1792273548453,
+    "terminalMs" : 1792273552901,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 4448,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 6
+    }
+  }, {
+    "id" : "sim-research-54",
+    "token" : "114953758067521965270511378081785848850861134452028212551328204259190146744366",
+    "buy" : true,
+    "price" : 0.15,
+    "submittedMs" : 1792273548201,
+    "activationDueMs" : 1792273548451,
+    "activatedMs" : 1792273548453,
+    "terminalMs" : 1792273552901,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 1240.32,
+    "remainingQueueAhead" : 1240.32,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 4448,
+    "printObservations" : {
+      "WRONG_AGGRESSOR" : 1,
+      "ORDER_NOT_ACTIVE" : 2
+    }
+  }, {
+    "id" : "sim-research-55",
+    "token" : "29131754755567212351062316123224412461519036887322564961665137729819314532072",
+    "buy" : true,
+    "price" : 0.65,
+    "submittedMs" : 1792273778475,
+    "activationDueMs" : 1792273778725,
+    "activatedMs" : null,
+    "terminalMs" : 1792273778726,
+    "terminalReason" : "POST_ONLY_WOULD_CROSS",
+    "initialQueueAhead" : null,
+    "remainingQueueAhead" : null,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 0,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-56",
+    "token" : "114953758067521965270511378081785848850861134452028212551328204259190146744366",
+    "buy" : true,
+    "price" : 0.33,
+    "submittedMs" : 1792273778475,
+    "activationDueMs" : 1792273778725,
+    "activatedMs" : 1792273778726,
+    "terminalMs" : 1792273778978,
+    "terminalReason" : "PEER_REJECTED:sim-research-55",
+    "initialQueueAhead" : 308.66,
+    "remainingQueueAhead" : 308.66,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 252,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-57",
+    "token" : "29131754755567212351062316123224412461519036887322564961665137729819314532072",
+    "buy" : true,
+    "price" : 0.66,
+    "submittedMs" : 1792273856081,
+    "activationDueMs" : 1792273856331,
+    "activatedMs" : 1792273856333,
+    "terminalMs" : 1792273856583,
+    "terminalReason" : "RESTING_NET_EDGE",
+    "initialQueueAhead" : 174,
+    "remainingQueueAhead" : 174,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 250,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-58",
+    "token" : "114953758067521965270511378081785848850861134452028212551328204259190146744366",
+    "buy" : true,
+    "price" : 0.32,
+    "submittedMs" : 1792273856081,
+    "activationDueMs" : 1792273856331,
+    "activatedMs" : 1792273856333,
+    "terminalMs" : 1792273856583,
+    "terminalReason" : "RESTING_NET_EDGE",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 250,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-59",
+    "token" : "108659936628082731108676084779623087849605410530128276236282493936165833091291",
+    "buy" : true,
+    "price" : 0.65,
+    "submittedMs" : 1792274332228,
+    "activationDueMs" : 1792274332478,
+    "activatedMs" : 1792274332478,
+    "terminalMs" : 1792274334482,
+    "terminalReason" : "RESTING_PRICE_INVALID",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 2004,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-60",
+    "token" : "4741298333014922915782732753767395522089391146582083930116327766566133352439",
+    "buy" : true,
+    "price" : 0.28,
+    "submittedMs" : 1792274332228,
+    "activationDueMs" : 1792274332478,
+    "activatedMs" : 1792274332478,
+    "terminalMs" : 1792274334482,
+    "terminalReason" : "RESTING_PRICE_INVALID",
+    "initialQueueAhead" : 0,
+    "remainingQueueAhead" : 0,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 2004,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-61",
+    "token" : "86392310702147507393764164990243143700928274457141110766283864490423767146136",
+    "buy" : true,
+    "price" : 0.73,
+    "submittedMs" : 1792274477017,
+    "activationDueMs" : 1792274477267,
+    "activatedMs" : 1792274477269,
+    "terminalMs" : 1792274477279,
+    "terminalReason" : "DATA_GAP:invalid_depth",
+    "initialQueueAhead" : 644,
+    "remainingQueueAhead" : 644,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 10,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-62",
+    "token" : "104852836006976739390732706686191873582159551810455620623159736149197397027940",
+    "buy" : true,
+    "price" : 0.2,
+    "submittedMs" : 1792274477017,
+    "activationDueMs" : 1792274477267,
+    "activatedMs" : null,
+    "terminalMs" : 1792274477269,
+    "terminalReason" : "POST_ONLY_WOULD_CROSS",
+    "initialQueueAhead" : null,
+    "remainingQueueAhead" : null,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 0,
+    "printObservations" : {
+      "ORDER_NOT_ACTIVE" : 1
+    }
+  }, {
+    "id" : "sim-research-63",
+    "token" : "37797488664146718034516762845014584577820622189530711667413890392816374473527",
+    "buy" : true,
+    "price" : 0.43,
+    "submittedMs" : 1792275792353,
+    "activationDueMs" : 1792275792603,
+    "activatedMs" : 1792275792606,
+    "terminalMs" : 1792275792856,
+    "terminalReason" : "RESTING_NET_EDGE",
+    "initialQueueAhead" : 36,
+    "remainingQueueAhead" : 36,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 250,
+    "printObservations" : { }
+  }, {
+    "id" : "sim-research-64",
+    "token" : "1185131596995989437507469883069954297398474143018401676763013508864887395325",
+    "buy" : true,
+    "price" : 0.54,
+    "submittedMs" : 1792275792353,
+    "activationDueMs" : 1792275792603,
+    "activatedMs" : 1792275792606,
+    "terminalMs" : 1792275792856,
+    "terminalReason" : "RESTING_NET_EDGE",
+    "initialQueueAhead" : 60,
+    "remainingQueueAhead" : 60,
+    "eligiblePrintVolume" : 0,
+    "remainingShares" : 5,
+    "activeMs" : 250,
+    "printObservations" : { }
+  } ],
+  "settlementExperiment" : {
+    "experiment" : "CS-MINT-LAB0",
+    "liveAllowed" : false,
+    "independentPaperQualificationAllowed" : false,
+    "labelsSha256" : "15e240cbe3e4b0ebed5d3240627df19d4a37b8006919efcf70c69874c1aa9457",
+    "consumedBindings" : 5,
+    "logicalTapeSha256" : "cd850df52d7f9994526603130f2942008f8f49ba80495d82b70dea66f0dc6d8b",
+    "labelBindings" : 5,
+    "partialLabels" : true
+  },
+  "settlementVolumeConservation" : {
+    "venueQuantity" : 500.000000,
+    "hiddenLiquidityAndCrossPriceQueueUncertainty" : true,
+    "unusedQuantity" : 495.000000,
+    "queueAbsorbed" : 0,
+    "uniqueMakerComponents" : 29,
+    "allocatedQuantity" : 5
+  },
+  "independentPaperQualificationAllowed" : false,
+  "boughtShares" : 5,
+  "soldShares" : 5,
+  "fills" : 3,
+  "pendingMarkouts" : 0,
+  "markoutSamples" : {
+    "1000" : 3,
+    "5000" : 3,
+    "30000" : 3
+  },
+  "incentives" : 0,
+  "markoutPnl" : {
+    "1000" : -0.700,
+    "5000" : -0.900,
+    "30000" : -0.570
+  },
+  "activeMarkets" : [ {
+    "condition" : "0x7184eec4dea87d5bc2d11c3c7331c431ae7c3dce1ab36b82cbab77f63eab7b94",
+    "remainingMs" : 320932,
+    "accepting" : true,
+    "freshBooks" : true,
+    "oldestBookAgeMs" : 95,
+    "inventoryImbalance" : 0
+  }, {
+    "condition" : "0x9a6062cad483111099c1dbd173820bca6e6e3a43eb51bdb1a139576b20d17bc0",
+    "remainingMs" : 1220932,
+    "accepting" : true,
+    "freshBooks" : false,
+    "oldestBookAgeMs" : null,
+    "inventoryImbalance" : 0
+  }, {
+    "condition" : "0xb15dc498d868c6a5a2cf5e4be03f1a659ed2cb2cd5390421810b31dc6fbd48b1",
+    "remainingMs" : 1220932,
+    "accepting" : true,
+    "freshBooks" : false,
+    "oldestBookAgeMs" : null,
+    "inventoryImbalance" : 0
+  }, {
+    "condition" : "0xf62c5b41da87c5e0a1f0e747377f41f8f2f85477cf091fa81135ee44f6dfc068",
+    "remainingMs" : 320932,
+    "accepting" : true,
+    "freshBooks" : true,
+    "oldestBookAgeMs" : 70,
+    "inventoryImbalance" : 0
+  } ],
+  "cash" : 499.150000000000000000,
+  "availableCash" : 499.150000000000000000,
+  "netRealizedPnl" : -0.850000000000000000,
+  "feesAndSettlementCosts" : 0,
+  "holdings" : {
+    "88599287360325233240690982088109814021050513475420535621672707507474151524334" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "68713744852050441410525222986399224163071215075586452812298378957198443263074" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "4741298333014922915782732753767395522089391146582083930116327766566133352439" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "104852836006976739390732706686191873582159551810455620623159736149197397027940" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "16795101822868135097730715929499520284068825791987716036350881954067262229639" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "108659936628082731108676084779623087849605410530128276236282493936165833091291" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "114953758067521965270511378081785848850861134452028212551328204259190146744366" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "96371365769352158478291046907531478085946919315051203313885857514445973649906" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "90827958547092315523053718314766058700661330048869415774334054001811040147565" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "16175391777578581291856766353347645408943260654044130963788305612049839550467" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "111483047138744341084908511134649046340782071893203968292523044546548806603017" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "60453725400291540906707255377279644238700481508117554396074505575883769430752" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "29131754755567212351062316123224412461519036887322564961665137729819314532072" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "86392310702147507393764164990243143700928274457141110766283864490423767146136" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "37797488664146718034516762845014584577820622189530711667413890392816374473527" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "109695830070783323552969685917854264172760457103805232126572452662539183339339" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "113018561134691819367134394166719415088826397325932309510434417023612873331144" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "56594055081742285401126461087344997302154330102790609573500257095344610475856" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "24425983237583387702191969762479873542578129593731401331021780144229251798926" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "55737658689682726282928582667260267133840572603606139287178552247198192132863" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "97633576483209798376114904068020277393362133819309371058640832878221862309807" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "98826021943202708520924659479598273757755752889897158966321766492280966891783" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "23483883631632360165735493411298462619921502740293970738062164777872750645807" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "81612192540779355103642463861444662448688366769729947944043160190247313559462" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "39957124264501461044113367286064663231125607305517193008308429942676497738063" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "12589566430666404778428222777978747623958961794906352412512658324998006663268" : {
+      "shares" : 0,
+      "basis" : 0E-18
+    },
+    "84665667317220934988554783199677753943116285022093459518578532927292183788362" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "107306350694751961504130816062109145454294786610808049293967240215790557915685" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "63389254310243942298662961901083654221297418086974101235694343905851769797150" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "37069430453027020108128063486126782164340049575337701159437854259358368589353" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "1185131596995989437507469883069954297398474143018401676763013508864887395325" : {
+      "shares" : 0,
+      "basis" : 0
+    },
+    "20137364530685466064804594203834096984022555122711773440197812413539992965162" : {
+      "shares" : 0,
+      "basis" : 0
+    }
+  },
+  "halted" : false,
+  "dataGaps" : 23402,
+  "riskBreaches" : 0,
+  "resolvedMarkets" : 16,
+  "resolvedTradedMarkets" : 1,
+  "pendingTakers" : 0,
+  "openOrderCount" : 0,
+  "exitLossUsed" : 0.850000000000000000,
+  "decision" : "NO_GO",
+  "configuration" : {
+    "schema" : 1,
+    "initialCash" : 500,
+    "orderShares" : 5,
+    "minimumEdge" : 0.01,
+    "portfolioBudget" : 100,
+    "activationMs" : 250,
+    "cancelMs" : 250,
+    "maxBookAgeMs" : 2000,
+    "queueMultiplier" : 2,
+    "mergeCost" : 0.01,
+    "redemptionCost" : 0.01,
+    "unhedgedMs" : 30000,
+    "maxUnhedged" : 25,
+    "maxExitLoss" : 2.5,
+    "feeMultiplier" : 1,
+    "decisionMillis" : 250,
+    "metadataMaxAgeMs" : 60000,
+    "latencyJitterMs" : 0,
+    "latencySeed" : 0,
+    "makerImprovementTicks" : 1
+  },
+  "frameAtomicity" : "recorded-frame-v1",
+  "decisionClock" : "recorded-inputs",
+  "schema" : 2,
+  "windowStartMs" : -9223372036854775808,
+  "windowEndMs" : 9223372036854775807,
+  "freezeSha256" : "",
+  "replayMode" : "research-settlement-labelled-development-only",
+  "maxInputGapMs" : 260,
+  "maxSourceLagMs" : 4509,
+  "inputFormat" : "normalized-public-v1",
+  "strategyIndependentDataset" : false,
+  "externalPaperInputs" : false,
+  "recordingClosedCleanly" : true,
+  "revision" : "64a395b49459a2594438ea166f8ef92a7e6af1bb",
+  "strategyRevision" : "b4d6dfccee46459b93342fe6f64f83d0f65d2473",
+  "firstArrivalMs" : 1792269582615,
+  "lastArrivalMs" : 1792276779073,
+  "marketDays" : [ "2026-10-17" ],
+  "inputSha256" : "9363443ae9287016ab7c63d3cf11d6b1ae33d814d9e3ad340bb99b33e7285074",
+  "configSha256" : "df3955d60e667e935a2ef503c221b300fd01c72986cce320878d9d7b671bdb6a",
+  "rows" : 6163831,
+  "reason" : "Evaluate frozen heldout baseline and stress reports against acceptance criteria"
+}
