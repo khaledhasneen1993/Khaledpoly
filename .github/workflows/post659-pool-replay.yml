@@ -23,15 +23,20 @@ jobs:
           python3 -c 'from research.phase6.post659_pool_replay import require_native;print(require_native())'
           python3 -m unittest research.phase6.tests.test_post659_pool_replay research.phase6.tests.test_post659_receipt_pool -q
           python3 -m research.phase6.post659_pool_inputs --output "$RUNNER_TEMP/inputs661"
-      - name: Checkout frozen exact661 source-builder inputs only
+      - name: Checkout frozen exact651 source-builder inputs only
         uses: actions/checkout@v4
         with:
           ref: 2f47b7110908bd9311d410be75dd0173b14f04d7
           path: frozen-source651
           persist-credentials: false
-      - name: Generate unchanged exact661 source bridge
-        working-directory: frozen-source651
-        run: python3 -m research.phase6.next_postactivation_pool_build --output "$RUNNER_TEMP/source661"
+      - name: Generate unchanged exact653, exact655, exact657, exact659 bridges then bind exact661
+        run: |
+          (cd frozen-source651 && python3 -m research.phase6.post649_pool_build --output "$RUNNER_TEMP/source651")
+          python3 -m research.phase6.post651_pool_build --source "$RUNNER_TEMP/source651" --output "$RUNNER_TEMP/source653"
+          python3 -m research.phase6.post653_pool_build --source "$RUNNER_TEMP/source653" --output "$RUNNER_TEMP/source655"
+          python3 -m research.phase6.post655_pool_build --source "$RUNNER_TEMP/source655" --output "$RUNNER_TEMP/source657"
+          python3 -m research.phase6.post657_pool_build --source "$RUNNER_TEMP/source657" --output "$RUNNER_TEMP/source659"
+          python3 -m research.phase6.post659_pool_build --source "$RUNNER_TEMP/source659" --output "$RUNNER_TEMP/source661"
       - name: Checkout frozen executor source after retained artifact expiry
         uses: actions/checkout@v4
         with:
