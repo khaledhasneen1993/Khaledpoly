@@ -1,0 +1,26 @@
+{
+  "scope" : "ALL663_NATIVE_IDENTITY_PARITY_NOT_ACCOUNT_REPLAY",
+  "readerRejectionGuards" : 39,
+  "originalIdentities" : 663,
+  "pool" : {
+    "experiment" : "CONSERVED-RECEIPT-POOL0",
+    "bindings" : 663,
+    "consumedBindings" : 663,
+    "actualComponents" : 1574,
+    "failed" : false,
+    "strictPartialPool" : true,
+    "nativePartialPoolReaderImplemented" : true,
+    "aggregateFallbackAllowed" : false,
+    "fullOriginalTapeCoverageProven" : false,
+    "fullAccountReplayAuthorized" : false,
+    "independentPaperQualificationAllowed" : false,
+    "liveAllowed" : false
+  },
+  "portionsLogicalSha256" : "94e216696d9f1cdb4db7ee994a6d608f10dd563d98c011e1096e465eb028cc0a",
+  "poolLogicalSha256" : "7d2816d836db430e0add3e52acb86e464349c1a4e29a9742d8a5c20e6fd80220",
+  "sourceIdentitiesSha256" : "f44220c1a973ec5952dbce0695d3ee348ca291169bce9420a0929f58ab6426ee",
+  "marketNetPnlRecomputed" : false,
+  "completeAccountComparisonPerformed" : false,
+  "independentPaperQualificationAllowed" : false,
+  "liveAllowed" : false
+}
