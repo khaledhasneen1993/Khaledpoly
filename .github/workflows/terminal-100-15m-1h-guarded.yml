@@ -1,0 +1,67 @@
+name: Khaledpoly risk-controlled 15m PAPER 1h
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/terminal-100-15m-1h-guarded.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: khaledpoly-15m-guarded-hour
+  cancel-in-progress: false
+jobs:
+  guarded_paper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare risk-controlled 15m engine
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('research/terminal_100_5m_2h.py').read_text()
+          replacements={
+            'slot=(now//300)*300':'slot=(now//900)*900',
+            'left=slot+300-now':'left=slot+900-now',
+            'slug = f"{asset}-updown-5m-{slot}"':'slug = f"{asset}-updown-15m-{slot}"',
+            'SHARES = 18.0':'SHARES = 5.0',
+            'MIN_EDGE = 0.015':'MIN_EDGE = 0.025',
+            'FIRST_LEG_TIMEOUT = 42':'FIRST_LEG_TIMEOUT = 18',
+            'EXIT_DRAWDOWN = 0.14':'EXIT_DRAWDOWN = 0.05',
+            'MAX_CYCLES_PER_SLOT = 3':'MAX_CYCLES_PER_SLOT = 1',
+            'if slot != last_slot:':'if s["realized_pnl"] <= -3.0: break\n            if slot != last_slot:',
+            'emit(events,"market_discovered",slug=m["slug"])':'emit(events,"market_discovered",slug=m["slug"] if m else "unavailable")',
+            'entries_this_slot < MAX_CYCLES_PER_SLOT':'entries_this_slot < MAX_CYCLES_PER_SLOT and s["realized_pnl"] > -3.0',
+            'active=close_position(s,active,q,events,"aggressive_one_sided_exit")':'active=close_position(s,active,q,events,"aggressive_one_sided_exit")\n                        entries_this_slot=MAX_CYCLES_PER_SLOT',
+          }
+          for before,after in replacements.items():
+              assert before in s, f'Missing upstream anchor: {before}'
+              s=s.replace(before,after)
+          # No new exposure while the prior paired order remains unresolved;
+          # no same-window re-entry after a one-sided loss.
+          Path('/tmp/khaledpoly_guarded_15m.py').write_text(s)
+          PY
+          python3 -m py_compile /tmp/khaledpoly_guarded_15m.py
+          python3 /tmp/khaledpoly_guarded_15m.py --self-test
+      - name: Run one-hour read-only paper trial
+        timeout-minutes: 65
+        run: |
+          python3 -u /tmp/khaledpoly_guarded_15m.py --duration-seconds 3600 --output-dir paper_runs/guarded_15m_1h
+      - name: Validate final report
+        run: |
+          python3 - <<'PY'
+          import json
+          r=json.load(open('paper_runs/guarded_15m_1h/summary.json'))
+          assert r['started_with_usdc']==100
+          assert abs(r['cash_usdc']-100-r['realized_pnl_usdc'])<0.0001
+          assert r['metrics']['merged']+r['metrics']['one_sided']+r['metrics']['zero_fills']==len(r['trades'])
+          print('GUARDED_15M_1H_SUMMARY',json.dumps({k:v for k,v in r.items() if k!='trades'}))
+          PY
+      - name: Upload paper reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: guarded-15m-100usdc-1h-paper-results
+          path: paper_runs/guarded_15m_1h/
+          if-no-files-found: warn
+          retention-days: 14
