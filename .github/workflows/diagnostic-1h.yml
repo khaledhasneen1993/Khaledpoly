@@ -1,0 +1,44 @@
+name: Khaledpoly diagnostic 1h paper
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/diagnostic-1h.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare 15m diagnostic observer
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('research/terminal_100_5m_2h.py').read_text()
+          for old,new in [
+            ('slot=(now//300)*300','slot=(now//900)*900'),
+            ('left=slot+300-now','left=slot+900-now'),
+            ('slug = f"{asset}-updown-5m-{slot}"','slug = f"{asset}-updown-15m-{slot}"'),
+            ('SHARES = 18.0','SHARES = 5.0'),
+            ('MIN_EDGE = 0.015','MIN_EDGE = 0.025'),
+            ('FIRST_LEG_TIMEOUT = 42','FIRST_LEG_TIMEOUT = 12'),
+            ('EXIT_DRAWDOWN = 0.14','EXIT_DRAWDOWN = 0.03'),
+            ('MAX_CYCLES_PER_SLOT = 3','MAX_CYCLES_PER_SLOT = 1')
+          ]:
+            assert old in s, old
+            s=s.replace(old,new)
+          Path('/tmp/diagnostic.py').write_text(s)
+          PY
+          python3 /tmp/diagnostic.py --self-test
+      - name: Observe market for one hour
+        timeout-minutes: 65
+        run: python3 -u /tmp/diagnostic.py --duration-seconds 3600 --output-dir paper_runs/diagnostic_1h
+      - name: Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostic-1h-results
+          path: paper_runs/diagnostic_1h/
+          if-no-files-found: warn
