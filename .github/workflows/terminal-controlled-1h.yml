@@ -1,0 +1,69 @@
+name: Khaledpoly controlled-entry PAPER 1h validation
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/terminal-controlled-1h.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: khaledpoly-controlled-hour
+  cancel-in-progress: false
+jobs:
+  paper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build defensive research engine and run self-tests
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('research/terminal_100_5m_2h.py').read_text()
+          edits={
+            'slot=(now//300)*300':'slot=(now//900)*900',
+            'left=slot+300-now':'left=slot+900-now',
+            'slug = f"{asset}-updown-5m-{slot}"':'slug = f"{asset}-updown-15m-{slot}"',
+            'SHARES = 18.0':'SHARES = 5.0',
+            'MIN_EDGE = 0.015':'MIN_EDGE = 0.04',
+            'FIRST_LEG_TIMEOUT = 42':'FIRST_LEG_TIMEOUT = 12',
+            'EXIT_DRAWDOWN = 0.14':'EXIT_DRAWDOWN = 0.03',
+            'MAX_CYCLES_PER_SLOT = 3':'MAX_CYCLES_PER_SLOT = 1',
+            'if slot != last_slot:':'if s["realized_pnl"] <= -2.0: break\n            if slot != last_slot:',
+            'emit(events,"market_discovered",slug=m["slug"])':'emit(events,"market_discovered",slug=m["slug"] if m else "unavailable")',
+            'entries_this_slot < MAX_CYCLES_PER_SLOT':'entries_this_slot < MAX_CYCLES_PER_SLOT and s["realized_pnl"] > -2.0',
+            'if all(v is not None for v in (yp,np,ya,na)) and yp<ya and np<na and yp+np<=CAP':'if all(v is not None for v in (yp,np,ya,na)) and yp<ya and np<na and (ya-yp)+(na-np)<=0.055 and yp+np<=CAP',
+            'active=close_position(s,active,q,events,"aggressive_one_sided_exit")':'active=close_position(s,active,q,events,"aggressive_one_sided_exit")\n                        entries_this_slot=MAX_CYCLES_PER_SLOT',
+          }
+          for before,after in edits.items():
+              assert before in s, f'upstream changed: {before}'
+              s=s.replace(before,after)
+          # Explicitly retain one-sided loss accounting; do not assume atomic maker fills.
+          # More stringent spread and edge filters are hypotheses, not profit guarantees.
+          Path('/tmp/khaledpoly_controlled.py').write_text(s)
+          PY
+          python3 -m py_compile /tmp/khaledpoly_controlled.py
+          python3 /tmp/khaledpoly_controlled.py --self-test
+      - name: Run one-hour market-observed PAPER trial
+        timeout-minutes: 65
+        run: |
+          python3 -u /tmp/khaledpoly_controlled.py --duration-seconds 3600 --output-dir paper_runs/controlled_15m_1h
+      - name: Validate and publish results
+        if: success()
+        run: |
+          python3 - <<'PY'
+          import json
+          r=json.load(open('paper_runs/controlled_15m_1h/summary.json'))
+          assert r['started_with_usdc']==100.0
+          assert abs(r['cash_usdc']-100-r['realized_pnl_usdc'])<0.0001
+          assert r['metrics']['merged']+r['metrics']['one_sided']+r['metrics']['zero_fills']==len(r['trades'])
+          print('CONTROLLED_1H_SUMMARY',json.dumps({k:v for k,v in r.items() if k!='trades'}))
+          PY
+      - name: Upload full trade history
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: controlled-15m-100usdc-1h-paper-results
+          path: paper_runs/controlled_15m_1h/
+          if-no-files-found: warn
+          retention-days: 14
