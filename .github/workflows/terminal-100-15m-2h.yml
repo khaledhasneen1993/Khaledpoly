@@ -1,0 +1,67 @@
+name: Khaledpoly 15m 100 USDC PAPER 2h comparison
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [.github/workflows/terminal-100-15m-2h.yml]
+permissions:
+  contents: read
+concurrency:
+  group: terminal-100-15m-2h
+  cancel-in-progress: false
+jobs:
+  paper_15m:
+    runs-on: ubuntu-latest
+    timeout-minutes: 135
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare identical strategy with 15m market slots
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('research/terminal_100_5m_2h.py')
+          s=p.read_text()
+          assert 'slot=(now//300)*300' in s
+          assert 'left=slot+300-now' in s
+          assert 'slug = f"{asset}-updown-5m-{slot}"' in s
+          s=s.replace('slot=(now//300)*300','slot=(now//900)*900')
+          s=s.replace('left=slot+300-now','left=slot+900-now')
+          s=s.replace('slug = f"{asset}-updown-5m-{slot}"','slug = f"{asset}-updown-15m-{slot}"')
+          Path('/tmp/terminal_100_15m_2h.py').write_text(s)
+          PY
+          python3 /tmp/terminal_100_15m_2h.py --self-test
+      - name: Probe 15m public markets
+        timeout-minutes: 3
+        run: |
+          python3 - <<'PY'
+          import importlib.util,time
+          spec=importlib.util.spec_from_file_location('trial','/tmp/terminal_100_15m_2h.py')
+          m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+          slot=int(time.time())//900*900
+          market=m.market_for_slot(slot,{'counters':m.counters()})
+          if market is None: raise RuntimeError('No 15m market metadata found')
+          print('PREFLIGHT_15M',market['slug'],m.quote(market))
+          PY
+      - name: Run two-hour read-only 15m paper trial
+        timeout-minutes: 125
+        run: |
+          python3 -u /tmp/terminal_100_15m_2h.py --duration-seconds 7200 --output-dir paper_runs/terminal_100_15m_2h
+      - name: Validate final summary
+        run: |
+          python3 - <<'PY'
+          import json
+          r=json.load(open('paper_runs/terminal_100_15m_2h/summary.json'))
+          assert r['started_with_usdc']==100
+          assert r['stages_done']==1
+          assert abs(r['cash_usdc']-100-r['realized_pnl_usdc'])<0.0001
+          assert r['metrics']['merged']+r['metrics']['one_sided']+r['metrics']['zero_fills']==len(r['trades'])
+          print('15M_2H_COMPLETE',json.dumps({k:v for k,v in r.items() if k!='trades'}))
+          PY
+      - name: Upload results even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: terminal-100-15m-2h-paper-results
+          path: paper_runs/terminal_100_15m_2h/
+          if-no-files-found: warn
+          retention-days: 14
