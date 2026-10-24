@@ -1,0 +1,79 @@
+name: Khaledpoly 15m entry diagnostics 1h
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/entry-diagnostics-15m-1h.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - name: Record public order book entry decisions for one hour
+        timeout-minutes: 65
+        run: |
+          mkdir -p paper_runs/entry_diagnostics_15m
+          python3 - <<'PY'
+          import json,time,urllib.request,urllib.parse,collections,datetime
+          from pathlib import Path
+          end=time.monotonic()+3600
+          counts=collections.Counter()
+          output=Path('paper_runs/entry_diagnostics_15m/observations.jsonl')
+          def fetch(url):
+              req=urllib.request.Request(url,headers={'User-Agent':'Khaledpoly-research/1.0'})
+              with urllib.request.urlopen(req,timeout=10) as r:return json.load(r)
+          def top(book,side):
+              prices=[]
+              for level in book.get(side,[]):
+                  try:
+                      if float(level['size'])>=5:prices.append(float(level['price']))
+                  except (ValueError,KeyError,TypeError):pass
+              return (max(prices) if side=='bids' else min(prices)) if prices else None
+          with output.open('w') as f:
+              while time.monotonic()<end:
+                  now=int(time.time());slot=now//900*900
+                  for asset in ('btc','eth','sol'):
+                      row={'ts':datetime.datetime.now(datetime.timezone.utc).isoformat(),'asset':asset,'slot':slot}
+                      try:
+                          market=fetch(f'https://gamma-api.polymarket.com/markets/slug/{asset}-updown-15m-{slot}')
+                          tokens=market.get('clobTokenIds') or market.get('clob_token_ids')
+                          if isinstance(tokens,str):tokens=json.loads(tokens)
+                          if not isinstance(tokens,list) or len(tokens)<2:raise ValueError('missing_tokens')
+                          quotes=[]
+                          for token in tokens[:2]:
+                              book=fetch('https://clob.polymarket.com/book?token_id='+urllib.parse.quote(str(token)))
+                              quotes.append((top(book,'bids'),top(book,'asks')))
+                          row['quotes']=quotes
+                          if any(x is None for pair in quotes for x in pair):
+                              reasons=['insufficient_depth']
+                          else:
+                              (yb,ya),(nb,na)=quotes
+                              edge=1-yb-nb;spread=ya-yb+na-nb
+                              row.update(edge=round(edge,5),spread=round(spread,5))
+                              reasons=[]
+                              if min(yb,nb)<.17 or max(yb,nb)>.83:reasons.append('price_extreme')
+                              if yb>=ya or nb>=na:reasons.append('crossed_book')
+                              if yb+nb>.98:reasons.append('price_cap')
+                              if edge<.04:reasons.append('edge_below_4pct')
+                              if spread>.055:reasons.append('spread_above_5_5pct')
+                              if not reasons:reasons=['eligible_quote_not_guaranteed_fill']
+                      except Exception as exc:
+                          reasons=['data_error'];row['error']=str(exc)[:160]
+                      row['reasons']=reasons
+                      for reason in reasons:counts[reason]+=1
+                      f.write(json.dumps(row)+'\n');f.flush()
+                  time.sleep(min(15,max(0,end-time.monotonic())))
+          summary={'samples':sum(counts.values()),'reason_counts':dict(counts),'orders_submitted':0,'capital_at_risk_usdc':0,'notes':'Read-only quote diagnostics; eligible does not mean profitable or filled.'}
+          Path('paper_runs/entry_diagnostics_15m/summary.json').write_text(json.dumps(summary,indent=2))
+          print('ENTRY_DIAGNOSTICS_SUMMARY',json.dumps(summary),flush=True)
+          PY
+      - name: Upload observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: entry-diagnostics-15m-1h
+          path: paper_runs/entry_diagnostics_15m/
+          retention-days: 14
